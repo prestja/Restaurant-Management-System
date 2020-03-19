@@ -7,7 +7,17 @@ use mongodb::{Client, options::ClientOptions};
 
 #[get("/")]
 fn index() -> &'static str {
-    "Hello, world!"
+    "Default route"
+}
+
+#[get("/orders")]
+fn orders() -> &'static str {
+	"Orders route"
+}
+
+#[get("/staff")]
+fn staff() -> &'static str {
+	"Staff route"
 }
 
 fn connect() {
@@ -24,5 +34,9 @@ fn connect() {
 
 fn main() {
     connect();
-    rocket::ignite().mount("/", routes![index]).launch();
+    rocket::ignite()
+    .mount("/", routes![index])
+    .mount("/", routes![orders])
+    .mount("/", routes![staff])
+    .launch();
 }

@@ -1,160 +1,198 @@
 <!DOCTYPE html>
 <html>
 <style>
-.button-group button {
-	background-color: #D3D3D3; /*Makes Gray background*/
-	border:  5px #D3D3D3;  /*Border around boxes is Gray*/
-	color: black; /* White text */
-	padding: 10px 20px; /* Some padding */
-	margin: 10px;  /* Created space between buttons */
-	font-family: Arial Black, Times, serif; /* sets font */
-	font-size:  20px;	/* Sets size */
-	font-weight:  normal;	/*Sets normal or bold */
-	text-align: center;	/* Aligns to center of button */
-	cursor: pointer; /* Pointer/hand icon */
-	width: 20%; /* Set a width if needed */
-	display: inline-block; /* Make the buttons appear below each other; changed "block" to "inline-block" */
-}
+* {
+		box-sizing: border-box;
+	}
 
-.button-group button:not(:last-child) {
-  border-right: none; /* Prevent double borders */
-}
+	body {
+		background-color: black;
+		margin: 0;
+	}
+	
+	/*Created a header container to hold buttons at the top*/
+	.header {
+		padding: 10px;
+		<!-- background-color: blue; -->
+		margin: 0px 0px 0px;
+	}
+	
+	/*Button group for creating the buttons at top of page*/
+	/*Same button group from the main page*/
+	.button-group button {
+		background-color: #D3D3D3; /*Makes Gray background*/
+		border:  0px #D3D3D3;  /*Border around boxes is Gray*/
+		color: black; /* White text */
+		padding: 10px 10px; /* Some padding */
+		margin: 0;  /* Created space between buttons */
+		font-family: Arial Black, Times, serif; /* sets font */
+		font-size:  16px;	/* Sets size */
+		font-weight:  normal;	/*Sets normal or bold */
+		text-align: center;	/* Aligns to center of button */
+		cursor: pointer; /* Pointer/hand icon */
+		width: 15%; /* Set a width if needed */
+		display: inline-block;
+	}
 
-/* Add a background color on hover */
-.button-group button:hover {
-  background-color: #3e8e41;
-}
+	.button-group button:not(:last-child) {
+		border-right: none; /* Prevent double borders */
+	}
 
-/*Creating some containers for main images*/
-.big_container {
-   width: 1177px;
-	height: 750px;
-}
-
-
-#container {
-  position: relative;
-  width: 392px;
-  height:700px;
-  float: left;
-}
-
-#container img {
-  width: 100%;
-  height: 100%;
-}
-
-#container .button {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  background-color: #f1f1f1;
-  color: black;
-  font-size: 50px;
-  padding: 16px 105px;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-  text-align: center;
-  opacity: 0.6; /* Makes button see through */
-}
-
-#container .button:hover {
-  background-color: black;
-  color: white;
-}
-
-#container-center {
-  position: relative;
-  width: 392px;
-  height:700px;
-  float: left;
-}
-
-#container-center img {
-  width: 100%;
-  height: 100%;
-}
-
-#container-center .button {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  background-color: #f1f1f1;
-  color: black;
-  font-size: 50px;
-  padding: 16px 130px;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-  text-align: center;
-  opacity: 0.6; /* Makes button see through */
-}
-
-#container-center .button:hover {
-  background-color: black;
-  color: white;
-}
-
-#container-right {
-  position: relative;
-  width: 392px;
-  height:700px;
-  float: left;
-}
-
-#container-right img {
-  width: 100%;
-  height: 100%;
-}
-
-#container-right .button {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  background-color: #f1f1f1;
-  color: black;
-  font-size: 50px;
-  padding: 16px 140px;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-  text-align: center;
-  opacity: 0.6; /* Makes button see through */
-}
-
-#container-right .button:hover {
-  background-color: black;
-  color: white;
-}
-
+	/* Add a background color on hover */
+	.button-group button:hover {
+		background-color: #3e8e41;
+	}
+	
+	.column-left {
+		float: left;
+		width: 33.3%;
+		height: 100%;
+		background-color: black;
+	}
+	
+	.column-left img {
+		width: 100%;
+		height: 530px;
+		object-fit: fill;
+	}
+	
+	.column-left .button {
+		position: absolute;
+		top: 45%;
+		left: 15%;
+		transform: translate(-50%, -50%);
+		-ms-transform: translate(-50%, -50%);
+		background-color: #f1f1f1;
+		color: black;
+		font-size: 20px;
+		padding: 30px 100px;
+		border: none;
+		cursor: pointer;
+		border-radius: 5px;
+		text-align: center;
+		opacity: 0.6;
+	}
+	
+	.column-left .button:hover {
+		background-colr: black;
+		color: white;
+	}
+	
+	.column-center {
+		float: left;
+		width: 33.3%;
+		height: 100%;
+		background-color: black;
+	}
+	
+	.column-center img {
+		width: 100%;
+		height: 530px;
+		object-fit: fill;
+	}
+	
+	.column-center .button {
+		position: absolute;
+		top: 45%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		-ms-transform: translate(-50%, -50%);
+		background-color: #f1f1f1;
+		color: black;
+		font-size: 20px;
+		padding: 30px 100px;
+		border: none;
+		cursor: pointer;
+		border-radius: 5px;
+		text-align: center;
+		opacity: 0.6;
+	}
+	
+	.column-center .button:hover {
+		background-colr: black;
+		color: white;
+	}
+	
+	.column-right {
+		float: left;
+		width: 33.3%;
+		height: 100%;
+		background-color: black;
+	}
+	
+	.column-right img {
+		width: 100%;
+		height: 530px;
+		object-fit: fill;
+	}
+	
+	.column-right .button {
+		position: absolute;
+		top: 45%;
+		left: 85%;
+		transform: translate(-50%, -50%);
+		-ms-transform: translate(-50%, -50%);
+		background-color: #f1f1f1;
+		color: black;
+		font-size: 20px;
+		padding: 30px 100px;
+		border: none;
+		cursor: pointer;
+		border-radius: 5px;
+		text-align: center;
+		opacity: 0.6;
+	}
+	
+	.column-right .button:hover {
+		background-colr: black;
+		color: white;
+	}
+	
+	.row:after {
+		content: "";
+		display: table;
+		clear: both;
+	}
+	
+	
+	
+	@media screen and (max-width: 600px){
+		.column {
+			width: 100%;
+		}
+	}
 </style>
 
 <body style="background-color:Black;">
-<div class="button-group">
-	<button onclick="document.location = 'Refill.html'">Refill</button>
-	<button onclick="document.location = 'Help.html'">Help</button>
+<div class="header">
+
+	<div class="button-group">
+		<button onclick="document.location = 'Refill.html'">REFILL</button>
+		<button onclick="document.location = 'Help.html'">HELP</button>
+	</div>
+	
 </div>
 
-<div class="big_container">
-	<div id="container">
+<div class="row">
+	<div class="column-left">
+		<!--<h2>ORDER</h2>-->
 		<img src="burger_pic.jpg" alt="Snow">
 		<button class="button" onclick="document.location = 'Order_Menu.html'">ORDER</button>
+		
 	</div>
-	<div id="container-center">
+	
+	<div class="column-center">
+		<!--<h2>PLAY</h2>-->
 		<img src="pacman_game.jpg" alt="Snow">
 		<button class="button" onclick="document.location = 'Play_Menu.html'">PLAY</button>
 	</div>
-	<div id="container-right">
+	
+	<div class="column-right">
+		<!--<h2>PAY</h2>-->
 		<img src="pay_pic.jpg" alt="Snow">
 		<button class="button" onclick="document.location = 'Pay_Menu.html'">PAY</button>
 	</div>
+	
 </div>
 
 </body>

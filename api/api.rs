@@ -10,17 +10,22 @@ use rocket_cors::{Guard, AllowedOrigins, AllowedHeaders, Responder};
 
 #[get("/")]
 fn index() -> &'static str {
-    "Default route"
+    "Default GET"
 }
 
 #[get("/orders")]
-fn orders() -> &'static str {
-	"Orders route"
+fn orders_get() -> &'static str {
+	"Orders GET"
+}
+
+#[post("/orders")]
+fn orders_post() -> &'static str {
+	"Orders POST"
 }
 
 #[get("/staff")]
 fn staff() -> &'static str {
-	"Staff route"
+	"Staff GET"
 }
 
 fn connect() {
@@ -51,7 +56,8 @@ fn main() {
 
     rocket::ignite()
     .mount("/api", routes![index])
-    .mount("/api", routes![orders])
+    .mount("/api", routes![orders_get])
+    .mount("/api", routes![orders_post])
     .mount("/api", routes![staff])
     .attach(cors)
     .launch();

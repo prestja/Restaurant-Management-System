@@ -4,6 +4,9 @@
 extern crate mongodb;
 
 use mongodb::{Client, options::ClientOptions};
+use rocket::Response;
+use rocket::http::Method;
+use rocket_cors::{Guard, AllowedOrigins, AllowedHeaders, Responder};
 
 #[get("/")]
 fn index() -> &'static str {
@@ -29,14 +32,27 @@ fn connect() {
 
     for db_name in client.list_database_names(None).unwrap(){
         println!("{}", db_name);
-    }
+    }    
 }
 
 fn main() {
-    connect();
+    //connect();
+    
+    let allowed_origins = AllowedOrigins::all();
+
+    let cors = rocket_cors::CorsOptions {
+        allowed_origins,
+        allowed_methods: vec![Method::Get].into_iter().map(From::from).collect(),
+        allowed_headers: AllowedHeaders::some(&["Authorization", "Accept"]),
+        allow_credentials: true,
+        ..Default::default()
+    }
+    .to_cors().unwrap();
+
     rocket::ignite()
-    .mount("/", routes![index])
-    .mount("/", routes![orders])
-    .mount("/", routes![staff])
+    .mount("/api", routes![index])
+    .mount("/api", routes![orders])
+    .mount("/api", routes![staff])
+    .attach(cors)
     .launch();
 }

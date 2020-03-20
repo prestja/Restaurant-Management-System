@@ -163,6 +163,21 @@
 	}
 </style>
 
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script>
+	$(document).ready(function(){	 
+		$.get("http://159.89.238.181:443/api/orders", function(data, status){
+			alert("Data: " + data + "\nStatus: " + status);
+		});
+		
+		$.post("http://159.89.238.181:443/api/orders", function(data, status){
+			alert("Data: " + data + "\nStatus: " + status);
+		});
+	});
+	</script>
+</head>
+
 <body style="background-color:Black;">
 <div class="header">
 

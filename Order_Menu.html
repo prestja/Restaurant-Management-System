@@ -44,6 +44,22 @@
 		background-color: #3e8e41;
 	}
 </style>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+    $(document).ready(function(){ 
+		$("button").click(function(){
+			$.get("http://159.89.238.181:443/api/orders", function(data, status){
+				document.innerHTML+=data;
+			});
+        
+			$.post("http://159.89.238.181:443/api/orders", function(data, status){
+            
+			});
+		});
+    });
+    </script>
+</head>
 
 <body style="background-color:Black;">
 	<div class="header">
@@ -55,6 +71,8 @@
 		</div>
 	
 	</div>
+	
+	<button onclick="" style=margin:20%50%>TEST BUTTON</button>
 	
 </body>
 </html>

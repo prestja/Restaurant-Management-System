@@ -1,50 +1,54 @@
 #![feature(proc_macro_hygiene, decl_macro)]
 
 #[macro_use] extern crate rocket;
-extern crate mongodb;
 
-use mongodb::{Client, options::ClientOptions};
-use rocket::Response;
 use rocket::http::Method;
-use rocket_cors::{Guard, AllowedOrigins, AllowedHeaders, Responder};
+use rocket_cors::{AllowedOrigins, AllowedHeaders};
+
+#[macro_use] extern crate rocket_contrib;
+use rocket_contrib::databases::mongodb;
+use crate::rocket_contrib::databases::mongodb::db::ThreadedDatabase;
+
+#[database("mongodb_logs")]
+struct LogsDbConn(mongodb::db::Database);
 
 #[get("/")]
-fn index() -> &'static str {
-    "Default GET"
+fn index(conn: LogsDbConn) -> &'static str {
+   	let collection = conn.collection("orders");
+   	println!("{}", collection.name());
+    return "Default GET";
 }
 
+/*
 #[get("/orders")]
 fn orders_get() -> &'static str {
-	"Orders GET"
+	return "Orders GET";
 }
 
 #[post("/orders")]
 fn orders_post() -> &'static str {
-	"Orders POST"
+	return "Orders POST";
 }
 
 #[get("/staff")]
 fn staff() -> &'static str {
-	"Staff GET"
+	return "Staff GET";
 }
+*/
 
-fn connect() {
-    println!("Attempting connection");
+/*
+fn get_client() -> mongodb::Client {
     let mut client_options : ClientOptions =
     ClientOptions::parse("mongodb://localhost:27017").unwrap();
     client_options.app_name = Some("My App".to_string());
     let client : Client = Client::with_options(client_options).unwrap();
 
-    for db_name in client.list_database_names(None).unwrap(){
-        println!("{}", db_name);
-    }    
+	return client;
 }
 
+*/
 fn main() {
-    //connect();
-    
     let allowed_origins = AllowedOrigins::all();
-
     let cors = rocket_cors::CorsOptions {
         allowed_origins,
         allowed_methods: vec![Method::Get].into_iter().map(From::from).collect(),
@@ -53,12 +57,9 @@ fn main() {
         ..Default::default()
     }
     .to_cors().unwrap();
-
     rocket::ignite()
     .mount("/api", routes![index])
-    .mount("/api", routes![orders_get])
-    .mount("/api", routes![orders_post])
-    .mount("/api", routes![staff])
+    .attach(LogsDbConn::fairing())
     .attach(cors)
     .launch();
 }

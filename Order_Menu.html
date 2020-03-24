@@ -49,13 +49,14 @@
 		background-color: #A9A9A9 !important; //makes Gray background
 		padding: 10px;
 		margin: 10px 10px 10px;
-		position: sticky;
-		width: 20%;
+		position: relative;
+		width: 150px;
 		height: 245px;
-		top: 80px;
 		left: 20px;
+		display: inline-block;
 	}
 	
+	/*Created a menu button similar to header buttons*/
 	.menu-button-group button {
 		background-color: #D3D3D3; /*Makes Gray background*/
 		border:  0px #D3D3D3;  /*Border around boxes is Gray*/
@@ -73,12 +74,24 @@
 		left: 10px;
 		top: 10px;
 		bottom: 10px;
-		right: 10px;
 	}
 	
 	/* Add a background color on hover */
 	.menu-button-group button:hover {
 		background-color: #3e8e41;
+	}
+	
+	/*Created a menu container to hold menu items*/
+	.menu {
+		background-color: #A9A9A9 !important; //makes Gray background
+		padding: 10px;
+		margin: 10px 10px 10px 10px;
+		width: 50%;
+		height: 100%;
+		left: 190px;
+		display: inline-block;
+		text-align: center;
+		position: absolute;
 	}
 </style>
 <head>
@@ -108,18 +121,47 @@
 		</div>
 	
 	</div>
+	
 	<div class = "left-menu">
 		<div class="menu-button-group">
-			<button>DRINKS</button>
+			<button onclick="menuType('drinks')">DRINKS</button>
 			<br><br>
-			<button>APPS</button>
+			<button onclick="menuType('apps')">APPS</button>
 			<br><br>
-			<button>MEALS</button>
+			<button onclick="menuType('meals')">MEALS</button>
 			<br><br>
-			<button>SWEETS</button>
+			<button onclick="menuType('sweets')">SWEETS</button>
 		</div>
 	</div>
-	<button onclick="" style=margin:20%50%>TEST BUTTON</button>
+	
+	<div class = "menu" id = "menuType">
+		<h2 id = "headerType">DRINKS</h2>
+		<hr color = "black">
+	</div>
+	<script>
+		function menuType(mType)
+		{	
+			var t = document.getElementById("headerType");
+			if(mType === "drinks")
+			{
+				t.innerHTML = "DRINKS";
+			}
+			else if(mType === "apps")
+			{
+				t.innerHTML = "APPETIZERS";
+			}
+			else if(mType === "meals")
+			{
+				t.innerHTML = "MEALS";
+			}
+			else if(mType === "sweets")
+			{
+				t.innerHTML = "SWEETS";
+			}
+		}
+	</script>
+	
+	<button onclick="" style="position:relative;left:450px">TEST BUTTON</button>
 	
 </body>
 </html>

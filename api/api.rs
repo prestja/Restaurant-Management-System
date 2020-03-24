@@ -19,22 +19,35 @@ fn index(conn: LogsDbConn) -> &'static str {
     return "Default GET";
 }
 
-/*
+
 #[get("/orders")]
-fn orders_get() -> &'static str {
-	return "Orders GET";
+fn orders(conn: LogsDbConn) -> String {
+	let mut str = String::from("[\n\t");
+	let collection = conn.collection("orders");
+	let mut cursor = collection.find(None, None);
+	for entries in cursor{
+		str.push_str(entries);
+		str.push_str(",\n");
+	}
+	str.push_str("]");
+	return str;
 }
 
-#[post("/orders")]
-fn orders_post() -> &'static str {
-	return "Orders POST";
+#[get("/orders/<ordernum>")]
+fn orders_get(ordernum: u8) -> String {
+        return format!("Orders GET. Number is {}", ordernum);
 }
 
-#[get("/staff")]
-fn staff() -> &'static str {
-	return "Staff GET";
+#[post("/orders/<ordernum>")]
+fn orders_post(ordernum: u8) -> String {
+        return format!("Orders POST. Number is {}", ordernum);
 }
-*/
+
+#[get("/staff/<emp_id>")]
+fn staff(emp_id: u8) -> String {
+        return format!("Staff GET. Employee ID is {}", emp_id);
+}
+
 
 /*
 fn get_client() -> mongodb::Client {
@@ -59,6 +72,8 @@ fn main() {
     .to_cors().unwrap();
     rocket::ignite()
     .mount("/api", routes![index])
+    .mount("/api", routes![orders_get])
+    .mount("/api", routes![orders_post])
     .attach(LogsDbConn::fairing())
     .attach(cors)
     .launch();

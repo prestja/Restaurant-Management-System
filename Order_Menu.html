@@ -43,6 +43,43 @@
 	.button-group button:hover {
 		background-color: #3e8e41;
 	}
+	
+	/*Created a left container to hold buttons for the menu types*/
+	.left-menu {
+		background-color: #A9A9A9 !important; //makes Gray background
+		padding: 10px;
+		margin: 10px 10px 10px;
+		position: sticky;
+		width: 20%;
+		height: 245px;
+		top: 80px;
+		left: 20px;
+	}
+	
+	.menu-button-group button {
+		background-color: #D3D3D3; /*Makes Gray background*/
+		border:  0px #D3D3D3;  /*Border around boxes is Gray*/
+		color: black; /* White text */
+		padding: 10px 10px; /* Some padding */
+		margin: 0;  /* Created space between buttons */
+		font-family: Arial Black, Times, serif; /* sets font */
+		font-size:  16px;	/* Sets size */
+		font-weight:  normal;	/*Sets normal or bold */
+		text-align: center;	/* Aligns to center of button */
+		cursor: pointer; /* Pointer/hand icon */
+		width: 86%; /* Set a width if needed */
+		display: inline-block;
+		position: relative;
+		left: 10px;
+		top: 10px;
+		bottom: 10px;
+		right: 10px;
+	}
+	
+	/* Add a background color on hover */
+	.menu-button-group button:hover {
+		background-color: #3e8e41;
+	}
 </style>
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -71,7 +108,17 @@
 		</div>
 	
 	</div>
-	
+	<div class = "left-menu">
+		<div class="menu-button-group">
+			<button>DRINKS</button>
+			<br><br>
+			<button>APPS</button>
+			<br><br>
+			<button>MEALS</button>
+			<br><br>
+			<button>SWEETS</button>
+		</div>
+	</div>
 	<button onclick="" style=margin:20%50%>TEST BUTTON</button>
 	
 </body>

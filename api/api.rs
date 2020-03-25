@@ -6,27 +6,31 @@ use rocket::http::Method;
 use rocket_cors::{AllowedOrigins, AllowedHeaders};
 
 #[macro_use] extern crate rocket_contrib;
-use rocket_contrib::databases::mongodb;
 use crate::rocket_contrib::databases::mongodb::db::ThreadedDatabase;
+use rocket_contrib::{databases::mongodb};
 
 #[database("mongodb_logs")]
 struct LogsDbConn(mongodb::db::Database);
 
 #[get("/")]
 fn index(conn: LogsDbConn) -> &'static str {
+   	/*
    	let collection = conn.collection("orders");
    	println!("{}", collection.name());
-    return "Default GET";
+   	*/
+    return "You are at the default route, this does nothing";
 }
 
 
 #[get("/orders")]
 fn orders(conn: LogsDbConn) -> String {
+	println!("ORDERS route");
 	let mut str = String::from("[\n\t");
 	let collection = conn.collection("orders");
-	let mut cursor = collection.find(None, None);
-	for entries in cursor{
-		str.push_str(entries);
+	let mut cursor = collection.find(None, None).unwrap();
+	for result in cursor {
+		let doc = result.expect("Could not find");
+		str.push_str("!");
 		str.push_str(",\n");
 	}
 	str.push_str("]");
@@ -72,6 +76,7 @@ fn main() {
     .to_cors().unwrap();
     rocket::ignite()
     .mount("/api", routes![index])
+    .mount("/api", routes![orders])
     .mount("/api", routes![orders_get])
     .mount("/api", routes![orders_post])
     .attach(LogsDbConn::fairing())

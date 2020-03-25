@@ -93,6 +93,19 @@
 		text-align: center;
 		position: absolute;
 	}
+	
+	/*Created a receipt container to hold menu items*/
+	.receipt {
+		background-color: #A9A9A9 !important; //makes Gray background
+		padding: 10px;
+		margin: 10px 10px 10px 10px;
+		width: 33%;
+		height: 75%;
+		right: 20px;
+		display: inline-block;
+		text-align: center;
+		position: absolute;
+	}
 </style>
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -161,7 +174,32 @@
 		}
 	</script>
 	
-	<button onclick="" style="position:relative;left:450px">TEST BUTTON</button>
+/*Stores div for receipt items*/
+	<div class = "receipt">
+		<h2 text-align="center">RECEIPT</h2>
+		<div style="display:inline-block; width:45%;text-align:left;height:20px">
+			<h4>DESCRIPTION</h4>
+		</div>
+		<div style="display:inline-block;width:45%;text-align:right;height:20px">
+			<h4>QTY</h4>
+		</div>
+		<hr color = "black">
+		<div style = "color:#B22222 !important;text-align:left;position:relative;left:10px">
+			<form action="">
+				<label>Known Allergies:</label>
+				<br>
+				<input type="text" id="known-allergies" name="known-allergies" placeholder="Enter Allergies Here..."/>
+				<input type="submit" value="SUBMIT">
+			</form>
+			<br>
+			<span style="color:black !important">*VEGETARIAN ITEM</span>
+		</div>
+		<hr color="black">
+		<div class="menu-button-group" style="position:absolute;bottom:50px !important;width:90%">
+			<button onclick="">TEST BUTTON</button>
+		</div>
+	</div>
+
 	
 </body>
 </html>

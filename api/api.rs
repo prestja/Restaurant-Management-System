@@ -8,62 +8,56 @@ use rocket_cors::{AllowedOrigins, AllowedHeaders};
 #[macro_use] extern crate rocket_contrib;
 use crate::rocket_contrib::databases::mongodb::db::ThreadedDatabase;
 use rocket_contrib::{databases::mongodb};
+use mongodb::doc;
+use mongodb::bson;
+use serde_json;
+
 
 #[database("mongodb_logs")]
 struct LogsDbConn(mongodb::db::Database);
 
 #[get("/")]
-fn index(conn: LogsDbConn) -> &'static str {
-   	/*
-   	let collection = conn.collection("orders");
-   	println!("{}", collection.name());
-   	*/
+fn index(_conn: LogsDbConn) -> &'static str {  
     return "You are at the default route, this does nothing";
 }
 
-
 #[get("/orders")]
-fn orders(conn: LogsDbConn) -> String {
-	println!("ORDERS route");
+fn orders_get_all(_conn: LogsDbConn) -> String {
 	let mut str = String::from("[\n\t");
-	let collection = conn.collection("orders");
-	let mut cursor = collection.find(None, None).unwrap();
-	for result in cursor {
-		let doc = result.expect("Could not find");
-		str.push_str("!");
-		str.push_str(",\n");
+	let _coll = _conn.collection("orders");
+	let cursor = _coll.find(None, None).unwrap();
+	for result in cursor { // iterator
+		if let Ok(item) = result { // error check the iterator and unwrap value to `item`
+			let _bson = mongodb::to_bson(&item).unwrap(); // convert item to bson
+			let _json = serde_json::ser::to_string(&_bson).unwrap(); // convert item to json string
+			str.push_str(&_json);
+		}
+		str.push_str(",\n\t"); // push separator characters for each new entry   	
 	}
-	str.push_str("]");
+	str.pop(); 	// remove last unnecessary separator characters
+	str.pop();
+	str.pop();
+	str.push_str("\n]");
 	return str;
 }
 
-#[get("/orders/<ordernum>")]
-fn orders_get(ordernum: u8) -> String {
-        return format!("Orders GET. Number is {}", ordernum);
+#[get("/orders/<id>")]
+fn orders_get(id: u32) -> String {
+    return format!("Orders GET. Number is {}", id);
 }
 
-#[post("/orders/<ordernum>")]
-fn orders_post(ordernum: u8) -> String {
-        return format!("Orders POST. Number is {}", ordernum);
+#[post("/orders")]
+fn orders_post(_conn: LogsDbConn) -> &'static str {
+    let _coll = _conn.collection("orders");
+    _coll.insert_one(doc!{ "id": 32 }, None).unwrap();
+    return "Inserted an element into database";
 }
 
-#[get("/staff/<emp_id>")]
-fn staff(emp_id: u8) -> String {
-        return format!("Staff GET. Employee ID is {}", emp_id);
+#[get("/staff/<id>")]
+fn staff(id: u32) -> String {
+    return format!("Staff GET. Employee ID is {}", id);
 }
 
-
-/*
-fn get_client() -> mongodb::Client {
-    let mut client_options : ClientOptions =
-    ClientOptions::parse("mongodb://localhost:27017").unwrap();
-    client_options.app_name = Some("My App".to_string());
-    let client : Client = Client::with_options(client_options).unwrap();
-
-	return client;
-}
-
-*/
 fn main() {
     let allowed_origins = AllowedOrigins::all();
     let cors = rocket_cors::CorsOptions {
@@ -76,7 +70,7 @@ fn main() {
     .to_cors().unwrap();
     rocket::ignite()
     .mount("/api", routes![index])
-    .mount("/api", routes![orders])
+    .mount("/api", routes![orders_get_all])
     .mount("/api", routes![orders_get])
     .mount("/api", routes![orders_post])
     .attach(LogsDbConn::fairing())

@@ -27,63 +27,7 @@ fn index(_conn: LogsDbConn) -> &'static str {
 	return "You are at the default route, this does nothing";
 }
 
-#[get("/orders")]
-fn orders_get_all(_conn: LogsDbConn) -> String {
-	let mut str = String::from("[\n\t");
-	let _coll = _conn.collection("orders");
-	let cursor = _coll.find(None, None).unwrap();
-	for result in cursor {
-		if let Ok(item) = result {
-			let _bson = mongodb::to_bson(&item).unwrap();
-			let _json = serde_json::ser::to_string(&_bson).unwrap();
-			str.push_str(&_json);
-		}
-		str.push_str(",\n\t");
-	}
-	if str.len() <= 3{
-		return String::from("No entries found");
-	}
-	str.pop();
-	str.pop();
-	str.pop();
-	str.push_str("\n]");
-	return str;
-}
 
-#[get("/orders/<id>")]
-fn orders_get(_conn: LogsDbConn, id: u32) -> String 
-{
-	let mut str = String::from("[\n\t");
-	let doc = doc!{"id": id};
-	let _coll = _conn.collection("orders");
-	let cursor = _coll.find(Some(doc.clone()), None).unwrap();
-	for result in cursor 
-	{
-		if let Ok(item) = result 
-		{
-			let _bson = mongodb::to_bson(&item).unwrap();
-			let _json = serde_json::ser::to_string(&_bson).unwrap();
-			str.push_str(&_json);
-		}
-		str.push_str(",\n\t");
-	}
-	if str.len() <= 3
-	{
-		return String::from("No entries found");
-	}
-	str.pop();
-	str.pop();
-	str.pop();
-	str.push_str("\n]");
-	return str;
-}
-
-#[post("/orders")]
-fn orders_post(_conn: LogsDbConn) -> &'static str {
-	let _coll = _conn.collection("orders");
-	_coll.insert_one(doc!{ "id": 32 }, None).unwrap();
-	return "Inserted an element into database";
-}
 
 #[get("/staff")]
 fn staff_get_all(_conn: LogsDbConn) -> String {
@@ -347,6 +291,9 @@ fn main()
     .mount("/api", routes![tables::get_all])
     .mount("/api", routes![tables::get])
     .mount("/api", routes![tables::post])
+    .mount("/api", routes![orders::get_all])
+    .mount("/api", routes![orders::get])
+    .mount("/api", routes![orders::post])
     /*
     .mount("/api", routes![orders_get_all])
     .mount("/api", routes![orders_get])

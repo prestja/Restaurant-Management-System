@@ -1,9 +1,9 @@
 use crate::rocket_contrib::databases::mongodb::db::ThreadedDatabase;
+use crate::LogsDbConn;
 
 use rocket_contrib::{databases::mongodb};
 use mongodb::{doc, bson};
 use serde_json;
-use crate::LogsDbConn;
 
 #[get("/tables")]
 pub fn get_all(_conn: LogsDbConn) -> String 

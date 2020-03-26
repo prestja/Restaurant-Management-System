@@ -345,6 +345,8 @@ fn main()
     rocket::ignite()
     .mount("/api", routes![index])
     .mount("/api", routes![tables::get_all])
+    .mount("/api", routes![tables::get])
+    .mount("/api", routes![tables::post])
     /*
     .mount("/api", routes![orders_get_all])
     .mount("/api", routes![orders_get])

@@ -1,7 +1,5 @@
 use crate::rocket_contrib::databases::mongodb::db::ThreadedDatabase;
 
-use rocket::http::Method;
-use rocket_cors::{AllowedOrigins, AllowedHeaders};
 use rocket_contrib::{databases::mongodb};
 use mongodb::{doc, bson};
 use serde_json;
@@ -34,9 +32,8 @@ pub fn get_all(_conn: LogsDbConn) -> String
 	return str;
 }
 
-/*
 #[get("/tables/<id>")]
-pub fn tables_get(_conn: LogsDbConn, id: u32) -> String 
+pub fn get(_conn: LogsDbConn, id: u32) -> String 
 {
 	let mut str = String::from("[\n\t");
 	let doc = doc!{"id": id};
@@ -64,10 +61,9 @@ pub fn tables_get(_conn: LogsDbConn, id: u32) -> String
 }
 
 #[post("/tables")]
-pub fn tables_post(_conn: LogsDbConn) -> &'static str 
+pub fn post(_conn: LogsDbConn) -> &'static str 
 {
 	let _coll = _conn.collection("tables");
 	_coll.insert_one(doc!{ "id": 32 }, None).unwrap();
 	return "Inserted an element into database";
 }
-*/

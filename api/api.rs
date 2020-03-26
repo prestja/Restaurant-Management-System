@@ -18,7 +18,7 @@ struct LogsDbConn(mongodb::db::Database);
 
 #[get("/")]
 fn index(_conn: LogsDbConn) -> &'static str {  
-    return "You are at the default route, this does nothing";
+	return "You are at the default route, this does nothing";
 }
 
 #[get("/orders")]
@@ -26,18 +26,18 @@ fn orders_get_all(_conn: LogsDbConn) -> String {
 	let mut str = String::from("[\n\t");
 	let _coll = _conn.collection("orders");
 	let cursor = _coll.find(None, None).unwrap();
-	for result in cursor { // iterator
-		if let Ok(item) = result { // error check the iterator and unwrap value to `item`
-			let _bson = mongodb::to_bson(&item).unwrap(); // convert item to bson
-			let _json = serde_json::ser::to_string(&_bson).unwrap(); // convert item to json string
+	for result in cursor {
+		if let Ok(item) = result {
+			let _bson = mongodb::to_bson(&item).unwrap();
+			let _json = serde_json::ser::to_string(&_bson).unwrap();
 			str.push_str(&_json);
 		}
-		str.push_str(",\n\t"); // push separator characters for each new entry   	
+		str.push_str(",\n\t");
 	}
-        if str.len() <= 3{
-          return String::from("No entries found");
-        }
-	str.pop(); 	// remove last unnecessary separator characters
+	if str.len() <= 3{
+		return String::from("No entries found");
+	}
+	str.pop();
 	str.pop();
 	str.pop();
 	str.push_str("\n]");
@@ -45,309 +45,352 @@ fn orders_get_all(_conn: LogsDbConn) -> String {
 }
 
 #[get("/orders/<id>")]
-fn orders_get(_conn: LogsDbConn, id: u32) -> String {
-    	let mut str = String::from("[\n\t");
-    	let doc = doc!{"id": id}; //create a document to search for within the database
-    	let _coll = _conn.collection("orders");
-    	let cursor = _coll.find(Some(doc.clone()), None).unwrap(); //search for the defined document
-    	for result in cursor { // iterator
-        	if let Ok(item) = result { // error check the iterator and unwrap value to `item`
-                     	let _bson = mongodb::to_bson(&item).unwrap(); // convert item to bson
-                     	let _json = serde_json::ser::to_string(&_bson).unwrap(); // convert item to json string
-                     	str.push_str(&_json);
-            	}
-            	str.push_str(",\n\t"); // push separator characters for each new entry
-        }
-        if str.len() <= 3{
-          return String::from("No entries found");
-        }
-        str.pop();      // remove last unnecessary separator characters
-        str.pop();
-        str.pop();
-        str.push_str("\n]");
-        return str;
+fn orders_get(_conn: LogsDbConn, id: u32) -> String 
+{
+	let mut str = String::from("[\n\t");
+	let doc = doc!{"id": id};
+	let _coll = _conn.collection("orders");
+	let cursor = _coll.find(Some(doc.clone()), None).unwrap();
+	for result in cursor 
+	{
+		if let Ok(item) = result 
+		{
+			let _bson = mongodb::to_bson(&item).unwrap();
+			let _json = serde_json::ser::to_string(&_bson).unwrap();
+			str.push_str(&_json);
+		}
+		str.push_str(",\n\t");
+	}
+	if str.len() <= 3
+	{
+		return String::from("No entries found");
+	}
+	str.pop();
+	str.pop();
+	str.pop();
+	str.push_str("\n]");
+	return str;
 }
 
 #[post("/orders")]
 fn orders_post(_conn: LogsDbConn) -> &'static str {
-    let _coll = _conn.collection("orders");
-    _coll.insert_one(doc!{ "id": 32 }, None).unwrap();
-    return "Inserted an element into database";
+	let _coll = _conn.collection("orders");
+	_coll.insert_one(doc!{ "id": 32 }, None).unwrap();
+	return "Inserted an element into database";
 }
 
 #[get("/staff")]
 fn staff_get_all(_conn: LogsDbConn) -> String {
-        let mut str = String::from("[\n\t");
-        let _coll = _conn.collection("staff");
-        let cursor = _coll.find(None, None).unwrap();
-        for result in cursor { // iterator
-                if let Ok(item) = result { // error check the iterator and unwrap value to `item`
-                        let _bson = mongodb::to_bson(&item).unwrap(); // convert item to bson
-                        let _json = serde_json::ser::to_string(&_bson).unwrap(); // convert item to json string
-                        str.push_str(&_json);
-                }
-                str.push_str(",\n\t"); // push separator characters for each new entry
-        }
-        if str.len() <= 3{
-          return String::from("No entries found");
-        }
-        str.pop();      // remove last unnecessary separator characters
-        str.pop();
-        str.pop();
-        str.push_str("\n]");
-        return str;
+	let mut str = String::from("[\n\t");
+	let _coll = _conn.collection("staff");
+	let cursor = _coll.find(None, None).unwrap();
+	for result in cursor 
+	{ 
+		if let Ok(item) = result 
+		{
+			let _bson = mongodb::to_bson(&item).unwrap();
+			let _json = serde_json::ser::to_string(&_bson).unwrap();
+			str.push_str(&_json);
+		}
+			str.push_str(",\n\t");
+	}
+	if str.len() <= 3{
+	return String::from("No entries found");
+	}
+	str.pop();
+	str.pop();
+	str.pop();
+	str.push_str("\n]");
+	return str;
 }
 
 #[get("/staff/<id>")]
 fn staff_get(_conn: LogsDbConn, id: u32) -> String {
 	let mut str = String::from("[\n\t");
-        let doc = doc!{"empid": id}; //create a document to search for within the database
-        let _coll = _conn.collection("staff");
-        let cursor = _coll.find(Some(doc.clone()), None).unwrap(); //search for the defined document
-        for result in cursor { // iterator
-                if let Ok(item) = result { // error check the iterator and unwrap value to `item`
-                        let _bson = mongodb::to_bson(&item).unwrap(); // convert item to bson
-                        let _json = serde_json::ser::to_string(&_bson).unwrap(); // convert item to json string
-                        str.push_str(&_json);
-                }
-                str.push_str(",\n\t"); // push separator characters for each new entry
-        }
-	if str.len() <= 3{
-	  return String::from("No entries found");
+	let doc = doc!{"id": id};
+	let _coll = _conn.collection("staff");
+	let cursor = _coll.find(Some(doc.clone()), None).unwrap();
+	for result in cursor 
+	{
+		if let Ok(item) = result 
+		{
+			let _bson = mongodb::to_bson(&item).unwrap();
+			let _json = serde_json::ser::to_string(&_bson).unwrap();
+			str.push_str(&_json);
+		}
+		str.push_str(",\n\t");
 	}
-        str.pop();      // remove last unnecessary separator characters
-        str.pop();
-        str.pop();
-        str.push_str("\n]");
-        return str;
+	if str.len() <= 3
+	{
+		return String::from("No entries found");
+	}
+	str.pop();
+	str.pop();
+	str.pop();
+	str.push_str("\n]");
+	return str;
 }
 
 #[post("/staff")]
 fn staff_post(_conn: LogsDbConn) -> &'static str {
-    let _coll = _conn.collection("staff");
-    _coll.insert_one(doc!{ "empid": 32 }, None).unwrap();
-    return "Inserted an element into database";
+	let _coll = _conn.collection("staff");
+	_coll.insert_one(doc!{ "empid": 32 }, None).unwrap();
+	return "Inserted an element into database";
 }
 
 #[get("/customers")]
 fn customers_get_all(_conn: LogsDbConn) -> String {
-        let mut str = String::from("[\n\t");
-        let _coll = _conn.collection("customers");
-        let cursor = _coll.find(None, None).unwrap();
-        for result in cursor { // iterator
-                if let Ok(item) = result { // error check the iterator and unwrap value to `item`
-                        let _bson = mongodb::to_bson(&item).unwrap(); // convert item to bson
-                        let _json = serde_json::ser::to_string(&_bson).unwrap(); // convert item to json string
-                        str.push_str(&_json);
-                }
-                str.push_str(",\n\t"); // push separator characters for each new entry
-        }
-        if str.len() <= 3{
-          return String::from("No entries found");
-        }
-        str.pop();      // remove last unnecessary separator characters
-        str.pop();
-        str.pop();
-        str.push_str("\n]");
-        return str;
+	let mut str = String::from("[\n\t");
+	let _coll = _conn.collection("customers");
+	let cursor = _coll.find(None, None).unwrap();
+	for result in cursor 
+	{
+		if let Ok(item) = result 
+		{
+			let _bson = mongodb::to_bson(&item).unwrap();
+			let _json = serde_json::ser::to_string(&_bson).unwrap();
+			str.push_str(&_json);
+		}
+		str.push_str(",\n\t");
+	}
+	if str.len() <= 3
+	{
+		return String::from("No entries found");
+	}
+	str.pop();
+	str.pop();
+	str.pop();
+	str.push_str("\n]");
+	return str;
 }
 
 #[get("/customers/<id>")]
 fn customers_get(_conn: LogsDbConn, id: u32) -> String {
-        let mut str = String::from("[\n\t");
-        let doc = doc!{"id": id}; //create a document to search for within the database
-        let _coll = _conn.collection("customers");
-        let cursor = _coll.find(Some(doc.clone()), None).unwrap(); //search for the defined document
-        for result in cursor { // iterator
-                if let Ok(item) = result { // error check the iterator and unwrap value to `item`
-                        let _bson = mongodb::to_bson(&item).unwrap(); // convert item to bson
-                        let _json = serde_json::ser::to_string(&_bson).unwrap(); // convert item to json string
-                        str.push_str(&_json);
-                }
-                str.push_str(",\n\t"); // push separator characters for each new entry
-        }
-        if str.len() <= 3{
-          return String::from("No entries found");
-        }
-        str.pop();      // remove last unnecessary separator characters
-        str.pop();
-        str.pop();
-        str.push_str("\n]");
-        return str;
+	let mut str = String::from("[\n\t");
+	let doc = doc!{"id": id};
+	let _coll = _conn.collection("customers");
+	let cursor = _coll.find(Some(doc.clone()), None).unwrap();
+	for result in cursor 
+	{
+		if let Ok(item) = result 
+		{
+			let _bson = mongodb::to_bson(&item).unwrap();
+			let _json = serde_json::ser::to_string(&_bson).unwrap();
+			str.push_str(&_json);
+		}
+		str.push_str(",\n\t");
+	}
+	if str.len() <= 3{
+	return String::from("No entries found");
+	}
+	str.pop();
+	str.pop();
+	str.pop();
+	str.push_str("\n]");
+	return str;
 }
 
 #[post("/customers")]
-fn customers_post(_conn: LogsDbConn) -> &'static str {
-    let _coll = _conn.collection("customers");
-    _coll.insert_one(doc!{ "id": 32 }, None).unwrap();
-    return "Inserted an element into database";
+fn customers_post(_conn: LogsDbConn) -> &'static str 
+{
+	let _coll = _conn.collection("customers");
+	_coll.insert_one(doc!{ "id": 32 }, None).unwrap();
+	return "Inserted an element into database";
 }
 
 #[get("/ingredients")]
-fn ingredients_get_all(_conn: LogsDbConn) -> String {
-        let mut str = String::from("[\n\t");
-        let _coll = _conn.collection("ingredients");
-        let cursor = _coll.find(None, None).unwrap();
-        for result in cursor { // iterator
-                if let Ok(item) = result { // error check the iterator and unwrap value to `item`
-                        let _bson = mongodb::to_bson(&item).unwrap(); // convert item to bson
-                        let _json = serde_json::ser::to_string(&_bson).unwrap(); // convert item to json string
-                        str.push_str(&_json);
-                }
-                str.push_str(",\n\t"); // push separator characters for each new entry
-        }
-        if str.len() <= 3{
-          return String::from("No entries found");
-        }
-        str.pop();      // remove last unnecessary separator characters
-        str.pop();
-        str.pop();
-        str.push_str("\n]");
-        return str;
+fn ingredients_get_all(_conn: LogsDbConn) -> String 
+{
+	let mut str = String::from("[\n\t");
+	let _coll = _conn.collection("ingredients");
+	let cursor = _coll.find(None, None).unwrap();
+	for result in cursor 
+	{
+		if let Ok(item) = result 
+		{
+			let _bson = mongodb::to_bson(&item).unwrap();
+			let _json = serde_json::ser::to_string(&_bson).unwrap();
+			str.push_str(&_json);
+		}
+		str.push_str(",\n\t");
+	}
+	if str.len() <= 3
+	{
+		return String::from("No entries found");
+	}
+	str.pop();
+	str.pop();
+	str.pop();
+	str.push_str("\n]");
+	return str;
 }
 
 #[get("/ingredients/<item>")]
-fn ingredients_get(_conn: LogsDbConn, item: &rocket::http::RawStr) -> String {
-        let mut str = String::from("[\n\t");
-        let doc = doc!{"item": item.as_str()}; //create a document to search for within the database
-        let _coll = _conn.collection("ingredients");
-        let cursor = _coll.find(Some(doc.clone()), None).unwrap(); //search for the defined document
-        for result in cursor { // iterator
-                if let Ok(item) = result { // error check the iterator and unwrap value to `item`
-                        let _bson = mongodb::to_bson(&item).unwrap(); // convert item to bson
-                        let _json = serde_json::ser::to_string(&_bson).unwrap(); // convert item to json string
-                        str.push_str(&_json);
-                }
-                str.push_str(",\n\t"); // push separator characters for each new entry
-        }
-        if str.len() <= 3{
-          return String::from("No entries found");
-        }
-        str.pop();      // remove last unnecessary separator characters
-        str.pop();
-        str.pop();
-        str.push_str("\n]");
-        return str;
+fn ingredients_get(_conn: LogsDbConn, item: &rocket::http::RawStr) -> String 
+{
+	let mut str = String::from("[\n\t");
+	let doc = doc!{"item": item.as_str()};
+	let _coll = _conn.collection("ingredients");
+	let cursor = _coll.find(Some(doc.clone()), None).unwrap();
+	for result in cursor {
+		if let Ok(item) = result 
+		{
+			let _bson = mongodb::to_bson(&item).unwrap();
+			let _json = serde_json::ser::to_string(&_bson).unwrap();
+			str.push_str(&_json);
+		}
+		str.push_str(",\n\t");
+	}
+	if str.len() <= 3
+	{
+		return String::from("No entries found");
+	}
+	str.pop();
+	str.pop();
+	str.pop();
+	str.push_str("\n]");
+	return str;
 }
 
 #[post("/ingredients")]
-fn ingredients_post(_conn: LogsDbConn) -> &'static str {
-    let _coll = _conn.collection("ingredients");
-    _coll.insert_one(doc!{ "item": "beef_patties" }, None).unwrap();
-    return "Inserted an element into database";
+fn ingredients_post(_conn: LogsDbConn) -> &'static str 
+{
+	let _coll = _conn.collection("ingredients");
+	_coll.insert_one(doc!{ "item": "beef_patties" }, None).unwrap();
+	return "Inserted an element into database";
 }
 
 #[get("/schedules")]
-fn schedules_get_all(_conn: LogsDbConn) -> String {
-        let mut str = String::from("[\n\t");
-        let _coll = _conn.collection("schedules");
-        let cursor = _coll.find(None, None).unwrap();
-        for result in cursor { // iterator
-                if let Ok(item) = result { // error check the iterator and unwrap value to `item`
-                        let _bson = mongodb::to_bson(&item).unwrap(); // convert item to bson
-                        let _json = serde_json::ser::to_string(&_bson).unwrap(); // convert item to json string
-                        str.push_str(&_json);
-                }
-                str.push_str(",\n\t"); // push separator characters for each new entry
-        }
-        if str.len() <= 3{
-          return String::from("No entries found");
-        }
-        str.pop();      // remove last unnecessary separator characters
-        str.pop();
-        str.pop();
-        str.push_str("\n]");
-        return str;
+fn schedules_get_all(_conn: LogsDbConn) -> String 
+{
+	let mut str = String::from("[\n\t");
+	let _coll = _conn.collection("schedules");
+	let cursor = _coll.find(None, None).unwrap();
+	for result in cursor
+	{
+		if let Ok(item) = result
+		{
+			let _bson = mongodb::to_bson(&item).unwrap();
+			let _json = serde_json::ser::to_string(&_bson).unwrap();
+			str.push_str(&_json);
+		}
+		str.push_str(",\n\t");
+	}
+	if str.len() <= 3
+	{
+		return String::from("No entries found");
+	}
+	str.pop();
+	str.pop();
+	str.pop();
+	str.push_str("\n]");
+	return str;
 }
 
 #[get("/schedules/<schedule>")]
-fn schedules_get(_conn: LogsDbConn, schedule: &rocket::http::RawStr) -> String {
-        let mut str = String::from("[\n\t");
-        let doc = doc!{"schedule": schedule.as_str()}; //create a document to search for within the database
-        let _coll = _conn.collection("schedules");
-        let cursor = _coll.find(Some(doc.clone()), None).unwrap(); //search for the defined document
-        for result in cursor { // iterator
-                if let Ok(item) = result { // error check the iterator and unwrap value to `item`
-                        let _bson = mongodb::to_bson(&item).unwrap(); // convert item to bson
-                        let _json = serde_json::ser::to_string(&_bson).unwrap(); // convert item to json string
-                        str.push_str(&_json);
-                }
-                str.push_str(",\n\t"); // push separator characters for each new entry
-        }
-        if str.len() <= 3{
-          return String::from("No entries found");
-        }
-        str.pop();      // remove last unnecessary separator characters
-        str.pop();
-        str.pop();
-        str.push_str("\n]");
-        return str;
+fn schedules_get(_conn: LogsDbConn, schedule: &rocket::http::RawStr) -> String 
+{
+	let mut str = String::from("[\n\t");
+	let doc = doc!{"schedule": schedule.as_str()};
+	let _coll = _conn.collection("schedules");
+	let cursor = _coll.find(Some(doc.clone()), None).unwrap();
+	for result in cursor 
+	{
+		if let Ok(item) = result 
+		{
+			let _bson = mongodb::to_bson(&item).unwrap();
+			let _json = serde_json::ser::to_string(&_bson).unwrap();
+			str.push_str(&_json);
+		}
+		str.push_str(",\n\t");
+	}
+	if str.len() <= 3
+	{
+		return String::from("No entries found");
+	}
+	str.pop();
+	str.pop();
+	str.pop();
+	str.push_str("\n]");
+	return str;
 }
 
 #[post("/schedules")]
-fn schedules_post(_conn: LogsDbConn) -> &'static str {
-    let _coll = _conn.collection("schedules");
-    _coll.insert_one(doc!{ "schedule": "900-1700" }, None).unwrap();
-    return "Inserted an element into database";
+fn schedules_post(_conn: LogsDbConn) -> &'static str 
+{
+	let _coll = _conn.collection("schedules");
+	_coll.insert_one(doc!{ "schedule": "900-1700" }, None).unwrap();
+	return "Inserted an element into database";
 }
 
 #[get("/tables")]
-fn tables_get_all(_conn: LogsDbConn) -> String {
-        let mut str = String::from("[\n\t");
-        let _coll = _conn.collection("tables");
-        let cursor = _coll.find(None, None).unwrap();
-        for result in cursor { // iterator
-                if let Ok(item) = result { // error check the iterator and unwrap value to `item`
-                        let _bson = mongodb::to_bson(&item).unwrap(); // convert item to bson
-                        let _json = serde_json::ser::to_string(&_bson).unwrap(); // convert item to json string
-                        str.push_str(&_json);
-                }
-                str.push_str(",\n\t"); // push separator characters for each new entry
-        }
-        if str.len() <= 3{
-          return String::from("No entries found");
-        }
-        str.pop();      // remove last unnecessary separator characters
-        str.pop();
-        str.pop();
-        str.push_str("\n]");
-        return str;
+fn tables_get_all(_conn: LogsDbConn) -> String 
+{
+	let mut str = String::from("[\n\t");
+	let _coll = _conn.collection("tables");
+	let cursor = _coll.find(None, None).unwrap();
+	for result in cursor 
+	{
+		if let Ok(item) = result 
+		{
+			let _bson = mongodb::to_bson(&item).unwrap();
+			let _json = serde_json::ser::to_string(&_bson).unwrap();
+			str.push_str(&_json);
+		}
+		str.push_str(",\n\t");
+	}
+	if str.len() <= 3
+	{
+		return String::from("No entries found");
+	}
+	str.pop();
+	str.pop();
+	str.pop();
+	str.push_str("\n]");
+	return str;
 }
 
 #[get("/tables/<id>")]
-fn tables_get(_conn: LogsDbConn, id: u32) -> String {
-        let mut str = String::from("[\n\t");
-        let doc = doc!{"id": id}; //create a document to search for within the database
-        let _coll = _conn.collection("tables");
-        let cursor = _coll.find(Some(doc.clone()), None).unwrap(); //search for the defined document
-        for result in cursor { // iterator
-                if let Ok(item) = result { // error check the iterator and unwrap value to `item`
-                        let _bson = mongodb::to_bson(&item).unwrap(); // convert item to bson
-                        let _json = serde_json::ser::to_string(&_bson).unwrap(); // convert item to json string
-                        str.push_str(&_json);
-                }
-                str.push_str(",\n\t"); // push separator characters for each new entry
-        }
-        if str.len() <= 3{
-          return String::from("No entries found");
-        }
-        str.pop();      // remove last unnecessary separator characters
-        str.pop();
-        str.pop();
-        str.push_str("\n]");
-        return str;
+fn tables_get(_conn: LogsDbConn, id: u32) -> String 
+{
+	let mut str = String::from("[\n\t");
+	let doc = doc!{"id": id};
+	let _coll = _conn.collection("tables");
+	let cursor = _coll.find(Some(doc.clone()), None).unwrap();
+	for result in cursor 
+	{
+		if let Ok(item) = result
+		{
+			let _bson = mongodb::to_bson(&item).unwrap();
+			let _json = serde_json::ser::to_string(&_bson).unwrap();
+			str.push_str(&_json);
+		}
+		str.push_str(",\n\t");
+	}
+	if str.len() <= 3 
+	{
+		return String::from("No entries found");
+	}
+	str.pop();
+	str.pop();
+	str.pop();
+	str.push_str("\n]");
+	return str;
 }
 
 #[post("/tables")]
-fn tables_post(_conn: LogsDbConn) -> &'static str {
-    let _coll = _conn.collection("tables");
-    _coll.insert_one(doc!{ "id": 32 }, None).unwrap();
-    return "Inserted an element into database";
+fn tables_post(_conn: LogsDbConn) -> &'static str 
+{
+	let _coll = _conn.collection("tables");
+	_coll.insert_one(doc!{ "id": 32 }, None).unwrap();
+	return "Inserted an element into database";
 }
 
-fn main() {
+fn main() 
+{
     let allowed_origins = AllowedOrigins::all();
-    let cors = rocket_cors::CorsOptions {
+    let cors = rocket_cors::CorsOptions // attaches a CORS fairing to prevent security error on modern browsers
+    {
         allowed_origins,
         allowed_methods: vec![Method::Get].into_iter().map(From::from).collect(),
         allowed_headers: AllowedHeaders::some(&["Authorization", "Accept"]),

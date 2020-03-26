@@ -12,9 +12,15 @@ use mongodb::doc;
 use mongodb::bson;
 use serde_json;
 
+mod ingredients;
+mod staff;
+mod orders;
+mod tables;
+mod schedules;
+mod customers;
 
 #[database("mongodb_logs")]
-struct LogsDbConn(mongodb::db::Database);
+pub struct LogsDbConn(mongodb::db::Database);
 
 #[get("/")]
 fn index(_conn: LogsDbConn) -> &'static str {  
@@ -323,68 +329,6 @@ fn schedules_post(_conn: LogsDbConn) -> &'static str
 	return "Inserted an element into database";
 }
 
-#[get("/tables")]
-fn tables_get_all(_conn: LogsDbConn) -> String 
-{
-	let mut str = String::from("[\n\t");
-	let _coll = _conn.collection("tables");
-	let cursor = _coll.find(None, None).unwrap();
-	for result in cursor 
-	{
-		if let Ok(item) = result 
-		{
-			let _bson = mongodb::to_bson(&item).unwrap();
-			let _json = serde_json::ser::to_string(&_bson).unwrap();
-			str.push_str(&_json);
-		}
-		str.push_str(",\n\t");
-	}
-	if str.len() <= 3
-	{
-		return String::from("No entries found");
-	}
-	str.pop();
-	str.pop();
-	str.pop();
-	str.push_str("\n]");
-	return str;
-}
-
-#[get("/tables/<id>")]
-fn tables_get(_conn: LogsDbConn, id: u32) -> String 
-{
-	let mut str = String::from("[\n\t");
-	let doc = doc!{"id": id};
-	let _coll = _conn.collection("tables");
-	let cursor = _coll.find(Some(doc.clone()), None).unwrap();
-	for result in cursor 
-	{
-		if let Ok(item) = result
-		{
-			let _bson = mongodb::to_bson(&item).unwrap();
-			let _json = serde_json::ser::to_string(&_bson).unwrap();
-			str.push_str(&_json);
-		}
-		str.push_str(",\n\t");
-	}
-	if str.len() <= 3 
-	{
-		return String::from("No entries found");
-	}
-	str.pop();
-	str.pop();
-	str.pop();
-	str.push_str("\n]");
-	return str;
-}
-
-#[post("/tables")]
-fn tables_post(_conn: LogsDbConn) -> &'static str 
-{
-	let _coll = _conn.collection("tables");
-	_coll.insert_one(doc!{ "id": 32 }, None).unwrap();
-	return "Inserted an element into database";
-}
 
 fn main() 
 {
@@ -400,6 +344,8 @@ fn main()
     .to_cors().unwrap();
     rocket::ignite()
     .mount("/api", routes![index])
+    .mount("/api", routes![tables::get_all])
+    /*
     .mount("/api", routes![orders_get_all])
     .mount("/api", routes![orders_get])
     .mount("/api", routes![orders_post])
@@ -418,6 +364,7 @@ fn main()
     .mount("/api", routes![tables_get_all])
     .mount("/api", routes![tables_get])
     .mount("/api", routes![tables_post])
+    */
     .attach(LogsDbConn::fairing())
     .attach(cors)
     .launch();

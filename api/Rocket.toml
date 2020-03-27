@@ -1,0 +1,9 @@
+[development]
+address = "159.89.238.181"
+port = 8080
+workers = 2
+keep_alive = 5
+log = "normal"
+
+[global.databases]
+mongodb_logs = { url = "mongodb://localhost:27017" }

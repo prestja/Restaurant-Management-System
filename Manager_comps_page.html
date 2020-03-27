@@ -108,13 +108,13 @@
 		display: inline-block;
 	}
 	
-	/*Created a container to hold the add employee form*/
+	/*Created a container to hold the comps form*/
 	.items {
 		background-color: #A9A9A9 !important; //makes Gray background
 		padding: 10px;
 		margin: 10px 10px 10px 10px;
 		width: 80%;
-		height: 250px;
+		height: 400px;
 		display: inline-block;
 		text-align: center;
 		border: 5px;
@@ -201,29 +201,47 @@
 				<button onclick="document.location = 'Manager_discount_page.html'">DISCOUNT</button>
 			</div>
 		</div>
-	<!--holds add employee form-->
+	<!--holds comp table form-->
 		<div class = "items">
-			<h2>ADD EMPLOYEE</h2>
+			<h2>COMPS</h2>
 			<hr color="black">
 			<span style="text-align:left !important;position:relative;left:10px;">
-			<form>
-				<label>NAME:</label>
-				<input type="text" id="name" name="name" placeholder="John Doe" required />
-				<br>
-				<label>EMPLOYEE ID:</label>
-				<input type="text" id="empId" name="empId" placeholder="123456" required />
-				<br>
-				<label>POSITION:</label>
-				<input type="text" id="pos" name="pos" placeholder="waiter" required />
-				<br>
-				<label>HOURLY:</label>
-				<input type="text" id="hourly" name="hourly" placeholder="$7.25" required />
-				<br>
-				<label>PHONE:</label>
-				<input type="text" id="phone" name="phone" placeholder="123-456-7890" required />
-				<br><br>
-				<input type="submit" value="ADD EMP"/>
+			<form id ="rem">
+					<label>Select which table you would like to comp:</label>
+					<select id="tables">
+						<option value="Table1">Table 1</option>
+					</select>
+					<br><br>
+					<label>Price Amount or Specific items?</label>
+					<select id="typeOfComp" onclick="selectOption()">
+						<option value="prcAmt" selected>Price Amount</option>
+						<option value="specificItems">Specific Items</option>
+					</select>
+					<br><br>
+					<input type="text" id="amt" placeholder="$0.00" style="display:none">
+					<select id="spItems" style ="display:none" multiple>
+						<option value="item">ITEM1</option>
+						<option value="item2">ITEM2</option>
+					</select>
+					<br>
+					<input type ="submit" value ="COMP"/>
+					<label>**Hold down control to select several items</label>
 			</form>
+			<script>
+				function selectOption(){
+					var x = document.getElementById("typeOfComp").value;
+					if(x === "prcAmt")
+					{
+						document.getElementById("spItems").style.display = "none";
+						document.getElementById("amt").style.display = "block";
+					}
+					else
+					{
+						document.getElementById("amt").style.display = "none";
+						document.getElementById("spItems").style.display = "block";
+					}
+				}
+			</script>
 			</span>
 		</div>
 	</div>

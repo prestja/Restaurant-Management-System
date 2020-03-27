@@ -103,18 +103,18 @@
 		margin: 10px 10px 10px;
 		position: absolute;
 		width: 160px;
-		height: 400px;
+		height: 330px;
 		left: 20px;
 		display: inline-block;
 	}
 	
-	/*Created a container to hold the add employee form*/
+	/*Created a container to hold the sales report*/
 	.items {
 		background-color: #A9A9A9 !important; //makes Gray background
 		padding: 10px;
 		margin: 10px 10px 10px 10px;
 		width: 80%;
-		height: 250px;
+		height: 300px;
 		display: inline-block;
 		text-align: center;
 		border: 5px;
@@ -143,6 +143,14 @@
 	/* Add a background color on hover */
 	.tool-button-group button:hover {
 		background-color: #3e8e41;
+	}
+	table, th, td {
+		border: 1px solid black;
+		border-collapse: collapse;
+		padding: 5px;
+		position:relative;
+		right:10px;
+		left:5px;
 	}
 </style>
 <head>
@@ -184,46 +192,36 @@
 		</div>
 	</div>
 	
-	<!--Creates page to show 86/68-->
+	<!--Creates page to show reports-->
 	<div class = "main-section">
 		<div class = "menu-type">
-			<h2>TOOLS</h2>
+			<h2>REPORTS</h2>
 			<hr color = "black">
 			<div class="tool-button-group">
-				<button onclick="document.location = 'Manager_tool_page.html'">ADD EMP</button>
+				<button onclick="document.location = 'Manager_report_page.html'">SALES</button>
 				<br><br>
-				<button onclick="document.location = 'Manager_rem_employee_page.html'">REM EMP</button>
+				<button onclick="document.location = 'Manager_inventory_page.html'">INV</button>
 				<br><br>
-				<button onclick="document.location = 'Manager_comps_page.html'">COMPS</button>
+				<button onclick="document.location = 'Manager_labor_page.html'">LABOR</button>
 				<br><br>
-				<button onclick="document.location = 'Manager_promos_page.html'">PROMOS</button>
-				<br><br>
-				<button onclick="document.location = 'Manager_discount_page.html'">DISCOUNT</button>
+				<button onclick="document.location = 'Manager_comps_report_page.html'">COMPS</button>
 			</div>
 		</div>
-	<!--holds add employee form-->
+	<!--holds sales report-->
 		<div class = "items">
-			<h2>ADD EMPLOYEE</h2>
+			<h2>LABOR REPORT</h2>
 			<hr color="black">
 			<span style="text-align:left !important;position:relative;left:10px;">
-			<form>
-				<label>NAME:</label>
-				<input type="text" id="name" name="name" placeholder="John Doe" required />
-				<br>
-				<label>EMPLOYEE ID:</label>
-				<input type="text" id="empId" name="empId" placeholder="123456" required />
-				<br>
-				<label>POSITION:</label>
-				<input type="text" id="pos" name="pos" placeholder="waiter" required />
-				<br>
-				<label>HOURLY:</label>
-				<input type="text" id="hourly" name="hourly" placeholder="$7.25" required />
-				<br>
-				<label>PHONE:</label>
-				<input type="text" id="phone" name="phone" placeholder="123-456-7890" required />
-				<br><br>
-				<input type="submit" value="ADD EMP"/>
-			</form>
+				<table style="width:90%">
+					<tr>
+						<th>ID</th>
+						<th>NAME</th>
+						<th>START TIME</th>
+						<th>END TIME</th>
+						<th>TOTAL HOURS</th>
+						<th>TIPS</th>
+					</tr>
+				</table>
 			</span>
 		</div>
 	</div>

@@ -108,13 +108,13 @@
 		display: inline-block;
 	}
 	
-	/*Created a container to hold the add employee form*/
+	/*Created a container to hold the comps form*/
 	.items {
 		background-color: #A9A9A9 !important; //makes Gray background
 		padding: 10px;
 		margin: 10px 10px 10px 10px;
 		width: 80%;
-		height: 250px;
+		height: 400px;
 		display: inline-block;
 		text-align: center;
 		border: 5px;
@@ -201,29 +201,55 @@
 				<button onclick="document.location = 'Manager_discount_page.html'">DISCOUNT</button>
 			</div>
 		</div>
-	<!--holds add employee form-->
+	<!--holds comp table form-->
 		<div class = "items">
-			<h2>ADD EMPLOYEE</h2>
+			<h2>DISCOUNTS</h2>
 			<hr color="black">
 			<span style="text-align:left !important;position:relative;left:10px;">
-			<form>
-				<label>NAME:</label>
-				<input type="text" id="name" name="name" placeholder="John Doe" required />
-				<br>
-				<label>EMPLOYEE ID:</label>
-				<input type="text" id="empId" name="empId" placeholder="123456" required />
-				<br>
-				<label>POSITION:</label>
-				<input type="text" id="pos" name="pos" placeholder="waiter" required />
-				<br>
-				<label>HOURLY:</label>
-				<input type="text" id="hourly" name="hourly" placeholder="$7.25" required />
-				<br>
-				<label>PHONE:</label>
-				<input type="text" id="phone" name="phone" placeholder="123-456-7890" required />
-				<br><br>
-				<input type="submit" value="ADD EMP"/>
+			<form id ="rem">
+					<label>Select which table you would like to add the discount:</label>
+					<select id="tables">
+						<option value="Table1">Table 1</option>
+						<option value="Table2">Table 2</option>
+						<option value="Table3">Table 3</option>
+						<option value="Table4">Table 4</option>
+						<option value="Table5">Table 5</option>
+						<option value="Table6">Table 6</option>
+						<option value="Table7">Table 7</option>
+						<option value="Table8">Table 8</option>
+						<option value="Table9">Table 9</option>
+						<option value="Table10">Table 10</option>
+						<option value="Table11">Table 11</option>
+						<option value="Table12">Table 12</option>
+						<option value="Table13">Table 13</option>
+						<option value="Table14">Table 14</option>
+						<option value="Table15">Table 15</option>
+						<option value="Table16">Table 16</option>
+						<option value="Table17">Table 17</option>
+						<option value="Table18">Table 18</option>
+						<option value="Table19">Table 19</option>
+						<option value="Table20">Table 20</option>
+					</select>
+					<label>Discount Code:</label>
+					<input type="text" id="code" placeholder="Code">
+					<br><br>
+					<input type ="submit" value ="APPLY DISCOUNT"/>
 			</form>
+			<script>
+				function selectOption(){
+					var x = document.getElementById("typeOfComp").value;
+					if(x === "prcAmt")
+					{
+						document.getElementById("spItems").style.display = "none";
+						document.getElementById("amt").style.display = "block";
+					}
+					else
+					{
+						document.getElementById("amt").style.display = "none";
+						document.getElementById("spItems").style.display = "block";
+					}
+				}
+			</script>
 			</span>
 		</div>
 	</div>

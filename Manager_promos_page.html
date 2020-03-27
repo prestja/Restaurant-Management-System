@@ -108,13 +108,13 @@
 		display: inline-block;
 	}
 	
-	/*Created a container to hold the add employee form*/
+	/*Created a container to hold the comps form*/
 	.items {
 		background-color: #A9A9A9 !important; //makes Gray background
 		padding: 10px;
 		margin: 10px 10px 10px 10px;
 		width: 80%;
-		height: 250px;
+		height: 400px;
 		display: inline-block;
 		text-align: center;
 		border: 5px;
@@ -201,29 +201,52 @@
 				<button onclick="document.location = 'Manager_discount_page.html'">DISCOUNT</button>
 			</div>
 		</div>
-	<!--holds add employee form-->
+	<!--holds comp table form-->
 		<div class = "items">
-			<h2>ADD EMPLOYEE</h2>
+			<h2>PROMOS</h2>
 			<hr color="black">
 			<span style="text-align:left !important;position:relative;left:10px;">
-			<form>
-				<label>NAME:</label>
-				<input type="text" id="name" name="name" placeholder="John Doe" required />
-				<br>
-				<label>EMPLOYEE ID:</label>
-				<input type="text" id="empId" name="empId" placeholder="123456" required />
-				<br>
-				<label>POSITION:</label>
-				<input type="text" id="pos" name="pos" placeholder="waiter" required />
-				<br>
-				<label>HOURLY:</label>
-				<input type="text" id="hourly" name="hourly" placeholder="$7.25" required />
-				<br>
-				<label>PHONE:</label>
-				<input type="text" id="phone" name="phone" placeholder="123-456-7890" required />
-				<br><br>
-				<input type="submit" value="ADD EMP"/>
+			<form id ="rem">
+					<label>Select which promotion you would like to run:</label>
+					<select id="promo" onclick="selectOption()">
+						<option value="kids">Kids Eat Free</option>
+						<option value="drinks">Free Drinks</option>
+						<option value="other">Other</option>
+					</select>
+					<br><br>
+					<span id = "oth" style="display:none">
+						<label>Name of promotion:</label>
+						<input type="text" id="amt" placeholder="Name">
+						<br><br>
+						<label>Start Date:</label>
+						<input type="date" id="startDate">
+						<br><br>
+						<label>End Date:</label>
+						<input type="date" id="endDate">
+						<br><br>
+						<label>Type of discount:</label>
+						<select id="discType">
+							<option value="perc">Percent</option>
+							<option value="amt">Amount</option>
+						</select>
+						<input type="text" id="val" placeholder="0% or $0.00">
+						<br><br>
+					</span>
+					<input type ="submit" value ="ADD PROMOTION"/>
 			</form>
+			<script>
+				function selectOption(){
+					var x = document.getElementById("promo").value;
+					if(x === "other")
+					{
+						document.getElementById("oth").style.display = "block";
+					}
+					else
+					{
+						document.getElementById("oth").style.display = "none";
+					}
+				}
+			</script>
 			</span>
 		</div>
 	</div>

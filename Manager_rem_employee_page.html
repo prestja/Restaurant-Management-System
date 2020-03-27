@@ -161,7 +161,7 @@
     });
     </script>
 </head>
-<body style="background-color:Black;">
+<body style="background-color:Black;" onload="createForm()">
 	<!--creates buttons in header to go back-->
 	<div class="header">
 
@@ -201,31 +201,30 @@
 				<button onclick="document.location = 'Manager_discount_page.html'">DISCOUNT</button>
 			</div>
 		</div>
-	<!--holds add employee form-->
+	<!--holds remove employee form-->
 		<div class = "items">
-			<h2>ADD EMPLOYEE</h2>
+			<h2>REMOVE EMPLOYEE</h2>
 			<hr color="black">
 			<span style="text-align:left !important;position:relative;left:10px;">
-			<form>
-				<label>NAME:</label>
-				<input type="text" id="name" name="name" placeholder="John Doe" required />
-				<br>
-				<label>EMPLOYEE ID:</label>
-				<input type="text" id="empId" name="empId" placeholder="123456" required />
-				<br>
-				<label>POSITION:</label>
-				<input type="text" id="pos" name="pos" placeholder="waiter" required />
-				<br>
-				<label>HOURLY:</label>
-				<input type="text" id="hourly" name="hourly" placeholder="$7.25" required />
-				<br>
-				<label>PHONE:</label>
-				<input type="text" id="phone" name="phone" placeholder="123-456-7890" required />
-				<br><br>
-				<input type="submit" value="ADD EMP"/>
+			<form id ="rem">
+					<label>Select which employee(s) you would like to remove:</label>
+					<br><br>
+					<input type ="submit" value ="REM EMP"/>
 			</form>
 			</span>
 		</div>
 	</div>
+	<script>
+		function createForm(){
+			var x = document.createElement("INPUT");
+			x.setAttribute("type","checkbox");
+			x.setAttributes("id","emp")
+			document.getElementById("rem").appendChild(x);
+			var y = document.createElement("LABEL");
+			y.setAttributes("for","emp");
+			y.innerHTML = "ID:40";
+			document.getElementById("rem").appendChild(y);
+		}
+	</script>
 </body>
 </html>

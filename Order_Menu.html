@@ -14,7 +14,7 @@
 	/*Created a header container to hold buttons at the top*/
 	.header {
 		padding: 10px;
-		<!-- background-color: blue; -->
+		/* background-color: blue; */
 		margin: 0px 0px 0px;
 	}
 	
@@ -137,13 +137,13 @@
 	
 	<div class = "left-menu">
 		<div class="menu-button-group">
-			<button onclick="menuType('drinks')">DRINKS</button>
+			<button onclick="menuType('drinks')">BEVERAGES</button>
 			<br><br>
-			<button onclick="menuType('apps')">APPS</button>
+			<button onclick="menuType('apps')">APPETIZERS</button>
 			<br><br>
-			<button onclick="menuType('meals')">MEALS</button>
+			<button onclick="menuType('meals')">ENTREES</button>
 			<br><br>
-			<button onclick="menuType('sweets')">SWEETS</button>
+			<button onclick="menuType('sweets')">DESSERTS</button>
 		</div>
 	</div>
 	
@@ -157,7 +157,7 @@
 			var t = document.getElementById("headerType");
 			if(mType === "drinks")
 			{
-				t.innerHTML = "DRINKS";
+				t.innerHTML = "BEVERAGES"
 			}
 			else if(mType === "apps")
 			{
@@ -165,11 +165,11 @@
 			}
 			else if(mType === "meals")
 			{
-				t.innerHTML = "MEALS";
+				t.innerHTML = "ENTREES";
 			}
 			else if(mType === "sweets")
 			{
-				t.innerHTML = "SWEETS";
+				t.innerHTML = "DESSERTS";
 			}
 		}
 	</script>

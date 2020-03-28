@@ -1,4 +1,5 @@
 <html style = "width: 100%; height: 100%">
+
 <style>
     .orders 
     {
@@ -16,8 +17,8 @@
         height: 100%;
         background-color: lightgrey;        
         margin-right: 3vw;
-        display: inline-block;
         border-radius: 1vw;
+        display: none;
     }
 
     .controls 
@@ -28,16 +29,37 @@
     }
 </style>
 <head>
+    <script src="jquery-3.4.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var clone = $("#ticket_template").clone(true);
+            clone.css('display', 'inline-block');
+            clone.appendTo('.orders');
 
+            var clone = $("#ticket_template").clone(true);
+            clone.css('display', 'inline-block');
+            clone.appendTo('.orders');
+
+            var clone = $("#ticket_template").clone(true);
+            clone.css('display', 'inline-block');
+            clone.appendTo('.orders');
+
+            var clone = $("#ticket_template").clone(true);
+            clone.css('display', 'inline-block');
+            clone.appendTo('.orders');
+
+            var clone = $("#ticket_template").clone(true);
+            clone.css('display', 'inline-block');
+            clone.appendTo('.orders');
+        }); 
+
+    </script>
+    <div class = "ticket" id = "ticket_template">
+    </div>
 </head>
 <body>
     <div class = "orders">        
-        <div class = "ticket"></div> 
-        <div class = "ticket"></div> 
-        <div class = "ticket"></div>         
-        <div class = "ticket"></div>         
-        <div class = "ticket"></div>         
-        
+                        
     </div>
     <div class = "controls">
             

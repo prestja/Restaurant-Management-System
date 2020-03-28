@@ -108,7 +108,7 @@
 		display: inline-block;
 	}
 	
-	/*Created a container to hold the sales report*/
+	/*Created a container to hold the inventory report*/
 	.items {
 		background-color: #A9A9A9 !important; //makes Gray background
 		padding: 10px;
@@ -144,6 +144,7 @@
 	.tool-button-group button:hover {
 		background-color: #3e8e41;
 	}
+	/*styles table to have collapsed borders*/
 	table, th, td {
 		border: 1px solid black;
 		border-collapse: collapse;
@@ -207,10 +208,11 @@
 				<button onclick="document.location = 'Manager_comps_report_page.html'">COMPS</button>
 			</div>
 		</div>
-	<!--holds sales report-->
+	<!--holds inventory report report-->
 		<div class = "items">
 			<h2>INVENTORY REPORT</h2>
 			<hr color="black">
+			<!--edit button makes it to where the amount and 86'd can be edited-->
 			<span class="button-group">
 				<button onclick="editTable()'">EDIT</button>
 			</span>

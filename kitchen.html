@@ -36,32 +36,41 @@
         height: 10%; 
         background-color: lightgrey;
     }
+
+    .item 
+    {
+        display: none;
+    }
 </style>
 <head>
 	<link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet'>
     
     <script src="jquery-3.4.1.min.js"></script>
     <script>
+        function addTicket()
+        {
+            var clone = $("#ticket_template").clone(true);
+            clone.css('display', 'inline-block');
+            clone.appendTo('.orders');
+            return clone;
+        }
+
+        function addItem(ticket) 
+        {
+            var clone = $("#item_template").clone(true);
+            clone.css('display', 'inline-block');
+            console.log(clone.html());
+            ticket.find('.items').append(clone);
+            return clone;
+        }
+        
         $(document).ready(function() {
-            var clone = $("#ticket_template").clone(true);
-            clone.css('display', 'inline-block');
-            clone.appendTo('.orders');
-
-            var clone = $("#ticket_template").clone(true);
-            clone.css('display', 'inline-block');
-            clone.appendTo('.orders');
-
-            var clone = $("#ticket_template").clone(true);
-            clone.css('display', 'inline-block');
-            clone.appendTo('.orders');
-
-            var clone = $("#ticket_template").clone(true);
-            clone.css('display', 'inline-block');
-            clone.appendTo('.orders');
-
-            var clone = $("#ticket_template").clone(true);
-            clone.css('display', 'inline-block');
-            clone.appendTo('.orders');
+            let first = addTicket();
+            addItem(first);
+            //addTicket();
+            //addTicket();
+            //addTicket();
+            //addTicket();
         }); 
 
     </script>
@@ -79,32 +88,15 @@
             </div>
         </div>
         
-        <div class = "items" style = "height: 90%; background-color:orange; overflow:auto">
-            <p>LINE</p>
-            <p>LINE</p>
-            <p>LINE</p>
-            <p>LINE</p>
-            <p>LINE</p>
-            <p>LINE</p>
-            <p>LINE</p>
-            <p>LINE</p>
-            <p>LINE</p>
-            <p>LINE</p>
-            <p>LINE</p>
-            <p>LINE</p>
-            <p>LINE</p>
-            <p>LINE</p>
-            <p>LINE</p>
-            <p>LINE</p>
-            <p>LINE</p>
-            <p>LINE</p>
-            <p>LINE</p>
-            <p>LINE</p>
-            <p>LINE</p>
-            <p>LINE</p>
+        <div class = "items" style = "height: 90%; background-color:orange; overflow-x: hidden; overflow-y: scroll;">
         </div>
     </div>
+
+    <div class = "item" id = "item_template">       
+        <p> THIS IS AN ITEM</p>
+    </div>
 </head>
+
 <body>
     <div class = "orders">        
                         

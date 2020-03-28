@@ -108,7 +108,7 @@
 		display: inline-block;
 	}
 	
-	/*Created a container to hold the comps form*/
+	/*Created a container to hold the promotions form*/
 	.items {
 		background-color: #A9A9A9 !important; //makes Gray background
 		padding: 10px;
@@ -184,7 +184,7 @@
 		</div>
 	</div>
 	
-	<!--Creates page to show 86/68-->
+	<!--Creates page to show tools-->
 	<div class = "main-section">
 		<div class = "menu-type">
 			<h2>TOOLS</h2>
@@ -201,7 +201,7 @@
 				<button onclick="document.location = 'Manager_discount_page.html'">DISCOUNT</button>
 			</div>
 		</div>
-	<!--holds comp table form-->
+	<!--holds promotions form-->
 		<div class = "items">
 			<h2>PROMOS</h2>
 			<hr color="black">
@@ -214,6 +214,7 @@
 						<option value="other">Other</option>
 					</select>
 					<br><br>
+					<!--If the manager selects other, form displays-->
 					<span id = "oth" style="display:none">
 						<label>Name of promotion:</label>
 						<input type="text" id="amt" placeholder="Name">
@@ -235,6 +236,7 @@
 					<input type ="submit" value ="ADD PROMOTION"/>
 			</form>
 			<script>
+				<!--If other is selected, display form to fill out-->
 				function selectOption(){
 					var x = document.getElementById("promo").value;
 					if(x === "other")

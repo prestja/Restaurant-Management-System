@@ -1,0 +1,121 @@
+<html style = "width: 100%; height: 100%">
+
+<style>    
+    .orders 
+    {
+        width: 100%; 
+        height: 90%; 
+        background-color: white;
+        overflow-x:auto;
+        overflow-y: hidden;
+        white-space: nowrap;
+    }
+
+    .ticket 
+    {
+        width: 25%;
+        height: 100%;
+        background-color: lightgrey;        
+        margin-right: 1vw;
+        border-radius: 1vw;
+        display: none;
+    }    
+
+    .ticket button
+    {
+        background-color: white;
+        width: 33%;
+        font-family: "Lato", Arial, sans-serif;
+        color: black;
+        border-radius:1vw;
+    }
+
+    .controls 
+    {
+        width: 100%; 
+        height: 10%; 
+        background-color: lightgrey;
+    }
+
+    .item 
+    {
+        display: none;
+    }
+</style>
+<head>
+	<link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet'>
+    
+    <script src="jquery-3.4.1.min.js"></script>
+    <script>
+        function addTicket(order)
+        {
+            var clone = $("#ticket_template").clone(true);
+            clone.css('display', 'inline-block');
+            clone.appendTo('.orders');
+            
+            if (order.items === undefined) {
+                return clone;
+            }
+            order.items.forEach(item => 
+                addItem(order)
+            );
+            
+            return clone;
+        }
+
+        function addItem(ticket) 
+        {
+            var clone = $("#item_template").clone(true);
+            clone.css('display', 'inline-block');
+            console.log(clone.html());
+            ticket.find('.items').append(clone);
+            return clone;
+        }
+        
+        $(document).ready(function() {
+            $.ajax({
+                url: 'http://159.89.238.181:8080/api/orders',
+                type: 'get',
+                dataType: 'JSON',
+                success: function(response) {
+                    response.forEach(order => 
+                        addTicket(order)
+                    );
+                }
+            })
+        }); 
+
+    </script>
+    <div class = "ticket" id = "ticket_template">        
+        <div class = "information" style = "height: 20%; background-color: navy; color:white">
+            <div class = "row"> 
+                <button>Call waitstaff</button>
+                <button>Call manager</button>
+                <button>Complete</button>
+            </div>
+            <div class = "row">
+                <p>ORDER #</p>
+                <p>ORDERED AT  #</p>
+                <p>TABLE #</p>
+            </div>
+        </div>
+        
+        <div class = "items" style = "height: 90%; background-color:lightgrey; overflow-x: hidden; overflow-y: scroll;">
+        </div>
+    </div>
+
+    <div class = "item" id = "item_template">       
+        <p> THIS IS AN ITEM</p>
+    </div>
+</head>
+
+<body>
+    <div class = "orders">        
+                        
+    </div>
+    <div class = "controls">
+            
+    </div>
+
+</body>
+</html>

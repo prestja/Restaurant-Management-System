@@ -108,7 +108,7 @@
 		display: inline-block;
 	}
 	
-	/*Created a container to hold the comps form*/
+	/*Created a container to hold the discount form*/
 	.items {
 		background-color: #A9A9A9 !important; //makes Gray background
 		padding: 10px;
@@ -184,7 +184,7 @@
 		</div>
 	</div>
 	
-	<!--Creates page to show 86/68-->
+	<!--Creates page to show tools-->
 	<div class = "main-section">
 		<div class = "menu-type">
 			<h2>TOOLS</h2>
@@ -201,7 +201,7 @@
 				<button onclick="document.location = 'Manager_discount_page.html'">DISCOUNT</button>
 			</div>
 		</div>
-	<!--holds comp table form-->
+	<!--holds discount table form-->
 		<div class = "items">
 			<h2>DISCOUNTS</h2>
 			<hr color="black">
@@ -235,21 +235,6 @@
 					<br><br>
 					<input type ="submit" value ="APPLY DISCOUNT"/>
 			</form>
-			<script>
-				function selectOption(){
-					var x = document.getElementById("typeOfComp").value;
-					if(x === "prcAmt")
-					{
-						document.getElementById("spItems").style.display = "none";
-						document.getElementById("amt").style.display = "block";
-					}
-					else
-					{
-						document.getElementById("amt").style.display = "none";
-						document.getElementById("spItems").style.display = "block";
-					}
-				}
-			</script>
 			</span>
 		</div>
 	</div>

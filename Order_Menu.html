@@ -125,6 +125,7 @@
 </head>
 
 <body style="background-color:Black;">
+	<!--Stores header button group-->
 	<div class="header">
 
 		<div class="button-group">
@@ -134,7 +135,7 @@
 		</div>
 	
 	</div>
-	
+	<!--has buttons for the menu types-->
 	<div class = "left-menu">
 		<div class="menu-button-group">
 			<button onclick="menuType('drinks')">BEVERAGES</button>
@@ -146,12 +147,13 @@
 			<button onclick="menuType('sweets')">DESSERTS</button>
 		</div>
 	</div>
-	
+	<!--Stores menu items of menu type selected from the buttons, default is beverages-->
 	<div class = "menu" id = "menuType">
 		<h2 id = "headerType">BEVERAGES</h2>
 		<hr color = "black">
 	</div>
 	<script>
+		<!--selects menu type and displays menu items of that type-->
 		function menuType(mType)
 		{	
 			var t = document.getElementById("headerType");
@@ -174,7 +176,7 @@
 		}
 	</script>
 	
-/*Stores div for receipt items*/
+<!--Stores div for receipt items-->
 	<div class = "receipt">
 		<h2 text-align="center">RECEIPT</h2>
 		<div style="display:inline-block; width:45%;text-align:left;height:20px">
@@ -184,6 +186,7 @@
 			<h4>QTY</h4>
 		</div>
 		<hr color = "black">
+		<!--form for known allergies so kitchen and waitstaff can keep track-->
 		<div style = "color:#B22222 !important;text-align:left;position:relative;left:10px">
 			<form action="">
 				<label>Known Allergies:</label>
@@ -195,6 +198,7 @@
 			<span style="color:black !important">*VEGETARIAN ITEM</span>
 		</div>
 		<hr color="black">
+		<!--button submits the order-->
 		<div class="menu-button-group" style="position:absolute;bottom:50px !important;width:90%">
 			<button onclick="">TEST BUTTON</button>
 		</div>

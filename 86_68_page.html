@@ -189,18 +189,18 @@
 		<hr color = "black">
 		<div class = "menu-type">
 			<div class="menu-button-group">
-				<button onclick="menuType('drinks')">DRINKS</button>
+				<button onclick="menuType('drinks')">BEVERAGES</button>
 				<br><br>
-				<button onclick="menuType('apps')">APPS</button>
+				<button onclick="menuType('apps')">APPETIZERS</button>
 				<br><br>
 				<button onclick="menuType('meals')">MEALS</button>
 				<br><br>
-				<button onclick="menuType('sweets')">SWEETS</button>
+				<button onclick="menuType('sweets')">DESSERTS</button>
 			</div>
 		</div>
 	<!--holds menu items of the type selected in menu-type-->
 		<div class = "items" id = "menuType">
-			<h4 id = "headerType">DRINKS</h4>
+			<h4 id = "headerType">BEVERAGES</h4>
 			<hr color = "black">
 			<div class="items-button-group">
 				<button onclick="toggleColor('cheeseburger')" id = "cheeseburger">TEST BUTTON</button>
@@ -214,7 +214,7 @@
 				var t = document.getElementById("headerType");
 				if(mType === "drinks")
 				{
-					t.innerHTML = "DRINKS";
+					t.innerHTML = "BEVERAGES";
 				}
 				else if(mType === "apps")
 				{
@@ -222,11 +222,11 @@
 				}
 				else if(mType === "meals")
 				{
-					t.innerHTML = "MEALS";
+					t.innerHTML = "ENTREES";
 				}
 				else if(mType === "sweets")
 				{
-					t.innerHTML = "SWEETS";
+					t.innerHTML = "DESSERTS";
 				}
 			}
 			<!--Toggles the color of the button(there is a bug currently, have to click button twice to start toggling-->

@@ -1,6 +1,6 @@
 <html style = "width: 100%; height: 100%">
 
-<style>
+<style>    
     .orders 
     {
         width: 100%; 
@@ -19,6 +19,15 @@
         margin-right: 3vw;
         border-radius: 1vw;
         display: none;
+    }    
+
+    .ticket button
+    {
+        background-color: green;
+        width: 33%;
+        font-family: "Lato", Arial, sans-serif;
+        color: white;
+        border-radius:1vw;
     }
 
     .controls 
@@ -29,6 +38,8 @@
     }
 </style>
 <head>
+	<link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet'>
+    
     <script src="jquery-3.4.1.min.js"></script>
     <script>
         $(document).ready(function() {
@@ -54,7 +65,44 @@
         }); 
 
     </script>
-    <div class = "ticket" id = "ticket_template">
+    <div class = "ticket" id = "ticket_template">        
+        <div class = "information" style = "height: 20%; background-color: magenta">
+            <div class = "row"> 
+                <button>Call waitstaff</button>
+                <button>Call manager</button>
+                <button>Complete</button>
+            </div>
+            <div class = "row">
+                <p>ORDER #</p>
+                <p>ORDERED AT  #</p>
+                <p>TABLE #</p>
+            </div>
+        </div>
+        
+        <div class = "items" style = "height: 90%; background-color:orange; overflow:auto">
+            <p>LINE</p>
+            <p>LINE</p>
+            <p>LINE</p>
+            <p>LINE</p>
+            <p>LINE</p>
+            <p>LINE</p>
+            <p>LINE</p>
+            <p>LINE</p>
+            <p>LINE</p>
+            <p>LINE</p>
+            <p>LINE</p>
+            <p>LINE</p>
+            <p>LINE</p>
+            <p>LINE</p>
+            <p>LINE</p>
+            <p>LINE</p>
+            <p>LINE</p>
+            <p>LINE</p>
+            <p>LINE</p>
+            <p>LINE</p>
+            <p>LINE</p>
+            <p>LINE</p>
+        </div>
     </div>
 </head>
 <body>

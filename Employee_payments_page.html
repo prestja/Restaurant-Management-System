@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<style>
+	* {
+		box-sizing: border-box;
+	}
+
+	body {
+		background-color: black;
+		margin: 0;
+	}
+	
+	/*Created a header container to hold buttons at the top*/
+	.header {
+		padding: 10px;
+		<!-- background-color: blue; -->
+		margin: 0px 0px 0px;
+	}
+	
+	/*Button group for creating the buttons at top of page*/
+	/*Same button group from the main page*/
+	.button-group button {
+		background-color: #D3D3D3; /*Makes Gray background*/
+		border:  0px #D3D3D3;  /*Border around boxes is Gray*/
+		color: black; /* White text */
+		padding: 10px 10px; /* Some padding */
+		margin: 0;  /* Created space between buttons */
+		font-family: Arial Black, Times, serif; /* sets font */
+		font-size:  16px;	/* Sets size */
+		font-weight:  normal;	/*Sets normal or bold */
+		text-align: center;	/* Aligns to center of button */
+		cursor: pointer; /* Pointer/hand icon */
+		width: 15%; /* Set a width if needed */
+		display: inline-block;
+	}
+
+	.button-group button:not(:last-child) {
+		border-right: none; /* Prevent double borders */
+	}
+
+	/* Add a background color on hover */
+	.button-group button:hover {
+		background-color: #3e8e41;
+	}
+	
+	.column-left {
+		float: left;
+		width: 55%;
+		height: 90%;
+		padding: 0px 40px 130px;
+		background-color: gray;
+	}
+	
+	.column-right {
+		float: right;
+		width: 38%;
+		height: 90%;
+		padding: 0px 40px 533px;
+		background-color: gray;
+		text-align: center;
+	}
+	
+	.row:after {
+		content: "";
+		display: table;
+		clear: both;
+	}
+	
+	/*Adding to left container*/
+	/*Add buttons to the left container*/
+	.button-group2 button {
+		background-color: black; /*Makes Gray background*/
+		border:  0px #D3D3D3;  /*Border around boxes is Gray*/
+		color: white; /* White text */
+		padding: 20px 50px; /* Some padding */
+		margin: 25px;  /* Created space between buttons */
+		font-family: Arial Black, Times, serif; /* sets font */
+		font-size:  20px;	/* Sets size */
+		font-weight:  normal;	/*Sets normal or bold */
+		text-align: center;	/* Aligns to center of button */
+		cursor: pointer; /* Pointer/hand icon */
+		width: 65%; /* Set a width if needed */
+		display: block;
+	}
+
+	.button-group2 button:not(:last-child) {
+		border-right: none; /* Prevent double borders */
+	}
+
+	/* Add a background color on hover */
+	.button-group2 button:focus {
+		background-color: green;
+	}
+	
+
+	/*Create an input for tips*/
+	input {
+		margin: 10px 60px;
+		width: 150px;
+	}
+
+	label {
+		margin: 0px 0px 0px;
+	}
+	
+	h2 {
+		margin: 30px;
+	}
+	
+	@media screen and (max-width: 600px){
+		.column {
+			width: 100%;
+		}
+	}
+	
+	.slidecontainer {
+		float: right;
+		width: 100%;
+		background-color: none;
+		margin: 0 auto;
+	}
+
+	.slider {
+		-webkit-appearance: none;
+		width: 30%;
+		height: 25px;
+		background: #d3d3d3;
+		position: absolute;
+		left 50%;
+		outline: none;
+		opacity: 1;
+		-webkit-transition: .2s;
+		transition: opacity .2s;
+	}
+
+	.slider:hover {
+		opacity: 1;
+	}
+
+	.slider::-webkit-slider-thumb {
+		-webkit-appearance: none;
+		appearance: none;
+		width: 25px;
+		height: 25px;
+		background: #4CAF50;
+		cursor: pointer;
+	}
+
+	.slider::-moz-range-thumb {
+		width: 25px;
+		height: 25px;
+		background: #4CAF50;
+		cursor: pointer;
+	}
+	
+</style>
+<body>
+
+<div class="header">
+
+	<div class="button-group">
+		<button onclick="document.location = 'employee_main_page.html'">&#60&#60 BACK</button>
+	</div>
+	
+</div>
+
+<div class="row">
+	<div class="column-left">
+	<br>
+		<form>
+					<label>Select which table for payment:</label>
+					<select id="tables">
+						<option value="Table1">Table 1</option>
+						<option value="Table2">Table 2</option>
+						<option value="Table3">Table 3</option>
+						<option value="Table4">Table 4</option>
+						<option value="Table5">Table 5</option>
+						<option value="Table6">Table 6</option>
+						<option value="Table7">Table 7</option>
+						<option value="Table8">Table 8</option>
+						<option value="Table9">Table 9</option>
+						<option value="Table10">Table 10</option>
+						<option value="Table11">Table 11</option>
+						<option value="Table12">Table 12</option>
+						<option value="Table13">Table 13</option>
+						<option value="Table14">Table 14</option>
+						<option value="Table15">Table 15</option>
+						<option value="Table16">Table 16</option>
+						<option value="Table17">Table 17</option>
+						<option value="Table18">Table 18</option>
+						<option value="Table19">Table 19</option>
+						<option value="Table20">Table 20</option>
+					</select>
+		</form>
+		<h2>PAYMENT METHOD</h2>
+		
+		<div class="button-group2">
+			<button onclick="">CARD</button>
+			<button onclick="">CASH</button>
+			<button onclick="">SPLIT</button>
+		</div>
+		
+			<h2> TIP AMOUNT </h2>
+			
+			<div class="slidecontainer">
+				<input type="range" min="0" max="30" value="15" class="slider" id="myRange">
+				<p>Tip: <span id="demo"></span>&#37;</p>
+			</div>
+			
+			<script>
+				
+				var slider = document.getElementById("myRange");
+				var output = document.getElementById("demo");
+				output.innerHTML = slider.value;
+				slider.oninput = function() {
+					output.innerHTML = this.value;
+				}
+				
+			</script>
+		
+		
+	</div>
+	
+	<div class="column-right">
+		<h2>RECEIPT</h2>
+	</div>
+</div>
+
+
+</body>
+</html>

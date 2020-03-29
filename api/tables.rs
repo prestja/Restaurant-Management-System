@@ -67,3 +67,14 @@ pub fn post(_conn: LogsDbConn) -> &'static str
 	_coll.insert_one(doc!{ "id": 32}, None).unwrap();
 	return "Inserted an element into database";
 }
+
+#[post("/tables?<id>&<status>")]
+pub fn update_table(_conn: LogsDbConn, id: u32, status: u32) -> &'static str
+{
+	let _coll = _conn.collection("tables");
+	let filter = doc!{"id" => id};
+	let update = doc!{"$set" => {"status" => status}};
+
+	_coll.update_one(filter, update, None).unwrap();
+	return "Updated element in database";
+}

@@ -43,6 +43,8 @@ fn main()
 	.mount("/api/orders", routes![orders::get_status])	
 	.mount("/api/orders", routes![orders::post])
 	/*
+	.mount("/api", routes![tables::post])
+	.mount("/api", routes![tables::update_table])
 	.mount("/api", routes![ingredients::get_all])
 	.mount("/api", routes![ingredients::get])
 	.mount("/api", routes![ingredients::post])

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<style>
+	* {
+		box-sizing: border-box;
+	}
+
+	body {
+		background-color: black;
+		margin: 0;
+	}
+
+	/*Created a header container to hold buttons at the top*/
+	.header {
+		padding: 10px;
+
+		<!-- background-color: blue; -->
+		margin: 0px 0px 0px;
+	}
+
+/*Button group for creating the buttons at top of page*/
+
+	/*Same button group from the main page*/
+	.button-group button {
+		background-color: #D3D3D3; /*Makes Gray background*/
+		border:  0px #D3D3D3;  /*Border around boxes is Gray*/
+		color: black; /* White text */
+		padding: 10px 10px; /* Some padding */
+		margin: 0;  /* Created space between buttons */
+		font-family: Arial Black, Times, serif; /* sets font */
+		font-size:  16px;	/* Sets size */
+		font-weight:  normal;	/*Sets normal or bold */
+		text-align: center;	/* Aligns to center of button */
+		cursor: pointer; /* Pointer/hand icon */
+		width: 15%; /* Set a width if needed */
+		display: inline-block;
+	}
+	.button-group button:not(:last-child) {
+		border-right: none; /* Prevent double borders */
+	}
+	/* Add a background color on hover */
+	.button-group button:hover {
+		background-color: #3e8e41;
+	}
+
+	/*Created a container to hold the add employee form*/
+	.items {
+		background-color: #A9A9A9 !important; //makes Gray background
+		padding: 10px;
+		margin: 10px 10px 10px 10px;
+		width: 80%;
+		height:650px;
+		display: inline-block;
+		text-align: center;
+		border: 5px;
+		border-color: black;
+		position: relative;
+		left: 150px;
+		font-size:  40px !important;	/* Sets size */
+	}
+	.items input{
+		font-size: 20pt !important /*sets size*/
+	}
+</style>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+    $(document).ready(function(){ 
+		$("button").click(function(){
+			$.get("http://159.89.238.181:443/api/orders", function(data, status){
+				document.innerHTML+=data;
+			});
+			$.post("http://159.89.238.181:443/api/orders", function(data, status){
+			});
+		});
+    });
+    </script>
+</head>
+<body style="background-color:Black;">
+
+	<!--creates buttons in header to go back-->
+	<div class="header">
+		<div class="button-group">
+			<button onclick="document.location = 'Employee_Main_Page.html'">&#60&#60 BACK</button>
+		</div>
+	</div>
+
+	<!--holds add employee form-->
+		<div class = "items">
+			<h2>Clock in / Clock out</h2>
+			<hr color="black">
+			<span style="text-align:center !important;position:relative;left:10px;">
+			<form>
+				<label>EMPLOYEE ID:</label>
+				<input type="text" id="name" name="empId" placeholder="abcxxxx" required />
+				<br>
+				<label>PASSWORD:</label>
+				<input type="password" id="empId" name="pass" placeholder="123456" required />
+				<br>
+				<input type="submit" value="Clock In"/>
+				<input type="submit" value="Clock Out"/>
+			</form>
+			</span>
+		</div>
+	</div>
+</body>
+</html> 

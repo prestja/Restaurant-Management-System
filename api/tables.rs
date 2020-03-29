@@ -64,6 +64,6 @@ pub fn get(_conn: LogsDbConn, id: u32) -> String
 pub fn post(_conn: LogsDbConn) -> &'static str 
 {
 	let _coll = _conn.collection("tables");
-	_coll.insert_one(doc!{ "id": 32 }, None).unwrap();
+	_coll.insert_one(doc!{ "id": 32}, None).unwrap();
 	return "Inserted an element into database";
 }

@@ -29,12 +29,16 @@ fn main()
         ..Default::default()
     }
     .to_cors().unwrap();
-    rocket::ignite()
+    rocket::ignite()	
+	/*
 	.mount("/api", routes![tables::get_all])
 	.mount("/api", routes![tables::get])
-	.mount("/api", routes![tables::post])
-	.mount("/api", routes![orders::get_all])
-	.mount("/api", routes![orders::get])
+	.mount("/api", routes![tables::post])	
+	*/
+	//.mount("/api/", routes![orders::get])
+	.mount("/api/orders", routes![orders::get_id])
+	.mount("/api/orders", routes![orders::get_status])	
+	/*
 	.mount("/api", routes![orders::post])
 	.mount("/api", routes![ingredients::get_all])
 	.mount("/api", routes![ingredients::get])
@@ -48,6 +52,7 @@ fn main()
 	.mount("/api", routes![schedules::get_all])
 	.mount("/api", routes![schedules::get])
 	.mount("/api", routes![schedules::post])
+	*/	
 	.attach(LogsDbConn::fairing())
 	.attach(cors)
 	.launch();

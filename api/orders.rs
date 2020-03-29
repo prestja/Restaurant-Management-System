@@ -14,8 +14,11 @@ pub struct Item {
 
 #[derive(Serialize, Deserialize)]
 pub struct Order {
+	table: u32,
+	
+	// default values, not supplied by the front-end
 	#[serde(default)] id: u32,
-	#[serde(default)] status: u32,
+	#[serde(default)] status: u32
 }
 
 #[get("/")]
@@ -99,10 +102,9 @@ pub fn get_id(_conn: LogsDbConn, id: u32) -> String
 #[post("/", data = "<order>")]
 pub fn post(_conn: LogsDbConn, order: Json<Order>) -> &'static str {
 	let inner = order.into_inner(); // converts fron Json<Order> to just Order
-	let j = serde_json::to_string_pretty(&inner); // stringifies
 
-	println!("{}", j.unwrap());
 	let doc = doc! {
+		"table": inner.table,
 		"id": inner.id,
 		"status": inner.status
 	};

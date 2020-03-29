@@ -7,13 +7,6 @@ use rocket_contrib::{databases::mongodb};
 use rocket_contrib::json::Json;
 use mongodb::{doc, bson};
 
-pub enum OrderStatus {
-	Unfilled = 0,
-	ManagerRequired = 1,
-	WaitstaffRequired = 2,
-	Complete = 3
-}
-
 #[derive(Serialize, Deserialize)]
 pub struct Item {
 	id: u32
@@ -21,7 +14,8 @@ pub struct Item {
 
 #[derive(Serialize, Deserialize)]
 pub struct Order {
-	id: u32
+	id: u32,
+	status: u32,
 }
 
 #[get("/")]
@@ -101,14 +95,19 @@ pub fn get_id(_conn: LogsDbConn, id: u32) -> String
 	str.push_str("\n]");
 	return str;
 }
-//#[post("/")]
+
 #[post("/", data = "<order>")]
 pub fn post(_conn: LogsDbConn, order: Json<Order>) -> &'static str {
-	let inner = order.into_inner();
-	println!("{}", inner.id);
-	/*
+	let inner = order.into_inner(); // converts fron Json<Order> to just Order
+	let j = serde_json::to_string(&inner); // stringifies
+
+	println!("{}", j.unwrap());
+	let doc = doc! {
+		"id": inner.id,
+		"status": inner.status
+	};
+	
 	let _coll = _conn.collection("orders");
-	_coll.insert_one(doc!{ "id": 32, "status": 0}, None).unwrap();
-	*/
+	_coll.insert_one(doc, None).unwrap();
 	return "Post route";
 }

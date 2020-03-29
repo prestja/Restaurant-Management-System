@@ -104,6 +104,8 @@ pub fn get_id(_conn: LogsDbConn, id: u32) -> String
 //#[post("/")]
 #[post("/", data = "<order>")]
 pub fn post(_conn: LogsDbConn, order: Json<Order>) -> &'static str {
+	let inner = order.into_inner();
+	println!("{}", inner.id);
 	/*
 	let _coll = _conn.collection("orders");
 	_coll.insert_one(doc!{ "id": 32, "status": 0}, None).unwrap();

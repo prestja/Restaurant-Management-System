@@ -12,25 +12,25 @@
 
 	/*Created a header container to hold buttons at the top*/
 	.header {
-		padding: 10px;
+		padding: 1%;
 		<!-- background-color: blue; -->
-		margin: 0px 0px 0px;
+		margin: 0%;
 	}
 
 /*Button group for creating the buttons at top of page*/
 	/*Same button group from the main page*/
 	.button-group button {
 		background-color: #FFFFFF; /*Makes Button White*/
-		border:  0px #D3D3D3;  /*Border around boxes is Gray*/
+		border:  0% #D3D3D3;  /*Border around boxes is Gray*/
 		color: black; /* White text */
-		padding: 10px 10px; /* Some padding */
+		padding: 0.75%; /* Some padding */
 		margin: 0;  /* Created space between buttons */
 		font-family: Arial Black, Times, serif; /* sets font */
 		font-size:  16px;	/* Sets size */
 		font-weight:  normal;	/*Sets normal or bold */
 		text-align: center;	/* Aligns to center of button */
 		cursor: pointer; /* Pointer/hand icon */
-		width: 15%; /* Set a width if needed */
+		width: 15vw; /* Set a width if needed */
 		display: inline-block;
 	}
 
@@ -46,12 +46,12 @@
 	/*Created a left container to hold buttons for the manager navigation*/
 	.left-menu {
 		background-color: #050505 !important; //makes Gray background
-		padding: 10px;
-		margin: 10px 10px 10px;
+		padding: 1%;
+		margin: 1% 1% 1%;
 		position: absolute;
-		width: 1250px;
-		height: 800px;
-		left: 20px;
+		width: 65vw;
+		height: 90vh;
+		left: 2%;
 		display: inline-block;
 	}
 
@@ -60,24 +60,24 @@
 		background-color: #FFFFFF; /*Makes Background white*/
 		border:  0px #D3D3D3;  /*Border around boxes is Gray*/
 		color: black; /* White text */
-		padding: 10px 10px; /* Some padding */
+		padding: 1%; /* Some padding */
 		margin: 0;  /* Created space between buttons */
 		font-family: Arial Black, Times, serif; /* sets font */
 		font-size:  25px;	/* Sets font size */
 		font-weight:  normal;	/*Sets normal or bold */
 		text-align: center;	/* Aligns to center of button */
 		cursor: pointer; /* Pointer/hand icon */
-		width: 66%; /* Set a width if needed */
-		height: 100px;
+		width: 40vw; /* Set a width if needed */
+		height: 15vh;
 		display: inline-block;
 		position: relative;
-		left: 10px;
-		top: 10px;
-		bottom: 10px;
+		left: 1%;
+		top: 1%;
+		bottom: 1%;
 	}
 
 	/* Add a background color on hover */
-	.menu-button-group button:hover {
+	.menu-button-group button:focus {
 		background-color: #3e8e41;
 	}
 
@@ -88,15 +88,22 @@
 	/*Created a notification container to hold information about notificaions*/
 	.table-info {
 		background-color: #FFFFFF !important; //makes Container White
-		padding: 10px;
-		margin: 10px 10px 10px 10px;
-		width: 33%;
-		height: 75%;
-		right: 20px;
+		padding: 1%;
+		margin: 1%;
+		width: 40vw;
+		height: 75vh;
+		right: 2%;
 		display: inline-block;
 		text-align: center;
 		position: absolute;
 	}
+	
+	@media screen and (max-width: 600px) {
+		.column {
+			width: 100vh;
+		}
+	}
+	
 </style>
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>

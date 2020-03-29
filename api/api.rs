@@ -1,6 +1,9 @@
 #![feature(proc_macro_hygiene, decl_macro)]
+
 #[macro_use] extern crate rocket;
 #[macro_use] extern crate rocket_contrib;
+#[macro_use] extern crate serde;
+#[macro_use] extern crate serde_derive;
 
 use rocket::http::Method;
 use rocket_cors::{AllowedOrigins, AllowedHeaders};
@@ -38,8 +41,8 @@ fn main()
 	//.mount("/api/", routes![orders::get])
 	.mount("/api/orders", routes![orders::get_id])
 	.mount("/api/orders", routes![orders::get_status])	
+	.mount("/api/orders", routes![orders::post])
 	/*
-	.mount("/api", routes![orders::post])
 	.mount("/api", routes![ingredients::get_all])
 	.mount("/api", routes![ingredients::get])
 	.mount("/api", routes![ingredients::post])

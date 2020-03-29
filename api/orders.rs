@@ -1,15 +1,27 @@
+use crate::rocket_contrib;
 use crate::rocket_contrib::databases::mongodb::db::ThreadedDatabase;
 use crate::LogsDbConn;
+use crate::serde_derive;
 
 use rocket_contrib::{databases::mongodb};
+use rocket_contrib::json::Json;
 use mongodb::{doc, bson};
-use serde_json;
 
 pub enum OrderStatus {
 	Unfilled = 0,
 	ManagerRequired = 1,
 	WaitstaffRequired = 2,
 	Complete = 3
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct Item {
+	id: u32
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct Order {
+	id: u32
 }
 
 #[get("/")]
@@ -89,10 +101,12 @@ pub fn get_id(_conn: LogsDbConn, id: u32) -> String
 	str.push_str("\n]");
 	return str;
 }
-
-#[post("/")]
-pub fn post(_conn: LogsDbConn) -> &'static str {
+//#[post("/")]
+#[post("/", data = "<order>")]
+pub fn post(_conn: LogsDbConn, order: Json<Order>) -> &'static str {
+	/*
 	let _coll = _conn.collection("orders");
 	_coll.insert_one(doc!{ "id": 32, "status": 0}, None).unwrap();
-	return "Inserted an element into database";
+	*/
+	return "Post route";
 }

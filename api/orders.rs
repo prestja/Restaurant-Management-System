@@ -3,6 +3,7 @@ use crate::rocket_contrib::databases::mongodb::db::ThreadedDatabase;
 use crate::LogsDbConn;
 use crate::serde_derive;
 
+use rocket::response::content;
 use rocket_contrib::{databases::mongodb};
 use rocket_contrib::json::Json;
 use mongodb::{doc, bson};
@@ -100,7 +101,7 @@ pub fn get_id(_conn: LogsDbConn, id: u32) -> String
 }
 
 #[post("/", data = "<order>")]
-pub fn post(_conn: LogsDbConn, order: Json<Order>) -> &'static str {
+pub fn post(_conn: LogsDbConn, order: Json<Order>) -> String {
 	let inner = order.into_inner(); // converts fron Json<Order> to just Order
 
 	let doc = doc! {
@@ -111,5 +112,10 @@ pub fn post(_conn: LogsDbConn, order: Json<Order>) -> &'static str {
 	
 	let _coll = _conn.collection("orders");
 	_coll.insert_one(doc, None).unwrap();
-	return "Post route";
+	let response = json!({
+		"code": 200,
+		"message": "Inserted order into collection orders"
+	});
+
+	return serde_json::to_string(&response).unwrap();
 }

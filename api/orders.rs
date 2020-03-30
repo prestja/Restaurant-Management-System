@@ -7,6 +7,7 @@ use rocket::response::content;
 use rocket_contrib::{databases::mongodb};
 use rocket_contrib::json::Json;
 use mongodb::{doc, bson};
+use mongodb::coll::options;
 
 #[derive(Serialize, Deserialize)]
 pub struct Item {
@@ -104,15 +105,37 @@ pub fn get_id(_conn: LogsDbConn, id: u32) -> String
 pub fn post(_conn: LogsDbConn, order: Json<Order>) -> String {
 	let inner = order.into_inner(); // converts fron Json<Order> to just Order
 
-	let doc = doc! {
+	let doc = doc! // create a new document based upon deserialized object
+	{
 		"table": inner.table,
 		"id": inner.id,
 		"status": inner.status
 	};
 	
 	let _coll = _conn.collection("orders");
+	let options = mongodb::coll::options::IndexOptions {
+		background: None,
+		expire_after_seconds: None,
+		name: None,
+		sparse: None,
+		storage_engine: None,
+		unique: Some(true),
+		version: None,
+		default_language: None,
+		language_override: None,
+		text_version: None,
+		weights: None,
+		sphere_version: None,
+		bits: None,
+		max: None,
+		min: None,
+		bucket_size: None
+	};
+	//_coll.create_index(doc!{"id": 1}, None);
+
+
 	_coll.insert_one(doc, None).unwrap();
-	let response = json!({
+	let response = json!({ // generate a response for the user
 		"code": 200,
 		"message": "Inserted order into collection orders"
 	});

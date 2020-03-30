@@ -64,3 +64,15 @@ pub fn post(_conn: LogsDbConn) -> &'static str {
 	_coll.insert_one(doc!{ "empid": 32 }, None).unwrap();
 	return "Inserted an element into database";
 }
+
+#[post("/staff?<empid>&<tableid>")]
+pub fn update_staff_table(_conn: LogsDbConn, empid: u32, tableid: u32) -> &'static str
+{
+        let _coll = _conn.collection("staff");
+        let filter = doc!{"empid" => empid};
+        let update = doc!{"$set" => {"tableid" => tableid}};
+
+        _coll.update_one(filter, update, None).unwrap();
+        return "Updated element in database";
+}
+

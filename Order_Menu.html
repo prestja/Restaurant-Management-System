@@ -51,7 +51,7 @@
 		margin: 1% 1% 1%;
 		position: relative;
 		width: 20vw;
-		height: 45vh;
+		height: 60vh;
 		left: .5%;
 		display: inline-block;
 	}
@@ -106,6 +106,12 @@
 		text-align: center;
 		position: absolute;
 	}
+	
+	iframe {
+		width: 48vw;
+		height: 70vh;
+	}
+	
 </style>
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -144,6 +150,8 @@
 			<br><br>
 			<button onclick="menuType('meals')">ENTREES</button>
 			<br><br>
+			<button onclick="menuType('kids')">KIDS MENU</button>
+			<br><br>
 			<button onclick="menuType('sweets')">DESSERTS</button>
 		</div>
 	</div>
@@ -151,6 +159,9 @@
 	<div class = "menu" id = "menuType">
 		<h2 id = "headerType">BEVERAGES</h2>
 		<hr color = "black">
+		<body>
+			<iframe src="" width:"40%" ></iframe>
+		</body>
 	</div>
 	<script>
 		<!--selects menu type and displays menu items of that type-->
@@ -159,19 +170,28 @@
 			var t = document.getElementById("headerType");
 			if(mType === "drinks")
 			{
-				t.innerHTML = "BEVERAGES"
+				t.innerHTML = "BEVERAGES";
+				window.frames[0].document.location = "customer_main_pg.html";
 			}
 			else if(mType === "apps")
 			{
 				t.innerHTML = "APPETIZERS";
+				window.frames[0].document.location = "customer_main_pg.html";
 			}
 			else if(mType === "meals")
 			{
 				t.innerHTML = "ENTREES";
+				window.frames[0].document.location = "customer_main_pg.html";
+			}
+			else if(mType === "kids")
+			{
+				t.innerHTML = "KIDS MENU";
+				window.frames[0].document.location = "customer_main_pg.html";
 			}
 			else if(mType === "sweets")
 			{
 				t.innerHTML = "DESSERTS";
+				window.frames[0].document.location = "customer_main_pg.html";
 			}
 		}
 	</script>

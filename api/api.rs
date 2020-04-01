@@ -16,6 +16,7 @@ mod orders;
 mod tables;
 mod schedules;
 mod customers;
+mod items;
 
 #[database("mongodb_logs")]
 pub struct LogsDbConn(mongodb::db::Database);
@@ -55,6 +56,8 @@ fn main()
 	.mount("/api", routes![staff::post])
 	.mount("/api", routes![staff::update_staff_table])
 	.mount("/api", routes![staff::manager_add_staff])
+	
+	.mount("/api/items/", routes![items::get_category])
 	/*
 	.mount("/api", routes![customers::get_all])
 	.mount("/api", routes![customers::get])

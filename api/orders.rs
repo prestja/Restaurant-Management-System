@@ -77,8 +77,31 @@ pub fn get_status(_conn: LogsDbConn, status: u32) -> String {
 #[get("/?<id>")]
 pub fn get_id (_conn: LogsDbConn, id: String) -> String
 {	
-	let oid = mongodb::oid::ObjectId::with_string(id.as_str());
-	return String::from("sample response");
+	let mut _str = String::from("[\n\t");
+	//let _oid = mongodb::oid::ObjectId::with_string(id.as_str());
+	let _doc = doc!{"_id": id};
+	let _coll = _conn.collection("orders");
+	let _cursor = _coll.find(Some(_doc.clone()), None).unwrap();
+	for result in _cursor 
+	{
+		println!("Result");
+		if let Ok(item) = result 
+		{
+			let _bson = mongodb::to_bson(&item).unwrap();
+			let _json = serde_json::ser::to_string(&_bson).unwrap();
+			_str.push_str(&_json);
+		}
+		_str.push_str(",\n\t");
+	}
+	if _str.len() <= 3
+	{
+		return String::from("No entries found");
+	}
+	_str.pop();
+	_str.pop();
+	_str.pop();
+	_str.push_str("\n]");
+	return _str;
 }
 
 #[post("/", data = "<order>")]

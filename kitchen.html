@@ -74,7 +74,7 @@
         
         $(document).ready(function() {
             $.ajax({
-                url: 'http://159.89.238.181:8080/api/orders',
+                url: 'http://159.89.238.181:8080/api/orders/?status=0',
                 type: 'get',
                 dataType: 'JSON',
                 success: function(response) {

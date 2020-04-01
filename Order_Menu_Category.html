@@ -28,8 +28,13 @@
 	}	
 	
 	$(document).ready(function() {
-            $.ajax({
-                url: 'http://159.89.238.181:8080/api/items?category=0',
+            var queryStr = window.location.search; // will give you ?sndReq=234
+			
+			var category = queryStr.substr(1)
+			console.log(category);
+			var url = "http://159.89.238.181:8080/api/items?".concat(category);
+			$.ajax({
+                url: url,
                 type: 'get',
                 dataType: 'JSON',
                 success: function(response) {

@@ -115,19 +115,6 @@
 </style>
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script>
-    $(document).ready(function(){ 
-		$("button").click(function(){
-			$.get("http://159.89.238.181:443/api/orders", function(data, status){
-				document.innerHTML+=data;
-			});
-        
-			$.post("http://159.89.238.181:443/api/orders", function(data, status){
-            
-			});
-		});
-    });
-    </script>
 </head>
 
 <body style="background-color:Black;">
@@ -160,7 +147,7 @@
 		<h2 id = "headerType">BEVERAGES</h2>
 		<hr color = "black">
 		<body>
-			<iframe src="" width:"40%" ></iframe>
+			<iframe id = "order_items" src="Order_Menu_Category.html?category=3" width:"40%" ></iframe>
 		</body>
 	</div>
 	<script>
@@ -168,30 +155,31 @@
 		function menuType(mType)
 		{	
 			var t = document.getElementById("headerType");
+			var frame = document.getElementById('order_items');
 			if(mType === "drinks")
 			{
 				t.innerHTML = "BEVERAGES";
-				window.frames[0].document.location = "Order_Menu_Category.html";
+				frame.src = "Order_Menu_Category.html?category=3";
 			}
 			else if(mType === "apps")
 			{
 				t.innerHTML = "APPETIZERS";
-				window.frames[0].document.location = "Order_Menu_Category.html";
+				frame.src = "Order_Menu_Category.html?category=1";
 			}
 			else if(mType === "meals")
 			{
 				t.innerHTML = "ENTREES";
-				window.frames[0].document.location = "Order_Menu_Category.html";
+				frame.src = "Order_Menu_Category.html?category=0";
 			}
 			else if(mType === "kids")
 			{
 				t.innerHTML = "KIDS MENU";
-				window.frames[0].document.location = "Order_Menu_Category.html";
+				frame.src = "Order_Menu_Category.html?category=4";
 			}
 			else if(mType === "sweets")
 			{
 				t.innerHTML = "DESSERTS";
-				window.frames[0].document.location = "Order_Menu_Category.html";
+				frame.src = "Order_Menu_Category.html?category=2";
 			}
 		}
 	</script>

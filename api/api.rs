@@ -51,11 +51,11 @@ fn main()
 	.mount("/api", routes![ingredients::get])
 	.mount("/api", routes![ingredients::post])
 	*/
-	.mount("/api", routes![staff::get_all])
-	.mount("/api", routes![staff::get])
-	.mount("/api", routes![staff::post])
-	.mount("/api", routes![staff::update_staff_table])
-	.mount("/api", routes![staff::manager_add_staff])
+	.mount("/api/staff", routes![staff::get_all])
+	.mount("/api/staff", routes![staff::get])
+	.mount("/api/staff", routes![staff::post])
+	//.mount("/api", routes![staff::update_staff_table])
+	//.mount("/api", routes![staff::manager_add_staff])
 	
 	.mount("/api/items/", routes![items::get_category])
 	/*

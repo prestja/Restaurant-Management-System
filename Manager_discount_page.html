@@ -88,8 +88,8 @@
 		background-color: Black; //makes black background
 		padding: 10px;
 		margin: 10px 10px 10px 10px;
-		width: 80%;
-		height: 100%;
+		width: 80vw;
+		height: 100vh;
 		left: 190px;
 		display: inline-block;
 		text-align: center;
@@ -166,7 +166,7 @@
 	<div class="header">
 
 		<div class="button-group">
-			<button onclick="document.location = 'employee_main_pg.html'">&#60&#60 BACK</button>
+			<button onclick="document.location = 'employee_main_page.html'">&#60&#60 BACK</button>
 		</div>
 	
 	</div>
@@ -207,33 +207,26 @@
 			<hr color="black">
 			<span style="text-align:left !important;position:relative;left:10px;">
 			<form id ="rem">
-					<label>Select which table you would like to add the discount:</label>
-					<select id="tables">
-						<option value="Table1">Table 1</option>
-						<option value="Table2">Table 2</option>
-						<option value="Table3">Table 3</option>
-						<option value="Table4">Table 4</option>
-						<option value="Table5">Table 5</option>
-						<option value="Table6">Table 6</option>
-						<option value="Table7">Table 7</option>
-						<option value="Table8">Table 8</option>
-						<option value="Table9">Table 9</option>
-						<option value="Table10">Table 10</option>
-						<option value="Table11">Table 11</option>
-						<option value="Table12">Table 12</option>
-						<option value="Table13">Table 13</option>
-						<option value="Table14">Table 14</option>
-						<option value="Table15">Table 15</option>
-						<option value="Table16">Table 16</option>
-						<option value="Table17">Table 17</option>
-						<option value="Table18">Table 18</option>
-						<option value="Table19">Table 19</option>
-						<option value="Table20">Table 20</option>
-					</select>
-					<label>Discount Code:</label>
-					<input type="text" id="code" placeholder="Code">
+						<label>Name of discount:</label>
+						<input type="text" id="amt" placeholder="Name" required>
+						<br><br>
+						<label>Start Date:</label>
+						<input type="date" id="startDate" required>
+						<br><br>
+						<label>End Date:</label>
+						<input type="date" id="endDate" required>
+						<br><br>
+						<label>Type of discount:</label>
+						<select id="discType" required>
+							<option value="perc">Percent</option>
+							<option value="amt">Amount</option>
+						</select>
+						<input type="text" id="val" placeholder="0% or $0.00" required>
 					<br><br>
-					<input type ="submit" value ="APPLY DISCOUNT"/>
+					<label>Discount Code:</label>
+					<input type="text" id="code" placeholder="Code" required>
+					<br><br>
+					<input type ="submit" value ="ADD DISCOUNT"/>
 			</form>
 			</span>
 		</div>

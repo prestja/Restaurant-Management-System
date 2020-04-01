@@ -76,3 +76,18 @@ pub fn update_staff_table(_conn: LogsDbConn, empid: u32, tableid: u32) -> &'stat
         return "Updated element in database";
 }
 
+#[post("/staff/manager?<first>&<last>&<empid>&<position>&<wage>&<phone_num>")]
+pub fn manager_add_staff(_conn: LogsDbConn, first: &rocket::http::RawStr, last: &rocket::http::RawStr, empid: u32, position: u32, wage: f32, phone_num: &rocket::http::RawStr) -> &'static str
+{
+	let _coll = _conn.collection("staff");
+	let doc = doc!{
+	"firstName" => first.as_str(),
+	"lastName" => last.as_str(),
+	"empid" => empid,
+	"position" => position,
+	"wage" => wage,
+	"phone" => phone_num.as_str()};
+        _coll.insert_one(doc, None).unwrap();
+        return "Inserted an element into database";
+} 
+

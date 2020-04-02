@@ -149,6 +149,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
 	function handleSubmit(){
+		//creates object for the discount
 		let request = {
 			name : document.getElementById("name").value,
 			start_date : document.getElementById("startDate").value,
@@ -157,9 +158,11 @@
 			code : document.getElementById("code").value,
 		}
 		console.log(JSON.stringify(request));
+		//posts the object to the backend to be added into the database
 		/*$.post("http://159.89.238.181:8080/api/staff", JSON.stringify(request), function(data, status) {				
 				alert(status);
 		});*/
+		//resets the data for the object
 			name : document.getElementById("name").value = "";
 			start_date : document.getElementById("startDate").value = "";
 			end_date : document.getElementById("endDate").value = "";
@@ -174,7 +177,7 @@
 	<div class="header">
 
 		<div class="button-group">
-			<button onclick="document.location = 'employee_main_page.html'">&#60&#60 BACK</button>
+			<button onclick="document.location = 'landing.html'">&#60&#60 BACK</button>
 		</div>
 	
 	</div>
@@ -182,13 +185,13 @@
 	<!--Creates left menu for buttons for the different manager pages-->
 	<div class = "left-menu">
 		<div class="menu-button-group">
-			<button onclick="document.location = 'Manager_table_page.html'">TABLES</button>
+			<button onclick="document.location = 'tables.html'">TABLES</button>
 			<br><br>
-			<button onclick="document.location = '86_68_page.html'">86/68</button>
+			<button onclick="document.location = '86_68.html'">86/68</button>
 			<br><br>
-			<button onclick="document.location = 'Manager_tool_page.html'">TOOLS</button>
+			<button onclick="document.location = 'tools.html'">TOOLS</button>
 			<br><br>
-			<button onclick="document.location = 'Manager_report_page.html'">REPORTS</button>
+			<button onclick="document.location = 'reports.html'">REPORTS</button>
 		</div>
 	</div>
 	
@@ -198,15 +201,15 @@
 			<h2>TOOLS</h2>
 			<hr color = "black">
 			<div class="tool-button-group">
-				<button onclick="document.location = 'Manager_tool_page.html'">ADD EMP</button>
+				<button onclick="document.location = 'tools.html'">ADD EMP</button>
 				<br><br>
 				<button onclick="document.location = 'Manager_rem_employee_page.html'">REM EMP</button>
 				<br><br>
-				<button onclick="document.location = 'Manager_comps_page.html'">COMPS</button>
+				<button onclick="document.location = 'comps.html'">COMPS</button>
 				<br><br>
-				<button onclick="document.location = 'Manager_promos_page.html'">PROMOS</button>
+				<button onclick="document.location = 'promos.html'">PROMOS</button>
 				<br><br>
-				<button onclick="document.location = 'Manager_discount_page.html'">DISCOUNT</button>
+				<button onclick="document.location = 'discount.html'">DISCOUNT</button>
 			</div>
 		</div>
 	<!--holds discount table form-->

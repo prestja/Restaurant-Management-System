@@ -41,6 +41,7 @@
     
     #nav-help {
         /*border-radius: 40px 40px 40px 40px;*/
+		
     }
     
     #nav-refills {
@@ -51,6 +52,27 @@
         height: 90%;
         
     }
+	
+	.help_alert {
+		padding: 20px;
+		background-color: white;
+		color: black;
+	}
+	
+	.closebtn{
+		margin-left: 15px;
+		color: black;
+		font-weight: bold;
+		float: right;
+		font-size: 22px;
+		line-height: 20px;
+		cursor: pointer;
+		transition: 0.3s;
+	}
+	
+	.closebtn:hover {
+		color: green;
+	}
 
 </style>
 
@@ -60,12 +82,16 @@
 			window.history.back();
 		}
 		
-		function hideBack() {
-			var btn = parent.document.getElementById("nav-back");
-			var frm = document.getElementById("ifrm");
-		
-				btn.style.display = "none";
-			
+		function myFunction() {
+			var txt;
+			if (confirm("Do you need assistance from your server?")) {
+				txt = "You pressed OK!";
+				alert("Your server is on their way!");
+			} else {
+				txt = "You pressed Cancel!";
+				alert("Your request has been canceld");
+			}
+				document.getElementById("demo").innerHTML = txt;
 		}
 	</script>
 	
@@ -74,14 +100,14 @@
 <body>
     <!--Navigation buttons-->
     <div class = "navigation">
-        <button id = "nav-back" onclick = "goBack()">Back</button>
-        <button id = "nav-help">Help</button>
-        <button id = "nav-refills">Refills</button>
+        <button id = "nav-back" onclick ="goBack()" >Back</button>
+		<button id = "nav-help" onclick = "myFunction()">Help</button>
+        <button id = "nav-refills" onclick ="document.location = 'refills.html'">Refills</button>
     </div>
 
     <!---Content -->
     <div class = "content">
-        <iframe src = "landing.html" id="ifrm" style = "height: 100%; width: 100%" onload="hideBack()"></iframe>
+        <iframe src = "landing.html" id="ifrm" style = "height: 100%; width: 100%"></iframe>
     </div>
 
 </body>

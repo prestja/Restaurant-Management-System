@@ -199,6 +199,21 @@
 	<link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet'>
 </head>
 
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script>
+	$(document).ready(function(){	 
+		$.get("http://159.89.238.181:443/api/orders", function(data, status){
+			alert("Data: " + data + "\nStatus: " + status);
+		});
+		
+		$.post("http://159.89.238.181:443/api/orders", function(data, status){
+			alert("Data: " + data + "\nStatus: " + status);
+		});
+	});
+	</script>
+</head>
+
 <body style="background-color:Black;">
 	<!-- Top section stores help and refill buttons-->
 	<div class="header" style="height: 10vh">

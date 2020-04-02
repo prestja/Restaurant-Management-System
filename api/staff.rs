@@ -74,6 +74,28 @@ pub fn get(_conn: LogsDbConn, id: u32) -> String {
 	return str;
 }
 
+#[get("/login?<id>&<password>")]
+pub fn get_login(_conn: LogsDbConn, id: String, password: String) -> String {	
+	let mut str = String::from("[\n\t");
+	let doc = doc!{"id": id, "password": password};
+	let _coll = _conn.collection("staff");
+	let mut cursor = _coll.find(Some(doc.clone()), None).unwrap();
+	if let Some(result) = cursor.next() 
+	{
+		let response = json!({
+			"code": 200,
+			"message": "Logged in"
+		});
+		return serde_json::to_string(&response).unwrap();
+	} 
+
+	let response = json!({
+		"code": 403,
+		"message": "Invalid employee ID or password"
+	});
+	return serde_json::to_string(&response).unwrap();
+}
+
 #[post("/", data = "<employee>")]
 pub fn post(_conn: LogsDbConn, employee: Json<Employee>) -> String {
 	let inner = employee.into_inner();

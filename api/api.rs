@@ -53,6 +53,7 @@ fn main()
 	*/
 	.mount("/api/staff", routes![staff::get_all])
 	.mount("/api/staff", routes![staff::get])
+	.mount("/api/staff", routes![staff::get_login])
 	.mount("/api/staff", routes![staff::post])
 	//.mount("/api", routes![staff::update_staff_table])
 	//.mount("/api", routes![staff::manager_add_staff])

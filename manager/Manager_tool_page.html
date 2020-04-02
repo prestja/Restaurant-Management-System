@@ -159,19 +159,9 @@
 				phone: document.getElementById("phone").value,				
 			}
 			console.log(JSON.stringify(request));
-			$.ajax({
-				url : "http://159.89.238.181:8080/api/staff",
-				type: "POST",
-				data: JSON.stringify([request]),
-				contentType: "application/json; charset=utf-8",
-				dataType   : "json",
-				success    : function(){
-					console.log("Pure jQuery Pure JS object");
-					alert("Employee Added Successfully");
-				}
+			$.post("http://159.89.238.181:8080/api/staff", JSON.stringify(request), function(data, status) {				
+				alert(status);
 			});
-			const form = document.getElementById('addEmp');
-			form.reset();
 		}		
 	</script>
 </head>
@@ -210,8 +200,6 @@
 		<div class = "items">
 			<h2>ADD EMPLOYEE</h2>
 			<hr color="black">
-			<span style="text-align:left !important;position:relative;left:10px;">
-			<form id="addEmp">
 				<label>FIRST NAME:</label>
 				<input type="text" id="fname" name="fname" placeholder="John" maxlength=20 size=12/>
 				<br><br>
@@ -234,8 +222,6 @@
 				<input type="text" id="phone" name="phone" placeholder="123-456-7890" size=12 maxlength=12/>
 				<br><br>
 				<button onclick = "handleSubmit()">ADD EMPLOYEE</button>		
-			</form>
-			</span>
 		</div>
 	</div>
 </body>

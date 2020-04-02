@@ -82,16 +82,21 @@ pub fn get_login(_conn: LogsDbConn, id: String, password: String) -> String {
 	let mut cursor = _coll.find(Some(doc.clone()), None).unwrap();
 	if let Some(result) = cursor.next() 
 	{
-		let response = json!({
-			"code": 200,
-			"message": "Logged in"
-		});
-		return serde_json::to_string(&response).unwrap();
+		if let Ok(item) = result 
+		{
+			let _bson = mongodb::to_bson(&item).unwrap();
+			let response = json!({
+				"code": 200,
+				"message": "Succesfully logged in.",
+				"data": _bson
+			});
+			return serde_json::to_string(&response).unwrap();
+		}
 	} 
 
 	let response = json!({
 		"code": 403,
-		"message": "Invalid employee ID or password"
+		"message": "Invalid employee ID or password!"
 	});
 	return serde_json::to_string(&response).unwrap();
 }

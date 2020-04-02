@@ -162,6 +162,14 @@
 			$.post("http://159.89.238.181:8080/api/staff", JSON.stringify(request), function(data, status) {				
 				alert(status);
 			});
+			first_name: document.getElementById("fname").value = "";
+			last_name: document.getElementById("lname").value = "";
+			id: document.getElementById("empId").value = "";
+			password: document.getElementById("empPass").value = "";
+			position: document.getElementById("pos").value = "";
+			wage: document.getElementById("hourly").value = "";
+			phone: document.getElementById("phone").value = "";
+			alert("Employee added successfully!");
 		}		
 	</script>
 </head>
@@ -200,6 +208,7 @@
 		<div class = "items">
 			<h2>ADD EMPLOYEE</h2>
 			<hr color="black">
+			<div style="text-align:left;position:relative;left:10px">
 				<label>FIRST NAME:</label>
 				<input type="text" id="fname" name="fname" placeholder="John" maxlength=20 size=12/>
 				<br><br>
@@ -221,7 +230,8 @@
 				<label>PHONE:</label>
 				<input type="text" id="phone" name="phone" placeholder="123-456-7890" size=12 maxlength=12/>
 				<br><br>
-				<button onclick = "handleSubmit()">ADD EMPLOYEE</button>		
+				<button onclick = "handleSubmit()">ADD EMPLOYEE</button>
+			</div>
 		</div>
 	</div>
 </body>

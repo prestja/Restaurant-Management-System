@@ -114,7 +114,7 @@
 		padding: 10px;
 		margin: 10px 10px 10px 10px;
 		width: 60vw;
-		height: 260px;
+		height: 55vh;
 		display: inline-block;
 		text-align: center;
 		border: 5px;
@@ -159,6 +159,18 @@
 			});
 		});
     });
+	
+	const formToJSON = elements => [].reduce.call(elements, (data, element) => {
+			data[element.name] = element.value;
+		return data;
+	}, {});
+	
+	const handleSubmit = event => {
+		const form = document.getElementById('addEmp');
+		//stores data from form
+		const data = formToJSON(form.elements);
+		console.log(JSON.stringify(data, null, " "));
+	};
     </script>
 </head>
 <body style="background-color:Black;">
@@ -206,28 +218,33 @@
 			<h2>ADD EMPLOYEE</h2>
 			<hr color="black">
 			<span style="text-align:left !important;position:relative;left:10px;">
-			<form>
-				<label>NAME:</label>
-				<input type="text" id="name" name="name" placeholder="John Doe" required />
-				<br>
+			<form id="addEmp">
+				<label>FIRST NAME:</label>
+				<input type="text" id="fname" name="fname" placeholder="John" required />
+				<br><br>
+				<label>LAST NAME:</label>
+				<input type="text" id="lname" name="lname" placeholder="Doe" required />
+				<br><br>
 				<label>EMPLOYEE ID:</label>
 				<input type="text" id="empId" name="empId" placeholder="123456" required />
-				<br>
+				<br><br>
 				<label>PASSWORD:</label>
 				<input type="text" id="empPass" name="empPass" placeholder="123456" required />
-				<br>
+				<br><br>
 				<label>POSITION:</label>
 				<input type="text" id="pos" name="pos" placeholder="waiter" required />
-				<br>
+				<br><br>
 				<label>HOURLY:</label>
 				<input type="text" id="hourly" name="hourly" placeholder="$7.25" required />
-				<br>
+				<br><br>
 				<label>PHONE:</label>
 				<input type="text" id="phone" name="phone" placeholder="123-456-7890" required />
 				<br><br>
-				<input type="submit" value="ADD EMP"/>
+				<input type="submit" name="submit" value="ADD EMP" onclick="handleSubmit()"/>
 			</form>
 			</span>
+			<p id = 'results_display'>
+			</p>
 		</div>
 	</div>
 </body>

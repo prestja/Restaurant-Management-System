@@ -1,92 +1,72 @@
+use crate::rocket_contrib;
 use crate::rocket_contrib::databases::mongodb::db::ThreadedDatabase;
 use crate::LogsDbConn;
+use crate::serde_derive;
 
+use rocket::response::content;
 use rocket_contrib::{databases::mongodb};
+use rocket_contrib::json::Json;
 use mongodb::{doc, bson};
-use serde_json;
+use mongodb::coll::options;
+use mongodb::oid;
 
-#[get("/staff")]
-pub fn get_all(_conn: LogsDbConn) -> String {
-	let mut str = String::from("[\n\t");
-	let _coll = _conn.collection("staff");
-	let cursor = _coll.find(None, None).unwrap();
-	for result in cursor 
-	{ 
-		if let Ok(item) = result 
-		{
-			let _bson = mongodb::to_bson(&item).unwrap();
-			let _json = serde_json::ser::to_string(&_bson).unwrap();
-			str.push_str(&_json);
-		}
-		str.push_str(",\n\t");
-	}
-	if str.len() <= 3
-	{
-		return String::from("No entries found");
-	}
-	str.pop();
-	str.pop();
-	str.pop();
-	str.push_str("\n]");
-	return str;
+
+//Building a struct to contain notifications within
+#[derive(Serialize, Deserialize)]
+pub struct notification
+{
+	//holds table id from which notif originated
+	table: u32,
+	//Holds type of notification (help, refill, etc)
+	notif_type: u32,
+	//holds details regarding refill or type of help
+	#[serde(default)] details : String
 }
 
-#[get("/staff/<id>")]
-pub fn get(_conn: LogsDbConn, id: u32) -> String {
-	let mut str = String::from("[\n\t");
-	let doc = doc!{"id": id};
-	let _coll = _conn.collection("staff");
-	let cursor = _coll.find(Some(doc.clone()), None).unwrap();
-	for result in cursor 
-	{
-		if let Ok(item) = result 
-		{
-			let _bson = mongodb::to_bson(&item).unwrap();
-			let _json = serde_json::ser::to_string(&_bson).unwrap();
-			str.push_str(&_json);
-		}
-		str.push_str(",\n\t");
-	}
-	if str.len() <= 3
-	{
-		return String::from("No entries found");
-	}
-	str.pop();
-	str.pop();
-	str.pop();
-	str.push_str("\n]");
-	return str;
+
+//====================================================================================
+// WIP
+#[post("/", data = "<notifications>")]
+pub fn post(_conn: LogsDbConn) -> &'static str
+{
+	
+	
+	
+	
+	
+	//Establish connection to db collection for notifications
+	let _coll = _conn.collection("notifications");
+	//_coll.insert_one(doc!{ "
+	
 }
 
-//#[post("/staff")]
-//pub fn post(_conn: LogsDbConn) -> &'static str {
-//	let _coll = _conn.collection("staff");
-//	_coll.insert_one(doc!{ "empid": 32 }, None).unwrap();
-//	return "Inserted an element into database";
-//}
 
-//#[post("/staff?<empid>&<tableid>")]
-//pub fn update_staff_table(_conn: LogsDbConn, empid: u32, tableid: u32) -> &'static str
-//{
-//        let _coll = _conn.collection("staff");
-//        let filter = doc!{"empid" => empid};
-//        let update = doc!{"$set" => {"tableid" => tableid}};
 
-//        _coll.update_one(filter, update, None).unwrap();
-//       return "Updated element in database";
-//}
+//====================================================================================
 
-//#[post("/staff/manager?<first>&<last>&<empid>&<position>&<wage>&<phone_num>")]
-//pub fn manager_add_staff(_conn: LogsDbConn, first: &rocket::http::RawStr, last: &rocket::http::RawStr, empid: u32, position: u32, wage: f32, phone_num: &rocket::http::RawStr) -> &'static str
-//{
-//	let _coll = _conn.collection("staff");
-//	let doc = doc!{
-//	"firstName" => first.as_str(),
-//	"lastName" => last.as_str(),
-//	"empid" => empid,
-//	"position" => position,
-//	"wage" => wage,
-//	"phone" => phone_num.as_str()};
-//        _coll.insert_one(doc, None).unwrap();
-//        return "Inserted an element into database";
-//}
+#[post("/", data = "<employee>")]
+pub fn post(_conn: LogsDbConn, employee: Json<Employee>) -> String {
+	let inner = employee.into_inner();
+	let doc = doc!
+	{
+		"first_name": inner.first_name,
+		"last_name": inner.last_name,
+		"id": inner.id,
+		"password": inner.password,
+		"wage" : inner.wage,
+		"phone": inner.phone,
+		"position": inner.position
+	};
+	
+	let _coll = _conn.collection("staff");
+	//Does a check to ensure non-null values with minimal crash risk
+	_coll.insert_one(doc, None).unwrap();
+	
+	let response = json!({
+		"code": 200,
+		"message": "Inserted order into collection orders"
+	});
+	
+	
+	return serde_json::to_string(&response).unwrap();
+}

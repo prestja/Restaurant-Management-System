@@ -88,8 +88,8 @@
 		background-color: Black; //makes black background
 		padding: 10px;
 		margin: 10px 10px 10px 10px;
-		width: 80%;
-		height: 100%;
+		width: 80vw;
+		height: 100vh;
 		left: 190px;
 		display: inline-block;
 		text-align: center;
@@ -108,12 +108,12 @@
 		display: inline-block;
 	}
 	
-	/*Created a container to hold the add employee form*/
+	/*Created a container to hold the remove employee form*/
 	.items {
 		background-color: #A9A9A9 !important; //makes Gray background
 		padding: 10px;
 		margin: 10px 10px 10px 10px;
-		width: 80%;
+		width: 60vw;
 		height: 250px;
 		display: inline-block;
 		text-align: center;
@@ -166,7 +166,7 @@
 	<div class="header">
 
 		<div class="button-group">
-			<button onclick="document.location = 'employee_main_pg.html'">&#60&#60 BACK</button>
+			<button onclick="document.location = 'employee_main_page.html'">&#60&#60 BACK</button>
 		</div>
 	
 	</div>
@@ -184,7 +184,7 @@
 		</div>
 	</div>
 	
-	<!--Creates page to show 86/68-->
+	<!--Creates page to show tools-->
 	<div class = "main-section">
 		<div class = "menu-type">
 			<h2>TOOLS</h2>
@@ -215,6 +215,7 @@
 		</div>
 	</div>
 	<script>
+		<!--Function should add in all current employees from the database into a checkbox, but is not working currently-->
 		function createForm(){
 			var x = document.createElement("INPUT");
 			x.setAttribute("type","checkbox");

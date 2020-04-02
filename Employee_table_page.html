@@ -13,9 +13,9 @@
 	
 	/*Created a header container to hold buttons at the top*/
 	.header {
-		padding: 10px;
+		padding: 1%;
 		<!-- background-color: blue; -->
-		margin: 0px 0px 0px;
+		margin: 0%;
 	}
 	
 /*Button group for creating the buttons at top of page*/
@@ -24,14 +24,14 @@
 		background-color: #D3D3D3; /*Makes Gray background*/
 		border:  0px #D3D3D3;  /*Border around boxes is Gray*/
 		color: black; /* White text */
-		padding: 10px 10px; /* Some padding */
+		padding: 1% 1%; /* Some padding */
 		margin: 0;  /* Created space between buttons */
 		font-family: Arial Black, Times, serif; /* sets font */
 		font-size:  16px;	/* Sets size */
 		font-weight:  normal;	/*Sets normal or bold */
 		text-align: center;	/* Aligns to center of button */
 		cursor: pointer; /* Pointer/hand icon */
-		width: 15%; /* Set a width if needed */
+		width: 15vw; /* Set a width if needed */
 		display: inline-block;
 	}
 
@@ -44,38 +44,6 @@
 		background-color: #3e8e41;
 	}
 	
-	/*Created a left container to hold buttons for the manager navigation*/
-	.left-menu {
-		background-color: #A9A9A9 !important; //makes Gray background
-		padding: 10px;
-		margin: 10px 10px 10px;
-		position: absolute;
-		width: 150px;
-		height: 245px;
-		left: 20px;
-		display: inline-block;
-	}
-	
-	/*Created a menu button similar to header buttons*/
-	.menu-button-group button {
-		background-color: #D3D3D3; /*Makes Gray background*/
-		border:  0px #D3D3D3;  /*Border around boxes is Gray*/
-		color: black; /* White text */
-		padding: 10px 10px; /* Some padding */
-		margin: 0;  /* Created space between buttons */
-		font-family: Arial Black, Times, serif; /* sets font */
-		font-size:  16px;	/* Sets size */
-		font-weight:  normal;	/*Sets normal or bold */
-		text-align: center;	/* Aligns to center of button */
-		cursor: pointer; /* Pointer/hand icon */
-		width: 86%; /* Set a width if needed */
-		display: inline-block;
-		position: relative;
-		left: 10px;
-		top: 10px;
-		bottom: 10px;
-	}
-	
 	/* Add a background color on hover */
 	.menu-button-group button:hover {
 		background-color: #3e8e41;
@@ -84,11 +52,11 @@
 	/*Created a table container to hold tables*/
 	.tables {
 		background-color: #A9A9A9 !important; //makes Gray background
-		padding: 10px;
-		margin: 10px 10px 10px 10px;
-		width: 400px;
-		height: 350px;
-		left: 190px;
+		padding: 1%;
+		margin: 1%;
+		width: 55vw;
+		height: 80vh;
+		left: .5%;
 		display: inline-block;
 		text-align: center;
 		position: absolute;
@@ -99,8 +67,8 @@
 		background-color: #3e8e41; /*Makes green background*/
 		border:  0px #D3D3D3;  /*Border around boxes is Gray*/
 		color: black; /* White text */
-		padding: 10px 10px; /* Some padding */
-		margin: 0;  /* Created space between buttons */
+		padding: 3% 3%; /* Some padding */
+		margin: 2%;  /* Created space between buttons */
 		font-family: Arial Black, Times, serif; /* sets font */
 		font-size:  16px;	/* Sets size */
 		font-weight:  normal;	/*Sets normal or bold */
@@ -109,9 +77,9 @@
 		width: 15%; /* Set a width if needed */
 		display: inline-block;
 		position: relative;
-		left: 10px;
-		top: 10px;
-		bottom: 10px;
+		left: 1%;
+		top: 1%;
+		bottom: 1%;
 	}
 	
 	/* Add a background color on hover */
@@ -122,16 +90,24 @@
 	/*Created a table info container to hold information about tables*/
 	.table-info {
 		background-color: #A9A9A9 !important; //makes Gray background
-		padding: 10px;
-		margin: 10px 10px 10px 10px;
+		padding: 1%;
+		margin: 1%;
 		width: 33vw;
-		height: 75vh;
-		position: relative;
-		left: 600px;
+		height: 80vh;
+		right: 1%;
 		display: inline-block;
 		text-align: center;
+		position: absolute;
 	}
 	
+	table {
+		border: 1px solid black;
+		border-collapse: collapse;
+		padding: 5px;
+		width:90%;
+		position:relative;
+		left:10px;
+	}
 </style>
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -159,18 +135,6 @@
 	
 	</div>
 	
-	<!--Creates left menu for buttons for the different manager pages-->
-	<div class = "left-menu">
-		<div class="menu-button-group">
-			<button onclick="document.location = 'Manager_table_page.html'">TABLES</button>
-			<br><br>
-			<button onclick="document.location = '86_68_page.html'">86/68</button>
-			<br><br>
-			<button onclick="document.location = 'Manager_tool_page.html'">TOOLS</button>
-			<br><br>
-			<button onclick="document.location = 'Manager_report_page.html'">REPORTS</button>
-		</div>
-	</div>
 	
 	<!--Creates page to show the tables-->
 	<div class = "tables">
@@ -208,11 +172,20 @@
 	<div class = "table-info" id="table-num">
 		<h2 id = "headerType">TABLE 1</h2>
 		<hr color = "black">
-		<h4>RECEIPT</h4>
-		<hr color = "black">
-		<h4>PAYMENTS</h4>
-		<hr color="black">
-		<h4>NOTIFICATIONS</h4>
+		<div class="button-group">
+			<button onclick="document.location = 'employee_order_page.html'"  style="width:90% !important">ORDER/MODIFY</button>
+		</div>
+		<p style="text-align:left;position:relative;left:10px;">ITEMS ORDERED:</p>
+		<table>
+			<tr>
+				<th>
+					Description
+				</th>
+				<th>
+					QTY
+				</th>
+			</tr>
+		</table>
 	</div>
 	<script>
 		<!--takes in table number and displays information about that table-->

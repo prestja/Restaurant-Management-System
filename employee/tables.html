@@ -186,13 +186,19 @@
 				</th>
 			</tr>
 		</table>
+		<hr color="black">
+		<div class="button-group">
+			<input type="number" id="amt" placeholder="0.00">
+			<button id="comp" onclick="handleComp()">COMP</button>
+		</div>
 	</div>
 	<script>
 		<!--takes in table number and displays information about that table-->
 		function table(num)
 		{	
 			var t = document.getElementById("headerType");
-			if(num === 1)
+			t.innerHTML = "TABLE " + num;
+			/*if(num === 1)
 			{
 				t.innerHTML = "TABLE 1";
 			}
@@ -271,7 +277,7 @@
 			else if(num === 20)
 			{
 				t.innerHTML = "TABLE 20";
-			}
+			}*/
 		}
 	</script>
 </body>

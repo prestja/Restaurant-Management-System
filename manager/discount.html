@@ -148,17 +148,28 @@
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
-    $(document).ready(function(){ 
-		$("button").click(function(){
-			$.get("http://159.89.238.181:443/api/orders", function(data, status){
-				document.innerHTML+=data;
-			});
-        
-			$.post("http://159.89.238.181:443/api/orders", function(data, status){
-            
-			});
-		});
-    });
+	function handleSubmit(){
+		//creates object for the discount
+		let request = {
+			name : document.getElementById("name").value,
+			start_date : document.getElementById("startDate").value,
+			end_date : document.getElementById("endDate").value,
+			amount : document.getElementById("amt").value,
+			code : document.getElementById("code").value,
+		}
+		console.log(JSON.stringify(request));
+		//posts the object to the backend to be added into the database
+		/*$.post("http://159.89.238.181:8080/api/staff", JSON.stringify(request), function(data, status) {				
+				alert(status);
+		});*/
+		//resets the data for the object
+			name : document.getElementById("name").value = "";
+			start_date : document.getElementById("startDate").value = "";
+			end_date : document.getElementById("endDate").value = "";
+			amount : document.getElementById("amt").value = "";
+			code : document.getElementById("code").value = "";
+			alert("Discount added successfully!");
+	}
     </script>
 </head>
 <body style="background-color:Black;">
@@ -166,7 +177,7 @@
 	<div class="header">
 
 		<div class="button-group">
-			<button onclick="document.location = 'employee_main_page.html'">&#60&#60 BACK</button>
+			<button onclick="document.location = 'landing.html'">&#60&#60 BACK</button>
 		</div>
 	
 	</div>
@@ -174,13 +185,13 @@
 	<!--Creates left menu for buttons for the different manager pages-->
 	<div class = "left-menu">
 		<div class="menu-button-group">
-			<button onclick="document.location = 'Manager_table_page.html'">TABLES</button>
+			<button onclick="document.location = 'tables.html'">TABLES</button>
 			<br><br>
-			<button onclick="document.location = '86_68_page.html'">86/68</button>
+			<button onclick="document.location = '86_68.html'">86/68</button>
 			<br><br>
-			<button onclick="document.location = 'Manager_tool_page.html'">TOOLS</button>
+			<button onclick="document.location = 'tools.html'">TOOLS</button>
 			<br><br>
-			<button onclick="document.location = 'Manager_report_page.html'">REPORTS</button>
+			<button onclick="document.location = 'reports.html'">REPORTS</button>
 		</div>
 	</div>
 	
@@ -190,15 +201,15 @@
 			<h2>TOOLS</h2>
 			<hr color = "black">
 			<div class="tool-button-group">
-				<button onclick="document.location = 'Manager_tool_page.html'">ADD EMP</button>
+				<button onclick="document.location = 'tools.html'">ADD EMP</button>
 				<br><br>
 				<button onclick="document.location = 'Manager_rem_employee_page.html'">REM EMP</button>
 				<br><br>
-				<button onclick="document.location = 'Manager_comps_page.html'">COMPS</button>
+				<button onclick="document.location = 'comps.html'">COMPS</button>
 				<br><br>
-				<button onclick="document.location = 'Manager_promos_page.html'">PROMOS</button>
+				<button onclick="document.location = 'promos.html'">PROMOS</button>
 				<br><br>
-				<button onclick="document.location = 'Manager_discount_page.html'">DISCOUNT</button>
+				<button onclick="document.location = 'discount.html'">DISCOUNT</button>
 			</div>
 		</div>
 	<!--holds discount table form-->
@@ -206,28 +217,24 @@
 			<h2>DISCOUNTS</h2>
 			<hr color="black">
 			<span style="text-align:left !important;position:relative;left:10px;">
-			<form id ="rem">
-						<label>Name of discount:</label>
-						<input type="text" id="amt" placeholder="Name" required>
-						<br><br>
-						<label>Start Date:</label>
-						<input type="date" id="startDate" required>
-						<br><br>
-						<label>End Date:</label>
-						<input type="date" id="endDate" required>
-						<br><br>
-						<label>Type of discount:</label>
-						<select id="discType" required>
-							<option value="perc">Percent</option>
-							<option value="amt">Amount</option>
-						</select>
-						<input type="text" id="val" placeholder="0% or $0.00" required>
+			<div id ="rem">
+					<label>NAME OF DISCOUNT:</label>
+					<input type="text" id="name" placeholder="Name" maxlength=20>
 					<br><br>
-					<label>Discount Code:</label>
-					<input type="text" id="code" placeholder="Code" required>
+					<label>START DATE:</label>
+					<input type="date" id="startDate" >
 					<br><br>
-					<input type ="submit" value ="ADD DISCOUNT"/>
-			</form>
+					<label>END DATE:</label>
+					<input type="date" id="endDate">
+					<br><br>
+					<label>AMOUNT:</label>
+					<input type="text" id="amt" placeholder="0.00" maxlength=5>
+					<br><br>
+					<label>DISCOUNT CODE:</label>
+					<input type="text" id="code" placeholder="Code" maxlength=20>
+					<br><br>
+					<input type ="button" value ="ADD DISCOUNT" onclick="handleSubmit()"/>
+			</div>
 			</span>
 		</div>
 	</div>

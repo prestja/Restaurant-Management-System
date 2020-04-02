@@ -13,64 +13,6 @@ body {
   box-sizing: border-box;
 }
 
-/* Remove margins and padding from the list */
-ul {
-  margin: 10px 10px;
-  padding: 0;
-}
-
-/* Style the list items */
-ul li {
-  cursor: pointer;
-  position: relative;
-  padding: 30px 8px 12px 35px;
-  list-style-type: none;
-  background: #eee;
-  font-size: 18px;
-  font-family: Arial, Times, serif; 
-  transition: 0.2s;
-  
-  /* make the list items unselectable */
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-/* Set all odd list items to a different color (zebra-stripes) */
-ul li:nth-child(odd) {
-  background: #f9f9f9;
-}
-
-/* Darker background-color on hover */
-ul li:hover {
-  background: #ddd;
-}
-
-/* When clicked on, add a background color */
-ul li.checked {
-  background: #888;
-  color: #fff;
-}
-
-/* Add a "checked" mark when clicked on */
-ul li.checked::before {
-  content: '';
-  position: absolute;
-  border-color: #fff;
-  border-style: solid;
-  border-width: 0 2px 2px 0;
-  top: 10px;
-  left: 16px;
-  transform: rotate(45deg);
-  height: 15px;
-  width: 7px;
-}
-
-.close:hover {
-  background-color: #f44336;
-  color: white;
-}
 
 /* Style the header */
 .header {
@@ -111,6 +53,8 @@ ul li.checked::before {
 	.button-group button:hover {
 		background-color: #3e8e41;
 	}
+    
+    /*button group for submit button*/
  .bottom-group button {
   		background-color: #D3D3D3; /*Makes Gray background*/
 		border:  0px #D3D3D3;  /*Border around boxes is Gray*/
@@ -136,6 +80,38 @@ ul li.checked::before {
 	/* Add a background color on hover */
 	.bottom-group button:hover {
 		background-color: #3e8e41;
+      }
+      
+      /*Button group for drink buttons*/
+	.drink-group button {
+		background-color: #D3D3D3; /*Makes Gray background*/
+		border:  0px #D3D3D3;  /*Border around boxes is Gray*/
+		color: black; /* White text */
+		padding: 10px 10px; /* Some padding */
+		margin: 10px;  /* Created space between buttons */
+		font-family: Arial Black, Times, serif; /* sets font */
+		font-size:  15px;	/* Sets size */
+		font-weight:  normal;	/*Sets normal or bold */
+		text-align: center;	/* Aligns to center of button */
+		cursor: pointer; /* Pointer/hand icon */
+		width: 20%; /* Set a width if needed */
+		display: inline-block;
+	}
+
+	.drink-group button:not(:last-child) {
+		border-right: none; /* Prevent double borders */
+	}
+
+	/* Add a background color on hover */
+	.drink-group button:focus {
+		background-color: green;
+	}
+    
+    .drink-group img {
+    	width: 10%;
+        height: auto; 
+    }
+        
 </style>
 </head>
 <body  style="background-color:Black;">>
@@ -150,18 +126,17 @@ ul li.checked::before {
   <h3 style="margin:5px">Please Select Your Drink</h3>
 </div>
 
-	</div>
    	<div class= "bottom-group">
    <button type="button" onclick="alert('Your refill has been ordered!')">SUBMIT</button>
  	</div>
-<ul id="myUL">
-  <li>Coke</li>
-  <li>Dr.Pepper</li>
-  <li>Sprite</li>
-  <li>Diet Coke</li>
-  <li>Sweet Tea</li>
-  <li>Root Beer</li>
-</ul>
+    
+<div class= "drink-group">
+<button onclick="">Coke</button>
+ <img src="Drink_Coke.jpg" alt="Coke" style="width:100%">
+<button onclick="">Dr.Pepper</button>
+<button onclick="">Sprite</button>
+<button onclick="">Diet Coke</button>
+</div>
 
 <script>
 

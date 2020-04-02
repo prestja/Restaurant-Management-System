@@ -114,7 +114,7 @@
 		padding: 10px;
 		margin: 10px 10px 10px 10px;
 		width: 60vw;
-		height: 260px;
+		height: 60vh;
 		display: inline-block;
 		text-align: center;
 		border: 5px;
@@ -148,39 +148,46 @@
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
-    $(document).ready(function(){ 
-		$("button").click(function(){
-			$.get("http://159.89.238.181:443/api/orders", function(data, status){
-				document.innerHTML+=data;
+		//function happens when the submit button is clicked
+		function handleSubmit() {
+			//request creates an object to be stored for the employee
+			let request = {
+				first_name: document.getElementById("fname").value,
+				last_name: document.getElementById("lname").value,
+				id: document.getElementById("empId").value,
+				password: document.getElementById("empPass").value,
+				position: parseInt(document.getElementById("pos").value),
+				wage: parseFloat(document.getElementById("hourly").value),
+				phone: document.getElementById("phone").value,				
+			}
+			//puts the object in JSON format and posts it to the backend to be added to the database
+			console.log(JSON.stringify(request));
+			$.post("http://159.89.238.181:8080/api/staff", JSON.stringify(request), function(data, status) {				
+				alert(status);
 			});
-        
-			$.post("http://159.89.238.181:443/api/orders", function(data, status){
-            
-			});
-		});
-    });
-    </script>
+			//resets all form data
+			first_name: document.getElementById("fname").value = "";
+			last_name: document.getElementById("lname").value = "";
+			id: document.getElementById("empId").value = "";
+			password: document.getElementById("empPass").value = "";
+			position: document.getElementById("pos").value = "";
+			wage: document.getElementById("hourly").value = "";
+			phone: document.getElementById("phone").value = "";
+			alert("Employee added successfully!");
+		}		
+	</script>
 </head>
-<body style="background-color:Black;">
-	<!--creates buttons in header to go back-->
-	<div class="header">
-
-		<div class="button-group">
-			<button onclick="document.location = 'employee_main_page.html'">&#60&#60 BACK</button>
-		</div>
-	
-	</div>
-	
+<body style="background-color:Black;">	
 	<!--Creates left menu for buttons for the different manager pages-->
 	<div class = "left-menu">
 		<div class="menu-button-group">
-			<button onclick="document.location = 'Manager_table_page.html'">TABLES</button>
+			<button onclick="document.location = 'tables.html'">TABLES</button>
 			<br><br>
-			<button onclick="document.location = '86_68_page.html'">86/68</button>
+			<button onclick="document.location = '86_68.html'">86/68</button>
 			<br><br>
-			<button onclick="document.location = 'Manager_tool_page.html'">TOOLS</button>
+			<button onclick="document.location = 'tools.html'">TOOLS</button>
 			<br><br>
-			<button onclick="document.location = 'Manager_report_page.html'">REPORTS</button>
+			<button onclick="document.location = 'reports.html'">REPORTS</button>
 		</div>
 	</div>
 	
@@ -190,44 +197,45 @@
 			<h2>TOOLS</h2>
 			<hr color = "black">
 			<div class="tool-button-group">
-				<button onclick="document.location = 'Manager_tool_page.html'">ADD EMP</button>
+				<button onclick="document.location = 'tools.html'">ADD EMP</button>
 				<br><br>
 				<button onclick="document.location = 'Manager_rem_employee_page.html'">REM EMP</button>
 				<br><br>
-				<button onclick="document.location = 'Manager_comps_page.html'">COMPS</button>
+				<button onclick="document.location = 'comps.html'">COMPS</button>
 				<br><br>
-				<button onclick="document.location = 'Manager_promos_page.html'">PROMOS</button>
+				<button onclick="document.location = 'promos.html'">PROMOS</button>
 				<br><br>
-				<button onclick="document.location = 'Manager_discount_page.html'">DISCOUNT</button>
+				<button onclick="document.location = 'discount.html'">DISCOUNT</button>
 			</div>
 		</div>
 	<!--holds add employee form-->
 		<div class = "items">
 			<h2>ADD EMPLOYEE</h2>
 			<hr color="black">
-			<span style="text-align:left !important;position:relative;left:10px;">
-			<form>
-				<label>NAME:</label>
-				<input type="text" id="name" name="name" placeholder="John Doe" required />
-				<br>
-				<label>EMPLOYEE ID:</label>
-				<input type="text" id="empId" name="empId" placeholder="123456" required />
-				<br>
-				<label>PASSWORD:</label>
-				<input type="text" id="empPass" name="empPass" placeholder="123456" required />
-				<br>
-				<label>POSITION:</label>
-				<input type="text" id="pos" name="pos" placeholder="waiter" required />
-				<br>
-				<label>HOURLY:</label>
-				<input type="text" id="hourly" name="hourly" placeholder="$7.25" required />
-				<br>
-				<label>PHONE:</label>
-				<input type="text" id="phone" name="phone" placeholder="123-456-7890" required />
+			<div style="text-align:left;position:relative;left:10px">
+				<label>FIRST NAME:</label>
+				<input type="text" id="fname" name="fname" placeholder="John" maxlength=20 size=12/>
 				<br><br>
-				<input type="submit" value="ADD EMP"/>
-			</form>
-			</span>
+				<label>LAST NAME:</label>
+				<input type="text" id="lname" name="lname" placeholder="Doe" maxlength=20 size=12/>
+				<br><br>
+				<label>EMPLOYEE ID:</label>
+				<input type="text" id="empId" name="empId" placeholder="123456" maxlength=7 size=12/>
+				<br><br>
+				<label>PASSWORD:</label>
+				<input type="text" id="empPass" name="empPass" placeholder="123456" maxlength=10 size=12/>
+				<br><br>
+				<label>POSITION:</label>
+				<input type="text" id="pos" name="pos" placeholder="0 : Manager, 1: Waiter" maxlength=2 size=20/>
+				<br><br>
+				<label>HOURLY:</label>
+				<input type="text" id="hourly" name="hourly" placeholder="$7.25" maxlength=5 size=12/>
+				<br><br>
+				<label>PHONE:</label>
+				<input type="text" id="phone" name="phone" placeholder="123-456-7890" size=12 maxlength=12/>
+				<br><br>
+				<button onclick = "handleSubmit()">ADD EMPLOYEE</button>
+			</div>
 		</div>
 	</div>
 </body>

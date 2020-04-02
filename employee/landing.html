@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+
+<html>
+<style>
+	* {
+		box-sizing: border-box;
+	}
+	body {
+		background-color: black;
+		margin: 0;
+	}
+
+	/*Created a header container to hold buttons at the top*/
+	.header {
+		padding: 1%;
+		<!-- background-color: blue; -->
+		margin: 0%;
+	}
+
+/*Button group for creating the buttons at top of page*/
+	/*Same button group from the main page*/
+	.button-group button {
+		background-color: #FFFFFF; /*Makes Button White*/
+		border:  0% #D3D3D3;  /*Border around boxes is Gray*/
+		color: black; /* White text */
+		padding: 0.75%; /* Some padding */
+		margin: 0;  /* Created space between buttons */
+		font-family: Arial Black, Times, serif; /* sets font */
+		font-size:  16px;	/* Sets size */
+		font-weight:  normal;	/*Sets normal or bold */
+		text-align: center;	/* Aligns to center of button */
+		cursor: pointer; /* Pointer/hand icon */
+		width: 15vw; /* Set a width if needed */
+		display: inline-block;
+	}
+
+	.button-group button:not(:last-child) {
+		border-right: none; /* Prevent double borders */
+	}
+
+	/* Add a background color on hover */
+	.button-group button:hover {
+		background-color: #3e8e41;
+	}
+
+	/*Created a left container to hold buttons for the manager navigation*/
+	.left-menu {
+		background-color: #050505 !important; //makes Gray background
+		padding: 1%;
+		margin: 1% 1% 1%;
+		position: absolute;
+		width: 65vw;
+		height: 90vh;
+		left: 2%;
+		display: inline-block;
+	}
+
+	/*Created a menu button similar to header buttons*/
+	.menu-button-group button {
+		background-color: #FFFFFF; /*Makes Background white*/
+		border:  0px #D3D3D3;  /*Border around boxes is Gray*/
+		color: black; /* White text */
+		padding: 1%; /* Some padding */
+		margin: 0;  /* Created space between buttons */
+		font-family: Arial Black, Times, serif; /* sets font */
+		font-size:  25px;	/* Sets font size */
+		font-weight:  normal;	/*Sets normal or bold */
+		text-align: center;	/* Aligns to center of button */
+		cursor: pointer; /* Pointer/hand icon */
+		width: 40vw; /* Set a width if needed */
+		height: 15vh;
+		display: inline-block;
+		position: relative;
+		left: 1%;
+		top: 1%;
+		bottom: 1%;
+	}
+
+	/* Add a background color on hover */
+	.menu-button-group button:focus {
+		background-color: #3e8e41;
+	}
+
+	/* Add a background color on hover */
+	.table-button-group button:hover {
+		background-color: #D3D3D3;
+	}
+	/*Created a notification container to hold information about notificaions*/
+	.table-info {
+		background-color: #FFFFFF !important; //makes Container White
+		padding: 1%;
+		margin: 1%;
+		width: 40vw;
+		height: 75vh;
+		right: 2%;
+		display: inline-block;
+		text-align: center;
+		position: absolute;
+	}
+	
+	@media screen and (max-width: 600px) {
+		.column {
+			width: 100vh;
+		}
+	}
+	
+</style>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+    $(document).ready(function(){ 
+		$("button").click(function(){
+			$.get("http://159.89.238.181:443/api/orders", function(data, status){
+				document.innerHTML+=data;
+			});
+			$.post("http://159.89.238.181:443/api/orders", function(data, status){
+			});
+		});
+    });
+    </script>
+</head>
+<body style="background-color:Black;">
+
+	<!--creates buttons in header to go back-->
+	<div class="header">
+		<div class="button-group">
+			<button onclick="document.location = 'employee_login_pg.html'">LOG OUT</button>
+		</div>
+	</div>
+
+	<!--Creates left menu for buttons for the different employee pages-->
+	<div class = "left-menu">
+		<div class="menu-button-group">
+			<button onclick="document.location = 'tables.html'">MANAGE TABLES</button>
+			<br><br>
+			<button onclick="document.location = 'employee_Payments_page.html'">PAYMENTS</button>
+			<br><br>
+			<button onclick="document.location = 'employee_clockin_page.html'">TIME CLOCK</button>
+			<br><br>
+			<button onclick="document.location = 'manager_table_page.html'">MANAGER TOOLS</button>
+			<br><br>
+		</div>
+	</div>
+
+	<!--Creates section to show details about specific tables-->
+	<div class = "table-info" id="table-num">
+		<h2 id = "headerType">NOTIFICATIONS</h2>
+		<hr color = "black">
+		<h4>Table 1 needs coke refill | 15:30pm</h4>
+	</div>
+</body>
+</html>

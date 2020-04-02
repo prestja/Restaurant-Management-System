@@ -40,10 +40,19 @@
     }
 
 </style>    
+
+<head>
+	<script>
+		function goBack() {
+			window.history.back();
+		}
+	</script>
+</head>
+
 <body>
     <!--Navigation buttons-->
     <div class = "navigation">
-        <button id = "nav-back">Back</button>
+        <button id = "nav-back" onclick="goBack()">Back</button>
     </div>
 
     <!---Content -->

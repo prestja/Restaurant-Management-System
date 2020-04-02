@@ -13,31 +13,66 @@
     }
 
     .navigation button {
-        height: 50%;
-        width: 10%;
+        /*height: 50%;*/
+        /*width: 10%;*/
         vertical-align: middle;
         position: relative;
-        background-color:plum;
-        color:white;
+        /*background-color:plum;*/
+        /*color:white;*/
         border-color:transparent;
+		
+		background-color: #D3D3D3; /*Makes Gray background*/
+		border:  0px #D3D3D3;  /*Border around boxes is Gray*/
+		color: black; /* White text */
+		padding: 10px 10px; /* Some padding */
+		margin-top: 5px;  /* Created space between buttons */
+		font-family: Arial Black, Times, serif; /* sets font */
+		font-size:  16px;	/* Sets size */
+		font-weight:  normal;	/*Sets normal or bold */
+		text-align: center;	/* Aligns to center of button */
+		cursor: pointer; /* Pointer/hand icon */
+		width: 15%; /* Set a width if needed */
+		display: inline-block;
     }
 
     #nav-back {
-        border-radius: 50px 40px 40px 50px;
+        /*border-radius: 50px 40px 40px 50px;*/
     }
     
     #nav-help {
-        border-radius: 40px 40px 40px 40px;
+        /*border-radius: 40px 40px 40px 40px;*/
+		
     }
     
     #nav-refills {
-        border-radius: 40px 50px 50px 40px;
+        /*border-radius: 40px 50px 50px 40px;*/
     }
 
     .content {
         height: 90%;
         
     }
+	
+	.help_alert {
+		padding: 20px;
+		background-color: white;
+		color: black;
+	}
+	
+	.closebtn{
+		margin-left: 15px;
+		color: black;
+		font-weight: bold;
+		float: right;
+		font-size: 22px;
+		line-height: 20px;
+		cursor: pointer;
+		transition: 0.3s;
+	}
+	
+	.closebtn:hover {
+		color: green;
+	}
 
 </style>
 
@@ -46,6 +81,18 @@
 		function goBack() {
 			window.history.back();
 		}
+		
+		function myFunction() {
+			var txt;
+			if (confirm("Do you need assistance from your server?")) {
+				txt = "You pressed OK!";
+				alert("Your server is on their way!");
+			} else {
+				txt = "You pressed Cancel!";
+				alert("Your request has been canceld");
+			}
+				document.getElementById("demo").innerHTML = txt;
+		}
 	</script>
 	
 </head>
@@ -53,14 +100,14 @@
 <body>
     <!--Navigation buttons-->
     <div class = "navigation">
-        <button id = "nav-back" onclick = "goBack()">Back</button>
-        <button id = "nav-help">Help</button>
-        <button id = "nav-refills">Refills</button>
+        <button id = "nav-back" onclick ="goBack()" >Back</button>
+		<button id = "nav-help" onclick = "myFunction()">Help</button>
+        <button id = "nav-refills" onclick ="document.location = 'refills.html'">Refills</button>
     </div>
 
     <!---Content -->
     <div class = "content">
-        <iframe src = "landing.html" style = "height: 100%; width: 100%"></iframe>
+        <iframe src = "landing.html" id="ifrm" style = "height: 100%; width: 100%"></iframe>
     </div>
 
 </body>

@@ -159,9 +159,19 @@
 				phone: document.getElementById("phone").value,				
 			}
 			console.log(JSON.stringify(request));
+			$.ajax({
+				url : "http://159.89.238.181:8080/api/staff",
+				type: "POST",
+				data: JSON.stringify([request]),
+				contentType: "application/json; charset=utf-8",
+				dataType   : "json",
+				success    : function(){
+					console.log("Pure jQuery Pure JS object");
+					alert("Employee Added Successfully");
+				}
+			});
 			const form = document.getElementById('addEmp');
 			form.reset();
-			alert("Employee Added Successfully");
 		}		
 	</script>
 </head>
@@ -215,7 +225,7 @@
 				<input type="text" id="empPass" name="empPass" placeholder="123456" maxlength=10 size=12/>
 				<br><br>
 				<label>POSITION:</label>
-				<input type="text" id="pos" name="pos" placeholder="0 : Manager, 1: Waiter" maxlength=2 size=12/>
+				<input type="text" id="pos" name="pos" placeholder="0 : Manager, 1: Waiter" maxlength=2 size=20/>
 				<br><br>
 				<label>HOURLY:</label>
 				<input type="text" id="hourly" name="hourly" placeholder="$7.25" maxlength=5 size=12/>

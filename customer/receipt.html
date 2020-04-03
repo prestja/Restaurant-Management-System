@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+
+<html>
+<style>
+	* {
+		box-sizing: border-box;
+	}
+	body {
+		background-color: black;
+		margin: 0;
+	}
+
+	/*Created a header container to hold buttons at the top*/
+	.header {
+		padding: 1%;
+		<!-- background-color: blue; -->
+		margin: 0%;
+	}
+
+/*Button group for creating the buttons at top of page*/
+	/*Same button group from the main page*/
+	.button-group button {
+		background-color: #FFFFFF; /*Makes Button White*/
+		border:  0% #D3D3D3;  /*Border around boxes is Gray*/
+		color: black; /* White text */
+		padding: 0.75%; /* Some padding */
+		margin: 0;  /* Created space between buttons */
+		font-family: Arial Black, Times, serif; /* sets font */
+		font-size:  16px;	/* Sets size */
+		font-weight:  normal;	/*Sets normal or bold */
+		text-align: center;	/* Aligns to center of button */
+		cursor: pointer; /* Pointer/hand icon */
+		width: 15vw; /* Set a width if needed */
+		display: inline-block;
+	}
+
+	.button-group button:not(:last-child) {
+		border-right: none; /* Prevent double borders */
+	}
+
+	/* Add a background color on hover */
+	.button-group button:hover {
+		background-color: #3e8e41;
+	}
+
+	/*Created a left container to hold buttons for the manager navigation*/
+	.left-menu {
+		background-color: #c70c0c !important; //makes Gray background
+		padding: 1%;
+		margin: 1% 1% 1%;
+		position: absolute;
+		width: 95vw;
+		height: 80vh;
+		left: 2%;
+		display: inline-block;
+		text-align: center;
+		font-size: 30px;
+	}
+
+	/*Created a menu button similar to header buttons*/
+	.menu-button-group button {
+		background-color: #FFFFFF; /*Makes Background white*/
+		border:  0px #D3D3D3;  /*Border around boxes is Gray*/
+		color: black; /* White text */
+		padding: 1%; /* Some padding */
+		margin: 1%;  /* Created space between buttons */
+		font-family: Arial Black, Times, serif; /* sets font */
+		font-size:  40px;	/* Sets font size */
+		font-weight:  normal;	/*Sets normal or bold */
+		text-align: center;	/* Aligns to center of button */
+		cursor: pointer; /* Pointer/hand icon */
+		width: 15vw; /* Set a width if needed */
+		height: 40vh;
+		display: inline-block;
+		position: relative;
+		left: 1%;
+		top: 1%;
+		bottom: 1%;
+	}
+
+	/* Add a background color on hover */
+	.menu-button-group button:focus {
+		background-color: #3e8e41;
+	}
+
+	/* Add a background color on hover */
+	.table-button-group button:hover {
+		background-color: #D3D3D3;
+	}
+
+	@media screen and (max-width: 600px) {
+		.column {
+			width: 100vh;
+		}
+	}
+
+</style>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+    $(document).ready(function(){ 
+		$("button").click(function(){
+			$.get("http://159.89.238.181:443/api/orders", function(data, status){
+				document.innerHTML+=data;
+			});
+			$.post("http://159.89.238.181:443/api/orders", function(data, status){
+			});
+		});
+    });
+    </script>
+	
+	<script type="text/javascript">
+	function Selection(ButtonID){
+		if(ButtonID == 1){
+			alert("A Server will bring you your receipt shortly");
+			window.location.href="roulette.html";
+		}
+		else{
+			alert("Thank you for your patronage!");
+			window.location.href="roulette.html";
+		}
+		}
+	</script>
+</head>
+<body style="background-color:Black;">
+
+	<!--Creates left menu for buttons for the different employee pages-->
+	<div class = "left-menu">
+		<div class="menu-button-group">
+			<h2>How would you like your Receipt?</h2>
+			<hr color="black">
+			<br><br><br>
+			<button id = "1" onclick = "Selection(1)">Printed</button>
+			<button id = "2" onclick = "Selection(2)">Emailed</button>
+			
+			
+		</div>
+	</div>
+
+</body>
+</html>

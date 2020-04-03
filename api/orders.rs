@@ -75,10 +75,8 @@ pub fn get_status(_conn: LogsDbConn, status: u32) -> String {
 }
 
 #[get("/?<id>")]
-pub fn get_id (_conn: LogsDbConn, id: String) -> String
-{	
+pub fn get_id (_conn: LogsDbConn, id: String) -> String {	
 	let mut _str = String::from("[\n\t");
-	//let _oid = mongodb::oid::ObjectId::with_string(id.as_str());
 	let _doc = doc!{"_id": id};
 	let _coll = _conn.collection("orders");
 	let _cursor = _coll.find(Some(_doc.clone()), None).unwrap();
@@ -125,12 +123,14 @@ pub fn post(_conn: LogsDbConn, order: Json<Order>) -> String {
 
 #[post("/comp?<table>&<amount>")]
 pub fn comp (_conn: LogsDbConn, table: u32, amount: f32) -> String {
+	// this document is for the query (what to find)
 	let _doc = doc! {
 		"table": table,
 		"status": {
-			"$lt": 5
+			"$lt": 5 // where the status of the order is < 5 (not yet paid)
 		}
 	};
+	// this document applies new or updates values
 	let _comp = doc! {
 		"$set": {
 			"comp": amount
@@ -140,14 +140,16 @@ pub fn comp (_conn: LogsDbConn, table: u32, amount: f32) -> String {
 	let _coll = _conn.collection("orders");
 	let _result = _coll.find_one_and_update(_doc.clone(), _comp.clone(), None).unwrap();
 	
+	// if there was a result updated
 	if let Some(item) = _result {
-		let response = json!({ // generate a response for the user
+		let response = json!({
 			"code": 200,
 			"message": "Successfully compensated order."
 		});
 		return serde_json::to_string(&response).unwrap();
 	}
-	let response = json!({ // generate a response for the user
+	// otherwise, output an error
+	let response = json!({
 		"code": 404,
 		"message": "No unpaid orders could be found for the specified table."
 	});

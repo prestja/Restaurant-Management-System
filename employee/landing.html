@@ -112,6 +112,13 @@
 		display:none;
 	}
 	
+	.notebutton{
+		background-color: blue;
+		width:50%;
+		height: 10%;
+		position: relative;
+	}
+	
 </style>
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -179,9 +186,11 @@
 		<h2 id = "headerType">NOTIFICATIONS</h2>
 		<hr color = "black">
 		<h4>Table 1 needs coke refill | 15:30pm</h4>
-		<div id = "notification_template"> 
+		<div id = "notification_template" >
+			<div class = "notebutton">
 			<p style = "width: 80%">sometext</p>
 			<button style = "width: 3%; height: 20%"></button>
+			</div>
 		</div>
 	</div>
 </body>

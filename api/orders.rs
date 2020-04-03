@@ -107,7 +107,6 @@ pub fn get_id (_conn: LogsDbConn, id: String) -> String
 #[post("/", data = "<order>")]
 pub fn post(_conn: LogsDbConn, order: Json<Order>) -> String {
 	let inner = order.into_inner(); // converts fron Json<Order> to just Order
-
 	let doc = doc! // create a new document based upon deserialized object
 	{
 		"table": inner.table,
@@ -120,6 +119,37 @@ pub fn post(_conn: LogsDbConn, order: Json<Order>) -> String {
 	let response = json!({ // generate a response for the user
 		"code": 200,
 		"message": "Inserted order into collection orders"
+	});
+	return serde_json::to_string(&response).unwrap();
+}
+
+#[post("/comp?<table>&<amount>")]
+pub fn comp (_conn: LogsDbConn, table: u32, amount: f32) -> String {
+	let _doc = doc! {
+		"table": table,
+		"status": {
+			"$lt": 5
+		}
+	};
+	let _comp = doc! {
+		"$set": {
+			"comp": amount
+		}
+	};
+
+	let _coll = _conn.collection("orders");
+	let _result = _coll.find_one_and_update(_doc.clone(), _comp.clone(), None).unwrap();
+	
+	if let Some(item) = _result {
+		let response = json!({ // generate a response for the user
+			"code": 200,
+			"message": "Successfully compensated order."
+		});
+		return serde_json::to_string(&response).unwrap();
+	}
+	let response = json!({ // generate a response for the user
+		"code": 404,
+		"message": "No unpaid orders could be found for the specified table."
 	});
 	return serde_json::to_string(&response).unwrap();
 }

@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 body {
   margin: 0;
@@ -70,17 +68,26 @@ body {
 		background-color: green; 
 	}
 </style>
+
+<head>
+	<script>
+		function readPin() {
+			//alert('fuck');
+			//alert((localStorage.getItem('saved_pin'));
+			alert( localStorage.getItem('saved_pin2') );
+		}
+	</script>
+	
 </head>
-<body  style="background-color:Black;">>
+<body  style="background-color:Black;">
 
 	
 <div id="myDIV" class="header" style = "height: 15%;">
   <h2 style="margin:5px">Please Input Your Information For Rewards</h2>	
 </div>
 
-<div class= "bottom-group">
-   /*<button type="button" onclick="alert('Your rewards account has been created!')">SUBMIT</button>*/
-   <button type="button" onclick="alert(' localStorage.getItem('saved_pin')">SUBMIT</button>
+<div class= "bottom-group">  
+   <button type="button" onclick="readPin()">SUBMIT</button>
  </div>
 
 <label style = "color: white; font-family: Arial Black, Times, serif" for ="phone">Phone Number:</label><br><br>

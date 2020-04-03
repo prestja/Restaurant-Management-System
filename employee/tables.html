@@ -119,17 +119,17 @@
 			t.innerHTML = "TABLE " + num;
 			t.value = num;
 		}
+		
 		//when comp button is pressed
+		
 		function handleComp()
 		{
 			var t = document.getElementById("headerType");
 			var tableNum = parseInt(t.value);
 			var amount = document.getElementById("amt").value;
-			if(tableNum == null)
-			{
+			if(tableNum == null) {
 				tableNum=1;
 			}
-			console.log(tableNum);
 			/*if(amount !== "")
 			{
 				var url = 'http://159.89.238.181:8080/api/orders/comp?table=';
@@ -145,7 +145,7 @@
 		}
     </script>
 </head>
-<body style="background-color:Black;">
+<body style="background-color:Black;" onload="table(1)">
 	<!--creates buttons in header to go back-->
 	<div class="header">
 

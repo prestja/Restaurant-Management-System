@@ -19,9 +19,9 @@ pub struct Item {
 pub struct Order {
 	table: u32,
 	
-	// default values, not supplied by the front-end
+	// default values, not required for deserialization
 	#[serde(default)] id: u32,
-	#[serde(default)] status: u32
+	#[serde(default)] status: u32  // ordered = 0, NeedStaff = 1, NeedManager = 2, Ready = 3, Served = 4, Closed = 5
 }
 
 #[get("/", rank = 1)]
@@ -53,18 +53,15 @@ pub fn get_status(_conn: LogsDbConn, status: u32) -> String {
 	let doc = doc!{"status": status};
 	let _coll = _conn.collection("orders");
 	let cursor = _coll.find(Some(doc.clone()), None).unwrap();
-	for result in cursor 
-	{
-		if let Ok(item) = result 
-		{
+	for result in cursor {
+		if let Ok(item) = result {
 			let _bson = mongodb::to_bson(&item).unwrap();
 			let _json = serde_json::ser::to_string(&_bson).unwrap();
 			str.push_str(&_json);
 		}
 		str.push_str(",\n\t");
 	}
-	if str.len() <= 3
-	{
+	if str.len() <= 3 {
 		return String::from("No entries found");
 	}
 	str.pop();

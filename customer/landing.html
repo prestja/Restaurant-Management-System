@@ -85,6 +85,12 @@
 </style>
 <head>
 	<link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet'>
+	
+	<script>
+		function handleStuff() {
+			parent.window.postMessage("inline-block", '*');
+		}
+	</script>
 </head>
 
 <body style="background-color:Black;">
@@ -92,16 +98,16 @@
 	<!-- Bottom section holds order, pay, and play buttons-->
 	<div class="row" style= "height: 90vh; display: flex; flex-wrap: wrap;">
 		<div class="column" style="background: url('../img/burger.jpg') no-repeat; background-size: auto 100%;">		
-			<button class="button" onclick="document.location = '../menu.html'"></button>
-			<div class="title" onclick="document.location = '../menu.html'">Order</div> 		
+			<button class="button" onclick="document.location = '../menu.html'; handleStuff();"></button>
+			<div class="title" onclick="document.location = '../menu.html'; handleStuff();">Order</div> 		
 		</div>	
 		<div class="column" style="background: url('../img/game.jpg') no-repeat; background-size: auto 100%;">
-			<button class="button" onclick="document.location = 'play.html'"></button>
-			<div class="title" onclick="document.location = 'play.html'">Play</div> 		
+			<button class="button" onclick="document.location = 'play.html'; handleStuff();"></button>
+			<div class="title" onclick="document.location = 'play.html'; handleStuff();">Play</div> 		
 		</div>	
 		<div class="column" style="background: url('../img/payment.jpg') no-repeat; background-size: auto 100%;">
-			<button class="button" onclick="document.location = '../payment.html'"></button>
-			<div class="title" onclick="document.location = '../payment.html'">Pay</div> 		
+			<button class="button" onclick="document.location = '../payment.html'; handleStuff();"></button>
+			<div class="title" onclick="document.location = '../payment.html'; handleStuff();">Pay</div> 		
 		</div>	
 	</div>
 </body>

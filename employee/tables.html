@@ -125,7 +125,12 @@
 			var t = document.getElementById("headerType");
 			var tableNum = parseInt(t.value);
 			var amount = document.getElementById("amt").value;
-			if(amount !== "")
+			if(tableNum == null)
+			{
+				tableNum=1;
+			}
+			console.log(tableNum);
+			/*if(amount !== "")
 			{
 				var url = 'http://159.89.238.181:8080/api/orders/comp?table=';
 				url = url.concat(tableNum);
@@ -134,7 +139,7 @@
 				$.post(url, function(status) {				
 				alert(status);
 			});
-			}
+			}*/
 			
 			document.getElementById("amt").value = "";
 		}
@@ -185,7 +190,7 @@
 	
 	<!--Creates section to show details about specific tables-->
 	<div class = "table-info" id="table-num">
-		<h2 id = "headerType" value="1">TABLE 1</h2>
+		<h2 id = "headerType" value=1>TABLE 1</h2>
 		<hr color = "black">
 		<div class="button-group">
 			<button onclick="document.location = 'employee_order_page.html'"  style="width:90% !important">ORDER/MODIFY</button>

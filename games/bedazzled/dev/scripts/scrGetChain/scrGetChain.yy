@@ -1,5 +1,5 @@
 {
-    "id": "f1d775ac-04c9-477d-93c2-b204585afd56",
+    "id": "0f4c7de2-737a-4284-be66-a87f0d003baf",
     "modelName": "GMScript",
     "mvc": "1.0",
     "name": "scrGetChain",

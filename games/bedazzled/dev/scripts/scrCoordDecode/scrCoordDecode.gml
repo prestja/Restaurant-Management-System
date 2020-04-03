@@ -1,4 +1,4 @@
 ///@function scrCoordEncode(val);
-///@description Decode a single value into an [x, y] coordinate pair
+///@description Decode a single value into an [i, j] coordinate pair
 ///@param val
-return make_pair(argument0 mod 8, argument0 div 8);
+return make_pair(argument0 div 8, argument0 mod 8);

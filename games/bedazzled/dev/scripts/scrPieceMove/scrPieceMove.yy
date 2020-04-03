@@ -1,8 +1,8 @@
 {
-    "id": "d05ad13e-373a-4e72-9d77-6921223336ad",
+    "id": "ef6f6134-2d95-4d7a-ae53-23f894733c11",
     "modelName": "GMScript",
     "mvc": "1.0",
-    "name": "scrGetRemainingMoves",
+    "name": "scrPieceMove",
     "IsCompatibility": false,
     "IsDnD": false
 }

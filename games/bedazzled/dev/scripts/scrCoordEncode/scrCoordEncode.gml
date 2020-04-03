@@ -1,5 +1,5 @@
-///@function scrCoordEncode(x, y);
-///@description Encode an [x, y] coordinate pair as a single value
-///@param x
-///@param y
-return (argument1 * 8) + argument0;
+///@function scrCoordEncode(i, j);
+///@description Encode an [i, j] coordinate pair as a single value
+///@param i
+///@param j
+return (argument0 * 8) + argument1;

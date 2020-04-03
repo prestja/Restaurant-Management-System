@@ -1,16 +1,81 @@
-///@function scrGetChain(x, y, type)
-///@description Find the full chain of spaces of the given type connected to the given point
-///@param x
-///@param y
-///@param type
-var xx = argument0, yy = argument1, type = argument2;
-//Create empty list
-var _chain = ds_list_create();
-//Only search if you are in a valid position
-if (xx >= 0 && xx <= 7 && yy >= 0 && yy <= 7) {
-	scrCheckMatch(xx, yy, type, Dir.Right, _chain);
-	scrCheckMatch(xx, yy, type, Dir.Left, _chain);
-	scrCheckMatch(xx, yy, type, Dir.Up, _chain);
-	scrCheckMatch(xx, yy, type, Dir.Down, _chain);
+///@function scrGetChain(i, j)
+///@description Return a ds_list of all spaces that form a valid chain connected to [i, j], or undefined if there is none
+///@param i
+///@param j
+var i = argument0, j = argument1;
+//Get initial piece
+var _type;
+if (instance_exists(global.game_grid[i, j])) { _type = global.game_grid[i, j].image_index; }
+else { return undefined; }
+
+//Initialize lists
+var _chain_v = ds_list_create();
+var _chain_h = ds_list_create();
+
+//Look left
+if (j > 0) {
+	for(var xx = j - 1; xx >= 0; --xx) {
+		if (instance_exists(global.game_grid[i, xx])) {
+			if (global.game_grid[i, xx].image_index == _type) {
+				ds_list_add(_chain_h, scrCoordEncode(i, xx));
+			}
+			else { break; }
+		}
+		else { break; }
+	}
 }
-return _chain;
+
+//Look right
+if (j < 7) {
+	for(var xx = j + 1; xx <= 7; ++xx) {
+		if (instance_exists(global.game_grid[i, xx])) {
+			if (global.game_grid[i, xx].image_index == _type) {
+				ds_list_add(_chain_h, scrCoordEncode(i, xx));
+			}
+			else { break; }
+		}
+		else { break; }
+	}
+}
+
+//Look up
+if (i > 0) {
+	for(var yy = i - 1; yy >= 0; --yy) {
+		if (instance_exists(global.game_grid[yy, j])) {
+			if (global.game_grid[yy, j].image_index == _type) {
+				ds_list_add(_chain_v, scrCoordEncode(yy, j));
+			}
+			else { break; }
+		}
+		else { break; }
+	}
+}
+
+///Look down
+if (i < 7) {
+	for(var yy = i + 1; yy <= 7; ++yy) {
+		if (instance_exists(global.game_grid[yy, j])) {
+			if (global.game_grid[yy, j].image_index == _type) {
+				ds_list_add(_chain_v, scrCoordEncode(yy, j));
+			}
+			else { break; }
+		}
+		else { break; }
+	}
+}
+
+if (ds_list_size(_chain_h) >= 2) { 
+	ds_list_destroy(_chain_v);
+	ds_list_add(_chain_h, scrCoordEncode(i, j));
+	return _chain_h; 
+}
+else if (ds_list_size(_chain_v) >= 2) {
+	ds_list_destroy(_chain_h);
+	ds_list_add(_chain_v, scrCoordEncode(i, j));
+	return _chain_v;
+}
+else {
+	ds_list_destroy(_chain_h);
+	ds_list_destroy(_chain_v);
+	return undefined;
+}

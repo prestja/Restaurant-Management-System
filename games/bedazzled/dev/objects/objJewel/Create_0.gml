@@ -1,11 +1,12 @@
 ///@description Initialize
+cpt_init();
 image_speed = 0;
 image_index = ct_argument[0];
-grid_y = ct_argument[1];
-grid_x = ct_argument[2];
-goto_grid_y = grid_y;
-goto_grid_x = grid_x;
-cpt_init();
+grid_i = ct_argument[1];
+grid_j = ct_argument[2];
+goto_grid_i = grid_i;
+goto_grid_j = grid_j;
 myPos = [x, y];
 myDest = [x, y];
 myPath = -1;
+settled = true;

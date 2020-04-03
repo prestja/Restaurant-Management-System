@@ -1,8 +1,8 @@
 {
-    "id": "943c2821-d947-4542-aca6-f77c7f09d3a8",
+    "id": "e5f2d9c6-4b70-451c-ab27-c3124fe6826b",
     "modelName": "GMScript",
     "mvc": "1.0",
-    "name": "scrGetPieceDir",
+    "name": "scrAttemptSwap",
     "IsCompatibility": false,
     "IsDnD": false
 }

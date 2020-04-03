@@ -127,19 +127,17 @@
 			var t = document.getElementById("headerType");
 			var tableNum = parseInt(t.value);
 			var amount = document.getElementById("amt").value;
-			if(tableNum == null) {
-				tableNum=1;
-			}
-			/*if(amount !== "")
+			if(amount !== "")
 			{
 				var url = 'http://159.89.238.181:8080/api/orders/comp?table=';
 				url = url.concat(tableNum);
 				url = url.concat('&amount=');
 				url = url.concat(amount);
-				$.post(url, function(status) {				
-				alert(status);
+				$.post(url, function(status,data) {				
+				var j = $.parseJSON(data);
+				alert(j.message);
 			});
-			}*/
+			}
 			
 			document.getElementById("amt").value = "";
 		}

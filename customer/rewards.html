@@ -75,21 +75,22 @@ body {
 
 	
 <div id="myDIV" class="header" style = "height: 15%;">
-  <h2 style="margin:5px">You Won a Free Dessert!</h2>
-  <h3 style="margin:5px">Please Select Your Dessert</h3>	
-</div>
-
-<div class = "dessert" style = "width: 100%; margin-top: 80px;">
-	<button id="cheesecake" style="background: url('../img/dessert/Dessert_Cheesecake.jpg') no-repeat; background-size: auto 100%; "; onclick=""></button>
-	<button id="chocolatecake" style="background: url('../img/dessert/Dessert_ChocolateCake.jpg') no-repeat; background-size: auto 100%; "; onclick=""></button>
-	<button id="cookiepie" style="background: url('../img/dessert/Dessert_CookiePie.jpg') no-repeat; background-size: auto 100%; "; onclick=""></button>
-	<button id="paradisepie" style="background: url('../img/dessert/Dessert_ParadisePie.jpg') no-repeat; background-size: auto 100%; "; onclick=""></button>		
+  <h2 style="margin:5px">Please Input Your Information For Rewards</h2>	
 </div>
 
 <div class= "bottom-group">
-   <button type="button" onclick="alert('Your refill has been ordered!')">SUBMIT</button>
+   <button type="button" onclick="alert('Your rewards account has been created!')">SUBMIT</button>
  </div>
-    
+
+<label style = "color: white; font-family: Arial Black, Times, serif" for ="phone">Phone Number:</label><br><br>
+<input style = "margin: 0px 0px;"type="tel" id="phone" name="phone" placeholder="555-555-5555" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required><br><br>
+
+<label style = "color: white; font-family: Arial Black, Times, serif" for ="email">Email:</label><br><br>
+<input style = "margin: 0px 0px;"type="email" id="email" name="email" placeholder="xxxx@xxxx.com" required><br><br>
+
+<label style = "color: white; font-family: Arial Black, Times, serif" for ="birthday">Birthday:</label><br><br>
+<input style = "margin: 0px 0px;"type="birthday" id="birthday" name="birthday" placeholder="mm/dd/yyyy" required><br><br>
+
 
 </body>
 </html>

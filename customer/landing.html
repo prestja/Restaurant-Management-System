@@ -95,13 +95,24 @@
 			<div class="title" onclick="document.location = '../menu.html'">Order</div> 		
 		</div>	
 		<div class="column" style="background: url('../img/game.jpg') no-repeat; background-size: auto 100%;">
-			<button class="button" onclick="document.location = 'play.html'"></button>
-			<div class="title" onclick="document.location = 'play.html'">Play</div> 		
+			<button class="button" onclick="pinPrompt()"></button>
+			<div class="title" onclick="pinPrompt()">Play</div> 		
 		</div>	
 		<div class="column" style="background: url('../img/payment.jpg') no-repeat; background-size: auto 100%;">
 			<button class="button" onclick="document.location = '../payment.html'"></button>
 			<div class="title" onclick="document.location = '../payment.html'">Pay</div> 		
 		</div>	
 	</div>
+/*prompts for user to enter pin*/
+<script>
+	function pinPrompt(){
+		var pin = prompt("Please enter a pin", "1234");
+		if(pin != null)
+		{
+			document.location = 'play.html';
+		}
+		
+	}
+</script>
 </body>
 </html>

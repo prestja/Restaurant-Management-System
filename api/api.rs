@@ -18,6 +18,7 @@ mod schedules;
 mod customers;
 mod items;
 mod notifications;
+mod coupons;
 
 #[database("mongodb_logs")]
 pub struct LogsDbConn(mongodb::db::Database);
@@ -70,6 +71,8 @@ fn main()
 	.mount("/api", routes![schedules::get])
 	.mount("/api", routes![schedules::post])
 	*/	
+	.mount("/api/coupons", routes![coupons::post])
+	.mount("/api/coupons", routes![coupons::get_all])
 	.attach(LogsDbConn::fairing())
 	.attach(cors)
 	.launch();

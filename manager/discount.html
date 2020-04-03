@@ -152,20 +152,20 @@
 		//creates object for the discount
 		let request = {
 			name : document.getElementById("name").value,
-			start_date : document.getElementById("startDate").value,
-			end_date : document.getElementById("endDate").value,
-			amount : document.getElementById("amt").value,
+			start : document.getElementById("startDate").value,
+			end : document.getElementById("endDate").value,
+			amount : parseFloat(document.getElementById("amt").value),
 			code : document.getElementById("code").value,
 		}
 		console.log(JSON.stringify(request));
 		//posts the object to the backend to be added into the database
-		/*$.post("http://159.89.238.181:8080/api/staff", JSON.stringify(request), function(data, status) {				
+		$.post("http://159.89.238.181:8080/api/coupons", JSON.stringify(request), function(data, status) {				
 				alert(status);
-		});*/
+		});
 		//resets the data for the object
 			name : document.getElementById("name").value = "";
-			start_date : document.getElementById("startDate").value = "";
-			end_date : document.getElementById("endDate").value = "";
+			start : document.getElementById("startDate").value = "";
+			end : document.getElementById("endDate").value = "";
 			amount : document.getElementById("amt").value = "";
 			code : document.getElementById("code").value = "";
 			alert("Discount added successfully!");
@@ -205,10 +205,6 @@
 				<br><br>
 				<button onclick="document.location = 'Manager_rem_employee_page.html'">REM EMP</button>
 				<br><br>
-
-				<button onclick="document.location = 'comps.html'">COMPS</button>
-				<br><br>
-
 				<button onclick="document.location = 'promos.html'">PROMOS</button>
 				<br><br>
 				<button onclick="document.location = 'discount.html'">DISCOUNT</button>
@@ -225,23 +221,6 @@
 					<br><br>
 					<label>START DATE:</label>
 					<input type="date" id="startDate" >
-
-					<br><br>
-					<label>END DATE:</label>
-					<input type="date" id="endDate">
-					<br><br>
-					<label>AMOUNT:</label>
-					<input type="text" id="amt" placeholder="0.00" maxlength=5>
-					<br><br>
-
-					<br><br>
-					<label>END DATE:</label>
-					<input type="date" id="endDate">
-					<br><br>
-					<label>AMOUNT:</label>
-					<input type="text" id="amt" placeholder="0.00" maxlength=5>
-					<br><br>
-
 					<br><br>
 					<label>END DATE:</label>
 					<input type="date" id="endDate">

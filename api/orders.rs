@@ -106,7 +106,9 @@ pub fn post(_conn: LogsDbConn, order: Json<Order>) -> String {
 	{
 		"table": inner.table,
 		"id": inner.id,
-		"status": inner.status
+		"status": inner.status,
+		"total": 43.19,
+		"tip": 5.00 
 	};
 	
 	let _coll = _conn.collection("orders");
@@ -125,6 +127,9 @@ pub fn comp (_conn: LogsDbConn, table: u32, amount: f32) -> String {
 		"table": table,
 		"status": {
 			"$lt": 5 // where the status of the order is < 5 (not yet paid)
+		},
+		"total": {
+			"$gte": amount
 		}
 	};
 	// this document applies new or updates values

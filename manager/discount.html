@@ -152,9 +152,9 @@
 		//creates object for the discount
 		let request = {
 			name : document.getElementById("name").value,
-			start_date : document.getElementById("startDate").value,
-			end_date : document.getElementById("endDate").value,
-			amount : document.getElementById("amt").value,
+			start : document.getElementById("startDate").value,
+			end : document.getElementById("endDate").value,
+			amount : parseFloat(document.getElementById("amt").value),
 			code : document.getElementById("code").value,
 		}
 		console.log(JSON.stringify(request));
@@ -164,8 +164,8 @@
 		});
 		//resets the data for the object
 			name : document.getElementById("name").value = "";
-			start_date : document.getElementById("startDate").value = "";
-			end_date : document.getElementById("endDate").value = "";
+			start : document.getElementById("startDate").value = "";
+			end : document.getElementById("endDate").value = "";
 			amount : document.getElementById("amt").value = "";
 			code : document.getElementById("code").value = "";
 			alert("Discount added successfully!");

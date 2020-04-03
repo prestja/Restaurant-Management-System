@@ -17,43 +17,14 @@ body {
 /* Style the header */
 .header {
   background-color: #D3D3D3;
-  margin: 10px 85x;
+  margin: 0;
   padding: 5px 5px;
   color: black;
   text-align: center;
+  top: 0;
 }
 
 
-.addBtn:hover {
-  background-color: #bbb;
-}
-
-	/*Button group for creating the buttons at top of page*/
-	/*Same button group from the main page*/
-	.button-group button {
-		background-color: #D3D3D3; /*Makes Gray background*/
-		border:  0px #D3D3D3;  /*Border around boxes is Gray*/
-		color: black; /* White text */
-		padding: 10px 10px; /* Some padding */
-		margin: 10px;  /* Created space between buttons */
-		font-family: Arial Black, Times, serif; /* sets font */
-		font-size:  16px;	/* Sets size */
-		font-weight:  normal;	/*Sets normal or bold */
-		text-align: center;	/* Aligns to center of button */
-		cursor: pointer; /* Pointer/hand icon */
-		width: 15%; /* Set a width if needed */
-		display: inline-block;
-	}
-
-	.button-group button:not(:last-child) {
-		border-right: none; /* Prevent double borders */
-	}
-
-	/* Add a background color on hover */
-	.button-group button:hover {
-		background-color: #3e8e41;
-	}
-    
     /*button group for submit button*/
  .bottom-group button {
   		background-color: #D3D3D3; /*Makes Gray background*/
@@ -70,41 +41,59 @@ body {
 		display: inline-block;
         position: absolute;
         bottom: 10px;
-        margin-left:1000px;
+        right:2%;
+		
         
   }
   	.bottom-group button:not(:last-child) {
 		border-right: none; /* Prevent double borders */
 	}
 
+  
 	/* Add a background color on hover */
 	.bottom-group button:hover {
 		background-color: #3e8e41;
       }
-      
+	  
+	
+	.drink button {
+		height: 100px;
+		width: 145px; 
+		margin: 5px 5px;
+		
 
+	}  
+	  
+	.drink button:not(:last-child) {
+		border-right: none; /* Prevent double borders */
+	}
+	.drink button:focus{
+		background-color: green; 
+	}
 </style>
 </head>
 <body  style="background-color:Black;">>
 
-<div class="button-group">
-			<button onclick="document.location = 'customer_main_pg.html'">&#60&#60 BACK</button>
-			<button onclick="document.location = 'Help.html'">HELP</button>
-		</div>
 	
-<div id="myDIV" class="header">
+<div id="myDIV" class="header" style = "height: 15%;">
   <h2 style="margin:5px">Refills</h2>
   <h3 style="margin:5px">Please Select Your Drink</h3>
 </div>
 
-   	<div class= "bottom-group">
-   <button type="button" onclick="alert('Your refill has been ordered!')">SUBMIT</button>
- 	</div>
-    
-<div class="column" style="background: url('../img/drinks/Drink_Coke.jpg') no-repeat; background-size: auto 100%;">				
-	</div>
-	
+<div class = "drink" style = "width: 100%; margin-top: 20px;">
+	<button id="coke" style="background: url('../img/drinks/Drink_Coke.jpg') no-repeat; background-size: auto 100%; "; onclick=""></button>
+	<button id="dietcoke" style="background: url('../img/drinks/Drink_DietCoke.jpg') no-repeat; background-size: auto 100%; "; onclick=""></button>
+	<button id="drpp" style="background: url('../img/drinks/Drink_DrPepper.jpg') no-repeat; background-size: auto 100%; "; onclick=""></button>
+	<button id="rootbeer" style="background: url('../img/drinks/Drink_RootBeer.jpg') no-repeat; background-size: auto 100%; "; onclick=""></button>
+	<button id="sprite" style="background: url('../img/drinks/Drink_Sprie.jpg') no-repeat; background-size: auto 100%; "; onclick=""></button>
+	<button id="sweettea" style="background: url('../img/drinks/Drink_SweetTea.jpg') no-repeat; background-size: auto 100%; "; onclick=""></button>
+	<button id="lemonade" style="background: url('../img/drinks/Drink_Lemonade	.jpg') no-repeat; background-size: auto 100%; "; onclick=""></button>
+</div>
 
+<div class= "bottom-group">
+   <button type="button" onclick="alert('Your refill has been ordered!')">SUBMIT</button>
+ </div>
+    
 
 </body>
 </html>

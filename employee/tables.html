@@ -110,6 +110,7 @@
 	}
 </style>
 <head>
+	<script src="../jquery-3.4.1.min.js"></script>
     <script>
 		<!--takes in table number and displays information about that table-->
 		function table(num)
@@ -118,13 +119,22 @@
 			t.innerHTML = "TABLE " + num;
 			t.value = num;
 		}
-		
+		//when comp button is pressed
 		function handleComp()
 		{
 			var t = document.getElementById("headerType");
-			var tableNum = t.value;
+			var tableNum = parseInt(t.value);
 			var amount = document.getElementById("amt").value;
-			
+			if(amount !== "")
+			{
+				var url = 'http://159.89.238.181:8080/api/orders/comp?table=';
+				url = url.concat(tableNum);
+				url = url.concat('&amount=');
+				url = url.concat(amount);
+				$.post(url, function(status) {				
+				alert(status);
+			});
+			}
 			
 			document.getElementById("amt").value = "";
 		}
@@ -175,7 +185,7 @@
 	
 	<!--Creates section to show details about specific tables-->
 	<div class = "table-info" id="table-num">
-		<h2 id = "headerType">TABLE 1</h2>
+		<h2 id = "headerType" value="1">TABLE 1</h2>
 		<hr color = "black">
 		<div class="button-group">
 			<button onclick="document.location = 'employee_order_page.html'"  style="width:90% !important">ORDER/MODIFY</button>

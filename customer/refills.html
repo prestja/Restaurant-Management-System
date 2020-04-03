@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 body {
   margin: 0;
@@ -60,8 +58,6 @@ body {
 		height: 100px;
 		width: 145px; 
 		margin: 12px 12px;
-		
-
 	}  
 	  
 	.drink button:not(:last-child) {
@@ -71,9 +67,20 @@ body {
 		background-color: green; 
 	}
 </style>
+
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<script>
+		function handleStuff() {
+			parent.window.postMessage("inline-block", '*');
+		}
+	</script>
+
 </head>
 <body  style="background-color:Black;">>
 
+<!-- Commented Below Out 
 <<<<<<< HEAD
 <div class="button-group">
 			<button onclick="document.location = 'customer.html'">&#60&#60 BACK</button>
@@ -81,7 +88,9 @@ body {
 		</div>
 =======
 >>>>>>> aa7346f94436676830dc24cb782e8a5c6ec8968a
-	
+-->
+
+
 <div id="myDIV" class="header" style = "height: 15%;">
   <h2 style="margin:5px">Refills</h2>
   <h3 style="margin:5px">Please Select Your Drink</h3>

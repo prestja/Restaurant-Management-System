@@ -84,6 +84,14 @@
 			var home = document.getElementById("ifrm");
 			home.src = "landing.html";	
 		}
+
+		function goRefill() {
+			var home = document.getElementById("ifrm");
+			home.src = "refills.html";
+			
+			var btn = document.getElementById("nav-back");
+			btn.style.display = "inline-block";
+		}
 		
 		function hideBack() {
 			var btn = document.getElementById("nav-back");
@@ -95,6 +103,11 @@
 		function showButton(message) {
 			var btn = document.getElementById("nav-back");
 			btn.style.display = message.data;
+		}
+		
+		function showBtnLocal() {
+			var btn = document.getElementById("nav-back");
+			btn.style 
 		}
 		
 		function myFunction() {
@@ -117,7 +130,7 @@
     <div class = "navigation">
         <button id = "nav-back" onclick ="goBack(); hideBack();" >Back</button>
 		<button id = "nav-help" onclick = "myFunction()">Help</button>
-        <button id = "nav-refills" onclick ="document.location = 'refills.html'">Refills</button>
+        <button id = "nav-refills" onclick ="goRefill()">Refills</button>
     </div>
 
     <!---Content -->

@@ -65,7 +65,7 @@
 		var clone = $("#item_template").clone(true);
 		clone.css('display', 'block');
 		clone.appendTo('.container');
-		clone.children("p").html(item.name);
+		clone.children("button").html(item.name);
 		return clone;
 	}	
 	

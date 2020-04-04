@@ -5,6 +5,7 @@ use rocket_contrib::{databases::mongodb};
 use mongodb::{doc, bson};
 use serde_json;
 
+/*
 #[get("/customers")]
 pub fn get_all(_conn: LogsDbConn) -> String {
 	let mut str = String::from("[\n\t");
@@ -64,3 +65,5 @@ pub fn post(_conn: LogsDbConn) -> &'static str
 	_coll.insert_one(doc!{ "id": 32 }, None).unwrap();
 	return "Inserted an element into database";
 }
+
+*/

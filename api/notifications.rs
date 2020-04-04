@@ -22,8 +22,6 @@ pub struct Notification
 	#[serde(default)] details : serde_json::Value
 }
 
-//=============================	Get Functions 	===================================//
-//Ready for testing
 //This first get will attempt to grab a copy of all existing notifications in the collection
 #[get("/")]
 pub fn get_all(_conn: LogsDbConn) -> String 

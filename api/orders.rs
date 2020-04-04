@@ -12,16 +12,18 @@ use mongodb::oid;
 
 #[derive(Serialize, Deserialize)]
 pub struct Item {
-	id: u32
+	id: mongodb::oid::ObjectId
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct Order {
+	// required values, should be supplied by the front-end
 	table: u32,
-	
+	items: serde_json::Value,
+
 	// default values, not required for deserialization
 	#[serde(default)] id: u32,
-	#[serde(default)] status: u32  // ordered = 0, NeedStaff = 1, NeedManager = 2, Ready = 3, Served = 4, Closed = 5
+	#[serde(default)] status: u32  // ordered = 0, NeedStaff = 1, NeedManager = 2, Ready = 3, Served = 4, Closed = 5	
 }
 
 #[get("/", rank = 1)]
@@ -106,6 +108,7 @@ pub fn post(_conn: LogsDbConn, order: Json<Order>) -> String {
 	{
 		"table": inner.table,
 		"id": inner.id,
+		"items": inner.items,
 		"status": inner.status,
 		"total": 43.19,
 		"tip": 5.00 

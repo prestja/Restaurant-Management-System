@@ -26,7 +26,7 @@ pub struct Order {
 	#[serde(default)] status: u32  // ordered = 0, NeedStaff = 1, NeedManager = 2, Ready = 3, Served = 4, Closed = 5	
 }
 
-#[get("/", rank = 1)]
+#[get("/", rank = 3)]
 pub fn get(_conn: LogsDbConn) -> String {
 	let mut str = String::from("[\n\t");
 	let _coll = _conn.collection("orders");
@@ -73,7 +73,7 @@ pub fn get_status(_conn: LogsDbConn, status: u32) -> String {
 	return str;
 }
 
-#[get("/?<id>")]
+#[get("/?<id>", rank = 1)]
 pub fn get_id (_conn: LogsDbConn, id: String) -> String {	
 	let mut _str = String::from("[\n\t");
 	let _doc = doc!{"_id": id};
@@ -100,6 +100,36 @@ pub fn get_id (_conn: LogsDbConn, id: String) -> String {
 	_str.push_str("\n]");
 	return _str;
 }
+
+#[get("/?<tableid>", rank = 2)]
+pub fn get_table_orders(_conn: LogsDbConn, tableid: u32) -> String {
+	let mut doc_list = String::from("");
+        let _doc = doc!{"table": tableid};
+	let mut _filter = mongodb::coll::options::FindOptions::new();
+	_filter.projection = serde::export::Some(doc!{"items": 1, "_id": 0});
+        let _coll = _conn.collection("orders");
+	let _cursor = _coll.find(Some(_doc.clone()), Some(_filter.clone())).unwrap();
+	for result in _cursor
+	{
+		if let Ok(item) = result
+		{
+			if item != doc!{}
+			{
+				let _bson = mongodb::to_bson(&item).unwrap();
+				let _json = serde_json::ser::to_string(&_bson).unwrap();
+				doc_list.push_str(&_json);
+				doc_list.push_str("\n");
+			}
+		}
+	}
+	if doc_list.len() <= 1
+	{
+		return String::from("No entries found");
+	}
+	doc_list.pop();
+	return doc_list;
+}
+
 
 #[post("/", data = "<order>")]
 pub fn post(_conn: LogsDbConn, order: Json<Order>) -> String {

@@ -12,12 +12,11 @@
 		width:100%;
 		height: 10%;
 		margin-bottom: 10px;
-		display:none;	/*Mike: Changed from none to block to work*/
+		display:none;
 	}
-		
-	/*Mike: Did the following*/
-	.collapsible {
-		background-color: #777; /*Makes blocks gray*/
+
+	.button-group {
+		background-color: green; /*Makes blocks gray*/
 		color: white;			/*Makes words white*/
 		padding: 18px;			/*Controls how fat the buttons are horizontal*/
 		width:	100%;			/*How wide the buttons are on screen*/
@@ -26,25 +25,6 @@
 		text-align: left;		/*Aligns text to the left of gray box*/
 		outline: none;
 		font-size: 15px;		/*Adjust size of letters*/
-	}
-	
-	/*When hovering over button, or when clicked remains active*/
-	.active, .collapsible:hover {
-		background-color: green;	/*Button will be green in both scenerios*/
-	}
-	
-	/*Affect the box and its elements*/
-	.collapsible:after {
-		content: '\002B';		/*Keeps a plus sign before opening on button*/
-		color: white;
-		font-weight: bold;		/*Makes symbol fatter*/
-		float: right;			/*Symbol positions on right of box*/
-		margin: 5px;
-	}
-	
-	/*Active means it's been clicked and dropped down*/
-	.active:after {
-		content: '\002B';		/*Make a minus symbol when exapnds*/
 	}
 	
 	/*Controls the content shown after clicked*/
@@ -59,13 +39,15 @@
 </style>
 
 <head>
-	<script src="jquery-3.4.1.min.js"></script>
+	<script src="../jquery-3.4.1.min.js"></script>
 	<script>
 	function addItem(item) {
 		var clone = $("#item_template").clone(true);
 		clone.css('display', 'block');
 		clone.appendTo('.container');
 		clone.children("button").html(item.name);
+		clone.css('background','green');
+		clone.id(item.id);
 		return clone;
 	}	
 	
@@ -86,47 +68,31 @@
                 }
             })
         }); 
+	<!--Toggles the color and status of the button and pushes to backend-->
+			function toggleColor(id)
+			{
+				var background = document.getElementById(id).style.background;
+				var status;
+				if(background == "red")
+				{
+					document.getElementById(id).style.background = "green";
+					status = 1;
+				}
+				else
+				{
+					document.getElementById(id).style.background = "red";
+					status = 0;
+				}
+			}
 	</script>
 	
 </head>
 
 <body style="background-color:White;">
-	<div class = "container" style="width: 100%; height: 100%; overflow: auto; background-color:red">
+	<div class = "container" style="width: 100%; height: 100%; overflow: auto; background-color:black">
 		<div id ="item_template">
-			<button class="collapsible">Open Collapsible</button>
-			<div class="content">
-				<p>
-					This is some text to show that the button is working.
-					Or, it could be Jacob's dating profile....!
-					
-					Jacob likes bubble bath's and writing his code ONLY in 
-					Microsoft Visual Studios. I know what most are thinking,
-					that there are WAAAAYYY better options. Normally, you're right. But
-					 in the hands of Jacob "The Master Builder" Preston, it's like watching
-					 true love happen.
-				</p>
-			</div>
-			<!--<p>SOME TEXT</p>-->
+			<button class="button-group" onclick="toggleColor(this.id)" id="1">Open Collapsible</button>
 		</div>
 	</div>
-	
-	
-<script>
-var coll = document.getElementsByClassName("collapsible");
-var i;
-
-for (i = 0; i < coll.length; i++) {
-  coll[i].addEventListener("click", function() {
-    this.classList.toggle("active");
-    var content = this.nextElementSibling;
-    if (content.style.maxHeight){
-      content.style.maxHeight = null;
-    } else {
-      content.style.maxHeight = content.scrollHeight + "px";
-    } 
-  });
-}
-</script>
-	
 </body>
 </html>

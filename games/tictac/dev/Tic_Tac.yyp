@@ -432,6 +432,7 @@
         }
     ],
     "script_order": [
+        "e3e9953e-8b66-4178-8c7e-e173e8b9381f",
         "3860bef3-a945-4984-91ae-bbefcbd67259",
         "7c6fa834-7bf3-4f99-98f0-8b99bea1bc00",
         "acdb62f1-ccc7-4f09-941c-3e88808508b2",
@@ -449,8 +450,7 @@
         "50ce1514-aa6e-4535-a193-b24df8ef9edd",
         "2db0284a-0c3a-4d60-b161-7fa366ce8869",
         "b972d345-e873-445f-967f-f4ffbe13609c",
-        "9174e81c-c23a-4c42-ab83-edfd7bbd7699",
-        "e3e9953e-8b66-4178-8c7e-e173e8b9381f"
+        "9174e81c-c23a-4c42-ab83-edfd7bbd7699"
     ],
     "tutorial": ""
 }

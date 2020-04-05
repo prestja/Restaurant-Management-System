@@ -20,9 +20,6 @@ global.fontDraw=font_add_sprite(sprFont, 33, false, -2);
 draw_set_font(global.fontDraw);
 global.space_selected = noone;
 
-//Optimizations
-gpu_set_blendenable(false);
-
 //Resolution setup
 ideal_w=0;
 ideal_h=480;
@@ -54,8 +51,6 @@ if(ideal_h & 1) {ideal_h++;}
 surface_resize(application_surface, ideal_w, ideal_h);
 display_set_gui_size(ideal_w, ideal_h);
 window_set_size(ideal_w, ideal_h);
-//Center window
-alarm[0]=1;
 
 //Camera creation
 center_camera();

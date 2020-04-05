@@ -1,0 +1,1 @@
+return objGame.x - (objGame.ideal_w / 2);

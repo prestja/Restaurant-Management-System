@@ -29,5 +29,5 @@ else {
 	//Weaker gravity
 	vspeed = approach(vspeed, jump_terminal, jump_gravity*0.5);
 	
-	if (y > room_height + half_h()) { instance_destroy(); }
+	if (y > get_camera_b() + half_h()) { instance_destroy(); }
 }

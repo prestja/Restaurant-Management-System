@@ -44,7 +44,9 @@ pub fn post_status(_conn: LogsDbConn, id: String, status: u32) -> String {
 	let cast = bson::oid::ObjectId::with_string(id.as_str());
 	let coll = _conn.collection("items");
 	if let Ok(oid) = cast {
-		if let Ok (result) = coll.find_one(Some(doc! { "_id": oid }), None) {
+		let filter = doc! {"_id": oid};
+		let update = doc! {"status": status};
+		if let Ok (result) = coll.find_one(Some(filter.clone()), None) {
 			if let Some(item) = result {
 				return String::from("Valid item");
 			}

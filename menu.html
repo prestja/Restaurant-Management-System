@@ -110,6 +110,7 @@
 </style>
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	
 </head>
 
 <body style="background-color:Black;">
@@ -132,7 +133,7 @@
 		<h2 id = "headerType">BEVERAGES</h2>
 		<hr color = "black">
 		<body>
-			<iframe id = "order_items" src="menu_category.html?category=3" style="width:95%; height: 85%" ></iframe>
+			<iframe id = "order_items" src="menu_category.html?category=3" onclick="updateOrder()" style="width:95%; height: 85%" ></iframe>
 		</body>
 	</div>
 	<script>
@@ -167,6 +168,14 @@
 				frame.src = "menu_category.html?category=2";
 			}
 		}
+		
+		window.addEventListener('message', updateOrder, false);
+		function updateOrder(message) {
+			//alert('heard something');
+			var target = document.getElementById('orderFrame');
+			target.contentWindow.postMessage(message.data, '*');
+		}
+		
 	</script>
 	
 <!--Stores div for receipt items-->
@@ -193,7 +202,7 @@
 		</div>
 		<hr color="black">
 		
-		<iframe src="customer/customer_order.html" style="width:95%; height: 50%"></iframe>
+		<iframe src="customer/customer_order.html" id="orderFrame" style="width:95%; height: 50%"></iframe>
 		
 		<!--button submits the order-->
 		<div class="menu-button-group" style="position:relative;bottom:17px !important;width:90%">

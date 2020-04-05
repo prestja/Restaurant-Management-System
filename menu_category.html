@@ -61,13 +61,48 @@
 <head>
 	<script src="jquery-3.4.1.min.js"></script>
 	<script>
+	
 	function addItem(item) {
 		var clone = $("#item_template").clone(true);
-		clone.css('display', 'block');
+		
+		if(item.status == 1)
+		{
+			clone.css('display','block'); 
+		}
+		else
+		{	
+			clone.css('display','none');
+		}
 		clone.appendTo('.container');
-		clone.children("p").html(item.name);
+		clone.children("button").html(item.name);
+		clone.children("div").html(item.description);
 		return clone;
-	}	
+	}
+	
+	<!-- Michael Started Here -->
+	function handleStuff() {
+			//alert("on click");
+			var stuff = document.getElementsByClassName("content");
+			console.log(parent.window.postMessage("Need to figure this out.", '*'));
+			
+	}
+	
+	function showContent(){
+	var coll = document.getElementsByClassName("collapsible");
+	var i;
+
+	for (i = 0; i < coll.length; i++) {
+		coll[i].addEventListener("click", function() {
+				this.classList.toggle("active");
+				var content = this.nextElementSibling;
+				if (content.style.maxHeight){
+					content.style.maxHeight = null;
+				} else {
+					content.style.maxHeight = content.scrollHeight + "px";
+				}	 
+		});
+	}
+	}
 	
 	$(document).ready(function() {
             var queryStr = window.location.search; // will give you ?sndReq=234
@@ -93,18 +128,10 @@
 <body style="background-color:White;">
 	<div class = "container" style="width: 100%; height: 100%; overflow: auto; background-color:red">
 		<div id ="item_template">
-			<button class="collapsible">Open Collapsible</button>
+			<button class="collapsible" onclick="showContent(); handleStuff();">Open Collapsible</button>
 			<div class="content">
-				<p>
-					This is some text to show that the button is working.
-					Or, it could be Jacob's dating profile....!
-					
-					Jacob likes bubble bath's and writing his code ONLY in 
-					Microsoft Visual Studios. I know what most are thinking,
-					that there are WAAAAYYY better options. Normally, you're right. But
-					 in the hands of Jacob "The Master Builder" Preston, it's like watching
-					 true love happen.
-				</p>
+				<p>Some Text</p>
+				<p>Some Text</p>
 			</div>
 			<!--<p>SOME TEXT</p>-->
 		</div>
@@ -112,20 +139,7 @@
 	
 	
 <script>
-var coll = document.getElementsByClassName("collapsible");
-var i;
 
-for (i = 0; i < coll.length; i++) {
-  coll[i].addEventListener("click", function() {
-    this.classList.toggle("active");
-    var content = this.nextElementSibling;
-    if (content.style.maxHeight){
-      content.style.maxHeight = null;
-    } else {
-      content.style.maxHeight = content.scrollHeight + "px";
-    } 
-  });
-}
 </script>
 	
 </body>

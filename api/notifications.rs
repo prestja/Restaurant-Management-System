@@ -10,24 +10,18 @@ use mongodb::{doc, bson};
 use mongodb::coll::options;
 use mongodb::oid;
 
-
 //Building a struct to contain notifications within
 #[derive(Serialize, Deserialize)]
-pub struct notification
+pub struct Notification
 {
 	//holds table id from which notif originated
 	table: u32,
 	//Holds type of notification (help, refill, etc)
-	notif_type: u32,
+	variant: u32,
 	//holds details regarding refill or type of help
-	#[serde(default)] details : String
+	#[serde(default)] details : serde_json::Value
 }
 
-
-//====================================================================================//
-
-//=============================	Get Functions 	===================================//
-//Ready for testing
 //This first get will attempt to grab a copy of all existing notifications in the collection
 #[get("/")]
 pub fn get_all(_conn: LogsDbConn) -> String 
@@ -70,22 +64,16 @@ pub fn get_all(_conn: LogsDbConn) -> String
 	return str;
 }
 
-
-//=============================	Post Functions 	===================================//
-
-// Ready for testing
-//Function that allows for data to be formatted into a json object from a stored notification type object
-#[post("/", data = "<notifications>")]
+// Accepts JSON-formatted Notification and inserts into database
+#[post("/", data = "<notification>")]
 pub fn post(_conn: LogsDbConn, notification: Json<Notification>) -> String
 {
-	//doc will be our json message being sent, while inner is what allows us to access the data found in our
-	// notification (?)
 	let inner = notification.into_inner();
 	let doc = doc!
 	{
 		//matches exactly to the notification struct
 		"table": inner.table,
-		"notif_type": inner.notif_type,
+		"variant": inner.variant,
 		"details": inner.details
 	};
 	
@@ -100,9 +88,5 @@ pub fn post(_conn: LogsDbConn, notification: Json<Notification>) -> String
 		"code": 200,
 		"message": "Inserted notification into notifications collection"
 	});
-	
 	return serde_json::to_string(&response).unwrap();
-	
 }
-//====================================================================================//
-

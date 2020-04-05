@@ -62,6 +62,7 @@ fn main()
 	
 	.mount("/api/items/", routes![items::get_category])
 	.mount("/api/items/", routes![items::post_status])
+	.mount("/api/items/", routes![items::zero_inventory])
 	.mount("/api/notifications", routes![notifications::get_all])
 	.mount("/api/notifications", routes![notifications::post])
 	/*

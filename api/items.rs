@@ -39,7 +39,7 @@ pub fn get_category (_conn: LogsDbConn, category: u32) -> String
 	return _str;
 }
 
-#[post("/?<id>&<status>")]
+#[post("/?<id>&<status>", rank = 1)]
 pub fn post_status(_conn: LogsDbConn, id: String, status: u32) -> String {
 	let cast = bson::oid::ObjectId::with_string(id.as_str());
 	let coll = _conn.collection("items");
@@ -81,4 +81,47 @@ pub fn post_status(_conn: LogsDbConn, id: String, status: u32) -> String {
 		});
 		return serde_json::to_string(&response).unwrap();	
 	}
+}
+
+#[post("/?<id>", rank = 0)]
+pub fn zero_inventory(_conn: LogsDbConn, id: String) -> String {
+        let cast = bson::oid::ObjectId::with_string(id.as_str());
+        let coll = _conn.collection("items");
+        if let Ok(oid) = cast {
+                let filter = doc! {"_id": oid};
+                let _update = doc! {
+                        "$set": {
+                                "inventory": 0
+                        }
+                };
+                if let Ok (result) = coll.find_one_and_update(filter.clone(),_update.clone(), None) {
+                        println!("Got a result");
+                        if let Some(item) = result {
+                                let response = json!({
+                                        "code": 200,
+                                        "message": "Successfully updated status for item"
+                                });
+                                return serde_json::to_string(&response).unwrap();
+                        }
+                                let response = json!({
+                                "code": 404,
+                                "message": "Could not find item to update."
+                        });
+                        return serde_json::to_string(&response).unwrap();
+                }
+                else {
+                        let response = json!({
+                                "code": 404,
+                                "message": "Error accessing database."
+                        });
+                        return serde_json::to_string(&response).unwrap();
+                }
+        }
+        else {
+                let response = json!({
+                        "code": 404,
+                        "message": "Invalid or malformed object id."
+                });
+                return serde_json::to_string(&response).unwrap();
+        }
 }

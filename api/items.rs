@@ -9,6 +9,7 @@ use rocket_contrib::json::Json;
 use mongodb::{doc, bson};
 use mongodb::coll::options;
 use mongodb::oid;
+use bson::oid::ObjectId;
 
 #[get("/?<category>")]
 pub fn get_category (_conn: LogsDbConn, category: u32) -> String
@@ -36,4 +37,24 @@ pub fn get_category (_conn: LogsDbConn, category: u32) -> String
 	_str.pop();
 	_str.push_str("\n]");
 	return _str;
+}
+
+#[post("/?<id>&<status>")]
+pub fn post_status(_conn: LogsDbConn, id: String, status: u32) -> String {
+	//println!("{}", id);
+	//let result = bson::oid::ObjectId::with_string(id.as_str());
+	let coll = _conn.collection("items");
+	let result = coll.find_one(Some(doc! { "_id": bson::oid::ObjectId::with_string("5e83fdcc90c5a642e00f6241").unwrap() }), None);
+    if let Ok(opt) = result {
+    	if let Some(item) = opt {
+    		println!("Found!");
+    	}
+    	else {
+    		println!("Not found");
+    	}
+    }
+    else {
+    	println!("Result is not okay");
+    } 
+    return String::from("something");
 }

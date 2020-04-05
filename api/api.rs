@@ -61,6 +61,7 @@ fn main()
 	//.mount("/api", routes![staff::manager_add_staff])
 	
 	.mount("/api/items/", routes![items::get_category])
+	.mount("/api/items/", routes![items::post_status])
 	.mount("/api/notifications", routes![notifications::get_all])
 	.mount("/api/notifications", routes![notifications::post])
 	/*

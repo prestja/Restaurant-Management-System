@@ -133,7 +133,7 @@
 		padding: 10px;
 		margin: 10px 10px 10px 10px;
 		width: 50%;
-		height: 80vh;
+		height: 80%;
 		display: inline-block;
 		text-align: center;
 		border: 5px;
@@ -146,17 +146,53 @@
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
-    $(document).ready(function(){ 
-		$("button").click(function(){
-			$.get("http://159.89.238.181:443/api/orders", function(data, status){
-				document.innerHTML+=data;
-			});
-        
-			$.post("http://159.89.238.181:443/api/orders", function(data, status){
-            
-			});
-		});
-    });
+		<!--changes the type of items displayed on the menu-->
+			function menuType(mType)
+			{	
+				var t = document.getElementById("headerType");
+				var frame = document.getElementById('order_items');
+				if(mType === "drinks")
+				{
+					t.innerHTML = "BEVERAGES";
+					frame.src = "menu_category.html?category=3";
+				}
+				else if(mType === "apps")
+				{
+					t.innerHTML = "APPETIZERS";
+					frame.src = "menu_category.html?category=1";
+				}
+				else if(mType === "meals")
+				{
+					t.innerHTML = "ENTREES";
+					frame.src = "menu_category.html?category=0";
+				}
+				else if(mType === "kids")
+				{
+					t.innerHTML = "KIDS MENU";
+					frame.src = "menu_category.html?category=4";
+				}
+				else if(mType === "sweets")
+				{
+					t.innerHTML = "DESSERTS";
+					frame.src = "menu_category.html?category=2";
+				}
+			}
+			<!--Toggles the color of the button(there is a bug currently, have to click button twice to start toggling-->
+			function toggleColor(id)
+			{
+				var background = document.getElementById(id).style.background;
+				var status;
+				if(background == "red")
+				{
+					document.getElementById(id).style.background = "green";
+					status = 1;
+				}
+				else
+				{
+					document.getElementById(id).style.background = "red";
+					status = 0;
+				}
+			}
     </script>
 </head>
 <body style="background-color:Black;">
@@ -164,7 +200,7 @@
 	<div class="header">
 
 		<div class="button-group">
-			<button onclick="document.location = 'employee_main_page.html'">&#60&#60 BACK</button>
+			<button onclick="document.location = '../employee/landing.html'">&#60&#60 BACK</button>
 		</div>
 	
 	</div>
@@ -172,13 +208,13 @@
 	<!--Creates left menu for buttons for the different manager pages-->
 	<div class = "left-menu">
 		<div class="menu-button-group">
-			<button onclick="document.location = 'Manager_table_page.html'">TABLES</button>
+			<button onclick="document.location = 'tables.html'">TABLES</button>
 			<br><br>
-			<button onclick="document.location = '86_68_page.html'">86/68</button>
+			<button onclick="document.location = '86_68.html'">86/68</button>
 			<br><br>
-			<button onclick="document.location = 'Manager_tool_page.html'">TOOLS</button>
+			<button onclick="document.location = 'tools.html'">TOOLS</button>
 			<br><br>
-			<button onclick="document.location = 'Manager_report_page.html'">REPORTS</button>
+			<button onclick="document.location = 'reports.html'">REPORTS</button>
 		</div>
 	</div>
 	
@@ -194,54 +230,20 @@
 				<br><br>
 				<button onclick="menuType('meals')">MEALS</button>
 				<br><br>
+				<button onclick="menuType('kids')">KIDS</button>
+				<br><br>
 				<button onclick="menuType('sweets')">DESSERTS</button>
 			</div>
 		</div>
 	<!--holds menu items of the type selected in menu-type-->
-		<div class = "items" id = "menuType">
-			<h4 id = "headerType">BEVERAGES</h4>
-			<hr color = "black">
-			<div class="items-button-group">
-				<button onclick="toggleColor('cheeseburger')" id = "cheeseburger">TEST BUTTON</button>
-				<button onclick="toggleColor('cheeseburger2')" id = "cheeseburger2">TEST BUTTON2</button>
-			</div>
-		</div>
-		<script>
-		<!--changes the type of items displayed on the menu-->
-			function menuType(mType)
-			{	
-				var t = document.getElementById("headerType");
-				if(mType === "drinks")
-				{
-					t.innerHTML = "BEVERAGES";
-				}
-				else if(mType === "apps")
-				{
-					t.innerHTML = "APPETIZERS";
-				}
-				else if(mType === "meals")
-				{
-					t.innerHTML = "ENTREES";
-				}
-				else if(mType === "sweets")
-				{
-					t.innerHTML = "DESSERTS";
-				}
-			}
-			<!--Toggles the color of the button(there is a bug currently, have to click button twice to start toggling-->
-			function toggleColor(id)
-			{
-				var background = document.getElementById(id).style.background;
-				if(background == "red")
-				{
-					document.getElementById(id).style.background = "green";
-				}
-				else
-				{
-					document.getElementById(id).style.background = "red";
-				}
-			}
-		</script>
+		<!--Stores menu items of menu type selected from the buttons, default is beverages-->
+	<div class = "items" id = "menuType">
+		<h2 id = "headerType">BEVERAGES</h2>
+		<hr color = "black">
+		<body>
+			<iframe id = "order_items" src="menu_category.html?category=3" style="width:95%; height: 85%" ></iframe>
+		</body>
+	</div>
 	</div>
 </body>
 </html>

@@ -7,11 +7,21 @@ h2 {
 	text-align: center;
 }
 </style>
-
+<head>
+<script>	
+	window.addEventListener('message', changeWords, false);
+	function changeWords(message){
+		var pg = document.getElementsById("order").innerHTML = message.data;
+		pg = message.data;
+		
+	}	
+	
+</script>
+</head>
 <body style="background-color: white">
 
-<h2>THIS IS WHERE </h2>
-<h2>THE ORDER WILL BE</h2>
+<h2 id="order">Some Text</h2>
+
 
 </body>
 </html>

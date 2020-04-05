@@ -49,10 +49,11 @@ fn main()
 	/*
 	.mount("/api", routes![tables::post])
 	.mount("/api", routes![tables::update_table])
-	.mount("/api", routes![ingredients::get_all])
-	.mount("/api", routes![ingredients::get])
-	.mount("/api", routes![ingredients::post])
 	*/
+	.mount("/api/ingredients", routes![ingredients::get_all])
+	.mount("/api/ingredients", routes![ingredients::get])
+	.mount("/api/ingredients", routes![ingredients::post])
+	.mount("/api/ingredients", routes![ingredients::post_status])
 	.mount("/api/staff", routes![staff::get_all])
 	.mount("/api/staff", routes![staff::get])
 	.mount("/api/staff", routes![staff::get_login])
@@ -62,7 +63,6 @@ fn main()
 	
 	.mount("/api/items/", routes![items::get_category])
 	.mount("/api/items/", routes![items::post_status])
-	.mount("/api/items/", routes![items::zero_inventory])
 	.mount("/api/notifications", routes![notifications::get_all])
 	.mount("/api/notifications", routes![notifications::post])
 	/*

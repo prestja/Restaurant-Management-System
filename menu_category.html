@@ -63,7 +63,14 @@
 	<script>
 	function addItem(item) {
 		var clone = $("#item_template").clone(true);
-		clone.css('display', 'block');
+		if(item.status == 1)
+		{
+			clone.css('display','block'); 
+		}
+		else
+		{	
+			clone.css('display','none');
+		}
 		clone.appendTo('.container');
 		clone.children("button").html(item.name);
 		return clone;

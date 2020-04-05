@@ -16,15 +16,16 @@
 	}
 
 	.button-group {
-		background-color: green; /*Makes blocks gray*/
+		background-color: green; /*Makes blocks green*/
 		color: white;			/*Makes words white*/
-		padding: 18px;			/*Controls how fat the buttons are horizontal*/
+		padding: 10px;			/*Controls how fat the buttons are horizontal*/
 		width:	100%;			/*How wide the buttons are on screen*/
-		height: 100%;
+		height: 12%;
 		border: none;			/*Change if you want a border; can use -width, -style, -color*/
 		text-align: left;		/*Aligns text to the left of gray box*/
 		outline: none;
 		font-size: 15px;		/*Adjust size of letters*/
+		margin-bottom: 10px;
 	}
 	
 	/*Controls the content shown after clicked*/
@@ -41,21 +42,25 @@
 <head>
 	<script src="../jquery-3.4.1.min.js"></script>
 	<script>
+	/*Clones item to add on a button*/
 	function addItem(item) {
 		var clone = $("#item_template").clone(true);
 		clone.css('display', 'block');
+		clone.attr("id",item._id.$oid);
 		clone.appendTo('.container');
-		clone.children("button").html(item.name);
-		clone.css('background','green');
-		clone.id(item.id);
+		clone.html(item.name);
+		if(item.status == 1)
+		{clone.css('background','green');}
+		else{
+			clone.css('background','red');
+		}
 		return clone;
 	}	
 	
 	$(document).ready(function() {
             var queryStr = window.location.search; // will give you ?sndReq=234
 			
-			var category = queryStr.substr(1)
-			console.log(category);
+			var category = queryStr.substr(1);
 			var url = "http://159.89.238.181:8080/api/items?".concat(category);
 			$.ajax({
                 url: url,
@@ -71,17 +76,27 @@
 	<!--Toggles the color and status of the button and pushes to backend-->
 			function toggleColor(id)
 			{
-				var background = document.getElementById(id).style.background;
-				var status;
-				if(background == "red")
+				var background = document.getElementById(id);
+				var url="http://159.89.238.181:8080/api/items?id=";
+				url = url.concat(id);
+				url = url.concat('&status=');
+				if(background.style.background == "red")
 				{
 					document.getElementById(id).style.background = "green";
-					status = 1;
+					url = url.concat('1');
+					$.post(url, function(status) {				
+					var j = $.parseJSON(status);
+						alert(j.message);
+					});
 				}
 				else
 				{
 					document.getElementById(id).style.background = "red";
-					status = 0;
+					url = url.concat('0');
+					$.post(url, function(status) {				
+					var j = $.parseJSON(status);
+						alert(j.message);
+					});
 				}
 			}
 	</script>
@@ -90,9 +105,7 @@
 
 <body style="background-color:White;">
 	<div class = "container" style="width: 100%; height: 100%; overflow: auto; background-color:black">
-		<div id ="item_template">
-			<button class="button-group" onclick="toggleColor(this.id)" id="1">Open Collapsible</button>
-		</div>
+			<button class="button-group" id="item_template" onclick="toggleColor(this.id)" id="1">Open Collapsible</button>
 	</div>
 </body>
 </html>

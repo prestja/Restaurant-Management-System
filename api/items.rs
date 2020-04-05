@@ -41,20 +41,17 @@ pub fn get_category (_conn: LogsDbConn, category: u32) -> String
 
 #[post("/?<id>&<status>")]
 pub fn post_status(_conn: LogsDbConn, id: String, status: u32) -> String {
-	//println!("{}", id);
-	//let result = bson::oid::ObjectId::with_string(id.as_str());
+	let cast = bson::oid::ObjectId::with_string(id.as_str());
 	let coll = _conn.collection("items");
-	let result = coll.find_one(Some(doc! { "_id": bson::oid::ObjectId::with_string("5e83fdcc90c5a642e00f6241").unwrap() }), None);
-    if let Ok(opt) = result {
-    	if let Some(item) = opt {
-    		println!("Found!");
-    	}
-    	else {
-    		println!("Not found");
-    	}
-    }
-    else {
-    	println!("Result is not okay");
-    } 
-    return String::from("something");
+	if let Ok(oid) = cast {
+		if let Ok (result) = coll.find_one(Some(doc! { "_id": oid }), None) {
+			if let Some(item) = result {
+				return String::from("Valid item");
+			}
+		}
+		return String::from("Valid cast");
+	}
+	else {
+		return String::from("Invalid cast");
+	}
 }

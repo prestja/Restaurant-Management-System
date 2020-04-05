@@ -171,7 +171,9 @@
 		
 		window.addEventListener('message', updateOrder, false);
 		function updateOrder(message) {
-			window.postMessage(message.data, '*');
+			alert('heard something');
+			var target = document.getElementById('orderFrame');
+			target.contentWindow.postMessage(message.data, '*');
 		}
 		
 	</script>

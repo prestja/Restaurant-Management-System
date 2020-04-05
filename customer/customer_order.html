@@ -11,15 +11,15 @@ h2 {
 <script>	
 	window.addEventListener('message', changeWords, false);
 	function changeWords(message){
-		var pg = document.getElementsById("order").innerHTML = message.data;
-		pg = message.data;
-		
+		//var pg = document.getElementsById("order").innerHTML = message.data;
+		//pg = message.data;
+		alert('order');
+		document.body.innerHTML += "some text";
 	}	
 	
 </script>
 </head>
 <body style="background-color: white">
-
 <h2 id="order">Some Text</h2>
 
 

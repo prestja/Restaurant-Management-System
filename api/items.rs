@@ -40,7 +40,7 @@ pub fn get_category (_conn: LogsDbConn, category: u32) -> String
 }
 
 #[post("/?<id>&<status>")]
-pub fn post_status(_conn: LogsDbConn, id: String, status: u32) {
+pub fn post_status(_conn: LogsDbConn, id: String, status: u32) -> String {
 	let cast = bson::oid::ObjectId::with_string(id.as_str());
 	let coll = _conn.collection("items");
 	if let Ok(oid) = cast {
@@ -54,14 +54,31 @@ pub fn post_status(_conn: LogsDbConn, id: String, status: u32) {
 		if let Ok (result) = coll.find_one_and_update(filter.clone(),_comp.clone(), None) {
 			println!("Got a result");
 			if let Some(item) = result {
-				println!("Got an item");
+				let response = json!({
+					"code": 200,
+					"message": "Successfully updated status for item"
+				});
+				return serde_json::to_string(&response).unwrap();
 			}
+				let response = json!({
+				"code": 404,
+				"message": "Could not find item to update."
+			});
+			return serde_json::to_string(&response).unwrap();
 		}
 		else {
-			println!("Bad result");
+			let response = json!({
+				"code": 404,
+				"message": "Error accessing database."
+			});
+			return serde_json::to_string(&response).unwrap();
 		}
 	}
 	else {
-		println!("Bad cast");
+		let response = json!({
+			"code": 404,
+			"message": "Invalid or malformed object id."
+		});
+		return serde_json::to_string(&response).unwrap();	
 	}
 }

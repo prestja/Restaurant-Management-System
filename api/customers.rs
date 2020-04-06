@@ -78,7 +78,7 @@ pub fn post(_conn: LogsDbConn) -> &'static str
 }
 
 #[post("/", data = "<customer>")]
-pub fn update_rewards(_conn: LogsDbConn, customer: Json<Customer>)
+pub fn update_rewards(_conn: LogsDbConn, customer: Json<Customer>) -> String
 {
 	let inner = customer.into_inner();
 	let filter = doc!{
@@ -90,5 +90,26 @@ pub fn update_rewards(_conn: LogsDbConn, customer: Json<Customer>)
 	let mut _upsert = mongodb::coll::options::FindOneAndUpdateOptions::new();
 	_upsert.upsert = Some(true);
 	let coll = _conn.collection("customers");
-	let cursor = coll.find_one_and_update(filter.clone(), update.clone(), Some(_upsert.clone()));
+	if let Ok(result) = coll.find_one_and_update(filter.clone(), update.clone(), Some(_upsert.clone())){
+		if let Some(item) = result {
+                        let response = json!({
+                                "code": 200,
+                                "message": "Successfully updated quantity for customer."
+                        });
+                        return serde_json::to_string(&response).unwrap();
+                }
+                let response = json!({
+                        "code": 200,
+                        "message": "Inserted new customer."
+                });
+                return serde_json::to_string(&response).unwrap();
+        }
+        else {
+                let response = json!({
+                        "code": 404,
+                        "message": "Error accessing database."
+                });
+                return serde_json::to_string(&response).unwrap();
+        }
+
 }

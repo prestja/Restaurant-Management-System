@@ -106,26 +106,30 @@
 			<div class="title" onclick="document.location = '../payment.html'; handleStuff();">Pay</div> 		
 		</div>	
 	</div>
-/*prompts for user to enter pin*/
+
 <script>
 	window.addEventListener('message', recPin, false);
-	function recPin(message){
-		console.log(message.data);
-		
-		if(message.data == "")
-		{
-			console.log("Message data");
+	
+	// function called whenever landing receives a pin from its parent
+	function recPin(message) {		
+		if(message.data == "") {
 			var pin2 = prompt("Please enter a pin", "1234");
-			console.log(pin2);
 			var pin3 = {
-			type: "pin", pin: pin2
+				type: "pin", pin: pin2
 			};
 			parent.window.postMessage(pin3, "*");
 		}
-		document.location = "play.html";
+		// tell parent to hide the back button
+		var response = {
+			type: "back",
+			state: true
+		}
+		parent.window.postMessage(response, "*");
+		window.location = "play.html";
 	}
-	function pinPrompt(){
-		
+	
+	// function called when attempting to change to games page
+	function pinPrompt() {		
 		var thingy = {
 			type: "pin", pin: ""
 		};

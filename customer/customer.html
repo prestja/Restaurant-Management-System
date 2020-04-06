@@ -1,6 +1,5 @@
 <html>
-<style>
-    
+<style>    
     html, body {
         width: 100%;
         height: 100%;
@@ -78,12 +77,15 @@
 </style>
 
 <head>
-
 	<script>
-		var pin = "";
-		function goBack() {
+		var pin = ""; // default to no pin set
+		var table = 0; // default to table 0 (1 in real-world terms)
+		
+		function goBack() {			
 			var home = document.getElementById("ifrm");
-			home.src = "landing.html";	
+			
+			home.src = "landing.html";
+			showButton(false);
 		}
 
 		function goRefill() {
@@ -94,11 +96,16 @@
 			btn.style.display = "inline-block";
 		}
 		
-
-		function showButton(message) {
-			console.log("1234");
+		function showButton(state) {
 			var btn = document.getElementById("nav-back");
-			btn.style.display = message.data;
+			switch (state) {
+				case true:
+				btn.style.display = "inline-block";
+				break;
+				case false:
+				btn.style.display = "none";
+				break;
+			}
 		}
 		
 		function showBtnLocal(){
@@ -112,32 +119,24 @@
 				alert("Your server is on their way!");
 			} else {
 				txt = "You pressed Cancel!";
-				alert("Your request has been canceld");
+				alert("Your request has been cancelled");
 			}
 				document.getElementById("demo").innerHTML = txt;
-		}
-		
+		}		
 		
 		window.addEventListener('message', master_listener, false);
 	
 		function master_listener(message) {
-			if(message.data.type == "back" )
-			{
-				var btn = document.getElementById("nav-back");
-				btn.style.display = "none";
+			if(message.data.type == "back" ) {
+				showButton(message.data.state);
 			}
-			else if(message.data.type == "pin")
-			{
-				console.log("this is the pin!");
-				if(pin == "" && message.data.pin == "")
-				{
-					console.log("pin is empty");
+			else if(message.data.type == "pin") {
+				if(pin == "" && message.data.pin != "") {
 					pin = message.data.pin;
 				}
 				document.getElementById("ifrm").contentWindow.postMessage(pin, "*");
-			}
-			
-			}
+			}			
+		}
 			
 	</script>
 	
@@ -146,7 +145,7 @@
 <body>
     <!--Navigation buttons-->
     <div class = "navigation">
-        <button id = "nav-back" onclick ="goBack(); hideBack();" >Back</button>
+        <button id = "nav-back" onclick ="goBack();" >Back</button>
 		<button id = "nav-help" onclick = "myFunction()">Help</button>
         <button id = "nav-refills" onclick ="goRefill()">Refills</button>
     </div>

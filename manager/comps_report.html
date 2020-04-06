@@ -155,6 +155,45 @@
 </style>
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script>
+	//adds item for the comps report onto the table
+	function addItem(item) {
+		var compsTab = document.getElementById('comps');
+		
+		var rowCnt = salesTab.rows.length; //gets current amount of rows
+		var tr = salesTab.insertRow(rowCnt); //adds new row below the last row
+		tr = salesTab.insertRow(rowCnt);
+		
+		var td = document.createElement('td'); //inserts employee id into the table
+		td = tr.insertCell(0);
+		td.append(item.id);
+		
+		td = document.createElement('td'); //inserts employee name
+		td = tr.insertCell(1);
+		td.append(item.fname + ' ' + item.lname);
+		
+		td = document.createElement('td'); //inserts table number
+		td = tr.insertCell(2);
+		td.append('Table number here');
+		
+		td = document.createElement('td'); //inserts the amount comped for the order onto the table
+		td = tr.insertCell(3);
+		td.append('amount here');
+	}
+		$(document).ready(function() {
+			/*var url = "http://159.89.238.181:8080/api/items?".concat(category);
+			$.ajax({
+				url: url,
+				type: 'get',
+				dataType: 'JSON',
+				success: function(response) {
+					response.forEach(item => 
+						addItem(item)
+					);
+				}
+			})*/
+		}); 
+	</script>
 </head>
 <body style="background-color:Black;">
 	<!--creates buttons in header to go back-->
@@ -199,7 +238,7 @@
 			<h2>COMPS REPORT</h2>
 			<hr color="black">
 			<span style="text-align:left !important;position:relative;left:10px;">
-				<table style="width:90%">
+				<table style="width:90%" id = "comps">
 					<tr>
 						<th>ID</th>
 						<th>EMPLOYEE NAME</th>

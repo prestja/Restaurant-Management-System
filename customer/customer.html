@@ -81,9 +81,11 @@
 		var pin = ""; // default to no pin set
 		var table = 0; // default to table 0 (1 in real-world terms)
 		
-		function goBack(wasPlayMenu) {			
+		function goBack() {			
 			var home = document.getElementById("ifrm");
-			if (wasPlayMenu) {
+			var game = home.src;
+			console.log(game);
+			if (game == "games.html") {
 				var attempt = prompt("Please enter your pin");
 				if (pin != attempt) {
 					alert("I'm sorry, you put in the incorrect pin. If you believe this is a mistake, please press the HELP button located at the top of the display.");
@@ -151,7 +153,7 @@
 <body>
     <!--Navigation buttons-->
     <div class = "navigation">
-        <button id = "nav-back" onclick ="goBack(true);" >Back</button>
+        <button id = "nav-back" onclick ="goBack();" >Back</button>
 		<button id = "nav-help" onclick = "myFunction()">Help</button>
         <button id = "nav-refills" onclick ="goRefill()">Refills</button>
     </div>

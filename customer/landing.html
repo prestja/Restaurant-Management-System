@@ -86,11 +86,6 @@
 <head>
 	<link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet'>
 	
-	<script>
-		function handleStuff() {
-			parent.window.postMessage("inline-block", '*');
-		}
-	</script>
 </head>
 
 <body style="background-color:Black;">
@@ -102,28 +97,44 @@
 			<div class="title" onclick="document.location = '../menu.html'; handleStuff();">Order</div> 		
 		</div>	
 		<div class="column" style="background: url('../img/game.jpg') no-repeat; background-size: auto 100%;">
-<!--<<<<<<< HEAD-->
-			<button class="button" onclick="document.location = 'play.html'; handleStuff();"></button>
-			<div class="title" onclick="document.location = 'play.html'; handleStuff();">Play</div> 		
-=======
+
 			<button class="button" onclick="pinPrompt()"></button>
 			<div class="title" onclick="pinPrompt()">Play</div> 		
->>>>>>> aa7346f94436676830dc24cb782e8a5c6ec8968a
 		</div>	
 		<div class="column" style="background: url('../img/payment.jpg') no-repeat; background-size: auto 100%;">
 			<button class="button" onclick="document.location = '../payment.html'; handleStuff();"></button>
 			<div class="title" onclick="document.location = '../payment.html'; handleStuff();">Pay</div> 		
 		</div>	
 	</div>
-/*prompts for user to enter pin*/
+
 <script>
-	function pinPrompt(){
-		var pin = prompt("Please enter a pin", "1234");
-		if(pin != null)
-		{
-			document.location = 'play.html';
-			localStorage.setItem('saved_pin', pin);
-		}		
+	window.addEventListener('message', recPin, false);
+	
+	// function called whenever landing receives a pin from its parent
+	function recPin(message) {		
+		if(message.data == "") {
+			var pin2 = prompt("Please enter a pin", "1234");
+			var pin3 = {
+				type: "pin", pin: pin2
+			};
+			parent.window.postMessage(pin3, "*");
+		}
+		// tell parent to hide the back button
+		var response = {
+			type: "back",
+			state: true
+		}
+		parent.window.postMessage(response, "*");
+		window.location = "play.html";
+	}
+	
+	// function called when attempting to change to games page
+	function pinPrompt() {		
+		var thingy = {
+			type: "pin", pin: ""
+		};
+		parent.window.postMessage(thingy,"*");
+
 	}
 </script>
 </body>

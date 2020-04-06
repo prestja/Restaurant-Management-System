@@ -1,6 +1,5 @@
 <html>
-<style>
-    
+<style>    
     html, body {
         width: 100%;
         height: 100%;
@@ -78,11 +77,21 @@
 </style>
 
 <head>
-
 	<script>
-		function goBack() {
+		var pin = ""; // default to no pin set
+		var table = 0; // default to table 0 (1 in real-world terms)
+		
+		function goBack(wasPlayMenu) {			
 			var home = document.getElementById("ifrm");
-			home.src = "landing.html";	
+			if (wasPlayMenu) {
+				var attempt = prompt("Please enter your pin");
+				if (pin != attempt) {
+					alert("I'm sorry, you put in the incorrect pin. If you believe this is a mistake, please press the HELP button located at the top of the display.");
+					return;
+				}
+			}
+			home.src = "landing.html";
+			showButton(false);
 		}
 
 		function goRefill() {
@@ -93,21 +102,20 @@
 			btn.style.display = "inline-block";
 		}
 		
-		function hideBack() {
+		function showButton(state) {
 			var btn = document.getElementById("nav-back");
-			btn.style.display = "none";
+			switch (state) {
+				case true:
+				btn.style.display = "inline-block";
+				break;
+				case false:
+				btn.style.display = "none";
+				break;
+			}
 		}
 		
-		window.addEventListener('message', showButton, false);
-		
-		function showButton(message) {
+		function showBtnLocal(){
 			var btn = document.getElementById("nav-back");
-			btn.style.display = message.data;
-		}
-		
-		function showBtnLocal() {
-			var btn = document.getElementById("nav-back");
-			btn.style 
 		}
 		
 		function myFunction() {
@@ -117,10 +125,25 @@
 				alert("Your server is on their way!");
 			} else {
 				txt = "You pressed Cancel!";
-				alert("Your request has been canceld");
+				alert("Your request has been cancelled");
 			}
 				document.getElementById("demo").innerHTML = txt;
+		}		
+		
+		window.addEventListener('message', master_listener, false);
+	
+		function master_listener(message) {
+			if(message.data.type == "back" ) {
+				showButton(message.data.state);
+			}
+			else if(message.data.type == "pin") {
+				if(pin == "" && message.data.pin != "") {
+					pin = message.data.pin;
+				}
+				document.getElementById("ifrm").contentWindow.postMessage(pin, "*");
+			}			
 		}
+			
 	</script>
 	
 </head>
@@ -128,7 +151,7 @@
 <body>
     <!--Navigation buttons-->
     <div class = "navigation">
-        <button id = "nav-back" onclick ="goBack(); hideBack();" >Back</button>
+        <button id = "nav-back" onclick ="goBack(true);" >Back</button>
 		<button id = "nav-help" onclick = "myFunction()">Help</button>
         <button id = "nav-refills" onclick ="goRefill()">Refills</button>
     </div>

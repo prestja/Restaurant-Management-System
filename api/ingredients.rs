@@ -59,6 +59,7 @@ pub fn get(_conn: LogsDbConn, item: &rocket::http::RawStr) -> String
 	return str;
 }
 
+/*
 #[post("/")]
 pub fn post(_conn: LogsDbConn) -> &'static str 
 {
@@ -66,45 +67,36 @@ pub fn post(_conn: LogsDbConn) -> &'static str
 	_coll.insert_one(doc!{ "item": "beef_patties" }, None).unwrap();
 	return "Inserted an element into database";
 }
+*/
 
-#[post("/?<id>&<status>")]
-pub fn post_status(_conn: LogsDbConn, id: String, status: u32) -> String {
-	let cast = bson::oid::ObjectId::with_string(id.as_str());
+#[put("/?<name>&<count>")]
+pub fn put_count(_conn: LogsDbConn, name: String, count: u32) -> String {
 	let coll = _conn.collection("ingredients");
-	if let Ok(oid) = cast {
-		let filter = doc! {"_id": oid};
-		let _comp = doc! {
-			"$set": {
-				"status": status
-			}
-		};
-		if let Ok (result) = coll.find_one_and_update(filter.clone(),_comp.clone(), None) {
-			println!("Got a result");
-			if let Some(item) = result {
-				let response = json!({
-					"code": 200,
-					"message": "Successfully updated status for item"
-				});
-				return serde_json::to_string(&response).unwrap();
-			}
+	let filter = doc! {"item": name};
+	let _comp = doc! {
+		"$set": {
+			"count": count
+		}
+	};
+	if let Ok (result) = coll.find_one_and_update(filter.clone(),_comp.clone(), None) {
+		println!("Got a result");
+		if let Some(item) = result {
 			let response = json!({
-				"code": 404,
-				"message": "Could not find item to update."
+				"code": 200,
+				"message": "Successfully updated status for ingredient."
 			});
 			return serde_json::to_string(&response).unwrap();
 		}
-		else {
-			let response = json!({
-				"code": 404,
-				"message": "Error accessing database."
-			});
-			return serde_json::to_string(&response).unwrap();
-		}
+		let response = json!({
+			"code": 404,
+			"message": "Could not find ingredient to update."
+		});
+		return serde_json::to_string(&response).unwrap();
 	}
 	else {
 		let response = json!({
 			"code": 404,
-			"message": "Invalid or malformed object id."
+			"message": "Error accessing database."
 		});
 		return serde_json::to_string(&response).unwrap();
 	}

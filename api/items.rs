@@ -9,6 +9,7 @@ use rocket_contrib::json::Json;
 use mongodb::{doc, bson};
 use mongodb::coll::options;
 use mongodb::oid;
+use bson::oid::ObjectId;
 
 #[get("/?<category>")]
 pub fn get_category (_conn: LogsDbConn, category: u32) -> String
@@ -36,4 +37,48 @@ pub fn get_category (_conn: LogsDbConn, category: u32) -> String
 	_str.pop();
 	_str.push_str("\n]");
 	return _str;
+}
+
+#[post("/?<id>&<status>")]
+pub fn post_status(_conn: LogsDbConn, id: String, status: u32) -> String {
+	let cast = bson::oid::ObjectId::with_string(id.as_str());
+	let coll = _conn.collection("items");
+	if let Ok(oid) = cast {
+		let filter = doc! {"_id": oid};
+		let _comp = doc! {
+			"$set": {
+				"status": status
+			}
+		};
+		let update = doc! {"status": status};
+		if let Ok (result) = coll.find_one_and_update(filter.clone(),_comp.clone(), None) {
+			println!("Got a result");
+			if let Some(item) = result {
+				let response = json!({
+					"code": 200,
+					"message": "Successfully updated status for item"
+				});
+				return serde_json::to_string(&response).unwrap();
+			}
+				let response = json!({
+				"code": 404,
+				"message": "Could not find item to update."
+			});
+			return serde_json::to_string(&response).unwrap();
+		}
+		else {
+			let response = json!({
+				"code": 404,
+				"message": "Error accessing database."
+			});
+			return serde_json::to_string(&response).unwrap();
+		}
+	}
+	else {
+		let response = json!({
+			"code": 404,
+			"message": "Invalid or malformed object id."
+		});
+		return serde_json::to_string(&response).unwrap();	
+	}
 }

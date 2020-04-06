@@ -5,6 +5,7 @@ use rocket_contrib::{databases::mongodb};
 use mongodb::{doc, bson};
 use serde_json;
 
+/*
 #[get("/schedules")]
 pub fn get_all(_conn: LogsDbConn) -> String 
 {
@@ -67,3 +68,4 @@ pub fn post(_conn: LogsDbConn) -> &'static str
 	_coll.insert_one(doc!{ "schedule": "900-1700" }, None).unwrap();
 	return "Inserted an element into database";
 }
+*/

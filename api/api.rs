@@ -17,6 +17,7 @@ mod tables;
 mod schedules;
 mod customers;
 mod items;
+mod notifications;
 
 #[database("mongodb_logs")]
 pub struct LogsDbConn(mongodb::db::Database);
@@ -34,23 +35,23 @@ fn main()
     }
     .to_cors().unwrap();
     rocket::ignite()	
-	/*
-	.mount("/api", routes![tables::get_all])
-	.mount("/api", routes![tables::get])
-	.mount("/api", routes![tables::post])	
-	*/
+	.mount("/api/tables", routes![tables::get_all])
+	.mount("/api/tables", routes![tables::get])
+	.mount("/api/tables", routes![tables::post])	
 	//.mount("/api/", routes![orders::get])
 	.mount("/api/orders", routes![orders::get])
 	.mount("/api/orders", routes![orders::get_id])
 	.mount("/api/orders", routes![orders::get_status])	
 	.mount("/api/orders", routes![orders::post])
+	.mount("/api/orders", routes![orders::comp])
+	.mount("/api/orders", routes![orders::get_table_orders])
 	/*
 	.mount("/api", routes![tables::post])
 	.mount("/api", routes![tables::update_table])
-	.mount("/api", routes![ingredients::get_all])
-	.mount("/api", routes![ingredients::get])
-	.mount("/api", routes![ingredients::post])
 	*/
+	.mount("/api/ingredients", routes![ingredients::get_all])
+	.mount("/api/ingredients", routes![ingredients::get])
+	.mount("/api/ingredients", routes![ingredients::put_count])
 	.mount("/api/staff", routes![staff::get_all])
 	.mount("/api/staff", routes![staff::get])
 	.mount("/api/staff", routes![staff::get_login])
@@ -59,10 +60,16 @@ fn main()
 	//.mount("/api", routes![staff::manager_add_staff])
 	
 	.mount("/api/items/", routes![items::get_category])
+	.mount("/api/items/", routes![items::post_status])
+	.mount("/api/notifications", routes![notifications::get_all])
+	.mount("/api/notifications", routes![notifications::post])
 	/*
 	.mount("/api", routes![customers::get_all])
 	.mount("/api", routes![customers::get])
 	.mount("/api", routes![customers::post])
+	*/
+	.mount("/api/customers", routes![customers::update_rewards])
+	/*
 	.mount("/api", routes![schedules::get_all])
 	.mount("/api", routes![schedules::get])
 	.mount("/api", routes![schedules::post])

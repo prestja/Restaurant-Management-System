@@ -110,15 +110,14 @@
 	/*Created a container to hold the inventory report*/
 	.items {
 		background-color: #A9A9A9 !important; //makes Gray background
-		padding: 10px;
+		padding: 30px;
 		margin: 10px;
-		width: 80%;
 		display: inline-block;
 		text-align: center;
 		border: 5px;
 		border-color: black;
-		position: relative;
-		left: 150px;
+		position: absolute;
+		left: 200px;
 	}
 		/*Created a tool button similar to menu buttons*/
 	.tool-button-group button {
@@ -151,6 +150,7 @@
 		right:10px;
 		left:5px;
 		margin-bottom: 5px;
+		margin-right: 35px;
 	}
 </style>
 <head>
@@ -176,13 +176,13 @@
 		td = tr.insertCell(1);
 		td.appendChild(element);
 		
-		var element = document.createElement('input');
+		element = document.createElement('input');
 		element.setAttribute('type', 'button');
 		element.setAttribute('value','SAVE');
 		element.setAttribute('class', item.item);
 		element.setAttribute('onclick', 'editTable(this.className)');
-		td = document.createElement('td'); //creates save button for each item
-		td = tr.insertCell(2);
+		//td = document.createElement('td'); //creates save button for each item
+		//td = tr.insertCell(2);
 		td.appendChild(element);
 	}
 		$(document).ready(function() {
@@ -260,13 +260,12 @@
 		<div class = "items">
 			<h2>INVENTORY REPORT</h2>
 			<hr color="black">
-			<!--edit button makes it to where the amount and 86'd can be edited-->
+			<!--table stores all inventory items and amounts-->
 			<span style="text-align:left !important;position:relative;left:10px;">
-				<table style="width:90%" id = 'comps'>
+				<table id = 'comps'>
 					<tr>
 						<th>ITEM</th>
 						<th>AMOUNT</th>
-						<th></th>
 					</tr>
 				</table>
 			</span>

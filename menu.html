@@ -133,7 +133,7 @@
 		<h2 id = "headerType">BEVERAGES</h2>
 		<hr color = "black">
 		<body>
-			<iframe id = "order_items" src="menu_category.html?category=3" onclick="updateOrder()" style="width:95%; height: 85%" ></iframe>
+			<iframe id = "order_items" src="menu_category.html?category=3" onclick="updateOrder(); document.location = 'customer/customer_order_template.html';" style="width:95%; height: 85%" ></iframe>
 		</body>
 	</div>
 	<script>
@@ -172,9 +172,13 @@
 		window.addEventListener('message', updateOrder, false);
 		function updateOrder(message) {
 			//alert('heard something');
-			var target = document.getElementById('orderFrame');
+			//var target = document.getElementById('orderFrame');
+			//target.contentWindow.postMessage(message.data, '*');
+			var target = document.getElementById("order_items");
+			target.src = "customer/customer_order_template.html";
 			target.contentWindow.postMessage(message.data, '*');
 		}
+		
 		
 	</script>
 	

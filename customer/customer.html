@@ -83,10 +83,10 @@
 		
 		function goBack() {			
 			var home = document.getElementById("ifrm");
-			var game = home.src;
-			var n = game.lastIndexOf('/');
+			var game = home.src; //gets the source of the last page
+			var n = game.lastIndexOf('/'); //finds the name of the last page
 			var result = game.substring(n+1);
-			console.log(result);
+			//check to see if last page was game
 			if (result == "landing.html") {
 				var attempt = prompt("Please enter your pin");
 				if (pin != attempt) {

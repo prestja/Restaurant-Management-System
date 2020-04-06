@@ -119,12 +119,17 @@
 			t.innerHTML = "TABLE " + num;
 			t.value = num;
 		}
+		
 		//when comp button is pressed
+		
 		function handleComp()
 		{
+			//checks the table number
 			var t = document.getElementById("headerType");
 			var tableNum = parseInt(t.value);
+			//gets the amount input
 			var amount = document.getElementById("amt").value;
+			//if the amount is valid, send an ajax request with the table number and amount, then print the result
 			if(amount !== "")
 			{
 				var url = 'http://159.89.238.181:8080/api/orders/comp?table=';
@@ -132,7 +137,8 @@
 				url = url.concat('&amount=');
 				url = url.concat(amount);
 				$.post(url, function(status) {				
-				alert(status);
+				var j = $.parseJSON(status);
+				alert(j.message);
 			});
 			}
 			
@@ -140,7 +146,7 @@
 		}
     </script>
 </head>
-<body style="background-color:Black;">
+<body style="background-color:Black;" onload="table(1)">
 	<!--creates buttons in header to go back-->
 	<div class="header">
 
@@ -185,7 +191,7 @@
 	
 	<!--Creates section to show details about specific tables-->
 	<div class = "table-info" id="table-num">
-		<h2 id = "headerType" value="1">TABLE 1</h2>
+		<h2 id = "headerType" value=1>TABLE 1</h2>
 		<hr color = "black">
 		<div class="button-group">
 			<button onclick="document.location = 'employee_order_page.html'"  style="width:90% !important">ORDER/MODIFY</button>
@@ -206,7 +212,7 @@
 		</table>
 		<hr color="black">
 		<div class="button-group">
-			<input type="number" id="amt" placeholder="0.00" max=100>
+			<input type="number" id="amt" placeholder="0.00" max=100><br><br>
 			<button id="comp" onclick="handleComp()">COMP</button>
 		</div>
 	</div>

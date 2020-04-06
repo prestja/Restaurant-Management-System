@@ -1,11 +1,27 @@
+use crate::rocket_contrib;
 use crate::rocket_contrib::databases::mongodb::db::ThreadedDatabase;
 use crate::LogsDbConn;
+use crate::serde_derive;
 
+use rocket::response::content;
 use rocket_contrib::{databases::mongodb};
+use rocket_contrib::json::Json;
 use mongodb::{doc, bson};
-use serde_json;
+use mongodb::coll::options;
+use mongodb::oid;
 
-#[get("/staff")]
+#[derive(Serialize, Deserialize)]
+pub struct Employee {
+	#[serde(default)] first_name: String,
+	#[serde(default)] last_name: String,
+	#[serde(default)] id : String,
+	#[serde(default)] password: String,
+	#[serde(default)] wage : f32,
+	#[serde(default)] phone: String,
+	#[serde(default)] position: u32,
+}
+
+#[get("/")]
 pub fn get_all(_conn: LogsDbConn) -> String {
 	let mut str = String::from("[\n\t");
 	let _coll = _conn.collection("staff");
@@ -31,7 +47,7 @@ pub fn get_all(_conn: LogsDbConn) -> String {
 	return str;
 }
 
-#[get("/staff/<id>")]
+#[get("/<id>")]
 pub fn get(_conn: LogsDbConn, id: u32) -> String {
 	let mut str = String::from("[\n\t");
 	let doc = doc!{"id": id};
@@ -58,9 +74,51 @@ pub fn get(_conn: LogsDbConn, id: u32) -> String {
 	return str;
 }
 
-#[post("/staff")]
-pub fn post(_conn: LogsDbConn) -> &'static str {
+#[get("/login?<id>&<password>")]
+pub fn get_login(_conn: LogsDbConn, id: String, password: String) -> String {	
+	let doc = doc!{"id": id, "password": password};
 	let _coll = _conn.collection("staff");
-	_coll.insert_one(doc!{ "empid": 32 }, None).unwrap();
-	return "Inserted an element into database";
+	let mut cursor = _coll.find(Some(doc.clone()), None).unwrap();
+	if let Some(result) = cursor.next() 
+	{
+		if let Ok(item) = result 
+		{
+			let _bson = mongodb::to_bson(&item).unwrap();
+			let response = json!({
+				"code": 200,
+				"message": "Succesfully logged in.",
+				"data": _bson
+			});
+			return serde_json::to_string(&response).unwrap();
+		}
+	} 
+
+	let response = json!({
+		"code": 403,
+		"message": "Invalid employee ID or password!"
+	});
+	return serde_json::to_string(&response).unwrap();
+}
+
+#[post("/", data = "<employee>")]
+pub fn post(_conn: LogsDbConn, employee: Json<Employee>) -> String {
+	let inner = employee.into_inner();
+	let doc = doc!
+	{
+		"first_name": inner.first_name,
+		"last_name": inner.last_name,
+		"id": inner.id,
+		"password": inner.password,
+		"wage" : inner.wage,
+		"phone": inner.phone,
+		"position": inner.position
+	};
+	
+	let _coll = _conn.collection("staff");
+	_coll.insert_one(doc, None).unwrap();
+	let response = json!({
+		"code": 200,
+		"message": "Inserted order into collection orders"
+	});
+	return serde_json::to_string(&response).unwrap();
 }

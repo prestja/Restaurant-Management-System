@@ -144,21 +144,56 @@
 	.tool-button-group button:hover {
 		background-color: #3e8e41;
 	}
+	
+	table, th, td {/*stores table information*/
+		border: 1px solid black;
+		border-collapse: collapse;
+		padding: 5px;
+		position:relative;
+		right:10px;
+		left:5px;
+	}
 </style>
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
-    $(document).ready(function(){ 
-		$("button").click(function(){
-			$.get("http://159.89.238.181:443/api/orders", function(data, status){
-				document.innerHTML+=data;
-			});
-        
-			$.post("http://159.89.238.181:443/api/orders", function(data, status){
-            
-			});
-		});
-    });
+	//adds item for the sales report onto the table
+	function addItem(item) {
+		var salesTab = document.getElementById('sales');
+		
+		var rowCnt = salesTab.rows.length; //gets current amount of rows
+		var tr = salesTab.insertRow(rowCnt); //adds new row below the last row
+		tr = salesTab.insertRow(rowCnt);
+		
+		var td = document.createElement('td'); //inserts order id into the table
+		td = tr.insertCell(0);
+		td.append(item._id.$oid);
+		
+		td = document.createElement('td'); //inserts the number of items for the order onto the table
+		td = tr.insertCell(1);
+		td.append('Num items here');
+		
+		td = document.createElement('td'); //inserts the method of payment for an order onto a table
+		td = tr.insertCell(2);
+		td.append('Method of payment here');
+		
+		td = document.createElement('td'); //inserts the total for the order onto the table
+		td = tr.insertCell(3);
+		td.append('total here');
+	}
+		$(document).ready(function() {
+			/*var url = "http://159.89.238.181:8080/api/items?".concat(category);
+			$.ajax({
+				url: url,
+				type: 'get',
+				dataType: 'JSON',
+				success: function(response) {
+					response.forEach(item => 
+						addItem(item)
+					);
+				}
+			})*/
+		}); 
     </script>
 </head>
 <body style="background-color:Black;">
@@ -166,7 +201,7 @@
 	<div class="header">
 
 		<div class="button-group">
-			<button onclick="document.location = 'employee_main_page.html'">&#60&#60 BACK</button>
+			<button onclick="document.location = '../employee/landing.html'">&#60&#60 BACK</button>
 		</div>
 	
 	</div>
@@ -174,13 +209,13 @@
 	<!--Creates left menu for buttons for the different manager pages-->
 	<div class = "left-menu">
 		<div class="menu-button-group">
-			<button onclick="document.location = 'Manager_table_page.html'">TABLES</button>
+			<button onclick="document.location = 'tables.html'">TABLES</button>
 			<br><br>
-			<button onclick="document.location = '86_68_page.html'">86/68</button>
+			<button onclick="document.location = '86_68.html'">86/68</button>
 			<br><br>
-			<button onclick="document.location = 'Manager_tool_page.html'">TOOLS</button>
+			<button onclick="document.location = 'tools.html'">TOOLS</button>
 			<br><br>
-			<button onclick="document.location = 'Manager_report_page.html'">REPORTS</button>
+			<button onclick="document.location = 'reports.html'">REPORTS</button>
 		</div>
 	</div>
 	
@@ -190,13 +225,13 @@
 			<h2>REPORTS</h2>
 			<hr color = "black">
 			<div class="tool-button-group">
-				<button onclick="document.location = 'Manager_report_page.html'">SALES</button>
+				<button onclick="document.location = 'reports.html'">SALES</button>
 				<br><br>
-				<button onclick="document.location = 'Manager_inventory_page.html'">INV</button>
+				<button onclick="document.location = 'inventory.html'">INV</button>
 				<br><br>
-				<button onclick="document.location = 'Manager_labor_page.html'">LABOR</button>
+				<button onclick="document.location = 'labor.html'">LABOR</button>
 				<br><br>
-				<button onclick="document.location = 'Manager_comps_report_page.html'">COMPS</button>
+				<button onclick="document.location = 'comps_report.html'">COMPS</button>
 			</div>
 		</div>
 	<!--holds sales report-->
@@ -204,10 +239,14 @@
 			<h2>SALES REPORT</h2>
 			<hr color="black">
 			<span style="text-align:left !important;position:relative;left:10px;">
-				<h4>FOOD: <span id ="food"></span></h4>
-				<h4>DRINKS: <span id="drinks"></span></h4>
-				<h4>TOTAL GUESTS: <span id="numGuests"></span></h4>
-				<h4>PRICE PER GUEST: <span id="numGuests"></span></h4>
+				<table style="width:90%" id="sales">
+					<tr>
+						<th>ORDER ID</th>
+						<th># ITEMS</th>
+						<th>METHOD OF PAYMENT</th>
+						<th>TOTAL</th>
+					</tr>
+				</table>
 			</span>
 		</div>
 	</div>

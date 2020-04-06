@@ -51,7 +51,7 @@ fn main()
 	*/
 	.mount("/api/ingredients", routes![ingredients::get_all])
 	.mount("/api/ingredients", routes![ingredients::get])
-	.mount("/api/ingredients", routes![ingredients::put_count])
+	.mount("/api/ingredients", routes![ingredients::post_count])
 	.mount("/api/staff", routes![staff::get_all])
 	.mount("/api/staff", routes![staff::get])
 	.mount("/api/staff", routes![staff::get_login])
@@ -73,7 +73,7 @@ fn main()
 	.mount("/api", routes![schedules::get_all])
 	.mount("/api", routes![schedules::get])
 	.mount("/api", routes![schedules::post])
-	*/	
+	*/
 	.attach(LogsDbConn::fairing())
 	.attach(cors)
 	.launch();

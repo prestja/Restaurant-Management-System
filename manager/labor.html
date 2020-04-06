@@ -156,17 +156,52 @@
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
-    $(document).ready(function(){ 
-		$("button").click(function(){
-			$.get("http://159.89.238.181:443/api/orders", function(data, status){
-				document.innerHTML+=data;
-			});
-        
-			$.post("http://159.89.238.181:443/api/orders", function(data, status){
-            
-			});
-		});
-    });
+	//adds row to the labor table
+	function addItem(item) {
+		var labTab = document.getElementById('labor');
+		
+		//adds row to labor table by getting the length and inserts
+		var rowCnt = labTab.rows.length;
+		var tr = labTab.insertRow(rowCnt);
+		tr = labTab.insertRow(rowCnt);
+		
+		var td = document.createElement('td');//inserts employee id
+		td = tr.insertCell(0);
+		td.append(item._id.$oid);
+		
+		td = document.createElement('td'); //inserts employee name
+		td = tr.insertCell(1);
+		td.append(item.fname + ' ' + item.lname);
+		
+		td = document.createElement('td'); //inserts start time
+		td = tr.insertCell(2);
+		td.append('Start time here');
+		
+		td = document.createElement('td'); //inserts end time
+		td = tr.insertCell(3);
+		td.append('end time here');
+		
+		td = document.createElement('td'); //inserts total hours worked
+		td = tr.insertCell(4);
+		td.append('total hours here');
+		
+		td = document.createElement('td'); //inserts total tips for employee
+		td = tr.insertCell(5);
+		td.append('tips here');
+	}
+		$(document).ready(function() {
+			/*var url = "http://159.89.238.181:8080/api/items?".concat(category);
+			$.ajax({
+				url: url,
+				type: 'get',
+				dataType: 'JSON',
+				success: function(response) {
+					response.forEach(item => 
+						addItem(item)
+					);
+				}
+			})*/
+		}); 
     </script>
 </head>
 <body style="background-color:Black;">
@@ -212,7 +247,7 @@
 			<h2>LABOR REPORT</h2>
 			<hr color="black">
 			<span style="text-align:left !important;position:relative;left:10px;">
-				<table style="width:90%">
+				<table style="width:90%" id="labor">
 					<tr>
 						<th>ID</th>
 						<th>NAME</th>

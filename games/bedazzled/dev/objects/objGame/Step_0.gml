@@ -56,7 +56,7 @@ else if (global.game_state == GameState.Swapping) {
 		//Fill in spaces
 		for(var j = 0; j < 8; ++j) {
 			for(var k = 0; k < _gaps[j]; ++k) {
-				var _obj = instance_create_v(global.board_x + (j*64), global.board_y - ((k + 1)*64), "InstanceActors", objJewel, irandom(6), -1, j);
+				var _obj = instance_create_v(global.board_x + (j*piece_size), global.board_y - ((k + 1)*piece_size), "InstanceActors", objJewel, irandom(6), -1, j);
 				scrPieceMove(_obj, _gaps[j] - k - 1, j);
 			}
 		}
@@ -71,7 +71,7 @@ else if (global.game_state == GameState.Swapping) {
 	}
 }
 else if (global.game_state == GameState.GameOver) {
-	if (device_mouse_check_button_pressed(0, mb_left) && device_mouse_x(0) < 320  && device_mouse_y(0) < 72) {
+	if (device_mouse_check_button_pressed(0, mb_left) && device_mouse_x_to_gui(0) < 128  && device_mouse_y_to_gui(0) < 94) {
 		global.game_state = GameState.Player;
 		game_score = 0;
 		scrEmptyGameGrid();

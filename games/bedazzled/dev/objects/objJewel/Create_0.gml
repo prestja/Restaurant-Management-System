@@ -10,3 +10,5 @@ myPos = [x, y];
 myDest = [x, y];
 myPath = -1;
 settled = true;
+drag_detect_buffer = 6;
+drag_detect_flag = false;

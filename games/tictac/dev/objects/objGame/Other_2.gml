@@ -47,10 +47,13 @@ if(screen_h mod ideal_h !=0) {
 //Check for odd values
 if(ideal_w & 1) {ideal_w++;}
 if(ideal_h & 1) {ideal_h++;}
+//Set zoom level
+if (os_browser == browser_not_a_browser) { zoom = 1; }
+else { zoom = min(screen_w div ideal_w, screen_h div ideal_h); }
 //Set window sizes
-surface_resize(application_surface, ideal_w, ideal_h);
+surface_resize(application_surface, ideal_w*zoom, ideal_h*zoom);
 display_set_gui_size(ideal_w, ideal_h);
-window_set_size(ideal_w, ideal_h);
+window_set_size(ideal_w*zoom, ideal_h*zoom);
 
 //Camera creation
 center_camera();

@@ -9,7 +9,7 @@ if (instance_exists(piece)) {
 	piece.grid_j = dest_j;
 	piece.goto_grid_i = dest_i;
 	piece.goto_grid_j = dest_j;
-	piece.x = (global.board_x + (dest_j*64));
-	piece.y = (global.board_y + (dest_i*64));
+	piece.x = (global.board_x + (dest_j*piece_size));
+	piece.y = (global.board_y + (dest_i*piece_size));
 	global.game_grid[dest_i, dest_j] = piece;
 }

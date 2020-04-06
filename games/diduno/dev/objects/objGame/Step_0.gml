@@ -6,17 +6,18 @@ if (global.gameState == GameState.NewQuestion) {
 		questionId = irandom(maxQuestion);
 		if (questionId == lastQuestion) { questionId = wrap(questionId + 1, 0, maxQuestion); }
 		lastQuestion = questionId;
-		db_create(tb_static, room_width/2, 135, 2, true, scrQuestionGet(questionId, QuestionProperties.Text));
+		db_create(tb_static, x, get_camera_t() + (ideal_h/4), 2, true, scrQuestionGet(questionId, QuestionProperties.Text));
 	}
 	
 	//Create options
 	else if (global.textboxDone) {
 		//Create boxes
 		if (!instance_exists(objOption)) {
-			optionsReferences[0] = instance_create_v(-sprite_get_width(sprOption), 279, "InstanceActors", objOption, scrQuestionGet(questionId, QuestionProperties.Option0), 0);
-			optionsReferences[1] = instance_create_v(-sprite_get_width(sprOption), 416, "InstanceActors", objOption, scrQuestionGet(questionId, QuestionProperties.Option1), 1);
-			optionsReferences[2] = instance_create_v(room_width, 279, "InstanceActors", objOption, scrQuestionGet(questionId, QuestionProperties.Option2), 2);
-			optionsReferences[3] = instance_create_v(room_width, 416, "InstanceActors", objOption, scrQuestionGet(questionId, QuestionProperties.Option3), 3);
+			var _y1 = get_camera_t() + floor(5*ideal_h/8), _y2 = get_camera_t() + floor(7*ideal_h/8), _w = half_w(sprOption);
+			optionsReferences[0] = instance_create_v(get_camera_l() - _w, _y1, "InstanceActors", objOption, scrQuestionGet(questionId, QuestionProperties.Option0), 0);
+			optionsReferences[1] = instance_create_v(get_camera_l() - _w, _y2, "InstanceActors", objOption, scrQuestionGet(questionId, QuestionProperties.Option1), 1);
+			optionsReferences[2] = instance_create_v(get_camera_r() + _w, _y1, "InstanceActors", objOption, scrQuestionGet(questionId, QuestionProperties.Option2), 2);
+			optionsReferences[3] = instance_create_v(get_camera_r() + _w, _y2, "InstanceActors", objOption, scrQuestionGet(questionId, QuestionProperties.Option3), 3);
 		}
 	
 		//Wait for player respone
@@ -63,7 +64,8 @@ else if (global.gameState == GameState.AnsweredQuestion) {
 		//Increase score
 		var _score_increase = (_correct_option == global.optionChosen)? ((questionTimer div GAME_SPEED) + 1)*10 : 0;
 		gameScore += _score_increase;
-		instance_create_v(48, 214, "InstanceActors", objScore, "+"+string(_score_increase));
+		var _x = get_camera_l() + 6, _y = get_camera_t() + floor(3*ideal_h/8);
+		instance_create_v(_x, _y, "InstanceActors", objScore, "+"+string(_score_increase));
 		
 		//Start countdown
 		answerCountdown = GAME_SPEED * 2;

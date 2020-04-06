@@ -1,12 +1,13 @@
 /// @description Draw HUD & text
 //Draw score
-draw_text(0, 0, gameScore);
+draw_text(get_camera_l() + 6, get_camera_t() + 6, gameScore);
 
 //Draw timer
 if (global.gameState == GameState.WaitingResponse || (global.gameState == GameState.AnsweredQuestion && db_exists)) {
-	draw_sprite(sprTimer, 0, 888, 124);
+	var _x = get_camera_x() + 256 + 2*font_w, _y = get_camera_t() + (ideal_h/4);
+	draw_sprite(sprTimer, 0, _x, _y);
 	var _val = (questionTimer == 0)? 0 : (questionTimer div GAME_SPEED) + 1;
-	draw_text_shadow(888, 124, string(_val));
+	draw_text_shadow(_x, _y, string(_val));
 }
 
 //Draw batched shadow text

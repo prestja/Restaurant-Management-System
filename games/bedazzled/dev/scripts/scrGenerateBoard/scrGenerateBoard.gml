@@ -7,7 +7,7 @@ while(true) {
 			global.destroy_grid[i, j] = false;
 			//Create piece
 			var _val = irandom(6);
-			global.game_grid[i, j] = instance_create_v(global.board_x + (j*64), global.board_y + (i*64), "InstanceActors", objJewel, _val, i, j);
+			global.game_grid[i, j] = instance_create_v(global.board_x + (j*piece_size), global.board_y + (i*piece_size), "InstanceActors", objJewel, _val, i, j);
 			//Choose a starting value that wont make a chain
 			var _chain = scrGetChain(i, j);
 			while(_chain != undefined) {

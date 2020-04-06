@@ -59,16 +59,6 @@ pub fn get(_conn: LogsDbConn, item: &rocket::http::RawStr) -> String
 	return str;
 }
 
-/*
-#[post("/")]
-pub fn post(_conn: LogsDbConn) -> &'static str 
-{
-	let _coll = _conn.collection("ingredients");
-	_coll.insert_one(doc!{ "item": "beef_patties" }, None).unwrap();
-	return "Inserted an element into database";
-}
-*/
-
 #[put("/?<name>&<count>")]
 pub fn put_count(_conn: LogsDbConn, name: String, count: u32) -> String {
 	let coll = _conn.collection("ingredients");

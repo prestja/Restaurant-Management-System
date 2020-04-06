@@ -80,6 +80,7 @@
 <head>
 
 	<script>
+		var pin = "";
 		function goBack() {
 			var home = document.getElementById("ifrm");
 			home.src = "landing.html";	
@@ -93,21 +94,15 @@
 			btn.style.display = "inline-block";
 		}
 		
-		function hideBack() {
-			var btn = document.getElementById("nav-back");
-			btn.style.display = "none";
-		}
-		
-		window.addEventListener('message', showButton, false);
-		
+
 		function showButton(message) {
+			console.log("1234");
 			var btn = document.getElementById("nav-back");
 			btn.style.display = message.data;
 		}
 		
-		function showBtnLocal() {
+		function showBtnLocal(){
 			var btn = document.getElementById("nav-back");
-			btn.style 
 		}
 		
 		function myFunction() {
@@ -121,6 +116,29 @@
 			}
 				document.getElementById("demo").innerHTML = txt;
 		}
+		
+		
+		window.addEventListener('message', master_listener, false);
+	
+		function master_listener(message) {
+			if(message.data.type == "back" )
+			{
+				var btn = document.getElementById("nav-back");
+				btn.style.display = "none";
+			}
+			else if(message.data.type == "pin")
+			{
+				console.log("this is the pin!");
+				if(pin == "" && message.data.pin == "")
+				{
+					console.log("pin is empty");
+					pin = message.data.pin;
+				}
+				document.getElementById("ifrm").contentWindow.postMessage(pin, "*");
+			}
+			
+			}
+			
 	</script>
 	
 </head>

@@ -86,11 +86,6 @@
 <head>
 	<link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet'>
 	
-	<script>
-		function handleStuff() {
-			parent.window.postMessage("inline-block", '*');
-		}
-	</script>
 </head>
 
 <body style="background-color:Black;">
@@ -102,13 +97,9 @@
 			<div class="title" onclick="document.location = '../menu.html'; handleStuff();">Order</div> 		
 		</div>	
 		<div class="column" style="background: url('../img/game.jpg') no-repeat; background-size: auto 100%;">
-<!--<<<<<<< HEAD-->
-			<button class="button" onclick="document.location = 'play.html'; handleStuff();"></button>
-			<div class="title" onclick="document.location = 'play.html'; handleStuff();">Play</div> 		
-=======
+
 			<button class="button" onclick="pinPrompt()"></button>
 			<div class="title" onclick="pinPrompt()">Play</div> 		
->>>>>>> aa7346f94436676830dc24cb782e8a5c6ec8968a
 		</div>	
 		<div class="column" style="background: url('../img/payment.jpg') no-repeat; background-size: auto 100%;">
 			<button class="button" onclick="document.location = '../payment.html'; handleStuff();"></button>
@@ -117,13 +108,29 @@
 	</div>
 /*prompts for user to enter pin*/
 <script>
-	function pinPrompt(){
-		var pin = prompt("Please enter a pin", "1234");
-		if(pin != null)
+	window.addEventListener('message', recPin, false);
+	function recPin(message){
+		console.log(message.data);
+		
+		if(message.data == "")
 		{
-			document.location = 'play.html';
-			localStorage.setItem('saved_pin', pin);
-		}		
+			console.log("Message data");
+			var pin2 = prompt("Please enter a pin", "1234");
+			console.log(pin2);
+			var pin3 = {
+			type: "pin", pin: pin2
+			};
+			parent.window.postMessage(pin3, "*");
+		}
+		document.location = "play.html";
+	}
+	function pinPrompt(){
+		
+		var thingy = {
+			type: "pin", pin: ""
+		};
+		parent.window.postMessage(thingy,"*");
+
 	}
 </script>
 </body>

@@ -157,28 +157,27 @@
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
-	var arrayHead = new Array();
-	arrayHead = ['Order Id', '# Items', 'Method of Payment', 'Total'];
+	//adds item for the sales report onto the table
 	function addItem(item) {
 		var salesTab = document.getElementById('sales');
 		
-		var rowCnt = salesTab.rows.length;
-		var tr = salesTab.insertRow(rowCnt);
+		var rowCnt = salesTab.rows.length; //gets current amount of rows
+		var tr = salesTab.insertRow(rowCnt); //adds new row below the last row
 		tr = salesTab.insertRow(rowCnt);
 		
-		var td = document.createElement('td');
+		var td = document.createElement('td'); //inserts order id into the table
 		td = tr.insertCell(0);
 		td.append(item._id.$oid);
 		
-		td = document.createElement('td');
+		td = document.createElement('td'); //inserts the number of items for the order onto the table
 		td = tr.insertCell(1);
 		td.append('Num items here');
 		
-		td = document.createElement('td');
+		td = document.createElement('td'); //inserts the method of payment for an order onto a table
 		td = tr.insertCell(2);
 		td.append('Method of payment here');
 		
-		td = document.createElement('td');
+		td = document.createElement('td'); //inserts the total for the order onto the table
 		td = tr.insertCell(3);
 		td.append('total here');
 	}

@@ -26,7 +26,7 @@ pub struct Order {
 	#[serde(default)] status: u32  // ordered = 0, NeedStaff = 1, NeedManager = 2, Ready = 3, Served = 4, Closed = 5	
 }
 
-#[get("/", rank = 3)]
+#[get("/", rank = 4)]
 pub fn get(_conn: LogsDbConn) -> String {
 	let mut str = String::from("[\n\t");
 	let _coll = _conn.collection("orders");
@@ -143,6 +143,36 @@ pub fn get_table_orders(_conn: LogsDbConn, tableid: u32) -> String {
 	doc_list.pop();
 	doc_list.push_str("\n]");
 	return doc_list;
+}
+
+#[get("/comp")]
+pub fn get_comps(_conn: LogsDbConn) -> String
+{
+	let mut _str = String::from("[\n\t");
+	let _doc = doc!{"comp": {"$gte": 0}};
+	let mut _filter = mongodb::coll::options::FindOptions::new();
+	_filter.projection = Some(doc!{"comp": 1, "table": 1, "empname": 1});
+	let _coll = _conn.collection("orders");
+	let _cursor = _coll.find(Some(_doc.clone()), Some(_filter.clone())).unwrap();
+	for result in _cursor
+	{
+		if let Ok(item) = result
+       	        {
+                        let _bson = mongodb::to_bson(&item).unwrap();
+       	                let _json = serde_json::ser::to_string(&_bson).unwrap();
+               	        _str.push_str(&_json);
+                }
+       	        _str.push_str(",\n\t");
+        }
+       	if _str.len() <= 3
+        {
+       	        return String::from("No entries found");
+        }
+        _str.pop();
+       	_str.pop();
+        _str.pop();
+       	_str.push_str("\n]");
+        return _str;
 }
 
 #[post("/", data = "<order>")]

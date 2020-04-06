@@ -111,9 +111,8 @@
 	.items {
 		background-color: #A9A9A9 !important; //makes Gray background
 		padding: 10px;
-		margin: 10px 10px 10px 10px;
+		margin: 10px;
 		width: 80%;
-		height: 300px;
 		display: inline-block;
 		text-align: center;
 		border: 5px;
@@ -151,6 +150,7 @@
 		position:relative;
 		right:10px;
 		left:5px;
+		margin-bottom: 5px;
 	}
 </style>
 <head>
@@ -160,23 +160,33 @@
 	function addItem(item) {
 		var compsTab = document.getElementById('comps');
 		
-		var rowCnt = salesTab.rows.length; //gets current amount of rows
-		var tr = salesTab.insertRow(rowCnt); //adds new row below the last row
-		tr = salesTab.insertRow(rowCnt);
+		var rowCnt = compsTab.rows.length; //gets current amount of rows
+		var tr = compsTab.insertRow(rowCnt); //adds new row below the last row
+		tr = compsTab.insertRow(rowCnt);
 		
 		var td = document.createElement('td'); //inserts item into the table
 		td = tr.insertCell(0);
-		td.append(item.name);
+		td.append(item.item);
 		
 		var element = document.createElement('input');
-		element.attr('type','text');
-		element.attr('value',item.amount);
+		element.setAttribute('type','number');
+		element.setAttribute('value',item.count);
+		element.setAttribute('id',item.item);
 		td = document.createElement('td'); //inserts amount name
 		td = tr.insertCell(1);
 		td.appendChild(element);
+		
+		var element = document.createElement('input');
+		element.setAttribute('type', 'button');
+		element.setAttribute('value','SAVE');
+		element.setAttribute('class', item.item);
+		element.setAttribute('onclick', 'editTable(this.className)');
+		td = document.createElement('td'); //creates save button for each item
+		td = tr.insertCell(2);
+		td.appendChild(element);
 	}
 		$(document).ready(function() {
-			/*var url = "http://159.89.238.181:8080/api/items?".concat(category);
+			var url = "http://159.89.238.181:8080/api/ingredients";
 			$.ajax({
 				url: url,
 				type: 'get',
@@ -186,8 +196,26 @@
 						addItem(item)
 					);
 				}
-			})*/
+			})
 		}); 
+		
+	function editTable(item)
+	{
+		var amount = document.getElementById(item).value;
+		amount = parseInt(amount);
+		var url="http://159.89.238.181:8080/api/ingredients?name=";
+				url = url.concat(item);
+				url = url.concat('&count=');
+				url = url.concat(amount);
+		$.ajax({
+			url: url,
+			type: 'POST',
+			success: function(status) {				
+				var j = $.parseJSON(status);
+				alert(j.message);
+			}
+		});
+	}
     </script>
 </head>
 <body style="background-color:Black;">
@@ -233,15 +261,12 @@
 			<h2>INVENTORY REPORT</h2>
 			<hr color="black">
 			<!--edit button makes it to where the amount and 86'd can be edited-->
-			<span class="button-group">
-				<button onclick="editTable()'">SUBMIT INVENTORY</button>
-			</span>
-			<br><br>
 			<span style="text-align:left !important;position:relative;left:10px;">
-				<table style="width:90%">
+				<table style="width:90%" id = 'comps'>
 					<tr>
 						<th>ITEM</th>
 						<th>AMOUNT</th>
+						<th></th>
 					</tr>
 				</table>
 			</span>

@@ -54,6 +54,7 @@ fn main()
 	// staff functions
 	.mount("/api/staff", routes![staff::get_all])
 	.mount("/api/staff", routes![staff::get])
+	.mount("/api/staff", routes![staff::get_names])
 	.mount("/api/staff", routes![staff::get_login])
 	.mount("/api/staff", routes![staff::post])
 	// item functions

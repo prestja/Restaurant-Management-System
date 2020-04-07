@@ -199,8 +199,8 @@ pub fn post(_conn: LogsDbConn, order: Json<Order>) -> String {
 	return serde_json::to_string(&response).unwrap();
 }
 
-#[post("/comp?<table>&<amount>")]
-pub fn comp (_conn: LogsDbConn, table: u32, amount: f32) -> String {
+#[post("/comp?<table>&<amount>&<employee>")]
+pub fn comp (_conn: LogsDbConn, table: u32, amount: f32, employee: String) -> String {
 	// this document is for the query (what to find)
 	let _doc = doc! {
 		"table": table,
@@ -214,7 +214,8 @@ pub fn comp (_conn: LogsDbConn, table: u32, amount: f32) -> String {
 	// this document applies new or updates values
 	let _comp = doc! {
 		"$set": {
-			"comp": amount
+			"comp": amount,
+			"employee": employee
 		}
 	};
 

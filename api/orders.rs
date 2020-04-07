@@ -151,22 +151,21 @@ pub fn get_comps(_conn: LogsDbConn) -> String
 	let mut _str = String::from("[\n\t");
 	let _doc = doc!{"comp": {"$gte": 0}};
 	let mut _filter = mongodb::coll::options::FindOptions::new();
-	_filter.projection = Some(doc!{"comp": 1, "table": 1, "empname": 1});
 	let _coll = _conn.collection("orders");
-	let _cursor = _coll.find(Some(_doc.clone()), Some(_filter.clone())).unwrap();
+	let _cursor = _coll.find(Some(_doc.clone()), None).unwrap();
 	for result in _cursor
 	{
 		if let Ok(item) = result
-       	        {
-                        let _bson = mongodb::to_bson(&item).unwrap();
-       	                let _json = serde_json::ser::to_string(&_bson).unwrap();
-               	        _str.push_str(&_json);
-                }
-       	        _str.push_str(",\n\t");
+        {
+            let _bson = mongodb::to_bson(&item).unwrap();
+            let _json = serde_json::ser::to_string(&_bson).unwrap();
+   	        _str.push_str(&_json);
+   		}
+        _str.push_str(",\n\t");
         }
        	if _str.len() <= 3
         {
-       	        return String::from("No entries found");
+   	        return String::from("No entries found");
         }
         _str.pop();
        	_str.pop();

@@ -21,9 +21,6 @@ h2 {
 
 .rmvButton {border-radius: 50%;}
 
-#btn 1 .button {
-
-}
 
 
 </style>
@@ -32,10 +29,8 @@ h2 {
 <script>	
 	window.addEventListener('message', itemName, false);
 	function itemName(message){
-		var x = document.getElementById("para");
-		var btn = document.getElementById("btn");
-		x.innerHTML += message.data + "</br>";
-		
+		console.log(JSON.stringify(message.data));
+		//document.body.innerHTML += message.data + "</br>";	
 	}
 
 </script>
@@ -46,11 +41,6 @@ h2 {
 <pre>------------------------------------------------------</pre>
 </h5>
 
-	<div class="container">
-		<div id="myDiv">
-			<p id="para"> <button class="button .rmvButton" id="btn"> X </button></p>
-		</div>
-	</div>
 
 </body>
 </html>

@@ -74,6 +74,34 @@ pub fn get(_conn: LogsDbConn, id: u32) -> String {
 	return str;
 }
 
+#[get("/names")]
+pub fn get_names(_conn: LogsDbConn) -> String {
+	let mut str = String::from("[\n\t");
+	let mut _filter = mongodb::coll::options::FindOptions::new();
+	_filter.projection = Some(doc!{"names" : 1, "_id" : 0});
+	let _coll = _conn.collection("staff");
+	let cursor = _coll.find(None, Some(_filter.clone())).unwrap();
+	for result in cursor 
+	{ 
+		if let Ok(item) = result 
+		{
+			let _bson = mongodb::to_bson(&item).unwrap();
+			let _json = serde_json::ser::to_string(&_bson).unwrap();
+			str.push_str(&_json);
+		}
+		str.push_str(",\n\t");
+	}
+	if str.len() <= 3
+	{
+		return String::from("No entries found");
+	}
+	str.pop();
+	str.pop();
+	str.pop();
+	str.push_str("\n]");
+	return str;
+}
+
 #[get("/login?<id>&<password>")]
 pub fn get_login(_conn: LogsDbConn, id: String, password: String) -> String {	
 	let doc = doc!{"id": id, "password": password};

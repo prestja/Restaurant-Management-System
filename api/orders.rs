@@ -189,11 +189,13 @@ pub fn post(_conn: LogsDbConn, order: Json<Order>) -> String {
 	};
 	
 	let _coll = _conn.collection("orders");
-	_coll.insert_one(doc, None).unwrap();
+	let _update = doc!{"$currentDate": { "placed": true}};
+	_coll.insert_one(doc.clone(), None).unwrap();
 	let response = json!({ // generate a response for the user
 		"code": 200,
 		"message": "Inserted order into collection orders"
 	});
+	_coll.find_one_and_update(doc.clone(), _update, None).unwrap();
 	return serde_json::to_string(&response).unwrap();
 }
 

@@ -185,7 +185,7 @@
 		//td = tr.insertCell(2);
 		td.appendChild(element);
 	}
-		$(document).ready(function() {
+		$(document).ready(function() {//on load, add each item from ingredients in
 			var url = "http://159.89.238.181:8080/api/ingredients";
 			$.ajax({
 				url: url,
@@ -199,12 +199,12 @@
 			})
 		}); 
 		
-	function editTable(item)
+	function editTable(ingredient)//edits the ingredient table if the save button is pressed
 	{
-		var amount = document.getElementById(item).value;
+		var amount = document.getElementById(ingredient).value;//get amount input for ingredient
 		amount = parseInt(amount);
-		var url="http://159.89.238.181:8080/api/ingredients?name=";
-				url = url.concat(item);
+		var url="http://159.89.238.181:8080/api/ingredients?name=";//update the amount for the ingredient
+				url = url.concat(ingredient);
 				url = url.concat('&count=');
 				url = url.concat(amount);
 		$.ajax({
@@ -215,6 +215,37 @@
 				alert(j.message);
 			}
 		});
+		
+			var url = "http://159.89.238.181:8080/api/items";//get all items on the menu and pass them through the update item function
+			$.ajax({
+                url: url,
+                type: 'get',
+                dataType: 'JSON',
+                success: function(response) {
+                    response.forEach(item => 
+                        updateItem(item, ingredient, amount)
+                    );
+                }
+            });
+	}
+	
+	function updateItem(item, ingredient, amount){//updates the status of an item if the items ingredients inventory was set to 0
+		var ing = item.ingredients; //gets list of ingredients for the item
+		var url="http://159.89.238.181:8080/api/items?id=";
+				url = url.concat(item._id.$oid);
+				url = url.concat('&status=');
+		if(ing != undefined){
+			ing.forEach(function(element){ //for each ingredient for an item
+				if(element == ingredient && amount == 0)//if the ingredient was changed to amount = 0, update the status of the item on the menu to 0
+				{
+					url = url.concat('0');
+					$.post(url, function(status) {				
+						var j = $.parseJSON(status);
+							console.log(j.message);
+						});
+				}
+			});
+		}
 	}
     </script>
 </head>

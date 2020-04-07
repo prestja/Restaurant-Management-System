@@ -75,12 +75,11 @@
 		}
 		clone.appendTo('.container');
 		clone.children("button").html(item.name);
-		clone.children("button").attr("value",item.name);
+		clone.children("button").attr("value",item);
 		clone.children("button").attr("id",item._id.$oid);
-		clone.children("div").html(item.ingredients);
-		clone.children("div").html(item.nutrition);
-		clone.children("div").attr("ingr", item.ingredients);
-		clone.children("div").attr("nutr", item.nutrition);
+		clone.children("button").attr("nutr", item.nutrition);
+		clone.children("button").attr("ingr", item.ingredients);
+		
 		return clone;
 	}
 	

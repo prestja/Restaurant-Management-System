@@ -110,7 +110,9 @@
 </style>
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-	
+	<script>
+		
+	</script>
 </head>
 
 <body style="background-color:Black;">
@@ -133,7 +135,7 @@
 		<h2 id = "headerType">BEVERAGES</h2>
 		<hr color = "black">
 		<body>
-			<iframe id = "order_items" src="menu_category.html?category=3" onclick="updateOrder()" style="width:95%; height: 85%" ></iframe>
+			<iframe id = "order_items" src="menu_category.html?category=3" onclick="updateOrder(); " style="width:95%; height: 85%" ></iframe>
 		</body>
 	</div>
 	<script>
@@ -176,17 +178,31 @@
 			target.contentWindow.postMessage(message.data, '*');
 		}
 		
+		function showStuff(){
+			//-------------------------------------//
+			var coll = document.getElementsByClassName("collapsible");
+			var i;
+	
+			for (i = 0; i < coll.length; i++) {
+				coll[i].addEventListener("click", function() {
+					this.classList.toggle("active");
+					var content = this.nextElementSibling;
+					if (content.style.maxHeight){
+						content.style.maxHeight = null;
+					} else {
+						content.style.maxHeight = content.scrollHeight + "px";
+					}	 
+				});
+			}
+		}
+		
+		
 	</script>
 	
 <!--Stores div for receipt items-->
 	<div class = "receipt">
 		<h2 text-align="center">ORDER</h2>
-		<div style="display:inline-block; width:45%;text-align:left;height:20px">
-			<h4>DESCRIPTION</h4>
-		</div>
-		<div style="display:inline-block;width:45%;text-align:right;height:20px">
-			<h4>QTY</h4>
-		</div>
+		
 		<hr color = "black">
 		<!--form for known allergies so kitchen and waitstaff can keep track-->
 		<div style = "color:#B22222 !important;text-align:left;position:relative;left:10px">
@@ -202,7 +218,7 @@
 		</div>
 		<hr color="black">
 		
-		<iframe src="customer/customer_order.html" id="orderFrame" style="width:95%; height: 50%"></iframe>
+		<iframe src="customer/customer_order.html" id="orderFrame" style="width:95%; height: 60%"></iframe>
 		
 		<!--button submits the order-->
 		<div class="menu-button-group" style="position:relative;bottom:17px !important;width:90%">

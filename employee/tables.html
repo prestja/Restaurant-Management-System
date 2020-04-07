@@ -127,22 +127,29 @@
 			//checks the table number
 			var t = document.getElementById("headerType");
 			var tableNum = parseInt(t.value);
-			//gets the amount input
+			//gets the amount input, and the name input
 			var amount = document.getElementById("amt").value;
+			var name = document.getElementById("emp").value;
 			//if the amount is valid, send an ajax request with the table number and amount, then print the result
-			if(amount !== "")
+			if(amount !== "" && name != "")
 			{
 				var url = 'http://159.89.238.181:8080/api/orders/comp?table=';
 				url = url.concat(tableNum);
 				url = url.concat('&amount=');
 				url = url.concat(amount);
+				url = url.concat('&employee=');
+				url = url.concat(name);
 				$.post(url, function(status) {				
 				var j = $.parseJSON(status);
 				alert(j.message);
 			});
 			}
+			else{
+				alert("Employee name and amount cannot be empty");
+			}
 			
 			document.getElementById("amt").value = "";
+			document.getElementById("emp").value = "";
 		}
     </script>
 </head>
@@ -212,7 +219,10 @@
 		</table>
 		<hr color="black">
 		<div class="button-group">
+			<label>AMOUNT: </label>
 			<input type="number" id="amt" placeholder="0.00" max=100><br><br>
+			<label>EMPLOYEE NAME:</label>
+			<input type="text" id="emp" placeholder="John Doe" size=10 maxlength=30><br><br>
 			<button id="comp" onclick="handleComp()">COMP</button>
 		</div>
 	</div>

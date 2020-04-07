@@ -77,7 +77,9 @@
 		clone.children("button").html(item.name);
 		clone.children("button").attr("value",item.name);
 		clone.children("button").attr("id",item._id.$oid);
-		clone.children("div").html(item.description);
+		clone.children("button").attr("nutrition", item.nutrition);
+		clone.children("button").attr("ingredients", item.ingredients);
+		
 		return clone;
 	}
 	
@@ -89,12 +91,12 @@
 			
 	}
 	
-	function showContent(){
-	var coll = document.getElementsByClassName("collapsible");
-	var i;
-
-	for (i = 0; i < coll.length; i++) {
-		coll[i].addEventListener("click", function() {
+	function showContent(nutrition){
+		var coll = document.getElementsByClassName("collapsible");
+		var i;
+	
+		for (i = 0; i < coll.length; i++) {
+			coll[i].addEventListener("click", function() {
 				this.classList.toggle("active");
 				var content = this.nextElementSibling;
 				if (content.style.maxHeight){
@@ -102,13 +104,13 @@
 				} else {
 					content.style.maxHeight = content.scrollHeight + "px";
 				}	 
-		});
+			});
+		}
 	}
-	}
+	
 	
 	$(document).ready(function() {
             var queryStr = window.location.search; // will give you ?sndReq=234
-			
 			var category = queryStr.substr(1)
 			console.log(category);
 			var url = "http://159.89.238.181:8080/api/items?".concat(category);
@@ -121,7 +123,7 @@
                         addItem(item)
                     );
                 }
-            })
+            });
         }); 
 	</script>
 	
@@ -130,7 +132,7 @@
 <body style="background-color:White;">
 	<div class = "container" style="width: 100%; height: 100%; overflow: auto; background-color:red">
 		<div id ="item_template">
-			<button class="collapsible" onclick="showContent(); handleStuff(this.value);">Open Collapsible</button>
+			<button class="collapsible" onclick="handleStuff(this.id);">Open Collapsible</button>
 			<div class="content">
 				<p>Some Text</p>
 				<p>Some Text</p>
@@ -140,9 +142,9 @@
 	</div>
 	
 	
-<script>
+	<script>
 
-</script>
+	</script>
 	
 </body>
 </html>

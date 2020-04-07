@@ -21,7 +21,7 @@
 /*Button group for creating the buttons at top of page*/
 	/*Same button group from the main page*/
 	.button-group button {
-		background-color: #D3D3D3; /*Makes Gray background*/
+		background: #D3D3D3; /*Makes Gray background*/
 		border:  0px #D3D3D3;  /*Border around boxes is Gray*/
 		color: black; /* White text */
 		padding: 10px 10px; /* Some padding */
@@ -112,19 +112,18 @@
 	.items {
 		background-color: #A9A9A9 !important; //makes Gray background
 		padding: 10px;
-		margin: 10px 10px 10px 10px;
-		width: 60vw;
-		height: 300px;
+		margin: 10px;
 		display: inline-block;
 		text-align: center;
 		border: 5px;
 		border-color: black;
-		position: relative;
-		left: 150px;
+		position: absolute;
+		left: 200px;
+		width:350px;
 	}
 		/*Created a tool button similar to menu buttons*/
 	.tool-button-group button {
-		background-color: #D3D3D3; /*Makes Gray background*/
+		background: #D3D3D3; /*Makes Gray background*/
 		border:  0px #FFFFFF;  /*Border around boxes is black*/
 		color: black; /* White text */
 		padding: 10px 10px; /* Some padding */
@@ -144,13 +143,16 @@
 	.tool-button-group button:hover {
 		background-color: #3e8e41;
 	}
-	table, th, td {
+	
+	table, th, td {/*stores table information*/
 		border: 1px solid black;
 		border-collapse: collapse;
 		padding: 5px;
 		position:relative;
 		right:10px;
 		left:5px;
+		margin-bottom:5px;
+		margin-right:10px;
 	}
 </style>
 <head>
@@ -158,30 +160,39 @@
 	<script>
 	//adds item for the comps report onto the table
 	function addItem(item) {
+	if(item.employee != null && item.placed != null){
 		var compsTab = document.getElementById('comps');
 		
-		var rowCnt = salesTab.rows.length; //gets current amount of rows
-		var tr = salesTab.insertRow(rowCnt); //adds new row below the last row
-		tr = salesTab.insertRow(rowCnt);
+		var rowCnt = compsTab.rows.length; //gets current amount of rows
+		var tr = compsTab.insertRow(rowCnt); //adds new row below the last row
+		tr = compsTab.insertRow(rowCnt);
 		
-		var td = document.createElement('td'); //inserts employee id into the table
+		var td = document.createElement('td'); //inserts date into the table
 		td = tr.insertCell(0);
-		td.append(item.id);
+		var placed = item.placed.$date.$numberLong; //gets the date the order was placed and formats, then adds it onto the table
+		var d = new Date(0);
+		d.setUTCSeconds(placed/1000);
+		month = d.getMonth()+1;
+		day=d.getDate();
+		year = d.getFullYear();
+		d = month + '-' + day + '-' + year;
+		td.append(d);
 		
 		td = document.createElement('td'); //inserts employee name
 		td = tr.insertCell(1);
-		td.append(item.fname + ' ' + item.lname);
+		td.append(item.employee);
 		
 		td = document.createElement('td'); //inserts table number
 		td = tr.insertCell(2);
-		td.append('Table number here');
+		td.append(item.table);
 		
 		td = document.createElement('td'); //inserts the amount comped for the order onto the table
 		td = tr.insertCell(3);
-		td.append('amount here');
+		td.append("$" + item.comp);
+	}
 	}
 		$(document).ready(function() {
-			/*var url = "http://159.89.238.181:8080/api/items?".concat(category);
+			var url = "http://159.89.238.181:8080/api/orders/comp";
 			$.ajax({
 				url: url,
 				type: 'get',
@@ -191,8 +202,69 @@
 						addItem(item)
 					);
 				}
-			})*/
+			});
+			dailyReport();
 		}); 
+		
+	function dailyReport(){//filters table to today
+		document.getElementById('daily').style.background = "#3e8e41";
+		document.getElementById('monthly').style.background = "#D3D3D3";
+		var table, tr, td, textValue;
+		var today = new Date();//gets today and formats it
+		var dd = String(today.getDate()).padStart(2,'0');
+		var mm = String(today.getMonth()+1).padStart(2,'0');
+		var yyyy = today.getFullYear();
+		today = mm + '-' + dd + '-' + yyyy;
+		
+		table = document.getElementById("comps");//gets sales table and sets the element to the table row
+		tr = table.getElementsByTagName("tr");
+		for(var i = 0; i < tr.length; i++)//for each item in the table, if there is a td in the tr, check if the text value is equal to todays date.
+		//if it is todays date, set the display to "", otherwise hide the table row
+		{
+			td = tr[i].getElementsByTagName("td")[1];
+			if(td)
+			{
+				txtValue = td.textContent || td.innerText;
+				if (txtValue >= today)
+				{
+					tr[i].style.display = "";
+				}
+				else{
+					tr[i].style.display = "none";
+				}
+			}
+		}
+	}
+	function monthlyReport(){//filters table by month (last month to this month)
+		document.getElementById('monthly').style.background = '#3e8e41';
+		document.getElementById('daily').style.background = "#D3D3D3";
+		var today = new Date();//gets todays date and the start date and formats it
+		var startDate = new Date();
+		var dd = String(today.getDate()).padStart(2,'0');
+		var mm = String(today.getMonth()+1).padStart(2,'0');
+		var yyyy = today.getFullYear();
+		today = mm + '-' + dd + '-' + yyyy;
+		mm = String(startDate.getMonth()).padStart(2,'0');
+		startDate = mm + '-' + dd + '-' + yyyy;
+		
+		table = document.getElementById("comps");//gets sales table elements
+		tr = table.getElementsByTagName("tr");
+		for(var i = 0; i < tr.length; i++)//for each element in the table, check if the date is between startDate and today and sets the display to "" if it is, if not, set the display to none
+		{
+			td = tr[i].getElementsByTagName("td")[1];
+			if(td)
+			{
+				txtValue = td.textContent || td.innerText;
+				if (txtValue <= today || txtValue >= startDate)
+				{
+					tr[i].style.display = "";
+				}
+				else{
+					tr[i].style.display = "none";
+				}
+			}
+		}
+	}
 	</script>
 </head>
 <body style="background-color:Black;">
@@ -236,11 +308,17 @@
 	<!--holds comps report table-->
 		<div class = "items">
 			<h2>COMPS REPORT</h2>
+			<hr color = "black">
+			<div class = 'menu-button-group'><!--holds filters for the table-->
+				<button onclick="dailyReport()" id="daily" style="width:40%!important;display:inline-block!important">DAILY</button>
+				<button onclick="monthlyReport()" id="monthly" style="width:40%!important;display:inline-block!important">MONTHLY</button>
+			</div>
+			<br>
 			<hr color="black">
-			<span style="text-align:left !important;position:relative;left:10px;">
+			<span style="text-align:left !important;position:relative;left:10px!important">
 				<table style="width:90%" id = "comps">
 					<tr>
-						<th>ID</th>
+						<th>DATE</th>
 						<th>EMPLOYEE NAME</th>
 						<th>TABLE #</th>
 						<th>AMOUNT</th>

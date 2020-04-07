@@ -175,18 +175,38 @@
 		
 		td = document.createElement('td'); //inserts start time
 		td = tr.insertCell(2);
-		td.append('Start time here');
+		var cIn = 'start time here'; //gets the date the order was placed and formats, then adds it onto the table
+		var d = new Date(0);
+		d.setUTCSeconds(cIn/1000);
+		month = d.getMonth()+1;
+		day=d.getDate();
+		year = d.getFullYear();
+		d = month + '-' + day + '-' + year;
+		td.append(d);
+		
+		td = document.createElement('td'); //inserts start time
+		td = tr.insertCell(3);
+		var t = new Date(0);
+		t.setUTCSeconds(cIn/1000);
+		td.append(t.toLocaleTimeString('en-US'));
 		
 		td = document.createElement('td'); //inserts end time
-		td = tr.insertCell(3);
-		td.append('end time here');
+		td = tr.insertCell(4);
+		var cOut = 'end time here';
+		var t = new Date(0);
+		t.setUTCSeconds(cOut/1000);
+		td.append(t.toLocaleTimeString('en-US'));
 		
 		td = document.createElement('td'); //inserts total hours worked
-		td = tr.insertCell(4);
-		td.append('total hours here');
+		td = tr.insertCell(5);
+		var totalHours = cOut - cIn;
+		totalHours = totalHours/1000;//convert to seconds
+		totalHours = totalHours/60;//convert to minutes
+		totalHours = totalHours/60;//convert to hours
+		td.append(parseInt(totalHours));
 		
 		td = document.createElement('td'); //inserts total tips for employee
-		td = tr.insertCell(5);
+		td = tr.insertCell(6);
 		td.append('tips here');
 	}
 		$(document).ready(function() {
@@ -201,7 +221,68 @@
 					);
 				}
 			})*/
+			dailyReport();
 		}); 
+		
+	function dailyReport(){//filters table to today
+		document.getElementById('daily').style.background = "#3e8e41";
+		document.getElementById('monthly').style.background = "#D3D3D3";
+		var table, tr, td, textValue;
+		var today = new Date();//gets today and formats it
+		var dd = String(today.getDate()).padStart(2,'0');
+		var mm = String(today.getMonth()+1).padStart(2,'0');
+		var yyyy = today.getFullYear();
+		today = mm + '-' + dd + '-' + yyyy;
+		
+		table = document.getElementById("labor");//gets sales table and sets the element to the table row
+		tr = table.getElementsByTagName("tr");
+		for(var i = 0; i < tr.length; i++)//for each item in the table, if there is a td in the tr, check if the text value is equal to todays date.
+		//if it is todays date, set the display to "", otherwise hide the table row
+		{
+			td = tr[i].getElementsByTagName("td")[1];
+			if(td)
+			{
+				txtValue = td.textContent || td.innerText;
+				if (txtValue >= today)
+				{
+					tr[i].style.display = "";
+				}
+				else{
+					tr[i].style.display = "none";
+				}
+			}
+		}
+	}
+	function monthlyReport(){//filters table by month (last month to this month)
+		document.getElementById('monthly').style.background = '#3e8e41';
+		document.getElementById('daily').style.background = "#D3D3D3";
+		var today = new Date();//gets todays date and the start date and formats it
+		var startDate = new Date();
+		var dd = String(today.getDate()).padStart(2,'0');
+		var mm = String(today.getMonth()+1).padStart(2,'0');
+		var yyyy = today.getFullYear();
+		today = mm + '-' + dd + '-' + yyyy;
+		mm = String(startDate.getMonth()).padStart(2,'0');
+		startDate = mm + '-' + dd + '-' + yyyy;
+		
+		table = document.getElementById("labor");//gets sales table elements
+		tr = table.getElementsByTagName("tr");
+		for(var i = 0; i < tr.length; i++)//for each element in the table, check if the date is between startDate and today and sets the display to "" if it is, if not, set the display to none
+		{
+			td = tr[i].getElementsByTagName("td")[1];
+			if(td)
+			{
+				txtValue = td.textContent || td.innerText;
+				if (txtValue <= today || txtValue >= startDate)
+				{
+					tr[i].style.display = "";
+				}
+				else{
+					tr[i].style.display = "none";
+				}
+			}
+		}
+	}
     </script>
 </head>
 <body style="background-color:Black;">
@@ -245,12 +326,19 @@
 	<!--holds labor report-->
 		<div class = "items">
 			<h2>LABOR REPORT</h2>
+			<hr color ="black">
+			<div class = 'menu-button-group'><!--holds filters for the table-->
+				<button onclick="dailyReport()" id="daily" style="width:40%!important;display:inline-block!important">DAILY</button>
+				<button onclick="monthlyReport()" id="monthly" style="width:40%!important;display:inline-block!important">MONTHLY</button>
+			</div>
+			<br>
 			<hr color="black">
 			<span style="text-align:left !important;position:relative;left:10px;">
 				<table style="width:90%" id="labor">
 					<tr>
 						<th>ID</th>
 						<th>NAME</th>
+						<th>DATE</th>
 						<th>START TIME</th>
 						<th>END TIME</th>
 						<th>TOTAL HOURS</th>

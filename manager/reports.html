@@ -210,6 +210,7 @@
 		}
 	}
 		$(document).ready(function() {
+			dailyReport();
 			var url = "http://159.89.238.181:8080/api/orders";
 			$.ajax({
 				url: url,
@@ -221,7 +222,6 @@
 					);
 				}
 			});
-			dailyReport();
 		}); 
 	function dailyReport(){//filters table to today
 		document.getElementById('daily').style.background = "#3e8e41";

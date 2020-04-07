@@ -48,6 +48,27 @@ pub fn get_all(_conn: LogsDbConn) -> String {
 	return str;
 }
 
+#[get("/?<code>")]
+pub fn get_code (_conn: LogsDbConn, code: String) -> String{
+	let doc = doc! {
+		"code": code
+	};
+	let coll = _conn.collection("coupons");
+	let result = coll.find_one(Some(doc), None);
+	if let Ok(opt) = result {
+		if let Some(item) = opt {
+			let _bson = mongodb::to_bson(&item).unwrap();
+			let _json = serde_json::ser::to_string(&_bson).unwrap();
+			return _json;
+		}
+	}
+	let response = json!({
+		"code": 404,
+		"message": "Could not find coupon"
+	});
+	return serde_json::to_string(&response).unwrap();
+}
+
 //Deserialize and post the new coupon to the database
 #[post("/", data = "<coupon>")]
 pub fn post(_conn: LogsDbConn, coupon: Json<Coupon>) -> String {

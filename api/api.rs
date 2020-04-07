@@ -65,7 +65,8 @@ fn main()
 	// customer functions
 	.mount("/api/customers", routes![customers::update_rewards])
 	// coupons functions
-	//.mount("/api/coupons", routes![coupons::get_code])
+	.mount("/api/coupons", routes![coupons::get_all])
+	.mount("/api/coupons", routes![coupons::get_code])
 	.mount("/api/coupons", routes![coupons::post])
 	// mount and launch	
 	.attach(LogsDbConn::fairing())

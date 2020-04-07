@@ -1,14 +1,11 @@
 use crate::rocket_contrib;
 use crate::rocket_contrib::databases::mongodb::db::ThreadedDatabase;
 use crate::LogsDbConn;
-use crate::serde_derive;
 
 use rocket::response::content;
 use rocket_contrib::{databases::mongodb};
 use rocket_contrib::json::Json;
 use mongodb::{doc, bson};
-use mongodb::coll::options;
-use mongodb::oid;
 
 #[derive(Serialize, Deserialize)]
 pub struct Customer {

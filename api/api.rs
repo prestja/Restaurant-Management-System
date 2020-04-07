@@ -18,6 +18,7 @@ mod customers;
 mod items;
 mod notifications;
 mod coupons;
+mod timeclock;
 
 #[database("mongodb_logs")]
 pub struct LogsDbConn(mongodb::db::Database);
@@ -68,6 +69,8 @@ fn main()
 	.mount("/api/coupons", routes![coupons::get_all])
 	.mount("/api/coupons", routes![coupons::get_code])
 	.mount("/api/coupons", routes![coupons::post])
+	.mount("/api/timeclock", routes![timeclock::clock_in])
+	.mount("/api/timeclock", routes![timeclock::clock_out])
 	// mount and launch	
 	.attach(LogsDbConn::fairing())
 	.attach(cors)

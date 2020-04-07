@@ -75,10 +75,10 @@
 		}
 		clone.appendTo('.container');
 		clone.children("button").html(item.name);
-		clone.children("button").attr("value",item);
+		clone.children("button").attr("value",item.name);
 		clone.children("button").attr("id",item._id.$oid);
-		clone.children("button").attr("nutr", item.nutrition);
-		clone.children("button").attr("ingr", item.ingredients);
+		clone.children("button").attr("nutrition", item.nutrition);
+		clone.children("button").attr("ingredients", item.ingredients);
 		
 		return clone;
 	}
@@ -132,7 +132,7 @@
 <body style="background-color:White;">
 	<div class = "container" style="width: 100%; height: 100%; overflow: auto; background-color:red">
 		<div id ="item_template">
-			<button class="collapsible" onclick="handleStuff(this.value);">Open Collapsible</button>
+			<button class="collapsible" onclick="handleStuff(this.id);">Open Collapsible</button>
 			<div class="content">
 				<p>Some Text</p>
 				<p>Some Text</p>

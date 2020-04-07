@@ -30,19 +30,17 @@
 	
 </style>
 <head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
 	<script>
-		window.addEventListener('message', updateScreen, false);
+		window.addEventListener('message', itemName, false);
 		function updateScreen(message) {
-			var img = document.getElementsByClass("column");
-			img.style.background="message.data.imgPath";
+			document.body.innerHTML += message.data + "<br/>";
 		}
 	</script>
 </head>
-<body>
-	<div class="column" onload="udateScreen()">
-		
-	</div>
+<body onclick="updateScreen()">
 
 
+	
 </body>
 </html>

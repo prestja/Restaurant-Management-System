@@ -77,7 +77,10 @@
 		clone.children("button").html(item.name);
 		clone.children("button").attr("value",item.name);
 		clone.children("button").attr("id",item._id.$oid);
-		<!--clone.children("div").html(item.description);--> <!--Commented this line out until a solution is found for a collapsing button-->
+		clone.children("div").html(item.ingredients);
+		clone.children("div").html(item.nutrition);
+		clone.children("div").attr("ingr", item.ingredients);
+		clone.children("div").attr("nutr", item.nutrition);
 		return clone;
 	}
 	
@@ -89,7 +92,7 @@
 			
 	}
 	
-	function showContent(){
+	function showContent(nutrition){
 		var coll = document.getElementsByClassName("collapsible");
 		var i;
 	
@@ -106,9 +109,9 @@
 		}
 	}
 	
+	
 	$(document).ready(function() {
             var queryStr = window.location.search; // will give you ?sndReq=234
-			
 			var category = queryStr.substr(1)
 			console.log(category);
 			var url = "http://159.89.238.181:8080/api/items?".concat(category);
@@ -121,7 +124,7 @@
                         addItem(item)
                     );
                 }
-            })
+            });
         }); 
 	</script>
 	

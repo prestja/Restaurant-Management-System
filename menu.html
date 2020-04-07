@@ -110,7 +110,9 @@
 </style>
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-	
+	<script>
+		
+	</script>
 </head>
 
 <body style="background-color:Black;">
@@ -133,7 +135,7 @@
 		<h2 id = "headerType">BEVERAGES</h2>
 		<hr color = "black">
 		<body>
-			<iframe id = "order_items" src="menu_category.html?category=3" onclick="updateOrder();" style="width:95%; height: 85%" ></iframe>
+			<iframe id = "order_items" src="menu_category.html?category=3" onclick="updateOrder(); showStuff();" style="width:95%; height: 85%" ></iframe>
 		</body>
 	</div>
 	<script>
@@ -174,9 +176,24 @@
 			//alert('heard something');
 			var target = document.getElementById('orderFrame');
 			target.contentWindow.postMessage(message.data, '*');
-			//var target = document.getElementById("order_items");
-			//target.src = "customer/customer_order_template.html";
-			//target.contentWindow.postMessage(message.data, '*');
+		}
+		
+		function showStuff(){
+			//-------------------------------------//
+			var coll = document.getElementsByClassName("collapsible");
+			var i;
+	
+			for (i = 0; i < coll.length; i++) {
+				coll[i].addEventListener("click", function() {
+					this.classList.toggle("active");
+					var content = this.nextElementSibling;
+					if (content.style.maxHeight){
+						content.style.maxHeight = null;
+					} else {
+						content.style.maxHeight = content.scrollHeight + "px";
+					}	 
+				});
+			}
 		}
 		
 		

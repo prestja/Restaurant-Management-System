@@ -158,59 +158,69 @@
     <script>
 	//adds row to the labor table
 	function addItem(item) {
-		var labTab = document.getElementById('labor');
+		if(item.clocked_in.$date.$numberLong != null){
+			var labTab = document.getElementById('labor');
 		
-		//adds row to labor table by getting the length and inserts
-		var rowCnt = labTab.rows.length;
-		var tr = labTab.insertRow(rowCnt);
-		tr = labTab.insertRow(rowCnt);
+			//adds row to labor table by getting the length and inserts
+			var rowCnt = labTab.rows.length;
+			var tr = labTab.insertRow(rowCnt);
+			tr = labTab.insertRow(rowCnt);
 		
-		var td = document.createElement('td');//inserts employee id
-		td = tr.insertCell(0);
-		td.append(item.id);
+			var td = document.createElement('td');//inserts employee id
+			td = tr.insertCell(0);
+			td.append(item.empid);
 		
-		td = document.createElement('td'); //inserts employee name
-		td = tr.insertCell(1);
-		td.append(item.fname + ' ' + item.lname);
+			td = document.createElement('td'); //inserts employee name
+			td = tr.insertCell(1);
+			td.append(item.first_name + ' ' + item.last_name);
 		
-		td = document.createElement('td'); //inserts start time
-		td = tr.insertCell(2);
-		var cIn = 'start time here'; //gets the date the order was placed and formats, then adds it onto the table
-		var d = new Date(0);
-		d.setUTCSeconds(cIn/1000);
-		month = d.getMonth()+1;
-		day=d.getDate();
-		year = d.getFullYear();
-		d = month + '-' + day + '-' + year;
-		td.append(d);
 		
-		td = document.createElement('td'); //inserts start time
-		td = tr.insertCell(3);
-		var t = new Date(0);
-		t.setUTCSeconds(cIn/1000);
-		td.append(t.toLocaleTimeString('en-US'));
+			td = document.createElement('td'); //inserts start time
+			td = tr.insertCell(2);
+			var cIn = item.clocked_in.$date.$numberLong; //gets the date the order was placed and formats, then adds it onto the table
+			var d = new Date(0);
+			d.setUTCSeconds(cIn/1000);
+			month = d.getMonth()+1;
+			day=d.getDate();
+			year = d.getFullYear();
+			d = month + '/' + day + '/' + year;
+			td.append(d);
 		
-		td = document.createElement('td'); //inserts end time
-		td = tr.insertCell(4);
-		var cOut = 'end time here';
-		var t = new Date(0);
-		t.setUTCSeconds(cOut/1000);
-		td.append(t.toLocaleTimeString('en-US'));
+			td = document.createElement('td'); //inserts start time
+			td = tr.insertCell(3);
+			var t = new Date(0);
+			t.setUTCSeconds(cIn/1000);
+			td.append(t.toLocaleTimeString('en-US'));
 		
-		td = document.createElement('td'); //inserts total hours worked
-		td = tr.insertCell(5);
-		var totalHours = cOut - cIn;
-		totalHours = totalHours/1000;//convert to seconds
-		totalHours = totalHours/60;//convert to minutes
-		totalHours = totalHours/60;//convert to hours
-		td.append(parseInt(totalHours));
+			if(item.clocked_out != 'None'){
+			td = document.createElement('td'); //inserts end time
+			td = tr.insertCell(4);
+			var cOut = item.clocked_out.$date.$numberLong;
+			var t = new Date(0);
+			t.setUTCSeconds(cOut/1000);
+			td.append(t.toLocaleTimeString('en-US'));
 		
-		td = document.createElement('td'); //inserts total tips for employee
-		td = tr.insertCell(6);
-		td.append('tips here');
+			td = document.createElement('td'); //inserts total hours worked
+			td = tr.insertCell(5);
+			var totalHours = cOut - cIn;
+			totalHours = totalHours/1000.0//convert to seconds
+			totalHours = totalHours/60.0;//convert to minutes
+			totalHours = totalHours/60.0;//convert to hours
+			td.append(parseInt(totalHours));
+			}
+			else{
+				td = document.createElement('td');
+				td = tr.insertCell(4);
+				td.append("N/A");
+				td = document.createElement('td');
+				td = tr.insertCell(5);
+				td.append("N/A");
+				
+			}
+		}
 	}
 		$(document).ready(function() {
-			/*var url = "http://159.89.238.181:8080/api/items?".concat(category);
+			var url = "http://159.89.238.181:4738/api/timeclock";
 			$.ajax({
 				url: url,
 				type: 'get',
@@ -220,24 +230,28 @@
 						addItem(item)
 					);
 				}
-			})*/
+			})
 		}); 
 		
 	function dailyReport(){//filters table to today
 		document.getElementById('daily').style.background = "#3e8e41";
 		document.getElementById('monthly').style.background = "#D3D3D3";
 		var table, tr, td, textValue;
-		var today = new Date();//gets today and formats it
-		
+		var today = new Date();//gets today
+		var d = String(today.getDate()).padStart(1,'0');
+		var mm = String(today.getMonth()+1).padStart(2,'0');
+		var yyyy = today.getFullYear();
+		today = mm + '/' + d + '/' + yyyy;
 		table = document.getElementById("labor");//gets sales table and sets the element to the table row
 		tr = table.getElementsByTagName("tr");
 		for(var i = 0; i < tr.length; i++)//for each item in the table, if there is a td in the tr, check if the text value is equal to todays date.
 		//if it is todays date, set the display to "", otherwise hide the table row
 		{
-			td = tr[i].getElementsByTagName("td")[1];
+			td = tr[i].getElementsByTagName("td")[2];
 			if(td)
 			{
 				txtValue = new Date();
+				
 				txtValue = td.textContent || td.innerText;
 				if (txtValue >= today)
 				{
@@ -258,7 +272,7 @@
 		var mm = String(today.getMonth()+1).padStart(2,'0');
 		var yyyy = today.getFullYear();
 		mm = String(startDate.getMonth()).padStart(2,'0');
-		startDate = mm + '-' + dd + '-' + yyyy;
+		startDate = mm + '/' + dd + '/' + yyyy;
 		
 		table = document.getElementById("labor");//gets sales table elements
 		tr = table.getElementsByTagName("tr");
@@ -338,7 +352,6 @@
 						<th>START TIME</th>
 						<th>END TIME</th>
 						<th>TOTAL HOURS</th>
-						<th>TIPS</th>
 					</tr>
 				</table>
 			</span>

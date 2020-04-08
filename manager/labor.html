@@ -221,7 +221,6 @@
 					);
 				}
 			})*/
-			dailyReport();
 		}); 
 		
 	function dailyReport(){//filters table to today
@@ -229,10 +228,6 @@
 		document.getElementById('monthly').style.background = "#D3D3D3";
 		var table, tr, td, textValue;
 		var today = new Date();//gets today and formats it
-		var dd = String(today.getDate()).padStart(2,'0');
-		var mm = String(today.getMonth()+1).padStart(2,'0');
-		var yyyy = today.getFullYear();
-		today = mm + '-' + dd + '-' + yyyy;
 		
 		table = document.getElementById("labor");//gets sales table and sets the element to the table row
 		tr = table.getElementsByTagName("tr");
@@ -242,6 +237,7 @@
 			td = tr[i].getElementsByTagName("td")[1];
 			if(td)
 			{
+				txtValue = new Date();
 				txtValue = td.textContent || td.innerText;
 				if (txtValue >= today)
 				{
@@ -261,7 +257,6 @@
 		var dd = String(today.getDate()).padStart(2,'0');
 		var mm = String(today.getMonth()+1).padStart(2,'0');
 		var yyyy = today.getFullYear();
-		today = mm + '-' + dd + '-' + yyyy;
 		mm = String(startDate.getMonth()).padStart(2,'0');
 		startDate = mm + '-' + dd + '-' + yyyy;
 		
@@ -272,6 +267,7 @@
 			td = tr[i].getElementsByTagName("td")[1];
 			if(td)
 			{
+				txtValue = new Date();
 				txtValue = td.textContent || td.innerText;
 				if (txtValue <= today || txtValue >= startDate)
 				{

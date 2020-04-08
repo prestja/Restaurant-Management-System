@@ -207,8 +207,18 @@
 		else{//if there was no comp, add the total of the order to the report
 			td.append("$" + item.total);
 		}
+		
+		
+		td = document.createElement('td');
+		td = tr.insertCell(5);
+		if(item.tip != null)
+		{
+			td.append("$" + item.tip);
 		}
-	}
+		else{
+			td.append("$0.00");
+		}
+	}}
 		$(document).ready(function() {
 			var url = "http://159.89.238.181:8080/api/orders";
 			$.ajax({
@@ -333,6 +343,7 @@
 						<th># ITEMS</th>
 						<th>METHOD OF PAYMENT</th>
 						<th>TOTAL</th>
+						<th>TIPS</th>
 					</tr>
 				</table>
 			</span>

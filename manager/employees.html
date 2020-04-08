@@ -113,14 +113,13 @@
 		background-color: #A9A9A9 !important; //makes Gray background
 		padding: 10px;
 		margin: 10px 10px 10px 10px;
-		width: 60vw;
-		height: 250px;
+		width: 300px;
 		display: inline-block;
 		text-align: center;
 		border: 5px;
 		border-color: black;
-		position: relative;
-		left: 150px;
+		position: absolute;
+		left: 200px;
 	}
 		/*Created a tool button similar to menu buttons*/
 	.tool-button-group button {
@@ -144,24 +143,59 @@
 	.tool-button-group button:hover {
 		background-color: #3e8e41;
 	}
+	
+		/*styles table to have collapsed borders*/
+	table, th, td {
+		border: 1px solid black;
+		border-collapse: collapse;
+		padding: 5px;
+		position:relative;
+		right:10px;
+		left:5px;
+		margin-bottom: 5px;
+		margin-right: 35px;
+	}
 </style>
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
-    $(document).ready(function(){ 
-		$("button").click(function(){
-			$.get("http://159.89.238.181:443/api/orders", function(data, status){
-				document.innerHTML+=data;
-			});
-        
-			$.post("http://159.89.238.181:443/api/orders", function(data, status){
-            
+		$(document).ready(function() {
+			var url = "http://159.89.238.181:8080/api/staff";
+			$.ajax({
+				url: url,
+				type: 'get',
+				dataType: 'JSON',
+				success: function(response) {
+					response.forEach(item => 
+						createForm(item)
+					);
+				}
 			});
 		});
-    });
+		
+		function createForm(item){
+			var empTab = document.getElementById("rem");
+			var rowCnt = empTab.rows.length; //gets current amount of rows
+			var tr = empTab.insertRow(rowCnt); //adds new row below the last row
+			tr = empTab.insertRow(rowCnt);
+			
+			var td = document.createElement('td'); //inserts item into the table
+			td = tr.insertCell(0);
+			td.append(item.first_name + ' ' + item.last_name);
+			
+			element = document.createElement('input');
+			element.setAttribute('type', 'button');
+			element.setAttribute('value','REMOVE');
+			element.setAttribute('class', item._id.$oid);
+			element.setAttribute('onclick', 'editTable(this.className)');
+			td = document.createElement('td'); //creates remove button for each item
+			td = tr.insertCell(1);
+			td.appendChild(element);
+		}
+		
     </script>
 </head>
-<body style="background-color:Black;" onload="createForm()">
+<body style="background-color:Black;">
 	<!--creates buttons in header to go back-->
 	<div class="header">
 
@@ -204,26 +238,16 @@
 			<h2>REMOVE EMPLOYEE</h2>
 			<hr color="black">
 			<span style="text-align:left !important;position:relative;left:10px;">
-			<form id ="rem">
-					<label>Select which employee(s) you would like to remove:</label>
-					<br><br>
-					<input type ="submit" value ="REM EMP"/>
-			</form>
+			<span style="text-align:left !important;position:relative;left:10px;">
+				<table id = 'rem'>
+					<tr>
+						<th>EMPLOYEE NAME</th>
+						<th></th>
+					</tr>
+				</table>
+			</span>
 			</span>
 		</div>
 	</div>
-	<script>
-		<!--Function should add in all current employees from the database into a checkbox, but is not working currently-->
-		function createForm(){
-			var x = document.createElement("INPUT");
-			x.setAttribute("type","checkbox");
-			x.setAttributes("id","emp")
-			document.getElementById("rem").appendChild(x);
-			var y = document.createElement("LABEL");
-			y.setAttributes("for","emp");
-			y.innerHTML = "ID:40";
-			document.getElementById("rem").appendChild(y);
-		}
-	</script>
 </body>
 </html>

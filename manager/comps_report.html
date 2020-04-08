@@ -160,7 +160,7 @@
 	<script>
 	//adds item for the comps report onto the table
 	function addItem(item) {
-	if(item.employee != null && item.placed != null){
+	if(item.employee != null && item.placed != null && item.comp != null){
 		var compsTab = document.getElementById('comps');
 		
 		var rowCnt = compsTab.rows.length; //gets current amount of rows
@@ -192,7 +192,7 @@
 	}
 	}
 		$(document).ready(function() {
-			var url = "http://159.89.238.181:8080/api/orders/comp";
+			var url = "http://159.89.238.181:8080/api/orders/";
 			$.ajax({
 				url: url,
 				type: 'get',
@@ -203,7 +203,6 @@
 					);
 				}
 			});
-			dailyReport();
 		}); 
 		
 	function dailyReport(){//filters table to today
@@ -211,10 +210,7 @@
 		document.getElementById('monthly').style.background = "#D3D3D3";
 		var table, tr, td, textValue;
 		var today = new Date();//gets today and formats it
-		var dd = String(today.getDate()).padStart(2,'0');
-		var mm = String(today.getMonth()+1).padStart(2,'0');
-		var yyyy = today.getFullYear();
-		today = mm + '-' + dd + '-' + yyyy;
+		txtValue = new Date();
 		
 		table = document.getElementById("comps");//gets sales table and sets the element to the table row
 		tr = table.getElementsByTagName("tr");

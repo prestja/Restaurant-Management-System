@@ -14,6 +14,67 @@ pub struct TimeInfo {
         last_name: String
 }
 
+#[get("/clockin")]
+pub fn get_clocked_in(_conn: LogsDbConn) -> String
+{
+	let mut str = String::from("[\n\t");
+        let _coll = _conn.collection("timeclock");
+	let _doc = doc!{"clocked_in" : {"$ne" : "None"}};
+	let mut _filter = mongodb::coll::options::FindOptions::new();
+        _filter.projection = Some(doc!{"empid" : 1, "first_name" : 1, "last_name": 1, "_id" : 0});
+        let cursor = _coll.find(Some(_doc.clone()), Some(_filter.clone())).unwrap();
+        for result in cursor
+        {
+                if let Ok(item) = result
+                {
+                        let _bson = mongodb::to_bson(&item).unwrap();
+                        let _json = serde_json::ser::to_string(&_bson).unwrap();
+                        str.push_str(&_json);
+                }
+                str.push_str(",\n\t");
+        }
+        if str.len() <= 3
+        {
+                return String::from("No entries found");
+        }
+        str.pop();
+        str.pop();
+        str.pop();
+        str.push_str("\n]");
+        return str;
+}
+
+#[get("/clockout")]
+pub fn get_clocked_out(_conn: LogsDbConn) -> String
+{
+	let mut str = String::from("[\n\t");
+        let _coll = _conn.collection("timeclock");
+        let _doc = doc!{"clocked_out" : {"$ne" : "None"}};
+        let mut _filter = mongodb::coll::options::FindOptions::new();
+        _filter.projection = Some(doc!{"empid" : 1, "first_name" : 1, "last_name": 1, "_id" : 0});
+        let cursor = _coll.find(Some(_doc.clone()), Some(_filter.clone())).unwrap();
+        for result in cursor
+        {
+                if let Ok(item) = result
+                {
+                        let _bson = mongodb::to_bson(&item).unwrap();
+                        let _json = serde_json::ser::to_string(&_bson).unwrap();
+                        str.push_str(&_json);
+                }
+                str.push_str(",\n\t");
+        }
+        if str.len() <= 3
+        {
+                return String::from("No entries found");
+        }
+        str.pop();
+        str.pop();
+        str.pop();
+        str.push_str("\n]");
+        return str;
+
+}
+
 #[post("/clockin", data = "<timeinfo>")]
 pub fn clock_in(_conn: LogsDbConn, timeinfo: Json<TimeInfo>) -> String
 {

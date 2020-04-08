@@ -75,7 +75,7 @@
 		}
 		clone.appendTo('.container');
 		clone.children("button").html(item.name);
-		clone.children("button").attr("value",item.name);
+		clone.children("button").attr("value",item);
 		clone.children("button").attr("id",item._id.$oid);
 		clone.children("button").attr("nutrition", item.nutrition);
 		clone.children("button").attr("ingredients", item.ingredients);
@@ -83,12 +83,9 @@
 		return clone;
 	}
 	
-	<!-- Michael Started Here -->
 	function handleStuff(value) {
-			//alert("on click");
 			var stuff = document.getElementsByClassName("content");
-			console.log(parent.window.postMessage(value, '*'));
-			
+			console.log(parent.window.postMessage(value, '*'));			
 	}
 	
 	function showContent(nutrition){
@@ -112,7 +109,6 @@
 	$(document).ready(function() {
             var queryStr = window.location.search; // will give you ?sndReq=234
 			var category = queryStr.substr(1)
-			console.log(category);
 			var url = "http://159.89.238.181:8080/api/items?".concat(category);
 			$.ajax({
                 url: url,

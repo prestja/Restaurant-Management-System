@@ -21,7 +21,7 @@ pub fn get_clocked_in(_conn: LogsDbConn) -> String
         let _coll = _conn.collection("timeclock");
 	let _doc = doc!{"clocked_in" : {"$ne" : "None"}};
 	let mut _filter = mongodb::coll::options::FindOptions::new();
-        _filter.projection = Some(doc!{"empid" : 1, "first_name" : 1, "last_name": 1, "_id" : 0});
+        _filter.projection = Some(doc!{"empid" : 1, "first_name" : 1, "last_name": 1, "clocked_in": 1, "_id" : 0});
         let cursor = _coll.find(Some(_doc.clone()), Some(_filter.clone())).unwrap();
         for result in cursor
         {
@@ -51,7 +51,7 @@ pub fn get_clocked_out(_conn: LogsDbConn) -> String
         let _coll = _conn.collection("timeclock");
         let _doc = doc!{"clocked_out" : {"$ne" : "None"}};
         let mut _filter = mongodb::coll::options::FindOptions::new();
-        _filter.projection = Some(doc!{"empid" : 1, "first_name" : 1, "last_name": 1, "_id" : 0});
+        _filter.projection = Some(doc!{"empid" : 1, "first_name" : 1, "last_name": 1, "clocked_out": 1, "_id" : 0});
         let cursor = _coll.find(Some(_doc.clone()), Some(_filter.clone())).unwrap();
         for result in cursor
         {

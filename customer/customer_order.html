@@ -48,13 +48,22 @@ h2 {
 	}
 	
 	function placeOrder() {
-		console.log("Placing order...");
+		//console.log("Placing order...");
 		var items = document.getElementsByClassName("content")[0].getElementsByClassName("itemTemplate");
+		var itemArray = [];
 		Array.prototype.forEach.call(items, function(i) {
-			console.log(i);
+			//console.log(i);
 			var data = $(i).data("item");
-			console.log(JSON.stringify(data));
+			itemArray.push(data._id);
 		});
+		
+		var order = {
+			table: 5,
+			items: itemArray,
+			status: 0
+		};
+		console.log(JSON.stringify(order));
+		$.post("http://159.89.238.181:8080/api/orders/", JSON.stringify(order));
 	}
 
 </script>

@@ -173,13 +173,11 @@
 		
 		window.addEventListener('message', updateOrder, false);
 		function updateOrder(message) {
-			//alert('heard something');
 			var target = document.getElementById('orderFrame');
 			target.contentWindow.postMessage(message.data, '*');
 		}
 		
 		function showStuff(){
-			//-------------------------------------//
 			var coll = document.getElementsByClassName("collapsible");
 			var i;
 	

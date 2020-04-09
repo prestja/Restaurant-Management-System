@@ -102,7 +102,7 @@
 	}	
 	
 	$(document).ready(function() {
-            var queryStr = window.location.search; // will give you ?sndReq=234
+            var queryStr = window.location.search;
 			var category = queryStr.substr(1)
 			var url = "http://159.89.238.181:8080/api/items?".concat(category);
 			$.ajax({
@@ -128,7 +128,6 @@
 				<p>Some Text</p>
 				<p>Some Text</p>
 			</div>
-			<!--<p>SOME TEXT</p>-->
 		</div>
 	</div>
 	

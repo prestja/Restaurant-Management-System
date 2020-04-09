@@ -95,22 +95,11 @@
 </style>
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script>
-    $(document).ready(function(){ 
-		$("button").click(function(){
-			$.get("http://159.89.238.181:443/api/orders", function(data, status){
-				document.innerHTML+=data;
-			});
-			$.post("http://159.89.238.181:443/api/orders", function(data, status){
-			});
-		});
-    });
-    </script>
-	
 	<script type="text/javascript">
 	function numbercheck(cardnum){
 		Math.floor((Math.random() * 5) + 1);
 		if(cardnum ==(Math.floor((Math.random() * 5) + 1))){
+			postnote();
 			alert("you win!");
 			window.location.href="landing.html";
 			//setTimeout(function() {window.location.href="landing.html"}, 3000);
@@ -120,6 +109,17 @@
 			window.location.href="landing.html";
 			//setTimeout(function() {window.location.href="landing.html"}, 3000);
 		}
+		}
+	</script>
+	<script type = "text/javascript">
+		function postnote(){
+		tablenum = parent.gettable();
+		var winner = {
+				table: tablenum,
+				variant: 4
+		}
+		//request with URL,data,success callback
+		$.post("http://159.89.238.181:8080/api/notifications",JSON.stringify(winner));
 		}
 	</script>
 </head>

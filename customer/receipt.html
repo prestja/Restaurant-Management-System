@@ -110,6 +110,8 @@
     </script>
 	
 	<script type="text/javascript">
+	var table;
+	
 	function Selection(ButtonID){
 		if(ButtonID == 1){
 			postnote();
@@ -123,16 +125,14 @@
 		}
 		
 		function postnote(){
-			//tablenum = parent.gettable();
-			tablenum = 1;
 			var print = {
-				table: tablenum,
+				table: table,
 				variant: 3
 			}
 			//request with URL,data,success callback
 			$.post("http://159.89.238.181:8080/api/notifications",JSON.stringify(print));
 			}
-			window.addEventListener('message', table_listener, false);
+			parent.window.postMessage(tablemessage, "*");
 	</script>
 </head>
 <body style="background-color:Black;">

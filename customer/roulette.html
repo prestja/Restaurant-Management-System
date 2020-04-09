@@ -112,35 +112,30 @@
 			//setTimeout(function() {window.location.href="landing.html"}, 3000);
 		}
 		}
-		function postnote(){
-		console.log(table);
+		function postnote() {		
 		var winner = {
-				table: table,
-				variant: 4
+			table: table,
+			variant: 4
 		};
 		//request with URL,data,success callback
-		console.log(JSON.stringify(winner));
 		$.post("http://159.89.238.181:8080/api/notifications",JSON.stringify(winner));
 		}
 		
 		window.addEventListener('message', table_listener, false);
 		
 		function table_listener(message){
-			console.log(message.data.table);
-			table = message.data.table;
+			table = message.data;
 		}
 		
-		function gettablenum(){
+		function gettablenum() {
 			var tablemessage = {
-			type: 'table'
-		};
+				type: 'table'
+			};
 			parent.window.postMessage(tablemessage, "*");
 		}
 	</script>
 </head>
 <body onload = "gettablenum()" style="background-color:Black;">
-
-	
 	<!--Creates left menu for buttons for the different employee pages-->
 	<div class = "left-menu">
 		<div class="menu-button-group">

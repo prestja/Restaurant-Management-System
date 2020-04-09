@@ -146,10 +146,14 @@
 				}
 				document.getElementById("ifrm").contentWindow.postMessage(pin, "*");
 			}
-			else if(message.data.type == "table"){
-			console.log(table);
-			document.getElementById("ifrm").contentWindow.postMessage(table, "*");	
+			else if(message.data.type == "table") {
+				document.getElementById("ifrm").contentWindow.postMessage(table, "*");	
 			}
+		}
+		
+		function goRoulette() {
+			var home = document.getElementById("ifrm");
+			home.src = "roulette.html";
 		}
 		
 	</script>
@@ -162,6 +166,7 @@
         <button id = "nav-back" onclick ="goBack();" >Back</button>
 		<button id = "nav-help" onclick = "myFunction()">Help</button>
         <button id = "nav-refills" onclick ="goRefill()">Refills</button>
+		<button id = "nav-roulette" onclick ="goRoulette()">Test Roulette</button>
     </div>
 
     <!---Content -->

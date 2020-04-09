@@ -112,6 +112,7 @@
 	<script type="text/javascript">
 	function Selection(ButtonID){
 		if(ButtonID == 1){
+			postnote();
 			alert("A Server will bring you your receipt shortly");
 			window.location.href="roulette.html";
 		}
@@ -120,6 +121,17 @@
 			window.location.href="roulette.html";
 		}
 		}
+		
+		function postnote(){
+			//tablenum = parent.gettable();
+			tablenum = 1;
+			var print = {
+				table: tablenum,
+				variant: 3
+			}
+			//request with URL,data,success callback
+			$.post("http://159.89.238.181:8080/api/notifications",JSON.stringify(print));
+			}
 	</script>
 </head>
 <body style="background-color:Black;">

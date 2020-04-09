@@ -96,9 +96,11 @@
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script type="text/javascript">
+	var table;
+	
 	function numbercheck(cardnum){
 		Math.floor((Math.random() * 5) + 1);
-		if(cardnum ==(Math.floor((Math.random() * 5) + 1))){
+		if(cardnum ==(Math.floor((Math.random() * 1) + 1))){
 			postnote();
 			alert("you win!");
 			window.location.href="landing.html";
@@ -110,21 +112,35 @@
 			//setTimeout(function() {window.location.href="landing.html"}, 3000);
 		}
 		}
-	</script>
-	<script type = "text/javascript">
 		function postnote(){
-		tablenum = parent.gettable();
+		console.log(table);
 		var winner = {
-				table: tablenum,
+				table: table,
 				variant: 4
-		}
+		};
 		//request with URL,data,success callback
+		console.log(JSON.stringify(winner));
 		$.post("http://159.89.238.181:8080/api/notifications",JSON.stringify(winner));
+		}
+		
+		window.addEventListener('message', table_listener, false);
+		
+		function table_listener(message){
+			console.log(message.data.table);
+			table = message.data.table;
+		}
+		
+		function gettablenum(){
+			var tablemessage = {
+			type: 'table'
+		};
+			parent.window.postMessage(tablemessage, "*");
 		}
 	</script>
 </head>
-<body style="background-color:Black;">
+<body onload = "gettablenum()" style="background-color:Black;">
 
+	
 	<!--Creates left menu for buttons for the different employee pages-->
 	<div class = "left-menu">
 		<div class="menu-button-group">

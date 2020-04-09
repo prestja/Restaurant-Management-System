@@ -145,12 +145,13 @@
 					pin = message.data.pin;
 				}
 				document.getElementById("ifrm").contentWindow.postMessage(pin, "*");
-			}			
+			}
+			else if(message.data.type == "table"){
+			console.log(table);
+			document.getElementById("ifrm").contentWindow.postMessage(table, "*");	
+			}
 		}
 		
-		function gettable(){
-			return table;
-		}
 	</script>
 	
 </head>

@@ -30,7 +30,7 @@ h2 {
 	window.addEventListener('message', itemName, false);
 	function itemName(message){
 		console.log(message.data);
-		document.body.innerHTML += message.data + "</br>";	
+		document.body.innerHTML += JSON.stringify(message.data) + "</br>";	
 	}
 
 </script>

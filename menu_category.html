@@ -74,18 +74,14 @@
 			clone.css('display','none');
 		}
 		clone.appendTo('.container');
-		clone.children("button").html(item.name);
-		clone.children("button").attr("value",item);
+		clone.children("button").html(item.name); // assign the human-readable name for this button
 		clone.children("button").attr("id",item._id.$oid);
-		clone.children("button").attr("nutrition", item.nutrition);
-		clone.children("button").attr("ingredients", item.ingredients);
-		
+		clone.children("button").data("item", item); // assign the data of this item to the button for future use
+		clone.children("button").click(function () { // when button is clicked, send the item
+			var item = $(this).data("item");
+			parent.window.postMessage(item, "*"); // send the item to parent container for processing
+		});
 		return clone;
-	}
-	
-	function handleStuff(value) {
-			var stuff = document.getElementsByClassName("content");
-			console.log(parent.window.postMessage(value, '*'));			
 	}
 	
 	function showContent(nutrition){
@@ -103,8 +99,7 @@
 				}	 
 			});
 		}
-	}
-	
+	}	
 	
 	$(document).ready(function() {
             var queryStr = window.location.search; // will give you ?sndReq=234
@@ -128,7 +123,7 @@
 <body style="background-color:White;">
 	<div class = "container" style="width: 100%; height: 100%; overflow: auto; background-color:red">
 		<div id ="item_template">
-			<button class="collapsible" onclick="handleStuff(this.id);">Open Collapsible</button>
+			<button class="collapsible">Open Collapsible</button>
 			<div class="content">
 				<p>Some Text</p>
 				<p>Some Text</p>

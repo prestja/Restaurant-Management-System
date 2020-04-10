@@ -74,6 +74,45 @@ pub fn get(_conn: LogsDbConn, id: u32) -> String {
 	return str;
 }
 
+//===================== WIP - Needs testing =======================================//
+//Function needed to return list of all employee names
+/*
+// Was just told this was finished via Erika
+
+#[get("/<first_name>&<last_name>")]
+pub fn get(_conn: LogsDbConn, first_name: String, last_name: String) -> String {
+	//create message string
+	let mut str = String::from("[\n\t");
+	//doc acts as our interim to pull information from the database and format it to be output to front
+	let doc = doc!{"first_name": first_name, "last_name": last_name};
+	//connect to database
+	let _coll = _conn.collection("staff");
+	let cursor = _coll.find(Some(doc.clone()), None).unwrap();
+	//For each result in database
+	for result in cursor 
+	{
+		if let Ok(item) = result 
+		{
+			let _bson = mongodb::to_bson(&item).unwrap();
+			let _json = serde_json::ser::to_string(&_bson).unwrap();
+			str.push_str(&_json);
+		}
+		str.push_str(",\n\t");
+	}
+	if str.len() <= 3
+	{
+		return String::from("No entries found");
+	}
+	str.pop();
+	str.pop();
+	str.pop();
+	str.push_str("\n]");
+	return str;
+}
+*/
+//===================== WIP - Needs testing =======================================//
+
+
 #[get("/login?<id>&<password>")]
 pub fn get_login(_conn: LogsDbConn, id: String, password: String) -> String {	
 	let doc = doc!{"id": id, "password": password};

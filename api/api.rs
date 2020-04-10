@@ -47,6 +47,7 @@ fn main()
 	.mount("/api/orders", routes![orders::post])
 	.mount("/api/orders", routes![orders::comp])
 	.mount("/api/orders", routes![orders::get_table_orders])
+	.mount("/api/orders", routes![orders::apply_promotion])
 	// ingredients functions
 	.mount("/api/ingredients", routes![ingredients::get_all])
 	.mount("/api/ingredients", routes![ingredients::get])

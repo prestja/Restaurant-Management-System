@@ -237,3 +237,43 @@ pub fn comp (_conn: LogsDbConn, table: u32, amount: f32, employee: String) -> St
 	});
 	return serde_json::to_string(&response).unwrap();
 }
+
+#[post("/?<id>&<amount>")]
+pub fn apply_promotion(_conn: LogsDbConn, id: String, amount: f32) -> String {
+        let cast = bson::oid::ObjectId::with_string(id.as_str());
+        let coll = _conn.collection("orders");
+        if let Ok(oid) = cast {
+                let filter = doc! {"_id": oid};
+                let _promo = doc! { "$inc": {"total": -amount} };
+                if let Ok (result) = coll.find_one_and_update(filter.clone(),_promo.clone(), None) {
+                        println!("Got a result");
+                        if let Some(item) = result {
+                                let response = json!({
+                                        "code": 200,
+                                        "message": "Successfully updated price for order"
+                                });
+                                return serde_json::to_string(&response).unwrap();
+                        }
+                                let response = json!({
+                                "code": 404,
+                                "message": "Could not find order to update."
+                        });
+                        return serde_json::to_string(&response).unwrap();
+                }
+                else {
+                        let response = json!({
+                                "code": 404,
+                                "message": "Error accessing database."
+                        });
+                        return serde_json::to_string(&response).unwrap();
+                }
+        }
+        else {
+                let response = json!({
+                        "code": 404,
+                        "message": "Invalid or malformed object id."
+                });
+                return serde_json::to_string(&response).unwrap();
+        }
+}
+

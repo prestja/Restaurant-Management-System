@@ -13,7 +13,7 @@ pub struct Notification
 	//holds table id from which notif originated
 	table: u32,
 	//Holds type of notification (help, refill, etc)
-	variant: u32,
+	variant: u32, // 0: help, 1: refills, 3: printed receipt, 4: winner winner chicken dinner
 	//holds details regarding refill or type of help
 	#[serde(default)] details : serde_json::Value
 }

@@ -12,18 +12,15 @@ pub fn get_all (_conn: LogsDbConn) -> String
 	let _doc = doc!{};
 	let _coll = _conn.collection("items");
 	let _cursor = _coll.find(Some(_doc.clone()), None).unwrap();
-	for result in _cursor 
-	{
-		if let Ok(item) = result 
-		{
+	for result in _cursor {
+		if let Ok(item) = result {
 			let _bson = mongodb::to_bson(&item).unwrap();
 			let _json = serde_json::ser::to_string(&_bson).unwrap();
 			_str.push_str(&_json);
 		}
 		_str.push_str(",\n\t");
 	}
-	if _str.len() <= 3
-	{
+	if _str.len() <= 3 {
 		return String::from("No entries found");
 	}
 	_str.pop();

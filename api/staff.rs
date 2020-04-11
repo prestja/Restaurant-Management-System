@@ -150,3 +150,23 @@ pub fn post(_conn: LogsDbConn, employee: Json<Employee>) -> String {
 	});
 	return serde_json::to_string(&response).unwrap();
 }
+
+#[delete("/?<id>")]
+pub fn delete(_conn: LogsDbConn, id: String) -> String {
+	let filter = doc! {
+		"id": id
+	};
+	let coll = _conn.collection("staff");
+	if let Ok (result) = coll.delete_one(filter, None) {
+		let response = json!({
+			"code": 200,
+			"message": "Removed the requested employee."
+		});
+		return serde_json::to_string(&response).unwrap();
+	}
+	let response = json!({
+		"code": 404,
+		"message": "Could not find that employee"
+	});
+	return serde_json::to_string(&response).unwrap();
+}

@@ -1,14 +1,10 @@
 use crate::rocket_contrib;
 use crate::rocket_contrib::databases::mongodb::db::ThreadedDatabase;
 use crate::LogsDbConn;
-use crate::serde_derive;
 
-use rocket::response::content;
 use rocket_contrib::{databases::mongodb};
 use rocket_contrib::json::Json;
 use mongodb::{doc, bson};
-use mongodb::coll::options;
-use mongodb::oid;
 
 //JSON Serialized datat type to be received with coupon information
 #[derive(Serialize, Deserialize)]
@@ -50,6 +46,27 @@ pub fn get_all(_conn: LogsDbConn) -> String {
 	//End the output string and return
 	str.push_str("\n]");
 	return str;
+}
+
+#[get("/?<code>")]
+pub fn get_code (_conn: LogsDbConn, code: String) -> String{
+	let doc = doc! {
+		"code": code
+	};
+	let coll = _conn.collection("coupons");
+	let result = coll.find_one(Some(doc), None);
+	if let Ok(opt) = result {
+		if let Some(item) = opt {
+			let _bson = mongodb::to_bson(&item).unwrap();
+			let _json = serde_json::ser::to_string(&_bson).unwrap();
+			return _json;
+		}
+	}
+	let response = json!({
+		"code": 404,
+		"message": "Could not find coupon"
+	});
+	return serde_json::to_string(&response).unwrap();
 }
 
 //Deserialize and post the new coupon to the database

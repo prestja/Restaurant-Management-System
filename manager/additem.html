@@ -108,13 +108,13 @@
 		display: inline-block;
 	}
 	
-	/*Created a container to hold the add employee form*/
+	/*Created a container to hold the add item form*/
 	.items {
 		background-color: #A9A9A9 !important; //makes Gray background
 		padding: 10px;
 		margin: 10px 10px 10px 10px;
 		width: 60vw;
-		height: 60vh;
+		height: 520px;
 		display: inline-block;
 		text-align: center;
 		border: 5px;
@@ -150,33 +150,66 @@
     <script>
 		//function happens when the submit button is clicked
 		function handleSubmit() {
-			//request creates an object to be stored for the employee
+			//request creates an object to be stored for the item
+			var category = document.getElementById("category").value;
+			var ing = document.getElementById("ingredients").value;
+			ing = ing.split(',');
+			var image = document.getElementById("img").value;
+			image = image.slice(12);
+			var imagePath = "img/" + category.toLowerCase() + "/" + image;
+			console.log(imagePath);
+			if(category == "BEVERAGES")
+			{
+				category = 3;
+			}
+			else if(category == "ENTREES")
+			{
+				category = 0;
+			}
+			else if(category == "APPETIZERS")
+			{
+				category = 1;
+			}
+			else if(category == "DESSERTS")
+			{
+				category = 2;
+			}
+			else if(category == "KIDS")
+			{
+				category = 4;
+			}
 			let request = {
-				first_name: document.getElementById("fname").value,
-				last_name: document.getElementById("lname").value,
-				id: document.getElementById("empId").value,
-				password: document.getElementById("empPass").value,
-				position: parseInt(document.getElementById("pos").value),
-				wage: parseFloat(document.getElementById("hourly").value),
-				phone: document.getElementById("phone").value,				
+				name: document.getElementById("name").value,
+				category: parseInt(category),
+				nutrition: document.getElementById("nutrition").value,
+				ingredients: ing,
+				allergen: document.getElementById("allergen").value,
+				vegan: document.getElementById("vegan").checked,
+				vegetarian: document.getElementById("vegetarian").checked,			
+				imgPath: imagePath,
+				price: document.getElementById("price").value
 			}
 			//puts the object in JSON format and posts it to the backend to be added to the database
 			console.log(JSON.stringify(request));
-			$.post("http://159.89.238.181:8080/api/staff", JSON.stringify(request), function(data, status) {				
+			/*$.post("http://159.89.238.181:8080/api/staff", JSON.stringify(request), function(data, status) {				
 				alert(status);
-			});
+			});*/
 			//resets all form data
-			first_name: document.getElementById("fname").value = "";
-			last_name: document.getElementById("lname").value = "";
-			id: document.getElementById("empId").value = "";
-			password: document.getElementById("empPass").value = "";
-			position: document.getElementById("pos").value = "";
-			wage: document.getElementById("hourly").value = "";
-			phone: document.getElementById("phone").value = "";
+			//window.location.reload();
 		}		
+		function filterForm(){
+			var category = document.getElementById("category").value;
+			var ingredients = document.getElementById("hide");
+			if(category == "BEVERAGES"){
+				ingredients.setAttribute("style","display:none");
+			}
+			else{
+				ingredients.setAttribute("style","display:inline");
+			}
+		}
 	</script>
 </head>
-<body style="background-color:Black;">	
+<body style="background-color:Black;" onload="filterForm()">	
 	<!--Creates left menu for buttons for the different manager pages-->
 	<div class = "left-menu">
 		<div class="menu-button-group">
@@ -211,31 +244,44 @@
 		</div>
 	<!--holds add employee form-->
 		<div class = "items">
-			<h2>ADD EMPLOYEE</h2>
+			<h2>ADD ITEM</h2>
 			<hr color="black">
 			<div style="text-align:left;position:relative;left:10px">
-				<label>FIRST NAME:</label>
-				<input type="text" id="fname" name="fname" placeholder="John" maxlength=20 size=12/>
+				<label>NAME:</label>
+				<input type="text" id="name" name="name" placeholder="Burgers" maxlength=20 size=12/>
 				<br><br>
-				<label>LAST NAME:</label>
-				<input type="text" id="lname" name="lname" placeholder="Doe" maxlength=20 size=12/>
+				<label>CATEGORY:</label>
+				<select id = "category" onchange="filterForm()">
+					<option name="bev">BEVERAGES</option>
+					<option name="app">APPETIZERS</option>
+					<option name="ent">ENTREES</option>
+					<option name="kids">KIDS</option>
+					<option name="des">DESSERTS</option>
+				</select>
 				<br><br>
-				<label>EMPLOYEE ID:</label>
-				<input type="text" id="empId" name="empId" placeholder="123456" maxlength=7 size=12/>
+				<label>PRICE:</label>
+				<input type="number" id="price" name="price" placeholder="0.00" maxlength=5/>
 				<br><br>
-				<label>PASSWORD:</label>
-				<input type="text" id="empPass" name="empPass" placeholder="123456" maxlength=10 size=12/>
+				<label>NUTRITION:</label>
+				<input type="text" id="nutrition" name="nutrition" placeholder="50 calories" maxlength=20 size=20/>
 				<br><br>
-				<label>POSITION:</label>
-				<input type="text" id="pos" name="pos" placeholder="0 : Manager, 1: Waiter" maxlength=2 size=20/>
+				<span id="hide">
+					<label>ALLERGENS:</label>
+					<input type="text" id="allergen" name="nutrition" placeholder="Nut Allergy" maxlength=40 size=20/>
+					<br><br>
+					<input type="checkbox" id="vegan" name="vegan"></input>
+					<label>VEGAN</label>
+					<input type="checkbox" id="vegetarian" name="vegetarian"></input>
+					<label>VEGETARIAN</label>
+					<br><br>
+					<label id = "ing">INGREDIENTS:</label><br>
+					<textarea id = "ingredients" rows = "5" cols = "40" placeholder="Enter ingredients here, each ingredient separated by a comma with no spaces. Example: Burger,cheese,lettuce"></textarea>
+					<br><br>
+				</span>
+				<label for="img">SELECT IMAGE:</label>
+				<input type="file" id="img" accept="image/*">
 				<br><br>
-				<label>HOURLY:</label>
-				<input type="text" id="hourly" name="hourly" placeholder="$7.25" maxlength=5 size=12/>
-				<br><br>
-				<label>PHONE:</label>
-				<input type="text" id="phone" name="phone" placeholder="123-456-7890" size=12 maxlength=12/>
-				<br><br>
-				<button onclick = "handleSubmit()">ADD EMPLOYEE</button>
+				<button onclick = "handleSubmit()">ADD ITEM</button>
 			</div>
 		</div>
 	</div>

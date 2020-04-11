@@ -169,14 +169,26 @@ pub fn modify(_conn: LogsDbConn, id: String, employee: Json<Employee>) -> String
 	let coll = _conn.collection("staff");
 	if let Ok(result) = coll.find_one_and_replace(filter, replacement, None) {
 		if let Some(item) = result {
-			return String::from("Worked");
+			let response = json!({
+				"code": 200,
+				"message": "Successfully updated employee."
+			});
+			return serde_json::to_string(&response).unwrap();
 		}
 		else {
-			return String::from("Bad item");
+			let response = json!({
+				"code": 404,
+				"message": "Error during insertion process: invalid or malformed employee."
+			});
+			return serde_json::to_string(&response).unwrap();
 		}			
 	}
 	else {
-		return String::from("Bad result");
+		let response = json!({
+				"code": 404,
+				"message": "Could not find the requested employee."
+		});
+		return serde_json::to_string(&response).unwrap();
 	}
 }
 

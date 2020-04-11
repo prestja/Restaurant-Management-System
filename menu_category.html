@@ -130,6 +130,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 	<script>
 	
 	
+	
 	function addItem(item) {
 		var clone = $("#item_template").clone(true);
 		
@@ -192,7 +193,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 <div class = "container" style="width: 100%; height: 100%; overflow: auto; background-color:white">
 		<div id ="item_template">
 			<!-- Trigger/Open The Modal -->
-			<button id="myBtn" class="collapsible">Open Collapsible</button>
+			<button id="myBtn" class="collapsible" onclick="sendParent()">Open Collapsible</button>
 			
 			<!-- The Modal -->
 			<div id="myModal" class="modal">
@@ -244,6 +245,13 @@ window.onclick = function(event) {
     modal.style.display = "none";
   }
 }
+
+
+//Sending it to parent
+function sendParent() {
+	parent.window.postMessage("block", '*');
+}
+	
 </script>
 
 </body>

@@ -1,0 +1,1 @@
+return objGame.y;

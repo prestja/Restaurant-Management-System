@@ -73,9 +73,9 @@
 
 	.refillTemplate {
 		display: none;
-		width: 100%;
+		width: 200px;
 		background-color: aqua;
-		color: black
+		color: black;
 	}
 
 
@@ -92,14 +92,19 @@
 	<script src="../jquery-3.4.1.min.js"></script>
 	<script>
 		window.addEventListener('message', addRefill, false);
+		//var drinkID = 0;
+
 		function addRefill(message)
 		{
+			//drinkID++;
 			var clone = $("#refillTemplate").clone(true);
 			clone.css('display', 'block');
 			clone.children(".refillName").html(message);
 			clone.data("refill", message); // assign the data of this item to the button for future use
+			//clone.data('id', drinkID);
+			
 			clone.appendTo('.content');
-			//console.log(message);
+			//console.log(clone.value);
 		}
 
 		function placeRefill()
@@ -113,7 +118,7 @@
 				var data = $(i).data("refill");
 				if(data != undefined)
 				{
-					console.log(data);
+					//console.log(data);
 				
 					refillArray.push(data);
 				}
@@ -131,6 +136,34 @@
 		}
 
 
+		function removeRefill()
+		{
+			//This uses the buttons class as a 'delete' item to narrow the functionality to just it
+			$('.delete').click(function()
+			{
+				//This forces the target to be the buttons grandparent, aka the container holding the entire refill item
+				 $(this).parent().parent().remove('#refillTemplate');
+
+			});
+		}
+
+
+		function removeRefills()
+		{
+			//Current idea for improvement -- Figure out how to filter a != "", as only the invisible template contains
+			//an empty string (note this uses :contains selector)
+
+			//currently cannot run this with just remove, as it deletes the invisible template for refills too, thus
+			//breaking refills
+
+			$('.delete').parent().parent().filter(":contains('sprite')").remove();
+			$('.delete').parent().parent().filter(":contains('coke')").remove();
+			$('.delete').parent().parent().filter(":contains('sweet tea')").remove();
+			$('.delete').parent().parent().filter(":contains('lemonade')").remove();
+			$('.delete').parent().parent().filter(":contains('dr pepper')").remove();
+			$('.delete').parent().parent().filter(":contains('root beer')").remove();
+
+		}
 
 		function handleStuff()
 		{
@@ -155,7 +188,7 @@
 
 	<div id="myDIV" class="header" style="height: 15%;">
 		<h2 style="margin:5px">Refills</h2>
-		<h3 style="margin:5px">Please Select Your Drink</h3>
+		<h3 style="margin:5px">Please Select Your Drinks to be refilled</h3>
 	</div>
 
 	<div class="drink" style="width: 100%; margin-top: 150px;">
@@ -172,20 +205,21 @@
 
 	<div class="content">
 		<!--- Refill template--->
-
 	</div>
 	<div class="refillTemplate" id="refillTemplate">
-		<div class="refillTemplate" style="align: left">
-			Drink name goes here
+
+		<div style="display:inline-block">
+			<button class="delete"value="Remove Element" onmousedown="removeRefill();">Remove this item</button>
+
 		</div>
-		<div style="align: right">
-			<button>Remove this item</button>
+		<div class="refillName" style="display:inline-block">
+			refill name goes here
 		</div>
 	</div>
 
 
 	<div class="bottom-group">
-		<button type="button" onclick="alert('Your refill has been ordered!'); placeRefill() ">SUBMIT</button>
+		<button type="button" onclick="alert('Your refill has been ordered!'); placeRefill(); removeRefills() ">SUBMIT</button>
 	</div>
 
 

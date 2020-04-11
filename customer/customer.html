@@ -135,7 +135,7 @@
 		}		
 		
 		window.addEventListener('message', master_listener, false);
-	
+		
 		function master_listener(message) {
 			if(message.data.type == "back" ) {
 				showButton(message.data.state);

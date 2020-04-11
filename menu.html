@@ -128,6 +128,8 @@
 			<button onclick="menuType('kids')">KIDS MENU</button>
 			<br><br>
 			<button onclick="menuType('sweets')">DESSERTS</button>
+			<br><br>
+			<button onclick="returnMain()">BACK</button>
 		</div>
 	</div>
 	<!--Stores menu items of menu type selected from the buttons, default is beverages-->
@@ -139,6 +141,11 @@
 		</body>
 	</div>
 	<script>
+		//Return function for new back button
+		function returnMain(){
+			document.location = "customer/landing.html";
+		}
+	
 		<!--selects menu type and displays menu items of that type-->
 		function menuType(mType)
 		{	

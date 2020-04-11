@@ -151,7 +151,36 @@ pub fn post(_conn: LogsDbConn, employee: Json<Employee>) -> String {
 	return serde_json::to_string(&response).unwrap();
 }
 
-#[delete("/?<id>")]
+#[post("/modify?<id>", data = "<employee>")]
+pub fn modify(_conn: LogsDbConn, id: String, employee: Json<Employee>) -> String {
+	let inner = employee.into_inner();
+	let filter = doc! {
+		"id": id
+	};
+	let replacement = doc! {
+		"first_name": inner.first_name,
+		"last_name": inner.last_name,
+		"id": inner.id,
+		"password": inner.password,
+		"wage": inner.wage,
+		"phone": inner.phone,
+		"position": inner.position
+	};
+	let coll = _conn.collection("staff");
+	if let Ok(result) = coll.find_one_and_replace(filter, replacement, None) {
+		if let Some(item) = result {
+			return String::from("Worked");
+		}
+		else {
+			return String::from("Bad item");
+		}			
+	}
+	else {
+		return String::from("Bad result");
+	}
+}
+
+#[post("/delete?<id>")]
 pub fn delete(_conn: LogsDbConn, id: String) -> String {
 	let filter = doc! {
 		"id": id

@@ -59,6 +59,7 @@ fn main()
 	.mount("/api/staff", routes![staff::get_login])
 	.mount("/api/staff", routes![staff::post])
 	.mount("/api/staff", routes![staff::delete])
+	.mount("/api/staff", routes![staff::modify])
 	// item functions
 	.mount("/api/items/", routes![items::get_all])
 	.mount("/api/items/", routes![items::get_category])

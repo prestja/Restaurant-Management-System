@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+	/*Create a table to store elements in receipt*/
+	table {
+		border-collapse: collapse;
+		border-spacing: 0;
+		width: 100%;
+		border: 1px solid #ddd;
+	}
+	
+	th, td {
+		text-align: left;
+		padding: 16px;
+	}
+	
+	tr:nth-child(even) {
+		background-color: #f2f2f2;
+	}
+
+
+	.receiptTotals {
+		background-color: none;
+		text-align: right;
+	}
+
+</style>
+</head>
+<body style="background-color:white">
+
+	<!--Creating a table to store purchase information-->
+	<table id="receipt">
+		<tr>
+			<th>Item</th>
+			<th>Qty</th>
+			<th>Price</th>
+		</tr>
+		<tr>
+			<th>Nachos</th>
+			<th>1</th>
+			<th>$7.99</th>
+		</tr>
+	</table>
+
+	<table id="total">
+		<tr>
+			<th></th>
+			<th></th>
+			<th>SUBTOTAL  $</th>
+		</tr>
+		<tr>
+			<th></th>
+			<th></th>
+			<th>TAX  $</th>
+		</tr>
+		<tr>
+			<th></th>
+			<th></th>
+			<th>GRATUITY  $</th>
+		</tr>
+		<tr>
+			<th></th>
+			<th></th>
+			<th>TOTAL DUE  $</th>
+		</tr>
+	</table>
+	<!--Header for customer receipt
+	<pre>Item                           Qty                         Price</pre>
+	<pre>================================================================</pre>
+	-->
+	
+	<!--Order data needs to go here to fill the body-->
+	<!--
+	<pre>Item name.         Number of item.           Item price</pre>
+	
+	<pre>================================================================</pre>
+	-->	
+		
+	<!--Bottom of the receipt needs these elements-->
+	<!--
+	<div class="receiptTotals">
+		<pre> SUBTOTAL   $ </pre>
+		<pre>      TAX   $ </pre>
+		<pre> GRATUITY   $ </pre>
+		<pre>TOTAL DUE   $ </pre>
+	</div>
+	-->
+	
+</body>
+</html>
+

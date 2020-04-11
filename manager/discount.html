@@ -152,20 +152,20 @@
 		//creates object for the discount
 		let request = {
 			name : document.getElementById("name").value,
-			start_date : document.getElementById("startDate").value,
-			end_date : document.getElementById("endDate").value,
-			amount : document.getElementById("amt").value,
+			start : document.getElementById("startDate").value,
+			end : document.getElementById("endDate").value,
+			amount : parseFloat(document.getElementById("amt").value),
 			code : document.getElementById("code").value,
 		}
 		console.log(JSON.stringify(request));
 		//posts the object to the backend to be added into the database
-		/*$.post("http://159.89.238.181:8080/api/staff", JSON.stringify(request), function(data, status) {				
+		$.post("http://159.89.238.181:8080/api/coupons", JSON.stringify(request), function(data, status) {				
 				alert(status);
-		});*/
+		});
 		//resets the data for the object
 			name : document.getElementById("name").value = "";
-			start_date : document.getElementById("startDate").value = "";
-			end_date : document.getElementById("endDate").value = "";
+			start : document.getElementById("startDate").value = "";
+			end : document.getElementById("endDate").value = "";
 			amount : document.getElementById("amt").value = "";
 			code : document.getElementById("code").value = "";
 			alert("Discount added successfully!");
@@ -177,7 +177,7 @@
 	<div class="header">
 
 		<div class="button-group">
-			<button onclick="document.location = 'landing.html'">&#60&#60 BACK</button>
+			<button onclick="document.location = '../employee/landing.html'">&#60&#60 BACK</button>
 		</div>
 	
 	</div>
@@ -203,9 +203,7 @@
 			<div class="tool-button-group">
 				<button onclick="document.location = 'tools.html'">ADD EMP</button>
 				<br><br>
-				<button onclick="document.location = 'Manager_rem_employee_page.html'">REM EMP</button>
-				<br><br>
-				<button onclick="document.location = 'comps.html'">COMPS</button>
+				<button onclick="document.location = 'employees.html'">REM EMP</button>
 				<br><br>
 				<button onclick="document.location = 'promos.html'">PROMOS</button>
 				<br><br>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<style>
+body {
+  margin: 0;
+  min-width: 250px;
+}
+
+/* Include the padding and border in an element's total width and height */
+* {
+  box-sizing: border-box;
+}
+
+
+/* Style the header */
+.header {
+  background-color: #D3D3D3;
+  margin: 0;
+  padding: 5px 5px;
+  color: black;
+  text-align: center;
+  top: 0;
+}
+
+
+    /*button group for submit button*/
+ .bottom-group button {
+  		background-color: #D3D3D3; /*Makes Gray background*/
+		border:  0px #D3D3D3;  /*Border around boxes is Gray*/
+		color: black; /* White text */
+		padding: 10px 10px; /* Some padding */
+		margin: 0;  /* Created space between buttons */
+		font-family: Arial Black, Times, serif; /* sets font */
+		font-size:  16px;	/* Sets size */
+		font-weight:  normal;	/*Sets normal or bold */
+		text-align: center;	/* Aligns to center of button */
+		cursor: pointer; /* Pointer/hand icon */
+		width: 15%; /* Set a width if needed */
+		display: inline-block;
+        position: absolute;
+        bottom: 10px;
+        right:2%;
+		
+        
+  }
+  	.bottom-group button:not(:last-child) {
+		border-right: none; /* Prevent double borders */
+	}
+
+  
+	/* Add a background color on hover */
+	.bottom-group button:hover {
+		background-color: #3e8e41;
+      }
+	  
+	/*button group for return button*/
+	.return-group button {
+  		background-color: #D3D3D3; /*Makes Gray background*/
+		border:  0px #D3D3D3;  /*Border around boxes is Gray*/
+		color: black; /* White text */
+		padding: 10px 10px; /* Some padding */
+		margin: 0;  /* Created space between buttons */
+		font-family: Arial Black, Times, serif; /* sets font */
+		font-size:  16px;	/* Sets size */
+		font-weight:  normal;	/*Sets normal or bold */
+		text-align: center;	/* Aligns to center of button */
+		cursor: pointer; /* Pointer/hand icon */
+		width: 15%; /* Set a width if needed */
+		display: inline-block;
+        position: absolute;
+        bottom: 10px;
+        left:2%;    
+	}
+	
+  	.return-group button:not(:last-child) {
+		border-right: none; /* Prevent double borders */
+	}
+  
+	/* Add a background color on hover */
+	.return-group button:hover {
+		background-color: #3e8e41;
+      }
+	  
+	
+	.dessert button {
+		height: 230px;
+		width: 300px;
+		margin: 10px 10px;
+		
+	}  
+	  
+	.dessert button:not(:last-child) {
+		border-right: none; /* Prevent double borders */
+	}
+	.dessert button:focus{
+		background-color: green; 
+	}
+</style>
+
+<head>
+	<script>
+		function readPin() {
+			//alert('fuck');
+			//alert((localStorage.getItem('saved_pin'));
+			alert( localStorage.getItem('saved_pin2') );
+		}
+	</script>
+	
+</head>
+<body  style="background-color:Black;">
+
+	
+<div id="myDIV" class="header" style = "height: 15%;">
+  <h2 style="margin:5px">Please Input Your Information For Rewards</h2>	
+</div>
+
+<!--Added a return button to payment screen-->
+<div class="return-group">
+	<button type="button" onclick="window.history.back()">RETURN</button>
+</div>
+
+<div class= "bottom-group">  
+   <button type="button" onclick="readPin()">SUBMIT</button>
+</div>
+
+<label style = "color: white; font-family: Arial Black, Times, serif" for ="phone">Phone Number:</label><br><br>
+<input style = "margin: 0px 0px;"type="tel" id="phone" name="phone" placeholder="555-555-5555" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required><br><br>
+
+<label style = "color: white; font-family: Arial Black, Times, serif" for ="email">Email:</label><br><br>
+<input style = "margin: 0px 0px;"type="email" id="email" name="email" placeholder="xxxx@xxxx.com" required><br><br>
+
+<label style = "color: white; font-family: Arial Black, Times, serif" for ="birthday">Birthday:</label><br><br>
+<input style = "margin: 0px 0px;"type="birthday" id="birthday" name="birthday" placeholder="mm/dd/yyyy" required><br><br>
+
+
+</body>
+</html>

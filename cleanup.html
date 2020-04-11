@@ -1,0 +1,33 @@
+<html>
+<head>
+	<script src="jquery-3.4.1.min.js"></script>
+	<script>
+	
+	$(document).ready(function() {
+			var url = "http://159.89.238.181:8080/api/items?category=1";
+			$.ajax({
+                url: url,
+                type: 'get',
+                dataType: 'JSON',
+                success: function(response) {
+                    for (let i = 0; i < response.length; i++) {
+						var array = response[i].ingredients.split(',');
+						for (let j = 0; j < array.length; j++) {
+							array[j] = array[j].trim();
+							array[j] = array[j].toLowerCase();
+						}
+						delete response[i]._id;
+						response[i].status = 1;
+						response[i].nutrition = response[i].nutrition.split(',')[0];
+						response[i].ingredients = array;
+						
+					}
+					console.log(JSON.stringify(response));
+                }
+            })
+        }); 
+	</script>	
+</head>
+
+<body style="background-color:White;"></body>
+</html>

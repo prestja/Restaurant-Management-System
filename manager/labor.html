@@ -156,17 +156,52 @@
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
-    $(document).ready(function(){ 
-		$("button").click(function(){
-			$.get("http://159.89.238.181:443/api/orders", function(data, status){
-				document.innerHTML+=data;
-			});
-        
-			$.post("http://159.89.238.181:443/api/orders", function(data, status){
-            
-			});
-		});
-    });
+	//adds row to the labor table
+	function addItem(item) {
+		var labTab = document.getElementById('labor');
+		
+		//adds row to labor table by getting the length and inserts
+		var rowCnt = labTab.rows.length;
+		var tr = labTab.insertRow(rowCnt);
+		tr = labTab.insertRow(rowCnt);
+		
+		var td = document.createElement('td');//inserts employee id
+		td = tr.insertCell(0);
+		td.append(item.id);
+		
+		td = document.createElement('td'); //inserts employee name
+		td = tr.insertCell(1);
+		td.append(item.fname + ' ' + item.lname);
+		
+		td = document.createElement('td'); //inserts start time
+		td = tr.insertCell(2);
+		td.append('Start time here');
+		
+		td = document.createElement('td'); //inserts end time
+		td = tr.insertCell(3);
+		td.append('end time here');
+		
+		td = document.createElement('td'); //inserts total hours worked
+		td = tr.insertCell(4);
+		td.append('total hours here');
+		
+		td = document.createElement('td'); //inserts total tips for employee
+		td = tr.insertCell(5);
+		td.append('tips here');
+	}
+		$(document).ready(function() {
+			/*var url = "http://159.89.238.181:8080/api/items?".concat(category);
+			$.ajax({
+				url: url,
+				type: 'get',
+				dataType: 'JSON',
+				success: function(response) {
+					response.forEach(item => 
+						addItem(item)
+					);
+				}
+			})*/
+		}); 
     </script>
 </head>
 <body style="background-color:Black;">
@@ -174,7 +209,7 @@
 	<div class="header">
 
 		<div class="button-group">
-			<button onclick="document.location = 'employee_main_page.html'">&#60&#60 BACK</button>
+			<button onclick="document.location = '../employee/landing.html'">&#60&#60 BACK</button>
 		</div>
 	
 	</div>
@@ -182,13 +217,13 @@
 	<!--Creates left menu for buttons for the different manager pages-->
 	<div class = "left-menu">
 		<div class="menu-button-group">
-			<button onclick="document.location = 'Manager_table_page.html'">TABLES</button>
+			<button onclick="document.location = 'tables.html'">TABLES</button>
 			<br><br>
-			<button onclick="document.location = '86_68_page.html'">86/68</button>
+			<button onclick="document.location = '86_68.html'">86/68</button>
 			<br><br>
-			<button onclick="document.location = 'Manager_tool_page.html'">TOOLS</button>
+			<button onclick="document.location = 'tools.html'">TOOLS</button>
 			<br><br>
-			<button onclick="document.location = 'Manager_report_page.html'">REPORTS</button>
+			<button onclick="document.location = 'reports.html'">REPORTS</button>
 		</div>
 	</div>
 	
@@ -198,13 +233,13 @@
 			<h2>REPORTS</h2>
 			<hr color = "black">
 			<div class="tool-button-group">
-				<button onclick="document.location = 'Manager_report_page.html'">SALES</button>
+				<button onclick="document.location = 'reports.html'">SALES</button>
 				<br><br>
-				<button onclick="document.location = 'Manager_inventory_page.html'">INV</button>
+				<button onclick="document.location = 'inventory.html'">INV</button>
 				<br><br>
-				<button onclick="document.location = 'Manager_labor_page.html'">LABOR</button>
+				<button onclick="document.location = 'labor.html'">LABOR</button>
 				<br><br>
-				<button onclick="document.location = 'Manager_comps_report_page.html'">COMPS</button>
+				<button onclick="document.location = 'comps_report.html'">COMPS</button>
 			</div>
 		</div>
 	<!--holds labor report-->
@@ -212,7 +247,7 @@
 			<h2>LABOR REPORT</h2>
 			<hr color="black">
 			<span style="text-align:left !important;position:relative;left:10px;">
-				<table style="width:90%">
+				<table style="width:90%" id="labor">
 					<tr>
 						<th>ID</th>
 						<th>NAME</th>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<style>	
+
+	.column {
+		background-color: #A9A9A9 !important; //makes Gray background
+		padding: 0%;
+		margin: 1%;
+		width: 600px;
+		height: 95%;
+		display: inline-block;
+		text-align: center;
+		position: absolute;
+	}
+	
+	.column-right {
+		background-color: pink;
+		padding: 0%;
+		margin: 1%;
+		width: 600px;
+		height: 95%;
+		display: inline-block;
+		text-align: center;
+		position: absolute;
+		right: 18%;
+	}
+	
+	img {
+		width: 100%;
+		height: 100%;
+		object-fit:cover;
+	}
+
+	@media screen and (max-width: 600px){
+		.column {
+			width: 100%;
+		}
+	}
+	
+	#ItemName {
+		text-align: center;
+		font-family: Arial Black, Times, serif; /* sets font */
+		font-size: 24px;
+		font-weight: bold;
+	}
+	
+	/*Created a menu button similar to header buttons*/
+	.menu-button-group button {
+		background-color: #D3D3D3; /*Makes Gray background*/
+		border:  0% #D3D3D3;  /*Border around boxes is Gray*/
+		color: black; /* White text */
+		padding: 5% 2%; /* Some padding */
+		margin: 0;  /* Created space between buttons */
+		font-family: Arial Black, Times, serif; /* sets font */
+		font-size:  16px;	/* Sets size */
+		font-weight:  normal;	/*Sets normal or bold */
+		text-align: center;	/* Aligns to center of button */
+		cursor: pointer; /* Pointer/hand icon */
+		width: 86%; /* Set a width if needed */
+		display: inline-block;
+		position: relative;
+		left: 15px;
+		top: 20px;
+		bottom: 0%;
+	}
+	
+	/* Add a background color on hover */
+	.menu-button-group button:hover {
+		background-color: #3e8e41;
+	}
+	
+</style>
+
+<body>
+
+	<div class="column">
+		<iframe src="../img/appetizer/Appetize_CheddarBites.jpg" style="width:100%; height: 400px"></iframe>
+		<br></br>
+		<p>Nutrition Facts</p>
+	</div>
+	
+	<div class="column-right">
+		<div id=ItemName id="itemName" name="Crispy Cheese Bites">
+			<p>Item Name && Item Price</p>
+			<br><br>
+			<p>Item Description</p>
+		</div>
+		
+		<!--button submits the order-->
+		<div class="menu-button-group" style="position:relative;bottom:-40%; !important;width:90%">
+			<button onclick="">SUBMIT ORDER</button>
+		</div>
+	</div>
+	
+</body>
+</html>

@@ -31,7 +31,6 @@
 		font-weight:  normal;	/*Sets normal or bold */
 		text-align: center;	/* Aligns to center of button */
 		cursor: pointer; /* Pointer/hand icon */
-		width: 15%; /* Set a width if needed */
 		display: inline-block;
 	}
 
@@ -157,17 +156,38 @@
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
-    $(document).ready(function(){ 
-		$("button").click(function(){
-			$.get("http://159.89.238.181:443/api/orders", function(data, status){
-				document.innerHTML+=data;
-			});
-        
-			$.post("http://159.89.238.181:443/api/orders", function(data, status){
-            
-			});
-		});
-    });
+	//adds item for the comps report onto the table
+	function addItem(item) {
+		var compsTab = document.getElementById('comps');
+		
+		var rowCnt = salesTab.rows.length; //gets current amount of rows
+		var tr = salesTab.insertRow(rowCnt); //adds new row below the last row
+		tr = salesTab.insertRow(rowCnt);
+		
+		var td = document.createElement('td'); //inserts item into the table
+		td = tr.insertCell(0);
+		td.append(item.name);
+		
+		var element = document.createElement('input');
+		element.attr('type','text');
+		element.attr('value',item.amount);
+		td = document.createElement('td'); //inserts amount name
+		td = tr.insertCell(1);
+		td.appendChild(element);
+	}
+		$(document).ready(function() {
+			/*var url = "http://159.89.238.181:8080/api/items?".concat(category);
+			$.ajax({
+				url: url,
+				type: 'get',
+				dataType: 'JSON',
+				success: function(response) {
+					response.forEach(item => 
+						addItem(item)
+					);
+				}
+			})*/
+		}); 
     </script>
 </head>
 <body style="background-color:Black;">
@@ -175,7 +195,7 @@
 	<div class="header">
 
 		<div class="button-group">
-			<button onclick="document.location = 'employee_main_page.html'">&#60&#60 BACK</button>
+			<button onclick="document.location = '../employee/landing.html'">&#60&#60 BACK</button>
 		</div>
 	
 	</div>
@@ -183,13 +203,13 @@
 	<!--Creates left menu for buttons for the different manager pages-->
 	<div class = "left-menu">
 		<div class="menu-button-group">
-			<button onclick="document.location = 'Manager_table_page.html'">TABLES</button>
+			<button onclick="document.location = 'tables.html'">TABLES</button>
 			<br><br>
-			<button onclick="document.location = '86_68_page.html'">86/68</button>
+			<button onclick="document.location = '86_68.html'">86/68</button>
 			<br><br>
-			<button onclick="document.location = 'Manager_tool_page.html'">TOOLS</button>
+			<button onclick="document.location = 'tools.html'">TOOLS</button>
 			<br><br>
-			<button onclick="document.location = 'Manager_report_page.html'">REPORTS</button>
+			<button onclick="document.location = 'reports.html'">REPORTS</button>
 		</div>
 	</div>
 	
@@ -199,13 +219,13 @@
 			<h2>REPORTS</h2>
 			<hr color = "black">
 			<div class="tool-button-group">
-				<button onclick="document.location = 'Manager_report_page.html'">SALES</button>
+				<button onclick="document.location = 'reports.html'">SALES</button>
 				<br><br>
-				<button onclick="document.location = 'Manager_inventory_page.html'">INV</button>
+				<button onclick="document.location = 'inventory.html'">INV</button>
 				<br><br>
-				<button onclick="document.location = 'Manager_labor_page.html'">LABOR</button>
+				<button onclick="document.location = 'labor.html'">LABOR</button>
 				<br><br>
-				<button onclick="document.location = 'Manager_comps_report_page.html'">COMPS</button>
+				<button onclick="document.location = 'comps_report.html'">COMPS</button>
 			</div>
 		</div>
 	<!--holds inventory report report-->
@@ -214,25 +234,18 @@
 			<hr color="black">
 			<!--edit button makes it to where the amount and 86'd can be edited-->
 			<span class="button-group">
-				<button onclick="editTable()'">EDIT</button>
+				<button onclick="editTable()'">SUBMIT INVENTORY</button>
 			</span>
 			<br><br>
 			<span style="text-align:left !important;position:relative;left:10px;">
 				<table style="width:90%">
 					<tr>
-						<th>ITEM:</th>
+						<th>ITEM</th>
 						<th>AMOUNT</th>
-						<th>86'D?</th>
 					</tr>
 				</table>
 			</span>
 		</div>
 	</div>
-	<script>
-		function editTable()
-		{
-			
-		}
-	</script>
 </body>
 </html>

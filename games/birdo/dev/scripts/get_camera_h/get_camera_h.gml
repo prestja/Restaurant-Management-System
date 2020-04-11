@@ -1,0 +1,1 @@
+return objGame.ideal_h;

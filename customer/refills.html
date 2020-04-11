@@ -1,6 +1,8 @@
 <!DOCTYPE html>
+
 <html>
 <style>
+	
 body {
   margin: 0;
   min-width: 250px;
@@ -21,6 +23,7 @@ body {
   text-align: center;
   top: 0;
 }
+
 
 
     /*button group for submit button*/
@@ -66,16 +69,60 @@ body {
 	.drink button:focus{
 		background-color: green; 
 	}
+	
+	.refillTemplate
+	{
+	display: none;
+	width: 100%;
+	background-color: aqua;
+	color:black
+	}
 </style>
 
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <script>
-		function handleStuff() {
+	window.addEventListener('message', addRefill, false);
+	function addRefill(message)
+	{
+		var clone = $("#refillTemplate").clone(true);
+		clone.css('display', 'block');
+		clone.children(".itemName").html(message.data.name);
+		clone.data("item", message.data); // assign the data of this item to the button for future use
+		clone.appendTo('.content');		
+		//console.log(message.data);
+	}
+	
+	function placeRefill() 
+	{
+		//console.log("Placing refill...");
+		var refills = document.getElementsByClassName("content")[0].getElementsByClassName("refillTemplate");
+		var refillArray = [];
+		Array.prototype.forEach.call(refills, function(i) 
+		{
+			//console.log(i);
+			var data = $(i).data("refill");
+			refillArray.push(data._id);
+		});
+		
+		var notifications =
+		{
+			table: 5,
+			variant: 0,
+			details: refillArray,
+		};
+		console.log(JSON.stringify(notifications));
+		$.post("http://159.89.238.181:8080/api/notifications/", JSON.stringify(notifications));
+	}
+	
+	
+	
+	function handleStuff() 
+	{
 			parent.window.postMessage("inline-block", '*');
-		}
-	</script>
+	}
+</script>
 
 </head>
 <body  style="background-color:Black;">>
@@ -97,17 +144,17 @@ body {
 </div>
 
 <div class = "drink" style = "width: 100%; margin-top: 150px;">
-	<button id="coke" style="background: url('../img/drinks/Drink_Coke.jpg') no-repeat; background-size: auto 100%; "; onclick=""></button>
-	<button id="dietcoke" style="background: url('../img/drinks/Drink_DietCoke.jpg') no-repeat; background-size: auto 100%; "; onclick=""></button>
-	<button id="drpp" style="background: url('../img/drinks/Drink_DrPepper.jpg') no-repeat; background-size: auto 100%; "; onclick=""></button>
-	<button id="rootbeer" style="background: url('../img/drinks/Drink_RootBeer.jpg') no-repeat; background-size: auto 100%; "; onclick=""></button>
-	<button id="sprite" style="background: url('../img/drinks/Drink_Sprie.jpg') no-repeat; background-size: auto 100%; "; onclick=""></button>
-	<button id="sweettea" style="background: url('../img/drinks/Drink_SweetTea.jpg') no-repeat; background-size: auto 100%; "; onclick=""></button>
-	<button id="lemonade" style="background: url('../img/drinks/Drink_Lemonade	.jpg') no-repeat; background-size: auto 100%; "; onclick=""></button>
+	<button id="coke" style="background: url('../img/drinks/Drink_Coke.jpg') no-repeat; background-size: auto 100%; "; onclick="addRefill('coke')"></button>
+	<button id="dietcoke" style="background: url('../img/drinks/Drink_DietCoke.jpg') no-repeat; background-size: auto 100%; "; onclick="addRefill('diet coke')"></button>
+	<button id="drpp" style="background: url('../img/drinks/Drink_DrPepper.jpg') no-repeat; background-size: auto 100%; "; onclick="addRefill('dr pepper')"></button>
+	<button id="rootbeer" style="background: url('../img/drinks/Drink_RootBeer.jpg') no-repeat; background-size: auto 100%; "; onclick="addRefill('root beer')"></button>
+	<button id="sprite" style="background: url('../img/drinks/Drink_Sprie.jpg') no-repeat; background-size: auto 100%; "; onclick="addRefill('sprite')"></button>
+	<button id="sweettea" style="background: url('../img/drinks/Drink_SweetTea.jpg') no-repeat; background-size: auto 100%; "; onclick="addRefill('sweet tea')"></button>
+	<button id="lemonade" style="background: url('../img/drinks/Drink_Lemonade.jpg') no-repeat; background-size: auto 100%; "; onclick="addRefill('lemonade')"></button>
 </div>
 
 <div class= "bottom-group">
-   <button type="button" onclick="alert('Your dessert has been ordered!')">SUBMIT</button>
+   <button type="button" onclick="alert('Your refill has been ordered!'); placeRefill() ">SUBMIT</button>
  </div>
     
 

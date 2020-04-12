@@ -217,14 +217,14 @@
 			
 				<div class="modal-header">
 					<span class="close">&times;</span>
-					<h2>Item Name</h2>
+					<h2 id="itemName">Item Name</h2>
 				</div>
 				<div class="modal-body">
 					<p>Item Description Goes Here</p>
 					<p>Some other text...</p>
 				</div>
 				<div class="modal-footer">
-					<h3>Submit Order Button Here</h3>
+					<button id="addOrder">Add To Order</h3>
 				</div>
 				
 			</div>
@@ -241,9 +241,9 @@
 		var span = document.getElementsByClassName("close")[0];
 		
 		// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-  modal.style.display = "none";
-}
+		span.onclick = function() {
+			modal.style.display = "none";
+		}
 		
 		//Return function for new back button
 		function returnMain(){
@@ -286,11 +286,24 @@ span.onclick = function() {
 		function updateOrder(message) {
 			if(message.data == 'block'){
 				modal.style.display = "block";
+				//sendToOrder(message.data);
 			}
 			else if(message.data != 'block'){
-				var target = document.getElementById('orderFrame');
-				target.contentWindow.postMessage(message.data, '*');
+				var name = document.getElementById("itemName");
+				name.innerHTML = message.data.name;
+				var body = document.getElementsByClassName("modal-body");
+				body.innerHTML = message.data.description;
+				var submit = document.getElementById("addOrder");
+				submit.onclick = sendToOrder(message.data);
+				//var target = document.getElementById('orderFrame');
+				//target.contentWindow.postMessage(message.data, '*');
 			}
+		}
+		
+		function sendToOrder(message){
+			console.log(message.data.name);
+			var target = document.getElementById('orderFrame');
+			target.contentWindow.postMessage(message.data, '*');
 		}
 		
 		function showStuff(){

@@ -12,17 +12,16 @@ pub struct Item {
 	name: String,
 	price: f32,
 	nutrition: String,
-	ingredients: serde_json::Value,
-	allergen: String,	
-	vegan: bool,
-	vegetarian: bool,
-	#[serde(default)] status: u32, // status defaults to 1 upon insertion
-	imgPath: String
+	imgPath: String,
+	#[serde(default)] ingredients: serde_json::Value,
+	#[serde(default)] allergen: String,	
+	#[serde(default)] vegan: bool,
+	#[serde(default)] vegetarian: bool,
+	#[serde(default)] status: u32 // status defaults to 1 upon insertion
 }
 
 #[get("/")]
-pub fn get_all (_conn: LogsDbConn) -> String
-{	
+pub fn get_all (_conn: LogsDbConn) -> String {	
 	let mut _str = String::from("[\n\t");
 	let _doc = doc!{};
 	let _coll = _conn.collection("items");
@@ -71,7 +70,7 @@ pub fn get_category (_conn: LogsDbConn, category: u32) -> String {
 
 #[post("/", data = "<item>")]
 pub fn post (_conn: LogsDbConn, item: Json<Item>) -> String {
-	let inner = item.into_inner(); // converts fron Json<Order> to just Order
+	let inner = item.into_inner(); // deserializes the Json-formatted item
 	let doc = doc! {
 		"name": inner.name,
 		"price": inner.price,
@@ -81,16 +80,25 @@ pub fn post (_conn: LogsDbConn, item: Json<Item>) -> String {
 		"vegan": inner.vegan,
 		"vegetarian": inner.vegetarian,
 		"status": 1,
-		"imgPath": inner.imgPath	
+		"imgPath": inner.imgPath
 	};
 	
 	let _coll = _conn.collection("items");
-	_coll.insert_one(doc, None).unwrap();
-	let response = json!({ // generate a response for the user
-		"code": 200,
-		"message": "Successfully inserted item into system."
-	});
-	return serde_json::to_string(&response).unwrap();
+	let result = _coll.insert_one(doc, None);
+	if let Ok(inserted) = result {
+		let response = json!({ // generate a response for the user
+			"code": 200,
+			"message": "Successfully inserted item into system."
+		});
+		return serde_json::to_string(&response).unwrap();
+	}
+	else {
+		let response = json!({ // generate a response for the user
+			"code": 404,
+			"message": "Error inserting item into system."
+		});
+		return serde_json::to_string(&response).unwrap();
+	}
 }
 
 #[post("/?<id>&<status>")]

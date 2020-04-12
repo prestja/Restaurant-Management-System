@@ -113,7 +113,7 @@
 		background-color: #A9A9A9 !important; //makes Gray background
 		padding: 10px;
 		margin: 10px 10px 10px 10px;
-		width: 900px;
+		width: 730px;
 		display: inline-block;
 		text-align: center;
 		border: 5px;
@@ -160,7 +160,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
 		$(document).ready(function() {
-			var url = "http://159.89.238.181:8080/api/staff";
+			var url = "http://159.89.238.181:8080/api/items";
 			$.ajax({
 				url: url,
 				type: 'get',
@@ -180,163 +180,57 @@
 			tr = empTab.insertRow(rowCnt);
 			var element;
 			
-			element = document.createElement('input');
-			element.setAttribute('type', 'text');
-			element.setAttribute('value',item.first_name);
-			element.setAttribute('class', item.id);
-			element.setAttribute('maxlength', 20);
-			element.setAttribute('size',10);
-			var td = document.createElement('td'); //inserts first name into the table
+			var td = document.createElement('td'); //inserts name into the table
 			td = tr.insertCell(0);
-			td.append(element);
+			td.append(item.name);
 			
 			element = document.createElement('input');
-			element.setAttribute('type', 'text');
-			element.setAttribute('value',item.last_name);
-			element.setAttribute('class', item.id);
-			element.setAttribute('maxlength', 20);
-			element.setAttribute('size',10);
-			td = document.createElement('td'); //inserts last name into the table
+			element.setAttribute('type', 'number');
+			if(item.price != null){
+				element.setAttribute('value',item.price.toFixed(2));
+			}
+			element.setAttribute('id', item._id.$oid);
+			td = document.createElement('td'); //inserts price into the table
 			td = tr.insertCell(1);
 			td.append(element);
 			
 			element = document.createElement('input');
-			element.setAttribute('type', 'text');
-			element.setAttribute('value',item.password);
-			element.setAttribute('class', item.id);
-			element.setAttribute('maxlength', 10);
-			element.setAttribute('size',10);
-			td = document.createElement('td'); //inserts password into the table
-			td = tr.insertCell(2);
-			td.append(element);
-			
-			element = document.createElement('input');
-			element.setAttribute('type', 'number');
-			element.setAttribute('value',item.wage.toFixed(2));
-			element.setAttribute('class', item.id);
-			element.setAttribute('maxlength', 5);
-			td = document.createElement('td'); //inserts wage into the table
-			td = tr.insertCell(3);
-			td.append(element);
-			
-			element = document.createElement('input');
-			element.setAttribute('type', 'text');
-			element.setAttribute('value',item.phone);
-			element.setAttribute('class', item.id);
-			element.setAttribute('maxlength', 20);
-			element.setAttribute('size',10);
-			td = document.createElement('td'); //inserts phone into the table
-			td = tr.insertCell(4);
-			td.append(element);
-			
-			element = document.createElement('input');
-			element.setAttribute('type', 'text');
-			if(item.position == 0)
-			{
-				element.setAttribute('value','Manager');
-			}
-			else
-			{
-				element.setAttribute('value','Waiter');
-			}
-			element.setAttribute('class', item.id);
-			element.setAttribute('maxlength', 20);
-			element.setAttribute('size',10);
-			td = document.createElement('td'); //inserts position into the table
-			td = tr.insertCell(5);
-			td.append(element);
-			
-			element = document.createElement('input');
 			element.setAttribute('type', 'button');
-			element.setAttribute('value','SAVE');
-			element.setAttribute('class', item.id);
-			element.setAttribute('onclick', 'modEmp(this.className)');
+			element.setAttribute('value','MODIFY');
+			element.setAttribute('class', item._id.$oid);
+			element.setAttribute('onclick', 'modItem(this.className)');
 			td = document.createElement('td'); //creates modify button for each item
-			td = tr.insertCell(6);
+			td = tr.insertCell(2);
 			td.appendChild(element);
 			
 			element = document.createElement('input');
 			element.setAttribute('type', 'button');
-			element.setAttribute('value','REMOVE');
-			element.setAttribute('class', item.id);
-			element.setAttribute('onclick', 'remEmp(this.className)');
+			element.setAttribute('value','REMOVE ITEM');
+			element.setAttribute('class', item._id.$oid);
+			element.setAttribute('onclick', 'remItem(this.className)');
 			td = document.createElement('td'); //creates remove button for each item
-			td = tr.insertCell(7);
+			td = tr.insertCell(3);
 			td.appendChild(element);
 		}
 		
-		function remEmp(id)//passes ajax request to remove the employee of id
+		function remItem(id)//passes ajax request to remove the employee of id
 		{
 			console.log(id);
-			var url = "http://159.89.238.181:8080/api/staff/delete?id=";
+			var url = "http://159.89.238.181:8080/api/items/delete?id=";
 			url = url.concat(id);
 			$.post(url, function(status) {				
 						var j = $.parseJSON(status);
 							alert(j.message);
 							window.location.reload();
-						});
-			
+			});
 		}
-		function modEmp(id){//modifies employee information
-			var row = document.getElementsByClassName(id);
-			var count = 0, firstName, lastName, password, wage, phone, position;
-			for(item of row)//goes through each item in the collection of employees
-			{
-				if(item.value != 'SAVE' && item.value != 'REMOVE')//gets rid of the save/remove buttons from the collection
-				{
-					if(count == 0)//sets all employee values
-					{
-						firstName = item.value;
-						count ++;
-					}
-					else if(count == 1)
-					{
-						lastName = item.value;
-						count++;
-					}
-					else if(count == 2)
-					{
-						password = item.value;
-						count++;
-					}
-					else if(count == 3)
-					{
-						wage = item.value;
-						count++;
-					}
-					else if(count == 4)
-					{
-						phone = item.value;
-						count++;
-					}
-					else if(count == 5)
-					{
-						position = item.value;
-						if(position == "Manager")
-						{
-							position = 0;
-						}
-						else if(position == "Waiter")
-						{
-							position = 1;
-						}
-						count++;
-					}
-				}
-			}
-			let request = {//collection of employee values
-				first_name: firstName,
-				last_name: lastName,
-				id: id,
-				password: password,
-				position: parseInt(position),
-				wage: parseFloat(wage),
-				phone: phone,				
-			}
-			console.log(JSON.stringify(request));
-			var url = "http://159.89.238.181:8080/api/staff/modify?id=";//ajax request to modify employees
+		function modItem(id){//modifies employee information
+			var price = parseFloat(document.getElementById(id).value);
+			var url = "http://159.89.238.181:8080/api/items/modify?id=";//ajax request to modify employees
 			url = url.concat(id);
-			$.post(url, JSON.stringify(request), function(data, status) {	
+			url = url.concat("&price=");
+			url = url.concat(price);
+			$.post(url, function(data, status) {	
 				alert(status);
 			});
 		}
@@ -384,20 +278,16 @@
 				<button onclick="document.location = 'discount.html'">DISCOUNT</button>
 			</div>
 		</div>
-	<!--holds remove employee form-->
+	<!--holds remove/modify items form-->
 		<div class = "items">
-			<h2>EMPLOYEES</h2>
+			<h2>MENU</h2>
 			<hr color="black">
 			<span style="text-align:left !important;position:relative;left:10px;">
 			<span style="text-align:left !important;position:relative;left:10px;">
 				<table id = 'rem'>
 					<tr>
-						<th>FIRST NAME</th>
-						<th>LAST NAME</th>
-						<th>PASSWORD</th>
-						<th>WAGE</th>
-						<th>PHONE</th>
-						<th>POSITION</th>
+						<th>NAME</th>
+						<th>PRICE</th>
 						<th></th>
 						<th></th>
 					</tr>

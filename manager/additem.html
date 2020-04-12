@@ -187,15 +187,14 @@
 				vegan: document.getElementById("vegan").checked,
 				vegetarian: document.getElementById("vegetarian").checked,			
 				imgPath: imagePath,
-				price: document.getElementById("price").value
+				price: parseFloat(document.getElementById("price").value)
 			}
 			//puts the object in JSON format and posts it to the backend to be added to the database
 			console.log(JSON.stringify(request));
-			/*$.post("http://159.89.238.181:8080/api/staff", JSON.stringify(request), function(data, status) {				
+			$.post("http://159.89.238.181:8080/api/items", JSON.stringify(request), function(data, status) {				
 				alert(status);
-			});*/
-			//resets all form data
-			//window.location.reload();
+				window.location.reload();
+			});
 		}		
 		function filterForm(){
 			var category = document.getElementById("category").value;

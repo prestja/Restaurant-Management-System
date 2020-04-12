@@ -91,7 +91,10 @@
 
 	<script src="../jquery-3.4.1.min.js"></script>
 	<script>
-		window.addEventListener('message', addRefill, false);
+		
+		window.addEventListener('message', get_table, false);
+		var table = 0;
+
 
 		function addRefill(message)
 		{
@@ -102,14 +105,14 @@
 			
 			clone.appendTo('.content');
 		}
-
-		function placeRefill()
+	
+	
+		function placeRefill(message)
 		{
 			var refills = document.getElementsByClassName('content')[0].getElementsByClassName('refillTemplate');
 			var refillArray = [];
 			Array.prototype.forEach.call(refills, function(i)
 			{
-				console.log(i);
 				var data = $(i).data("refill");
 				if(data != undefined)
 				{
@@ -117,19 +120,24 @@
 					refillArray.push(data);
 				}
 			});
-
+			
 			var notifications =
 			{
 				//variant ENUM :: 0 = help, 1 = notification
-				table: 5,
+				table: table,
 				variant: 1,
 				details: refillArray
 			};
-			console.log(JSON.stringify(notifications));
 			$.post("http://159.89.238.181:8080/api/notifications/", JSON.stringify(notifications));
 		}
-
-
+		function get_table(message)
+		{
+			table = parseInt(message.data); 
+		}
+		function on_load()
+		{
+			parent.window.postMessage("table", "*");
+		}
 		function removeRefill()
 		{
 			//This uses the buttons class as a 'delete' item to narrow the functionality to just it
@@ -166,7 +174,7 @@
 	</script>
 
 </head>
-<body style="background-color:Black;">
+<body style="background-color:Black;" onload = "on_load()">
 
 
 	<div id="myDIV" class="header" style="height: 15%;">
@@ -215,4 +223,7 @@
 
 
 </body>
+
+
+
 </html>

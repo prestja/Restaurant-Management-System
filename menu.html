@@ -183,9 +183,101 @@
 </style>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+	var modal;
+	var span;
+	function setup() {
+		// Get the modal
+		modal = document.getElementById("myModal");
+		// Get the <span> element that closes the modal
+		span = document.getElementsByClassName("close")[0];		
+		// When the user clicks on <span> (x), close the modal
+		span.onclick = function() {
+			modal.style.display = "none";
+		}
+	}
+	
+	//Return function for new back button
+	function returnMain(){
+		document.location = "customer/landing.html";
+	}
+
+	<!--selects menu type and displays menu items of that type-->
+	function menuType(mType)
+	{	
+		var t = document.getElementById("headerType");
+		var frame = document.getElementById('order_items');
+		if(mType === "drinks")
+		{
+			t.innerHTML = "BEVERAGES";
+			frame.src = "menu_category.html?category=3";
+		}
+		else if(mType === "apps")
+		{
+			t.innerHTML = "APPETIZERS";
+			frame.src = "menu_category.html?category=1";
+		}
+		else if(mType === "meals")
+		{
+			t.innerHTML = "ENTREES";
+			frame.src = "menu_category.html?category=0";
+		}
+		else if(mType === "kids")
+		{
+			t.innerHTML = "KIDS MENU";
+			frame.src = "menu_category.html?category=4";
+		}
+		else if(mType === "sweets")
+		{
+			t.innerHTML = "DESSERTS";
+			frame.src = "menu_category.html?category=2";
+		}
+	}
+	
+	window.addEventListener('message', updateOrder, false);
+	function updateOrder(message) {
+		if(message.data == 'block'){
+			modal.style.display = "block";
+		}
+		else if(message.data != 'block'){
+			var name = document.getElementById("itemName");
+			name.innerHTML = message.data.name;
+			var body = document.getElementsByClassName("modal-body");
+			body.innerHTML = message.data.description;
+			var submit = $("#addOrder");
+			
+			submit.click(function() {				
+				sendToOrder(message);
+			});
+		}
+	}
+	
+	function sendToOrder(message){
+		console.log("adding an item");
+		var target = document.getElementById('orderFrame');
+		target.contentWindow.postMessage(message.data, '*');
+	}
+	
+	function showStuff(){
+		var coll = document.getElementsByClassName("collapsible");
+		var i;
+
+		for (i = 0; i < coll.length; i++) {
+			coll[i].addEventListener("click", function() {
+				this.classList.toggle("active");
+				var content = this.nextElementSibling;
+				if (content.style.maxHeight){
+					content.style.maxHeight = null;
+				} else {
+					content.style.maxHeight = content.scrollHeight + "px";
+				}	 
+			});
+		}
+	}
+</script>
 </head>
 
-<body style="background-color:Black;">
+<body style="background-color:Black;" onload="setup()">
 	<!--has buttons for the menu types-->
 	<div class = "left-menu">
 		<div class="menu-button-group">
@@ -217,101 +309,20 @@
 			
 				<div class="modal-header">
 					<span class="close">&times;</span>
-					<h2>Item Name</h2>
+					<h2 id="itemName">Item Name</h2>
 				</div>
 				<div class="modal-body">
 					<p>Item Description Goes Here</p>
 					<p>Some other text...</p>
 				</div>
 				<div class="modal-footer">
-					<h3>Submit Order Button Here</h3>
+					<button id="addOrder">Add To Order</h3>
 				</div>
 				
 			</div>
 		</div>
-		
-		
 	</div>
-	<script>
-	
-		// Get the modal
-		var modal = document.getElementById("myModal");
-		
-		// Get the <span> element that closes the modal
-		var span = document.getElementsByClassName("close")[0];
-		
-		// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-  modal.style.display = "none";
-}
-		
-		//Return function for new back button
-		function returnMain(){
-			document.location = "customer/landing.html";
-		}
-	
-		<!--selects menu type and displays menu items of that type-->
-		function menuType(mType)
-		{	
-			var t = document.getElementById("headerType");
-			var frame = document.getElementById('order_items');
-			if(mType === "drinks")
-			{
-				t.innerHTML = "BEVERAGES";
-				frame.src = "menu_category.html?category=3";
-			}
-			else if(mType === "apps")
-			{
-				t.innerHTML = "APPETIZERS";
-				frame.src = "menu_category.html?category=1";
-			}
-			else if(mType === "meals")
-			{
-				t.innerHTML = "ENTREES";
-				frame.src = "menu_category.html?category=0";
-			}
-			else if(mType === "kids")
-			{
-				t.innerHTML = "KIDS MENU";
-				frame.src = "menu_category.html?category=4";
-			}
-			else if(mType === "sweets")
-			{
-				t.innerHTML = "DESSERTS";
-				frame.src = "menu_category.html?category=2";
-			}
-		}
-		
-		window.addEventListener('message', updateOrder, false);
-		function updateOrder(message) {
-			if(message.data == 'block'){
-				modal.style.display = "block";
-			}
-			else if(message.data != 'block'){
-				var target = document.getElementById('orderFrame');
-				target.contentWindow.postMessage(message.data, '*');
-			}
-		}
-		
-		function showStuff(){
-			var coll = document.getElementsByClassName("collapsible");
-			var i;
-	
-			for (i = 0; i < coll.length; i++) {
-				coll[i].addEventListener("click", function() {
-					this.classList.toggle("active");
-					var content = this.nextElementSibling;
-					if (content.style.maxHeight){
-						content.style.maxHeight = null;
-					} else {
-						content.style.maxHeight = content.scrollHeight + "px";
-					}	 
-				});
-			}
-		}
-		
-		
-	</script>
+
 	
 <!--Stores div for receipt items-->
 	<div class = "receipt">

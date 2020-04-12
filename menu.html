@@ -245,6 +245,8 @@
 		submit.unbind('click'); // remove any previous onclick listeners for this button		
 		submit.click(function() { // when clicked, send a message to the customer_order frame				
 			sendToOrder(message);
+			modal = document.getElementById("myModal");
+			modal.style.display = 'none';
 		});
 	}
 	

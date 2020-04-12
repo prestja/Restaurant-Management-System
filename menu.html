@@ -236,20 +236,17 @@
 	
 	window.addEventListener('message', updateOrder, false);
 	function updateOrder(message) {
-		if(message.data == 'block'){
-			modal.style.display = "block";
-		}
-		else if(message.data != 'block'){
-			var name = document.getElementById("itemName");
-			name.innerHTML = message.data.name;
-			var body = document.getElementsByClassName("modal-body");
-			body.innerHTML = message.data.description;
-			var submit = $("#addOrder");
-			
-			submit.click(function() {				
-				sendToOrder(message);
-			});
-		}
+		console.log("Updating order");
+		modal.style.display = "block";
+		var name = document.getElementById("itemName");
+		name.innerHTML = message.data.name;
+		var body = document.getElementsByClassName("modal-body");
+		body.innerHTML = message.data.description;
+		var submit = $("#addOrder");
+		submit.unbind('click'); // remove any previous onclick listeners for this button		
+		submit.click(function() { // when clicked, send a message to the customer_order frame				
+			sendToOrder(message);
+		});
 	}
 	
 	function sendToOrder(message){

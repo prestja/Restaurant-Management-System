@@ -47,11 +47,9 @@ h2 {
 	}
 	
 	function placeOrder() {
-		//console.log("Placing order...");
 		var items = document.getElementsByClassName("content")[0].getElementsByClassName("itemTemplate");
 		var itemArray = [];
 		Array.prototype.forEach.call(items, function(i) {
-			//console.log(i);
 			var data = $(i).data("item");
 			itemArray.push(data._id);
 		});

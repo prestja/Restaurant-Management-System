@@ -62,6 +62,12 @@ h2 {
 		console.log(JSON.stringify(order));
 		$.post("http://159.89.238.181:8080/api/orders/", JSON.stringify(order));
 	}
+	
+	$(document).ready(function(){
+		$("button").click(function(){
+			$(".itemTemplate").remove();
+		});
+	});
 
 </script>
 
@@ -86,7 +92,7 @@ h2 {
 			List any allergies or substitutions you would like <textarea rows = "1"> </textarea>
 		</div>
 		<div style = "align: right">
-			<button>Remove this item</button>
+			<button id="rmv">Remove this item</button>
 		</div>
 	</div>
 	

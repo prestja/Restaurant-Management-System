@@ -10,6 +10,7 @@ use mongodb::{doc, bson};
 #[derive(Serialize, Deserialize)]
 pub struct Item {
 	name: String,
+	category: u32,
 	price: f32,
 	nutrition: String,
 	imgPath: String,
@@ -73,6 +74,7 @@ pub fn post (_conn: LogsDbConn, item: Json<Item>) -> String {
 	let inner = item.into_inner(); // deserializes the Json-formatted item
 	let doc = doc! {
 		"name": inner.name,
+		"category": inner.category,
 		"price": inner.price,
 		"nutrition": inner.nutrition,
 		"ingredients": inner.ingredients,
@@ -101,6 +103,51 @@ pub fn post (_conn: LogsDbConn, item: Json<Item>) -> String {
 	}
 }
 
+#[post("/modify?<id>&<price>")]
+pub fn post_modify_price (conn: LogsDbConn, id: String, price: f32) -> String {
+	let cast = bson::oid::ObjectId::with_string(id.as_str());
+	let coll = conn.collection("items");
+	if let Ok(oid) = cast {
+		let filter = doc! {"_id": oid};		
+		let update = doc! {
+			"$set": {
+				"price": price
+			}
+		};
+		if let Ok (result) = coll.find_one_and_update(filter.clone(), update.clone(), None) {
+			if let Some(item) = result {
+				let response = json!({
+					"code": 200,
+					"message": "Successfully updated price for item"
+				});
+				return serde_json::to_string(&response).unwrap();
+			}
+			else {
+				let response = json!({
+					"code": 404,
+					"message": "Could not find item to update."
+				});
+				return serde_json::to_string(&response).unwrap();
+			}				
+		}
+		else {
+			let response = json!({
+				"code": 404,
+				"message": "Error accessing database."
+			});
+			return serde_json::to_string(&response).unwrap();
+		}
+	}
+	else {
+		let response = json!({
+			"code": 404,
+			"message": "Invalid or malformed object id."
+		});
+		return serde_json::to_string(&response).unwrap();	
+	}
+}
+
+
 #[post("/?<id>&<status>")]
 pub fn post_status(_conn: LogsDbConn, id: String, status: u32) -> String {
 	let cast = bson::oid::ObjectId::with_string(id.as_str());
@@ -114,7 +161,6 @@ pub fn post_status(_conn: LogsDbConn, id: String, status: u32) -> String {
 		};
 		let update = doc! {"status": status};
 		if let Ok (result) = coll.find_one_and_update(filter.clone(),_comp.clone(), None) {
-			println!("Got a result");
 			if let Some(item) = result {
 				let response = json!({
 					"code": 200,

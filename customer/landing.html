@@ -84,8 +84,7 @@
 	
 </style>
 <head>
-	<link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet'>
-	
+	<link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet'>	
 </head>
 
 <body style="background-color:Black;">
@@ -93,8 +92,8 @@
 	<!-- Bottom section holds order, pay, and play buttons-->
 	<div class="row" style= "height: 90vh; display: flex; flex-wrap: wrap;">
 		<div class="column" style="background: url('../img/burger.jpg') no-repeat; background-size: auto 100%;">		
-			<button class="button" onclick="document.location = '../menu.html'"></button>
-			<div class="title" onclick="document.location = '../menu.html'">Order</div> 		
+			<button class="button" onclick="goOrder()"></button>
+			<div class="title" onclick="goOrder()">Order</div> 		
 		</div>	
 		<div class="column" style="background: url('../img/game.jpg') no-repeat; background-size: auto 100%;">
 
@@ -102,16 +101,36 @@
 			<div class="title" onclick="pinPrompt()">Play</div> 		
 		</div>	
 		<div class="column" style="background: url('../img/payment.jpg') no-repeat; background-size: auto 100%;">
-			<button class="button" onclick="document.location = '../payment.html'"></button>
-			<div class="title" onclick="document.location = '../payment.html'">Pay</div> 		
+			<button class="button" onclick="goPay()"></button>
+			<div class="title" onclick="goPay()">Pay</div> 		
 		</div>	
 	</div>
 
 <script>
-	window.addEventListener('message', recPin, false);
+	function goOrder() {
+		var message = {
+			type: "order"
+		};
+		parent.window.postMessage(message, "*");
+	}
+	function goPlay() {
+		var message = {
+			type: "play"
+		};
+		parent.window.postMessage(message, "*");
+	}
+	
+	function goPay() {
+		var message = {
+			type: "pay"
+		};
+		parent.window.postMessage(message, "*");
+	}
+	
+	window.addEventListener('message', receivePIN, false);
 
 	// function called whenever landing receives a pin from its parent
-	function recPin(message) {		
+	function receivePIN(message) {		
 		if(message.data == "") {
 			var pin2 = prompt("Please enter a pin", "1234");
 			var pin3 = {

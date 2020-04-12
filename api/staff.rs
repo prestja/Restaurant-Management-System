@@ -74,6 +74,34 @@ pub fn get(_conn: LogsDbConn, id: u32) -> String {
 	return str;
 }
 
+#[get("/names")]
+pub fn get_names(_conn: LogsDbConn) -> String {
+	let mut str = String::from("[\n\t");
+	let mut _filter = mongodb::coll::options::FindOptions::new();
+	_filter.projection = Some(doc!{"names" : 1, "_id" : 0});
+	let _coll = _conn.collection("staff");
+	let cursor = _coll.find(None, Some(_filter.clone())).unwrap();
+	for result in cursor 
+	{ 
+		if let Ok(item) = result 
+		{
+			let _bson = mongodb::to_bson(&item).unwrap();
+			let _json = serde_json::ser::to_string(&_bson).unwrap();
+			str.push_str(&_json);
+		}
+		str.push_str(",\n\t");
+	}
+	if str.len() <= 3
+	{
+		return String::from("No entries found");
+	}
+	str.pop();
+	str.pop();
+	str.pop();
+	str.push_str("\n]");
+	return str;
+}
+
 #[get("/login?<id>&<password>")]
 pub fn get_login(_conn: LogsDbConn, id: String, password: String) -> String {	
 	let doc = doc!{"id": id, "password": password};
@@ -119,6 +147,67 @@ pub fn post(_conn: LogsDbConn, employee: Json<Employee>) -> String {
 	let response = json!({
 		"code": 200,
 		"message": "Inserted order into collection orders"
+	});
+	return serde_json::to_string(&response).unwrap();
+}
+
+#[post("/modify?<id>", data = "<employee>")]
+pub fn modify(_conn: LogsDbConn, id: String, employee: Json<Employee>) -> String {
+	let inner = employee.into_inner();
+	let filter = doc! {
+		"id": id
+	};
+	let replacement = doc! {
+		"first_name": inner.first_name,
+		"last_name": inner.last_name,
+		"id": inner.id,
+		"password": inner.password,
+		"wage": inner.wage,
+		"phone": inner.phone,
+		"position": inner.position
+	};
+	let coll = _conn.collection("staff");
+	if let Ok(result) = coll.find_one_and_replace(filter, replacement, None) {
+		if let Some(item) = result {
+			let response = json!({
+				"code": 200,
+				"message": "Successfully updated employee."
+			});
+			return serde_json::to_string(&response).unwrap();
+		}
+		else {
+			let response = json!({
+				"code": 404,
+				"message": "Error during insertion process: invalid or malformed employee."
+			});
+			return serde_json::to_string(&response).unwrap();
+		}			
+	}
+	else {
+		let response = json!({
+				"code": 404,
+				"message": "Could not find the requested employee."
+		});
+		return serde_json::to_string(&response).unwrap();
+	}
+}
+
+#[post("/delete?<id>")]
+pub fn delete(_conn: LogsDbConn, id: String) -> String {
+	let filter = doc! {
+		"id": id
+	};
+	let coll = _conn.collection("staff");
+	if let Ok (result) = coll.delete_one(filter, None) {
+		let response = json!({
+			"code": 200,
+			"message": "Removed the requested employee."
+		});
+		return serde_json::to_string(&response).unwrap();
+	}
+	let response = json!({
+		"code": 404,
+		"message": "Could not find that employee"
 	});
 	return serde_json::to_string(&response).unwrap();
 }

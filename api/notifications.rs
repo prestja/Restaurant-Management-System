@@ -1,14 +1,10 @@
 use crate::rocket_contrib;
 use crate::rocket_contrib::databases::mongodb::db::ThreadedDatabase;
 use crate::LogsDbConn;
-use crate::serde_derive;
 
-use rocket::response::content;
 use rocket_contrib::{databases::mongodb};
 use rocket_contrib::json::Json;
 use mongodb::{doc, bson};
-use mongodb::coll::options;
-use mongodb::oid;
 
 //Building a struct to contain notifications within
 #[derive(Serialize, Deserialize)]
@@ -17,7 +13,7 @@ pub struct Notification
 	//holds table id from which notif originated
 	table: u32,
 	//Holds type of notification (help, refill, etc)
-	variant: u32,
+	variant: u32, // 0: help, 1: refills, 3: printed receipt, 4: winner winner chicken dinner
 	//holds details regarding refill or type of help
 	#[serde(default)] details : serde_json::Value
 }

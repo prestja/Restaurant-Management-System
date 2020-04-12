@@ -2,7 +2,6 @@
 
 #[macro_use] extern crate rocket;
 #[macro_use] extern crate rocket_contrib;
-#[macro_use] extern crate serde;
 #[macro_use] extern crate serde_derive;
 
 use rocket::http::Method;
@@ -18,6 +17,8 @@ mod schedules;
 mod customers;
 mod items;
 mod notifications;
+mod coupons;
+mod timeclock;
 
 #[database("mongodb_logs")]
 pub struct LogsDbConn(mongodb::db::Database);
@@ -37,43 +38,47 @@ fn main()
     rocket::ignite()	
 	.mount("/api/tables", routes![tables::get_all])
 	.mount("/api/tables", routes![tables::get])
-	.mount("/api/tables", routes![tables::post])	
-	//.mount("/api/", routes![orders::get])
+	.mount("/api/tables", routes![tables::post])
+	// order functions	
 	.mount("/api/orders", routes![orders::get])
 	.mount("/api/orders", routes![orders::get_id])
-	.mount("/api/orders", routes![orders::get_status])	
+	.mount("/api/orders", routes![orders::get_status])
+	.mount("/api/orders", routes![orders::get_comps])
 	.mount("/api/orders", routes![orders::post])
 	.mount("/api/orders", routes![orders::comp])
 	.mount("/api/orders", routes![orders::get_table_orders])
-	/*
-	.mount("/api", routes![tables::post])
-	.mount("/api", routes![tables::update_table])
-	*/
+	.mount("/api/orders", routes![orders::apply_promotion])
+	// ingredients functions
 	.mount("/api/ingredients", routes![ingredients::get_all])
 	.mount("/api/ingredients", routes![ingredients::get])
-	.mount("/api/ingredients", routes![ingredients::put_count])
+	.mount("/api/ingredients", routes![ingredients::post_count])
+	// staff functions
 	.mount("/api/staff", routes![staff::get_all])
 	.mount("/api/staff", routes![staff::get])
+	.mount("/api/staff", routes![staff::get_names])
 	.mount("/api/staff", routes![staff::get_login])
 	.mount("/api/staff", routes![staff::post])
-	//.mount("/api", routes![staff::update_staff_table])
-	//.mount("/api", routes![staff::manager_add_staff])
-	
+	.mount("/api/staff", routes![staff::delete])
+	.mount("/api/staff", routes![staff::modify])
+	// item functions
+	.mount("/api/items/", routes![items::get_all])
 	.mount("/api/items/", routes![items::get_category])
+	.mount("/api/items/", routes![items::post])
 	.mount("/api/items/", routes![items::post_status])
+	.mount("/api/items/", routes![items::post_modify_price])
+	// notification functions
 	.mount("/api/notifications", routes![notifications::get_all])
 	.mount("/api/notifications", routes![notifications::post])
-	/*
-	.mount("/api", routes![customers::get_all])
-	.mount("/api", routes![customers::get])
-	.mount("/api", routes![customers::post])
-	*/
+	// customer functions
 	.mount("/api/customers", routes![customers::update_rewards])
-	/*
-	.mount("/api", routes![schedules::get_all])
-	.mount("/api", routes![schedules::get])
-	.mount("/api", routes![schedules::post])
-	*/	
+	// coupons functions
+	.mount("/api/coupons", routes![coupons::get_all])
+	.mount("/api/coupons", routes![coupons::get_code])
+	.mount("/api/coupons", routes![coupons::post])
+	.mount("/api/timeclock", routes![timeclock::clock_in])
+	.mount("/api/timeclock", routes![timeclock::clock_out])
+	.mount("/api/timeclock", routes![timeclock::get_all])
+	// mount and launch	
 	.attach(LogsDbConn::fairing())
 	.attach(cors)
 	.launch();

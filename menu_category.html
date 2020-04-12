@@ -128,62 +128,58 @@ body {font-family: Arial, Helvetica, sans-serif;}
 
 <script src="jquery-3.4.1.min.js"></script>
 	<script>
-	
-	
-	
-	function addItem(item) {
-		console.log("adding item");
-		var clone = $("#item_template").clone(true);		
-		if(item.status == 1) {
-			clone.css('display','block'); 
-		}
-		else {	
-			clone.css('display','none');
-		}
-		clone.appendTo('.container');
-		clone.children("button").html(item.name); // assign the human-readable name for this button
-		clone.children("button").attr("id",item._id.$oid);
-		clone.children("button").data("item", item); // assign the data of this item to the button for future use
-		clone.children("button").click(function () { // when button is clicked, send the item
-			console.log("button was clicked");
-			var item = $(this).data("item");
-			parent.window.postMessage(item, "*"); // send the item to parent container for processing
-		});
-		return clone;
-	}
-	
-	function showContent(nutrition) {
-		var coll = document.getElementsByClassName("collapsible");
-		var i;
-	
-		for (i = 0; i < coll.length; i++) {
-			coll[i].addEventListener("click", function() {
-				this.classList.toggle("active");
-				var content = this.nextElementSibling;
-				if (content.style.maxHeight){
-					content.style.maxHeight = null;
-				} else {
-					content.style.maxHeight = content.scrollHeight + "px";
-				}	 
-			});
-		}
-	}	
-	
-	$(document).ready(function() {
-		var queryStr = window.location.search;
-		var category = queryStr.substr(1)
-		var url = "http://159.89.238.181:8080/api/items?".concat(category);
-		$.ajax({
-			url: url,
-			type: 'get',
-			dataType: 'JSON',
-			success: function(response) {
-				response.forEach(item => 
-					addItem(item)
-				);
+		function addItem(item) {
+			var clone = $("#item_template").clone(true);		
+			if(item.status == 1) {
+				clone.css('display','block'); 
 			}
-		});
-	}); 
+			else {	
+				clone.css('display','none');
+			}
+			clone.appendTo('.container');
+			clone.children("button").html(item.name); // assign the human-readable name for this button
+			clone.children("button").attr("id",item._id.$oid);
+			clone.children("button").data("item", item); // assign the data of this item to the button for future use
+			clone.children("button").click(function () { // when button is clicked, send the item
+				console.log("button was clicked");
+				var item = $(this).data("item");
+				parent.window.postMessage(item, "*"); // send the item to parent container for processing
+			});
+			return clone;
+		}
+		
+		function showContent(nutrition) {
+			var coll = document.getElementsByClassName("collapsible");
+			var i;
+		
+			for (i = 0; i < coll.length; i++) {
+				coll[i].addEventListener("click", function() {
+					this.classList.toggle("active");
+					var content = this.nextElementSibling;
+					if (content.style.maxHeight){
+						content.style.maxHeight = null;
+					} else {
+						content.style.maxHeight = content.scrollHeight + "px";
+					}	 
+				});
+			}
+		}	
+		
+		$(document).ready(function() {
+			var queryStr = window.location.search;
+			var category = queryStr.substr(1)
+			var url = "http://159.89.238.181:8080/api/items?".concat(category);
+			$.ajax({
+				url: url,
+				type: 'get',
+				dataType: 'JSON',
+				success: function(response) {
+					response.forEach(item => 
+						addItem(item)
+					);
+				}
+			});
+		}); 
 	</script>
 	
 </head>

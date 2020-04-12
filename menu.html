@@ -195,11 +195,10 @@
 		span.onclick = function() {
 			modal.style.display = "none";
 		}
-	}
-	
-	//Return function for new back button
-	function returnMain(){
-		document.location = "customer/landing.html";
+		var toggle = {
+			type: "show"
+		};
+		parent.window.postMessage(toggle, "*");
 	}
 
 	<!--selects menu type and displays menu items of that type-->
@@ -288,7 +287,6 @@
 			<br><br>
 			<button onclick="menuType('sweets')">DESSERTS</button>
 			<br><br>
-			<button onclick="returnMain()">BACK</button>
 		</div>
 	</div>
 	<!--Stores menu items of menu type selected from the buttons, default is beverages-->

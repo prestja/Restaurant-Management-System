@@ -195,10 +195,24 @@
 </style>
 
 <head>
+<script>
+	function setup() {
+		var toggle = {
+			type: "show"
+		};
+		parent.window.postMessage(toggle, "*");
+	}
 	
+	function goRewards() {
+		var message = {
+			type: "rewards"
+		}
+		parent.window.postMessage(message, "*");
+	}
+</script>
 </head>
 
-<body>
+<body onload="setup()">
 <div class="row">
 	<div class="column-left">
 		<h2>PAYMENT METHOD</h2>
@@ -231,9 +245,8 @@
 		<h2>REWARDS</h2>
 		<div class="addRewards">
 			<div class="rewards-button">
-				<button onclick="document.location= 'customer/landing.html'">BACK</button>
-				<button onclick="">SIGN UP</button>
-				<button onclick="document.location = 'customer/rewards.html'">CURRENT MEMBER</button>
+				<button>SIGN UP</button>
+				<button onclick="goRewards()">CURRENT MEMBER</button>
 			</div>
 		</div>
 		

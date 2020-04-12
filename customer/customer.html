@@ -148,6 +148,7 @@
 					pin = message.data.pin;
 				}
 				document.getElementById("ifrm").contentWindow.postMessage(pin, "*");
+				showButton(true);
 			}
 			else if(message.data.type == "table") {
 				document.getElementById("ifrm").contentWindow.postMessage(table, "*");	

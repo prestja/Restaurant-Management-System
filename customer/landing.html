@@ -136,15 +136,13 @@
 			var pin3 = {
 				type: "pin", pin: pin2
 			};
-			parent.window.postMessage(pin3, "*");
+			parent.window.postMessage(pin3, "*"); // post the new pin to the parent
 		}
-		// tell parent to hide the back button
-		var response = {
-			type: "back",
-			state: true
-		}
-		parent.window.postMessage(response, "*");
-		window.location = "play.html";
+		
+		var navigation = {
+			type: "play"
+		};
+		parent.window.postMessage(navigation, "*");
 	}
 	
 	// function called when attempting to change to games page

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <style>
-* {
+	*{
 		box-sizing: border-box;
 	}
 
@@ -12,7 +12,6 @@
 		height: 100%
 	}
 	
-	/*Created a header container to hold buttons at the top*/
 	.header {
 		padding: 10px;
 		<!-- background-color: blue; -->
@@ -45,39 +44,46 @@
 		background-color: #3e8e41;
 	}
 
-.container{
-	margin: 20px auto;
-	width:400px;
-	height:400px;
-	background-color:#fff;
-	display:grid;
-	grid-template-columns: 200px 200px;
-	grid-row: auto auto;
-	grid-column-gap: 20px;
-	grid-row-gap: 20px;
-  .box{
-    background-color:white;
-    padding:20px;
-    border-radius:10px;
-    color:#fff;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:100px;
-    font-family: Arial Black, Times, serif;
-	
-  }
-
-}
+	.container {
+		margin: 20px auto;
+		width:400px;
+		height:400px;
+		background-color:#fff;
+		display:grid;
+		grid-template-columns: 200px 200px;
+		grid-row: auto auto;
+		grid-column-gap: 20px;
+		grid-row-gap: 20px;
+		.box {
+			background-color:white;
+			padding:20px;
+			border-radius:10px;
+			color:#fff;
+			display:flex;
+			align-items:center;
+			justify-content:center;
+			font-size:100px;
+			font-family: Arial Black, Times, serif;
+		}
+	}
 
 </style>
 
-<body style="background-color:Black;">
-<div class="container" style= "color:white; background: url('../img/games/birdo.png') no-repeat; background-size: 100%;">Birdo</div>
-<div class="container" style= "color:white; background: url('../img/games/diduno.png') no-repeat; background-size: 100%;">Diduno</div>
-<div class="container" style= "color:white; background: url('../img/games/bedazzled.png') no-repeat; background-size: 100%;">Bedazzled</div>
-<div class="container" style= "color:white; background: url('../img/games/tictac.png') no-repeat; background-size: 100%;">TicTac</div>
+<head>
+	<script>
+		function setup() {
+			var message = {
+				type: "show"
+			};
+			parent.window.postMessage(message, "*");
+		}
+	</script>
+</head>
+
+<body style="background-color:Black;" onload="setup()">
+	<div class="container" style= "color:white; background: url('../img/games/birdo.png') no-repeat; background-size: 100%;">Birdo</div>
+	<div class="container" style= "color:white; background: url('../img/games/diduno.png') no-repeat; background-size: 100%;">Diduno</div>
+	<div class="container" style= "color:white; background: url('../img/games/bedazzled.png') no-repeat; background-size: 100%;">Bedazzled</div>
+	<div class="container" style= "color:white; background: url('../img/games/tictac.png') no-repeat; background-size: 100%;">TicTac</div>
 </body>
-
-
 </html>

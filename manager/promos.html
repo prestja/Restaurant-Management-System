@@ -172,11 +172,21 @@
 			alert("Promotion added successfully!");
 		}
 		else if(promoType == 'kids'){
+			var now = new Date();
+			var month = (now.getMonth()+1);
+			var day = now.getDate();
+			if(month < 10)
+				month = "0" + month;
+			if(day < 10)
+				day = "0" + day;
+			var today = now.getFullYear() + '-' + month + '-' + day;
+			day = day+1;
+			var tomorrow = now.getFullYear() + '-' + month + '-' + day;
 			let request = {
 			name : "Kids Eat Free",
-			start : new Date(),
-			end : new Date()+1,
-			amount : 5.00 //change later to be based on the kids menu price
+			start : today,
+			end : tomorrow,
+			category : 4
 		}
 		console.log(JSON.stringify(request));
 		//posts the object to the backend to be added into the database
@@ -189,14 +199,23 @@
 			end : document.getElementById("endDate").value = "";
 			amount : document.getElementById("val").value = "";
 			alert("Promotion added successfully!");
-			console.log(request);
 		}
 		else if(promoType == 'drinks'){
+			var now = new Date();
+			var month = (now.getMonth()+1);
+			var day = now.getDate();
+			if(month < 10)
+				month = "0" + month;
+			if(day < 10)
+				day = "0" + day;
+			var today = now.getFullYear() + '-' + month + '-' + day;
+			day = day+1;
+			var tomorrow = now.getFullYear() + '-' + month + '-' + day;
 			let request = {
 			name : "Free Drinks",
-			start : new Date(),
-			end : new Date(),
-			amount : 5.00 //change later to be based on the drinks menu price
+			start : today,
+			end : tomorrow,
+			category : 3
 		}
 		console.log(JSON.stringify(request));
 		//posts the object to the backend to be added into the database

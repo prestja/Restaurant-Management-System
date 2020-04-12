@@ -1,18 +1,87 @@
+<!DOCTYPE html>
 <html>
-
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-	body {
-		width: 100%;
-		height: 100%;
-		margin: 0;
-	}
-	
-	#item_template {
+body {font-family: Arial, Helvetica, sans-serif;}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  position: relative;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  border: 1px solid #888;
+  width: 80%;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  -webkit-animation-name: animatetop;
+  -webkit-animation-duration: 0.4s;
+  animation-name: animatetop;
+  animation-duration: 0.4s
+}
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+  from {top:-300px; opacity:0} 
+  to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+  from {top:-300px; opacity:0}
+  to {top:0; opacity:1}
+}
+
+/* The Close Button */
+.close {
+  color: white;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-header {
+  padding: 2px 16px;
+  background-color: #5cb85c;
+  color: white;
+}
+
+.modal-body {padding: 2px 16px;}
+
+.modal-footer {
+  padding: 2px 16px;
+  background-color: #5cb85c;
+  color: white;
+}
+
+
+#item_template {
 		background-color: aqua;
 		width:100%;
 		height: 10%;
 		margin-bottom: 10px;
-		display:none;	/*Mike: Changed from none to block to work*/
+		display: none;	/*Mike: Changed from none to block to work*/
 	}
 		
 	/*Mike: Did the following*/
@@ -55,12 +124,12 @@
 		transition: max-height 0.2s ease-out;	/*Speed content expands when clicked*/
 		background-color: #f1f1f1;	/*Background of content*/
 	}
-	
 </style>
 
-<head>
-	<script src="jquery-3.4.1.min.js"></script>
+<script src="jquery-3.4.1.min.js"></script>
 	<script>
+	
+	
 	
 	function addItem(item) {
 		var clone = $("#item_template").clone(true);
@@ -74,21 +143,14 @@
 			clone.css('display','none');
 		}
 		clone.appendTo('.container');
-		clone.children("button").html(item.name);
-		clone.children("button").attr("value",item.name);
+		clone.children("button").html(item.name); // assign the human-readable name for this button
 		clone.children("button").attr("id",item._id.$oid);
-		clone.children("button").attr("nutrition", item.nutrition);
-		clone.children("button").attr("ingredients", item.ingredients);
-		
+		clone.children("button").data("item", item); // assign the data of this item to the button for future use
+		clone.children("button").click(function () { // when button is clicked, send the item
+			var item = $(this).data("item");
+			parent.window.postMessage(item, "*"); // send the item to parent container for processing
+		});
 		return clone;
-	}
-	
-	<!-- Michael Started Here -->
-	function handleStuff(value) {
-			//alert("on click");
-			var stuff = document.getElementsByClassName("content");
-			console.log(parent.window.postMessage(value, '*'));
-			
 	}
 	
 	function showContent(nutrition){
@@ -106,13 +168,11 @@
 				}	 
 			});
 		}
-	}
-	
+	}	
 	
 	$(document).ready(function() {
-            var queryStr = window.location.search; // will give you ?sndReq=234
+            var queryStr = window.location.search;
 			var category = queryStr.substr(1)
-			console.log(category);
 			var url = "http://159.89.238.181:8080/api/items?".concat(category);
 			$.ajax({
                 url: url,
@@ -124,27 +184,75 @@
                     );
                 }
             });
-        }); 
+		}); 
 	</script>
 	
 </head>
-
 <body style="background-color:White;">
-	<div class = "container" style="width: 100%; height: 100%; overflow: auto; background-color:red">
-		<div id ="item_template">
-			<button class="collapsible" onclick="handleStuff(this.id);">Open Collapsible</button>
-			<div class="content">
-				<p>Some Text</p>
-				<p>Some Text</p>
-			</div>
-			<!--<p>SOME TEXT</p>-->
-		</div>
-	</div>
-	
-	
-	<script>
 
-	</script>
+<div class = "container" style="width: 100%; height: 100%; overflow: auto; background-color:white">
+		<div id ="item_template">
+			<!-- Trigger/Open The Modal -->
+			<button id="myBtn" class="collapsible" onclick="sendParent()">Open Collapsible</button>
+			
+			<!-- The Modal -->
+			<div id="myModal" class="modal">
+
+			<!-- Modal content -->
+			<div class="modal-content">
+				<div class="modal-header">
+					<span class="close">&times;</span>
+					<h2>Item Name</h2>
+				</div>
+				<div class="modal-body">
+					<p>Item Description Goes Here</p>
+					<p>Some other text...</p>
+				</div>
+				<div class="modal-footer">
+					<h3>Submit Order Button Here</h3>
+				</div>
+			</div>
+
+			</div>
+		</div>	
+</div>
+
+
+
+<script>
+// Get the modal
+var modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal 
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
+
+//Sending it to parent
+function sendParent() {
+	parent.window.postMessage("block", '*');
+}
 	
+</script>
+
 </body>
 </html>

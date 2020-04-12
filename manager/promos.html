@@ -103,7 +103,7 @@
 		margin: 10px 10px 10px;
 		position: absolute;
 		width: 160px;
-		height: 400px;
+		height: 450px;
 		left: 20px;
 		display: inline-block;
 	}
@@ -147,18 +147,71 @@
 </style>
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script>
-    $(document).ready(function(){ 
-		$("button").click(function(){
-			$.get("http://159.89.238.181:443/api/orders", function(data, status){
-				document.innerHTML+=data;
-			});
-        
-			$.post("http://159.89.238.181:443/api/orders", function(data, status){
-            
-			});
-		});
-    });
+	<script>
+	function handleSubmit(){
+		//creates object for the promotion
+		var promoType = document.getElementById("promo").value;
+		console.log(promoType);
+		if(promoType == 'other'){
+		let request = {
+			name : document.getElementById("name").value,
+			start : document.getElementById("startDate").value,
+			end : document.getElementById("endDate").value,
+			amount : parseFloat(document.getElementById("val").value)
+		}
+		console.log(JSON.stringify(request));
+		//posts the object to the backend to be added into the database
+		//$.post("http://159.89.238.181:8080/api/", JSON.stringify(request), function(data, status) {				
+		//		alert(status);
+		//});
+		//resets the data for the object
+			name : document.getElementById("name").value = "";
+			start : document.getElementById("startDate").value = "";
+			end : document.getElementById("endDate").value = "";
+			amount : document.getElementById("val").value = "";
+			alert("Promotion added successfully!");
+		}
+		else if(promoType == 'kids'){
+			let request = {
+			name : "Kids Eat Free",
+			start : new Date(),
+			end : new Date()+1,
+			amount : 5.00 //change later to be based on the kids menu price
+		}
+		console.log(JSON.stringify(request));
+		//posts the object to the backend to be added into the database
+		//$.post("http://159.89.238.181:8080/api/", JSON.stringify(request), function(data, status) {				
+		//		alert(status);
+		//});
+		//resets the data for the object
+			name : document.getElementById("name").value = "";
+			start : document.getElementById("startDate").value = "";
+			end : document.getElementById("endDate").value = "";
+			amount : document.getElementById("val").value = "";
+			alert("Promotion added successfully!");
+			console.log(request);
+		}
+		else if(promoType == 'drinks'){
+			let request = {
+			name : "Free Drinks",
+			start : new Date(),
+			end : new Date(),
+			amount : 5.00 //change later to be based on the drinks menu price
+		}
+		console.log(JSON.stringify(request));
+		//posts the object to the backend to be added into the database
+		//$.post("http://159.89.238.181:8080/api/", JSON.stringify(request), function(data, status) {				
+		//		alert(status);
+		//});
+		//resets the data for the object
+			name : document.getElementById("name").value = "";
+			start : document.getElementById("startDate").value = "";
+			end : document.getElementById("endDate").value = "";
+			amount : document.getElementById("val").value = "";
+			alert("Promotion added successfully!");
+		}
+		
+	}
     </script>
 </head>
 <body style="background-color:Black;">
@@ -192,7 +245,11 @@
 			<div class="tool-button-group">
 				<button onclick="document.location = 'tools.html'">ADD EMP</button>
 				<br><br>
-				<button onclick="document.location = 'employees.html'">REM EMP</button>
+				<button onclick="document.location = 'employees.html'">EMPLOYEES</button>
+				<br><br>
+				<button onclick="document.location = 'additem.html'">ADD ITEM</button>
+				<br><br>
+				<button onclick="document.location = 'items.html'">MOD ITEMS</button>
 				<br><br>
 				<button onclick="document.location = 'promos.html'">PROMOS</button>
 				<br><br>
@@ -204,7 +261,6 @@
 			<h2>PROMOS</h2>
 			<hr color="black">
 			<span style="text-align:left !important;position:relative;left:10px;">
-			<form id ="rem">
 					<label>Select which promotion you would like to run:</label>
 					<select id="promo" onclick="selectOption()">
 						<option value="kids">Kids Eat Free</option>
@@ -215,7 +271,7 @@
 					<!--If the manager selects other, form displays-->
 					<span id = "oth" style="display:none">
 						<label>Name of promotion:</label>
-						<input type="text" id="amt" placeholder="Name">
+						<input type="text" id="name" placeholder="Name">
 						<br><br>
 						<label>Start Date:</label>
 						<input type="date" id="startDate">
@@ -223,16 +279,11 @@
 						<label>End Date:</label>
 						<input type="date" id="endDate">
 						<br><br>
-						<label>Type of discount:</label>
-						<select id="discType">
-							<option value="perc">Percent</option>
-							<option value="amt">Amount</option>
-						</select>
-						<input type="text" id="val" placeholder="0% or $0.00">
+						<label>Discount Amount:</label>
+						<input type="text" id="val" placeholder="$0.00">
 						<br><br>
 					</span>
-					<input type ="submit" value ="ADD PROMOTION"/>
-			</form>
+					<input type ="button" value ="ADD PROMOTION" onclick="handleSubmit()"/>
 			<script>
 				<!--If other is selected, display form to fill out-->
 				function selectOption(){

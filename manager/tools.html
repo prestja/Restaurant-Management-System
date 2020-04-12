@@ -103,7 +103,7 @@
 		margin: 10px 10px 10px;
 		position: absolute;
 		width: 160px;
-		height: 400px;
+		height: 450px;
 		left: 20px;
 		display: inline-block;
 	}
@@ -173,7 +173,6 @@
 			position: document.getElementById("pos").value = "";
 			wage: document.getElementById("hourly").value = "";
 			phone: document.getElementById("phone").value = "";
-			alert("Employee added successfully!");
 		}		
 	</script>
 </head>
@@ -199,7 +198,11 @@
 			<div class="tool-button-group">
 				<button onclick="document.location = 'tools.html'">ADD EMP</button>
 				<br><br>
-				<button onclick="document.location = 'employees.html'">REM EMP</button>
+				<button onclick="document.location = 'employees.html'">EMPLOYEES</button>
+				<br><br>
+				<button onclick="document.location = 'additem.html'">ADD ITEM</button>
+				<br><br>
+				<button onclick="document.location = 'items.html'">MOD ITEMS</button>
 				<br><br>
 				<button onclick="document.location = 'promos.html'">PROMOS</button>
 				<br><br>
@@ -224,7 +227,7 @@
 				<input type="text" id="empPass" name="empPass" placeholder="123456" maxlength=10 size=12/>
 				<br><br>
 				<label>POSITION:</label>
-				<input type="text" id="pos" name="pos" placeholder="0 : Manager, 1: Waiter" maxlength=2 size=20/>
+				<input type="text" id="pos" name="pos" placeholder="0: Manager, 1: Waiter" maxlength=2 size=20/>
 				<br><br>
 				<label>HOURLY:</label>
 				<input type="text" id="hourly" name="hourly" placeholder="$7.25" maxlength=5 size=12/>

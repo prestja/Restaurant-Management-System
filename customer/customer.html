@@ -18,12 +18,12 @@
         position: relative;
         /*background-color:plum;*/
         /*color:white;*/
-        border-color:transparent;
+        //border-color:transparent;
 		
 		background-color: #D3D3D3; /*Makes Gray background*/
-		border:  0px #D3D3D3;  /*Border around boxes is Gray*/
+		border:  0% #D3D3D3;  /*Border around boxes is Gray*/
 		color: black; /* White text */
-		padding: 10px 10px; /* Some padding */
+		padding: 1% 1%; /* Some padding */
 		margin-top: 5px;  /* Created space between buttons */
 		font-family: Arial Black, Times, serif; /* sets font */
 		font-size:  16px;	/* Sets size */
@@ -135,7 +135,7 @@
 		}		
 		
 		window.addEventListener('message', master_listener, false);
-	
+		
 		function master_listener(message) {
 			if(message.data.type == "back" ) {
 				showButton(message.data.state);
@@ -145,9 +145,17 @@
 					pin = message.data.pin;
 				}
 				document.getElementById("ifrm").contentWindow.postMessage(pin, "*");
-			}			
+			}
+			else if(message.data.type == "table") {
+				document.getElementById("ifrm").contentWindow.postMessage(table, "*");	
+			}
 		}
-			
+		
+		function goRoulette() {
+			var home = document.getElementById("ifrm");
+			home.src = "roulette.html";
+		}
+		
 	</script>
 	
 </head>
@@ -158,6 +166,7 @@
         <button id = "nav-back" onclick ="goBack();" >Back</button>
 		<button id = "nav-help" onclick = "myFunction()">Help</button>
         <button id = "nav-refills" onclick ="goRefill()">Refills</button>
+		<button id = "nav-roulette" onclick ="goRoulette()">Test Roulette</button>
     </div>
 
     <!---Content -->

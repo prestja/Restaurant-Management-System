@@ -49,11 +49,16 @@
 </style>
 <head>
 	<link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet'>
-    
-    <script src="jquery-3.4.1.min.js"></script>
+    <!--changed to https://... below to remove error-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
         function addTicket(order)
         {
+		
+			//Started here
+			console.log(JSON.stringify(order));
+			//Stopped here
+			
             var clone = $("#ticket_template").clone(true);
             clone.css('display', 'inline-block');
             clone.appendTo('.orders');
@@ -73,9 +78,18 @@
             var clone = $("#item_template").clone(true);
             clone.css('display', 'inline-block');
             console.log(clone.html());
-            ticket.find('.items').append(clone);
+            //ticket.find('.items').append(clone);
             return clone;
         }
+		
+		//Started here
+		function callWaiter()
+		{
+			var message = "Kitchen needs assistance";
+			console.log(JSON.stringify(message));
+			$.post("http://159.89.238.181:8080/api/staff/", JSON.stringify(message));
+		}
+		//Stopped here
         
         $(document).ready(function() {
             $.ajax({
@@ -94,7 +108,7 @@
     <div class = "ticket" id = "ticket_template">        
         <div class = "information" style = "height: 20%; background-color: navy; color:white">
             <div class = "row"> 
-                <button>Call waitstaff</button>
+                <button id="callW" onclick="callWaiter()">Call waitstaff</button>
                 <button>Call manager</button>
                 <button>Complete</button>
             </div>

@@ -178,7 +178,7 @@
 			month = d.getMonth()+1;
 			day=d.getDate();
 			year = d.getFullYear();
-			d = month + '-' + day + '-' + year;
+			d = month + '/' + day + '/' + year;
 			td.append(d);
 		
 		td = document.createElement('td'); //inserts the number of items for the order onto the table by going through the array of items and keeping a count
@@ -207,10 +207,19 @@
 		else{//if there was no comp, add the total of the order to the report
 			td.append("$" + item.total);
 		}
+		
+		
+		td = document.createElement('td');
+		td = tr.insertCell(5);
+		if(item.tip != null)
+		{
+			td.append("$" + item.tip);
 		}
-	}
+		else{
+			td.append("$0.00");
+		}
+	}}
 		$(document).ready(function() {
-			dailyReport();
 			var url = "http://159.89.238.181:8080/api/orders";
 			$.ajax({
 				url: url,
@@ -228,11 +237,6 @@
 		document.getElementById('monthly').style.background = "#D3D3D3";
 		var table, tr, td, textValue;
 		var today = new Date();//gets today and formats it
-		var dd = String(today.getDate()).padStart(2,'0');
-		var mm = String(today.getMonth()+1).padStart(2,'0');
-		var yyyy = today.getFullYear();
-		today = mm + '-' + dd + '-' + yyyy;
-		
 		table = document.getElementById("sales");//gets sales table and sets the element to the table row
 		tr = table.getElementsByTagName("tr");
 		for(var i = 0; i < tr.length; i++)//for each item in the table, if there is a td in the tr, check if the text value is equal to todays date.
@@ -260,10 +264,8 @@
 		var dd = String(today.getDate()).padStart(2,'0');
 		var mm = String(today.getMonth()+1).padStart(2,'0');
 		var yyyy = today.getFullYear();
-		today = mm + '-' + dd + '-' + yyyy;
 		mm = String(startDate.getMonth()).padStart(2,'0');
-		startDate = mm + '-' + dd + '-' + yyyy;
-		
+		startDate = mm + '/' + dd + '/' + yyyy;
 		table = document.getElementById("sales");//gets sales table elements
 		tr = table.getElementsByTagName("tr");
 		for(var i = 0; i < tr.length; i++)//for each element in the table, check if the date is between startDate and today and sets the display to "" if it is, if not, set the display to none
@@ -271,6 +273,7 @@
 			td = tr[i].getElementsByTagName("td")[1];
 			if(td)
 			{
+				txtValue = new Date();
 				txtValue = td.textContent || td.innerText;
 				if (txtValue <= today || txtValue >= startDate)
 				{
@@ -340,6 +343,7 @@
 						<th># ITEMS</th>
 						<th>METHOD OF PAYMENT</th>
 						<th>TOTAL</th>
+						<th>TIPS</th>
 					</tr>
 				</table>
 			</span>

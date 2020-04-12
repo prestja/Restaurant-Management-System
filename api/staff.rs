@@ -122,3 +122,64 @@ pub fn post(_conn: LogsDbConn, employee: Json<Employee>) -> String {
 	});
 	return serde_json::to_string(&response).unwrap();
 }
+
+#[post("/modify?<id>", data = "<employee>")]
+pub fn modify(_conn: LogsDbConn, id: String, employee: Json<Employee>) -> String {
+	let inner = employee.into_inner();
+	let filter = doc! {
+		"id": id
+	};
+	let replacement = doc! {
+		"first_name": inner.first_name,
+		"last_name": inner.last_name,
+		"id": inner.id,
+		"password": inner.password,
+		"wage": inner.wage,
+		"phone": inner.phone,
+		"position": inner.position
+	};
+	let coll = _conn.collection("staff");
+	if let Ok(result) = coll.find_one_and_replace(filter, replacement, None) {
+		if let Some(item) = result {
+			let response = json!({
+				"code": 200,
+				"message": "Successfully updated employee."
+			});
+			return serde_json::to_string(&response).unwrap();
+		}
+		else {
+			let response = json!({
+				"code": 404,
+				"message": "Error during insertion process: invalid or malformed employee."
+			});
+			return serde_json::to_string(&response).unwrap();
+		}			
+	}
+	else {
+		let response = json!({
+			"code": 404,
+			"message": "Could not find the requested employee."
+		});
+		return serde_json::to_string(&response).unwrap();
+	}
+}
+
+#[post("/delete?<id>")]
+pub fn delete(_conn: LogsDbConn, id: String) -> String {
+	let filter = doc! {
+		"id": id
+	};
+	let coll = _conn.collection("staff");
+	if let Ok (result) = coll.delete_one(filter, None) {
+		let response = json!({
+			"code": 200,
+			"message": "Removed the requested employee."
+		});
+		return serde_json::to_string(&response).unwrap();
+	}
+	let response = json!({
+		"code": 404,
+		"message": "Could not find that employee"
+	});
+	return serde_json::to_string(&response).unwrap();
+}

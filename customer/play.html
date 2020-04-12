@@ -2,37 +2,29 @@
 <html>
 <head>
 <style>
-<<<<<<< HEAD
-=======
-	*{
-		box-sizing: border-box;
-	}
->>>>>>> f39fd5c66287dd008ced58684963825b21ea342f
 
 	* {
 		box-sizing: border-box;
 	}
 	
-<<<<<<< HEAD
 	.grid-container {
 		display: grid;
-		grid-gap: 50px 100px;
+		grid-gap: 50px 10px;
 		grid-template-columns: auto auto;
-		background-color: #2196F3;
-		padding: 50px 50px;
-=======
-	.header {
+		background-color: black;
+		width: 70%;
 		padding: 10px;
-		<!-- background-color: blue; -->
-		margin: 0px 0px 0px;
->>>>>>> f39fd5c66287dd008ced58684963825b21ea342f
+		height: 500px;
+		margin-left: 15%;
+		margin-top: 5%;
 	}
 	
 	.grid-item {
-		background-color: rgba(255, 255, 255, 0.8);
+		background-color: black;
 		border: 1px solid rgba(0, 0, 0, 0.8);
-		padding: 50px 30px;
-		
+		padding: 10px;
+		height: 90%;
+		width: 70%;
 		font-size: 30px;
 		text-align: center;
 	}
@@ -44,83 +36,32 @@
 		color: green;
 		font-family: "Lato", Arial, sans-serif;
 		text-align: center;
-		font-size: 4vw;
+		font-size: 14px;
 		font-weight: 900;
 		position: relative;
 		opacity: 0.5;
-		top: 0%;
-	}
-<<<<<<< HEAD
-=======
-
-	/* Add a background color on hover */
-	.button-group button:hover {
-		background-color: #3e8e41;
+		top: 30%;
 	}
 
-	.container {
-		margin: 20px auto;
-		width:400px;
-		height:400px;
-		background-color:#fff;
-		display:grid;
-		grid-template-columns: 200px 200px;
-		grid-row: auto auto;
-		grid-column-gap: 20px;
-		grid-row-gap: 20px;
-		.box {
-			background-color:white;
-			padding:20px;
-			border-radius:10px;
-			color:#fff;
-			display:flex;
-			align-items:center;
-			justify-content:center;
-			font-size:100px;
-			font-family: Arial Black, Times, serif;
-		}
-	}
-
->>>>>>> f39fd5c66287dd008ced58684963825b21ea342f
 </style>
 </head>
 <body style="background-color: black">
 
 <div class="grid-container" style="">
-	<div class="grid-item" style= "color:white; background: url('../img/games/birdo.png') no-repeat; background-size: 100%;">
+	<div class="grid-item" style= "color:white; background: url('../img/games/birdo.png') no-repeat; background-size: 110%;">
 		<div class="title" onclick="">Birdo</div>
 	</div>
-	<div class="grid-item" style= "color:white; background: url('../img/games/diduno.png') no-repeat; background-size: 100%;">
+	<div class="grid-item" style= "color:white; background: url('../img/games/diduno.png') no-repeat; background-size: 120%;">
 		<div class="title" onclick="">Diduno</div>
 	</div>
-	<div class="grid-item" style= "color:white; background: url('../img/games/bedazzled.png') no-repeat; background-size: 100%;">
+	<div class="grid-item" style= "color:white; background: url('../img/games/bedazzled.png') no-repeat; background-size: 110%;">
 		<div class="title" onclick="">Bedazzled</div>
 	</div> 
-  <div class="grid-item" style= "color:white; background: url('../img/games/tictac.png') no-repeat; background-size: 100%;">
+  <div class="grid-item" style= "color:white; background: url('../img/games/tictac.png') no-repeat; background-size: 120%;">
 		<div class="title" onclick="">Tic-Tac</div>
 	</div> 
 </div>
 
-<<<<<<< HEAD
-</body>
-</html>
-=======
-<head>
-	<script>
-		function setup() {
-			var message = {
-				type: "show"
-			};
-			parent.window.postMessage(message, "*");
-		}
-	</script>
-</head>
 
-<body style="background-color:Black;" onload="setup()">
-	<div class="container" style= "color:white; background: url('../img/games/birdo.png') no-repeat; background-size: 100%;">Birdo</div>
-	<div class="container" style= "color:white; background: url('../img/games/diduno.png') no-repeat; background-size: 100%;">Diduno</div>
-	<div class="container" style= "color:white; background: url('../img/games/bedazzled.png') no-repeat; background-size: 100%;">Bedazzled</div>
-	<div class="container" style= "color:white; background: url('../img/games/tictac.png') no-repeat; background-size: 100%;">TicTac</div>
 </body>
 </html>
->>>>>>> f39fd5c66287dd008ced58684963825b21ea342f

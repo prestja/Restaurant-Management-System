@@ -97,14 +97,6 @@
 			home.src = "landing.html";
 			showButton(false);
 		}
-
-		function goRefill() {
-			var home = document.getElementById("ifrm");
-			home.src = "refills.html";
-			
-			var btn = document.getElementById("nav-back");
-			btn.style.display = "inline-block";
-		}
 		
 		function showButton(state) {
 			var btn = document.getElementById("nav-back");
@@ -140,6 +132,13 @@
 			if(message.data.type == "back" ) {
 				showButton(message.data.state);
 			}
+			else if (message.data.type == "show") {
+				console.log("should toggle to true");
+				showButton(true);
+			}
+			else if (message.data.type == "hide") {
+				showButton(false);
+			}
 			else if(message.data.type == "pin") {
 				if(pin == "" && message.data.pin != "") {
 					pin = message.data.pin;
@@ -156,6 +155,11 @@
 			home.src = "roulette.html";
 		}
 		
+		function goRefills() {
+			var home = document.getElementById("ifrm");
+			home.src = "refills.html";
+		}
+		
 	</script>
 	
 </head>
@@ -165,8 +169,7 @@
     <div class = "navigation">
         <button id = "nav-back" onclick ="goBack();" >Back</button>
 		<button id = "nav-help" onclick = "myFunction()">Help</button>
-        <button id = "nav-refills" onclick ="goRefill()">Refills</button>
-		<button id = "nav-roulette" onclick ="goRoulette()">Test Roulette</button>
+        <button id = "nav-refills" onclick="goRefills()">Refills</button>
     </div>
 
     <!---Content -->

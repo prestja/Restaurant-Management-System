@@ -195,10 +195,17 @@
 </style>
 
 <head>
-	
+<script>
+	function setup() {
+		var toggle = {
+			type: "show"
+		};
+		parent.window.postMessage(toggle, "*");
+	}
+</script>
 </head>
 
-<body>
+<body onload="setup()">
 <div class="row">
 	<div class="column-left">
 		<h2>PAYMENT METHOD</h2>

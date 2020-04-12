@@ -195,6 +195,10 @@
 		span.onclick = function() {
 			modal.style.display = "none";
 		}
+		var toggle = {
+			type: "show"
+		};
+		parent.window.postMessage(toggle, "*");
 	}
 	
 	//Return function for new back button

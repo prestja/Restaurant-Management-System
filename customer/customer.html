@@ -94,6 +94,11 @@
 					return;
 				}
 			}
+			if (result == "rewards.html") {
+				frame.src = "../payment.html";
+				return;
+			}
+			
 			frame.src = "landing.html";
 			showButton(false);
 		}

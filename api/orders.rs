@@ -110,10 +110,8 @@ pub fn get_table_orders(_conn: LogsDbConn, tableid: u32) -> String {
         let _coll = _conn.collection("orders");
 	let _itemcoll = _conn.collection("items");
 	let _cursor = _coll.find(Some(_doc.clone()), None).unwrap(); //search for the specified table in the orders database
-	for result in _cursor
-	{
-		if let Ok(item) = result
-		{
+	for result in _cursor {
+		if let Ok(item) = result {
 			if let Ok(array) = item.get_array("items"){ //get the array of items that are stored
 				for value in array{ //go through each item and extract its id
 					let itemid = value.as_object_id().unwrap();
@@ -154,25 +152,22 @@ pub fn get_comps(_conn: LogsDbConn) -> String
 	_filter.projection = Some(doc!{"comp": 1, "table": 1, "empname": 1});
 	let _coll = _conn.collection("orders");
 	let _cursor = _coll.find(Some(_doc.clone()), Some(_filter.clone())).unwrap();
-	for result in _cursor
-	{
-		if let Ok(item) = result
-       	        {
-                        let _bson = mongodb::to_bson(&item).unwrap();
-       	                let _json = serde_json::ser::to_string(&_bson).unwrap();
-               	        _str.push_str(&_json);
-                }
-       	        _str.push_str(",\n\t");
-        }
-       	if _str.len() <= 3
-        {
-       	        return String::from("No entries found");
-        }
-        _str.pop();
-       	_str.pop();
-        _str.pop();
-       	_str.push_str("\n]");
-        return _str;
+	for result in _cursor {
+		if let Ok(item) = result {
+            let _bson = mongodb::to_bson(&item).unwrap();
+            let _json = serde_json::ser::to_string(&_bson).unwrap();
+   	        _str.push_str(&_json);
+    	}
+        _str.push_str(",\n\t");
+    }
+   	if _str.len() <= 3 {
+        return String::from("No entries found");
+    }
+    _str.pop();
+   	_str.pop();
+    _str.pop();
+   	_str.push_str("\n]");
+    return _str;
 }
 
 #[post("/", data = "<order>")]

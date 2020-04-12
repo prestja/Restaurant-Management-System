@@ -1,9 +1,24 @@
 use crate::rocket_contrib;
 use crate::rocket_contrib::databases::mongodb::db::ThreadedDatabase;
 use crate::LogsDbConn;
+use crate::serde_derive;
 
 use rocket_contrib::{databases::mongodb};
+use rocket_contrib::json::Json;
 use mongodb::{doc, bson};
+
+#[derive(Serialize, Deserialize)]
+pub struct Item {
+	name: String,
+	price: f32,
+	nutrition: String,
+	ingredients: serde_json::Value,
+	allergen: String,	
+	vegan: bool,
+	vegetarian: bool,
+	#[serde(default)] status: u32, // status defaults to 1 upon insertion
+	imgPath: String
+}
 
 #[get("/")]
 pub fn get_all (_conn: LogsDbConn) -> String
@@ -31,24 +46,20 @@ pub fn get_all (_conn: LogsDbConn) -> String
 }
 
 #[get("/?<category>")]
-pub fn get_category (_conn: LogsDbConn, category: u32) -> String
-{	
+pub fn get_category (_conn: LogsDbConn, category: u32) -> String {	
 	let mut _str = String::from("[\n\t");
 	let _doc = doc!{"category": category};
 	let _coll = _conn.collection("items");
 	let _cursor = _coll.find(Some(_doc.clone()), None).unwrap();
-	for result in _cursor 
-	{
-		if let Ok(item) = result 
-		{
+	for result in _cursor {
+		if let Ok(item) = result {
 			let _bson = mongodb::to_bson(&item).unwrap();
 			let _json = serde_json::ser::to_string(&_bson).unwrap();
 			_str.push_str(&_json);
 		}
 		_str.push_str(",\n\t");
 	}
-	if _str.len() <= 3
-	{
+	if _str.len() <= 3 {
 		return String::from("No entries found");
 	}
 	_str.pop();
@@ -56,6 +67,30 @@ pub fn get_category (_conn: LogsDbConn, category: u32) -> String
 	_str.pop();
 	_str.push_str("\n]");
 	return _str;
+}
+
+#[post("/", data = "<item>")]
+pub fn post (_conn: LogsDbConn, item: Json<Item>) -> String {
+	let inner = item.into_inner(); // converts fron Json<Order> to just Order
+	let doc = doc! {
+		"name": inner.name,
+		"price": inner.price,
+		"nutrition": inner.nutrition,
+		"ingredients": inner.ingredients,
+		"allergen": inner.allergen,
+		"vegan": inner.vegan,
+		"vegetarian": inner.vegetarian,
+		"status": 1,
+		"imgPath": inner.imgPath	
+	};
+	
+	let _coll = _conn.collection("items");
+	_coll.insert_one(doc, None).unwrap();
+	let response = json!({ // generate a response for the user
+		"code": 200,
+		"message": "Successfully inserted item into system."
+	});
+	return serde_json::to_string(&response).unwrap();
 }
 
 #[post("/?<id>&<status>")]

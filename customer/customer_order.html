@@ -62,7 +62,14 @@ h2 {
 				status: 0
 			};
 			console.log(JSON.stringify(order));
-			$.post("http://159.89.238.181:8080/api/orders/", JSON.stringify(order));
+			$.post("http://159.89.238.181:8080/api/orders/", JSON.stringify(order), function(response){
+				var status = JSON.parse(response);
+				if(status.code != 200)
+				{
+					alert(status.message);
+				}
+				
+			});
 		}
 	}
 	

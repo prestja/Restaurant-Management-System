@@ -19,6 +19,7 @@ mod items;
 mod notifications;
 mod coupons;
 mod timeclock;
+mod promotions;
 
 #[database("mongodb_logs")]
 pub struct LogsDbConn(mongodb::db::Database);
@@ -75,6 +76,10 @@ fn main()
 	.mount("/api/coupons", routes![coupons::get_all])
 	.mount("/api/coupons", routes![coupons::get_code])
 	.mount("/api/coupons", routes![coupons::post])
+	// promotions functions
+	.mount("/api/promotions", routes![promotions::post])
+	//.mount("/api/promotions", routes![promotions::get_all])
+	// time clock functions
 	.mount("/api/timeclock", routes![timeclock::clock_in])
 	.mount("/api/timeclock", routes![timeclock::clock_out])
 	.mount("/api/timeclock", routes![timeclock::get_all])

@@ -70,14 +70,20 @@ pub fn post(_conn: LogsDbConn, notification: Json<Notification>) -> String {
 	};
 	
 	//Establish connection to db collection for notifications
-	let _coll = _conn.collection("notifications");
+	let coll = _conn.collection("notifications");
 	//Attempt to send via connection, the json formatted version of the notification
-	_coll.insert_one(doc, None).unwrap();
-
-	//if post successful
-	let response = json!({
-		"code": 200,
-		"message": "Inserted notification into notifications collection"
-	});
-	return serde_json::to_string(&response).unwrap();
+	if let Ok (result) = coll.insert_one(doc, None) {
+		let response = json!({
+			"code": 200,
+			"message": "The appropriate person(s) have been alerted."
+		});
+		return serde_json::to_string(&response).unwrap();
+	}
+	else {
+		let response = json!({
+			"code": 404,
+			"message": "Error posting a notification!"
+		});
+		return serde_json::to_string(&response).unwrap();
+	}
 }

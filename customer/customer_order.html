@@ -66,11 +66,11 @@ h2 {
 		}
 	}
 	
-	$(document).ready(function(){
-		$("button").click(function(){
-			$(".itemTemplate").remove();
-		});
-	});
+	//New remove function only targets the specific item
+	function removeItem(){
+		document.querySelector(".itemTemplate").remove();
+	}
+	
 
 </script>
 
@@ -95,7 +95,7 @@ h2 {
 			List any allergies or substitutions you would like <textarea rows = "1"> </textarea>
 		</div>
 		<div style = "align: right">
-			<button id="rmv">Remove this item</button>
+			<button id="rmv" onclick="removeItem()">Remove this item</button>
 		</div>
 	</div>
 	

@@ -49,60 +49,45 @@
 </style>
 <head>
 	<link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet'>
-    <!--changed to https://... below to remove error-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
-        function addTicket(order)
-        {
-		
-			//Started here
-			console.log(JSON.stringify(order));
-			//Stopped here
-			
+        function addTicket(order) {
             var clone = $("#ticket_template").clone(true);
-            clone.css('display', 'inline-block');
+            clone.css('display', 'inline-block');                        
+			clone.data("order", order); // places all information about this order in the element itself
             clone.appendTo('.orders');
-            
-            if (order.items === undefined) {
-                return clone;
+			clone.find(".table_num").html("Table: " + order.table);
+			if (order.placed != undefined) { 
+				var date = new Date(order.placed.$date.$numberLong);
+				clone.find(".ordered_at").html("Ordered at: " + date.getHours() + ":" + date.getMinutes());
+			}			
+			if (order.items === undefined) {
+                return clone; // pre-emptively return if no items exist
             }
             order.items.forEach(item => 
                 addItem(order)
-            );
-            
+            );			
             return clone;
         }
 
-        function addItem(ticket) 
-        {
+        function addItem(ticket) {
             var clone = $("#item_template").clone(true);
-            clone.css('display', 'inline-block');
-            console.log(clone.html());
-            //ticket.find('.items').append(clone);
+            clone.css('display', 'inline-block');            
             return clone;
         }
 		
-		//Started here
-		//Function to call a server to the kitchen
-		function callWaiter()
-		{
-			var message = "Kitchen needs assistance";
-			console.log(JSON.stringify(message));
-			$.post("http://159.89.238.181:8080/api/staff/", JSON.stringify(message));
+		function callWaiter() {
+			
 		}
-		//Function to call a manager to the kitchen
-		function callManager()
-		{
 		
+		function callManager() {
+			
 		}
-		//Function to mark the order complete
-		function markComplete()
-		{
-			//currently deletes the column but when page refreshed they come back because remains stored in backend
-			document.querySelector(".ticket").remove();
+
+		function markComplete() {
+			console.log("clicked complete for ticket");			
 		}
-		//Stopped here
-        
+
         $(document).ready(function() {
             $.ajax({
                 url: 'http://159.89.238.181:8080/api/orders/?status=0',
@@ -119,17 +104,15 @@
     </script>
     <div class = "ticket" id = "ticket_template">        
         <div class = "information" style = "height: 20%; background-color: navy; color:white">
-            <div class = "row"> 
-                <button id="callW" onclick="callWaiter()">Call waitstaff</button>
+            <div class = "topRow"> 
+                <button id="callW">Call waitstaff</button>
                 <button id="callM">Call manager</button>
-                <button id="complete" onclick="markComplete();">Complete</button>
+                <button id="complete">Complete</button>
             </div>
-            <div class = "row">
-                <p>ORDER #</p>
-                <p>ORDERED AT  #</p>
-                <p>TABLE #</p>
-            </div>
-			
+            <div class = "bottomRow">
+                <p class = "table_num">Table: </p>
+                <p class = "ordered_at">Time: </p>
+            </div>			
         </div>
         
         <div class = "items" style = "height: 90%; background-color:lightgrey; overflow-x: hidden; overflow-y: scroll;">

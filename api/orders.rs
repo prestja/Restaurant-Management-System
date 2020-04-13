@@ -73,6 +73,34 @@ pub fn get_status(_conn: LogsDbConn, status: u32) -> String {
 	return str;
 }
 
+#[post("/status?<table>&<status>")]
+pub fn post_status(conn: LogsDbConn, table: u32, status: u32) -> String {
+	let doc = doc! {
+		"table": table,
+		"status": {
+			"$lt": 5 // where the status of the order is < 5 (not yet paid)
+		}
+	}; // find the most recent order for the table
+	let update = doc! {
+		"$set": {
+			"status": status
+		}
+	}; // apply the user-specified status	
+	let coll = conn.collection("orders");
+	if let Ok (result) = coll.find_one_and_update(doc, update, None) {
+		let response = json!({
+			"code": 200,
+			"message": "Successfully updated status for order."
+		});		
+		return serde_json::to_string(&response).unwrap();
+	}
+	let response = json!({
+		"code": 404,
+		"message": "Could not find an order to update."
+	});		
+	return serde_json::to_string(&response).unwrap();
+}
+
 #[get("/?<id>", rank = 1)]
 pub fn get_id (_conn: LogsDbConn, id: String) -> String {	
 	let mut _str = String::from("[\n\t");

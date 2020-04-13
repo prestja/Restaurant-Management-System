@@ -83,11 +83,23 @@
         }
 		
 		//Started here
+		//Function to call a server to the kitchen
 		function callWaiter()
 		{
 			var message = "Kitchen needs assistance";
 			console.log(JSON.stringify(message));
 			$.post("http://159.89.238.181:8080/api/staff/", JSON.stringify(message));
+		}
+		//Function to call a manager to the kitchen
+		function callManager()
+		{
+		
+		}
+		//Function to mark the order complete
+		function markComplete()
+		{
+			//currently deletes the column but when page refreshed they come back because remains stored in backend
+			document.querySelector(".ticket").remove();
 		}
 		//Stopped here
         
@@ -109,17 +121,22 @@
         <div class = "information" style = "height: 20%; background-color: navy; color:white">
             <div class = "row"> 
                 <button id="callW" onclick="callWaiter()">Call waitstaff</button>
-                <button>Call manager</button>
-                <button>Complete</button>
+                <button id="callM">Call manager</button>
+                <button id="complete" onclick="markComplete();">Complete</button>
             </div>
             <div class = "row">
                 <p>ORDER #</p>
                 <p>ORDERED AT  #</p>
                 <p>TABLE #</p>
             </div>
+			
         </div>
         
         <div class = "items" style = "height: 90%; background-color:lightgrey; overflow-x: hidden; overflow-y: scroll;">
+			<p id="item_name"> Item Name </p>
+			<p id="item_subs"> --Subs </p>
+			<p id="known_allergies"> --Allergies </p>
+			<br>
         </div>
     </div>
 
@@ -130,10 +147,8 @@
 
 <body>
     <div class = "orders">        
-                        
     </div>
     <div class = "controls">
-            
     </div>
 </body>
 </html>

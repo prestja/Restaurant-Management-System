@@ -199,21 +199,35 @@ pub fn get_comps(_conn: LogsDbConn) -> String
 }
 
 #[post("/", data = "<order>")]
-pub fn post(_conn: LogsDbConn, order: Json<Order>) -> String {
+pub fn post(conn: LogsDbConn, order: Json<Order>) -> String {
 	let inner = order.into_inner(); // converts fron Json<Order> to just Order
-	let doc = doc! // create a new document based upon deserialized object
-	{
+	let doc = doc! {
 		"table": inner.table,
 		"id": inner.id,
 		"items": inner.items,
 		"status": inner.status,
 		"total": 43.19,
 		"tip": 5.00 
+	};	
+	let existing = doc! {
+		"table": inner.table,
+		"status": {
+			"$lt": 5 // where the status of the order is < 5 (not yet paid)
+		}
 	};
+	let coll = conn.collection("orders");
+	if let Ok(result) = coll.find_one(existing, None) {
+		if let Some (order) = result {
+			let response = json!({ // generate a response for the user
+				"code": 404,
+				"message": "You cannot place an order at this time as you have an outstanding unpaid order."
+			});
+			_coll.find_one_and_update(doc.clone(), _update, None).unwrap();
+			return serde_json::to_string(&response).unwrap();
+		}
+	}
 	
-	let _coll = _conn.collection("orders");
-	let _update = doc!{"$currentDate": { "placed": true}};
-	_coll.insert_one(doc.clone(), None).unwrap();
+	coll.insert_one(doc, None).unwrap();
 	let response = json!({ // generate a response for the user
 		"code": 200,
 		"message": "Inserted order into collection orders"

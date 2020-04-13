@@ -20,6 +20,7 @@ mod notifications;
 mod coupons;
 mod timeclock;
 mod promotions;
+mod payment;
 
 #[database("mongodb_logs")]
 pub struct LogsDbConn(mongodb::db::Database);
@@ -50,6 +51,8 @@ fn main()
 	.mount("/api/orders", routes![orders::comp])
 	.mount("/api/orders", routes![orders::get_table_orders])
 	.mount("/api/orders", routes![orders::apply_promotion])
+	// payment functions
+	.mount("/api/payment", routes![payment::post])
 	// ingredients functions
 	.mount("/api/ingredients", routes![ingredients::get_all])
 	.mount("/api/ingredients", routes![ingredients::get])

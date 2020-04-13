@@ -23,15 +23,31 @@ pub fn post(conn: LogsDbConn, table: u32, payment: Json<Payment>) -> String {
 			"$lt": 5 // where the status of the order is < 5 (not yet paid)
 		}
 	};
-	let update = doc! {
+	let update = doc! { // push a new value onto the order
 		"$push": {
-			"payments": 3 
+			"payments": {
+				"method": inner.method,
+				"amount": inner.amount
+			} 
 		}
 	};
 
 	let coll = conn.collection("orders");
 	if let Ok (result) = coll.find_one_and_update(doc, update, None) {
-		return String::from("good");
+		if let Some(item) = result {
+			let response = json!({
+				"code": 200,
+				"message": "Successfully updated payment information."
+			});
+			return serde_json::to_string(&response).unwrap();
+		}
+		else {
+			let response = json!({
+				"code": 404,
+				"message": "Error updating payment information."
+			});
+			return serde_json::to_string(&response).unwrap();
+		}		
 	}			
 	else {
 		let response = json!({

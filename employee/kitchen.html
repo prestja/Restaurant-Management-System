@@ -55,9 +55,13 @@
             var clone = $("#ticket_template").clone(true);
             clone.css('display', 'inline-block');                        
 			clone.find("#complete").data("order", order); // places all information about this order in the element itself
-            clone.appendTo('.orders');
+            clone.find("#callW").data("order", order);
+			clone.find("#callM").data("order", order);
+			clone.appendTo('.orders');
 			clone.find(".table_num").html("Table: " + order.table);
 			clone.find("#complete").click(markComplete);
+			clone.find("#callW").click(callWaiter);
+			clone.find("#callM").click(callManager);
 			if (order.placed != undefined) { 
 				var date = new Date(order.placed.$date.$numberLong);
 				clone.find(".ordered_at").html("Ordered at: " + date.getHours() + ":" + date.getMinutes());
@@ -77,12 +81,26 @@
             return clone;
         }
 		
-		function callWaiter() {
-			
+		function callWaiter() {			
+			var url = 'http://159.89.238.181:8080/api/notifications';
+			var data = {
+				table: $(this).data("order").table,
+				variant: 2
+			};
+			$.post(url, JSON.stringify(data), function(response){
+				alert(JSON.parse(response).message);
+			});
 		}
 		
 		function callManager() {
-			
+			var url = 'http://159.89.238.181:8080/api/notifications';
+			var data = {
+				table: $(this).data("order").table,
+				variant: 5
+			};
+			$.post(url, JSON.stringify(data), function(response){
+				alert(JSON.parse(response).message);
+			});
 		}
 
 		function markComplete() {

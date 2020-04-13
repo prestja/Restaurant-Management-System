@@ -51,7 +51,7 @@
 		margin: 10px 10px 10px;
 		position: relative;
 		width: 150px;
-		height: 245px;
+		height: 190px;
 		left: 20px;
 		top: 10px;
 		display: inline-block;
@@ -103,7 +103,7 @@
 		margin: 10px 10px 10px;
 		position: absolute;
 		width: 160px;
-		height: 400px;
+		height: 450px;
 		left: 20px;
 		display: inline-block;
 	}
@@ -113,14 +113,13 @@
 		background-color: #A9A9A9 !important; //makes Gray background
 		padding: 10px;
 		margin: 10px 10px 10px 10px;
-		width: 60vw;
-		height: 250px;
+		width: 900px;
 		display: inline-block;
 		text-align: center;
 		border: 5px;
 		border-color: black;
-		position: relative;
-		left: 150px;
+		position: absolute;
+		left: 200px;
 	}
 		/*Created a tool button similar to menu buttons*/
 	.tool-button-group button {
@@ -144,24 +143,206 @@
 	.tool-button-group button:hover {
 		background-color: #3e8e41;
 	}
+	
+		/*styles table to have collapsed borders*/
+	table, th, td {
+		border: 1px solid black;
+		border-collapse: collapse;
+		padding: 5px;
+		position:relative;
+		right:10px;
+		left:5px;
+		margin-bottom: 5px;
+		margin-right: 35px;
+	}
 </style>
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
-    $(document).ready(function(){ 
-		$("button").click(function(){
-			$.get("http://159.89.238.181:443/api/orders", function(data, status){
-				document.innerHTML+=data;
-			});
-        
-			$.post("http://159.89.238.181:443/api/orders", function(data, status){
-            
+		$(document).ready(function() {
+			var url = "http://159.89.238.181:8080/api/staff";
+			$.ajax({
+				url: url,
+				type: 'get',
+				dataType: 'JSON',
+				success: function(response) {
+					response.forEach(item => 
+						createForm(item)
+					);
+				}
 			});
 		});
-    });
+		
+		function createForm(item){
+			var empTab = document.getElementById("rem");
+			var rowCnt = empTab.rows.length; //gets current amount of rows
+			var tr = empTab.insertRow(rowCnt); //adds new row below the last row
+			tr = empTab.insertRow(rowCnt);
+			var element;
+			
+			element = document.createElement('input');
+			element.setAttribute('type', 'text');
+			element.setAttribute('value',item.first_name);
+			element.setAttribute('class', item.id);
+			element.setAttribute('maxlength', 20);
+			element.setAttribute('size',10);
+			var td = document.createElement('td'); //inserts first name into the table
+			td = tr.insertCell(0);
+			td.append(element);
+			
+			element = document.createElement('input');
+			element.setAttribute('type', 'text');
+			element.setAttribute('value',item.last_name);
+			element.setAttribute('class', item.id);
+			element.setAttribute('maxlength', 20);
+			element.setAttribute('size',10);
+			td = document.createElement('td'); //inserts last name into the table
+			td = tr.insertCell(1);
+			td.append(element);
+			
+			element = document.createElement('input');
+			element.setAttribute('type', 'text');
+			element.setAttribute('value',item.password);
+			element.setAttribute('class', item.id);
+			element.setAttribute('maxlength', 10);
+			element.setAttribute('size',10);
+			td = document.createElement('td'); //inserts password into the table
+			td = tr.insertCell(2);
+			td.append(element);
+			
+			element = document.createElement('input');
+			element.setAttribute('type', 'number');
+			element.setAttribute('value',item.wage.toFixed(2));
+			element.setAttribute('class', item.id);
+			element.setAttribute('maxlength', 5);
+			td = document.createElement('td'); //inserts wage into the table
+			td = tr.insertCell(3);
+			td.append(element);
+			
+			element = document.createElement('input');
+			element.setAttribute('type', 'text');
+			element.setAttribute('value',item.phone);
+			element.setAttribute('class', item.id);
+			element.setAttribute('maxlength', 20);
+			element.setAttribute('size',10);
+			td = document.createElement('td'); //inserts phone into the table
+			td = tr.insertCell(4);
+			td.append(element);
+			
+			element = document.createElement('input');
+			element.setAttribute('type', 'text');
+			if(item.position == 0)
+			{
+				element.setAttribute('value','Manager');
+			}
+			else
+			{
+				element.setAttribute('value','Waiter');
+			}
+			element.setAttribute('class', item.id);
+			element.setAttribute('maxlength', 20);
+			element.setAttribute('size',10);
+			td = document.createElement('td'); //inserts position into the table
+			td = tr.insertCell(5);
+			td.append(element);
+			
+			element = document.createElement('input');
+			element.setAttribute('type', 'button');
+			element.setAttribute('value','SAVE');
+			element.setAttribute('class', item.id);
+			element.setAttribute('onclick', 'modEmp(this.className)');
+			td = document.createElement('td'); //creates modify button for each item
+			td = tr.insertCell(6);
+			td.appendChild(element);
+			
+			element = document.createElement('input');
+			element.setAttribute('type', 'button');
+			element.setAttribute('value','REMOVE');
+			element.setAttribute('class', item.id);
+			element.setAttribute('onclick', 'remEmp(this.className)');
+			td = document.createElement('td'); //creates remove button for each item
+			td = tr.insertCell(7);
+			td.appendChild(element);
+		}
+		
+		function remEmp(id)//passes ajax request to remove the employee of id
+		{
+			console.log(id);
+			var url = "http://159.89.238.181:8080/api/staff/delete?id=";
+			url = url.concat(id);
+			$.post(url, function(status) {				
+						var j = $.parseJSON(status);
+							alert(j.message);
+							window.location.reload();
+						});
+			
+		}
+		function modEmp(id){//modifies employee information
+			var row = document.getElementsByClassName(id);
+			var count = 0, firstName, lastName, password, wage, phone, position;
+			for(item of row)//goes through each item in the collection of employees
+			{
+				if(item.value != 'SAVE' && item.value != 'REMOVE')//gets rid of the save/remove buttons from the collection
+				{
+					if(count == 0)//sets all employee values
+					{
+						firstName = item.value;
+						count ++;
+					}
+					else if(count == 1)
+					{
+						lastName = item.value;
+						count++;
+					}
+					else if(count == 2)
+					{
+						password = item.value;
+						count++;
+					}
+					else if(count == 3)
+					{
+						wage = item.value;
+						count++;
+					}
+					else if(count == 4)
+					{
+						phone = item.value;
+						count++;
+					}
+					else if(count == 5)
+					{
+						position = item.value;
+						if(position == "Manager")
+						{
+							position = 0;
+						}
+						else if(position == "Waiter")
+						{
+							position = 1;
+						}
+						count++;
+					}
+				}
+			}
+			let request = {//collection of employee values
+				first_name: firstName,
+				last_name: lastName,
+				id: id,
+				password: password,
+				position: parseInt(position),
+				wage: parseFloat(wage),
+				phone: phone,				
+			}
+			console.log(JSON.stringify(request));
+			var url = "http://159.89.238.181:8080/api/staff/modify?id=";//ajax request to modify employees
+			url = url.concat(id);
+			$.post(url, JSON.stringify(request), function(data, status) {	
+				alert(status);
+			});
+		}
     </script>
 </head>
-<body style="background-color:Black;" onload="createForm()">
+<body style="background-color:Black;">
 	<!--creates buttons in header to go back-->
 	<div class="header">
 
@@ -174,8 +355,6 @@
 	<!--Creates left menu for buttons for the different manager pages-->
 	<div class = "left-menu">
 		<div class="menu-button-group">
-			<button onclick="document.location = 'tables.html'">TABLES</button>
-			<br><br>
 			<button onclick="document.location = '86_68.html'">86/68</button>
 			<br><br>
 			<button onclick="document.location = 'tools.html'">TOOLS</button>
@@ -192,7 +371,11 @@
 			<div class="tool-button-group">
 				<button onclick="document.location = 'tools.html'">ADD EMP</button>
 				<br><br>
-				<button onclick="document.location = 'employees.html'">REM EMP</button>
+				<button onclick="document.location = 'employees.html'">EMPLOYEES</button>
+				<br><br>
+				<button onclick="document.location = 'additem.html'">ADD ITEM</button>
+				<br><br>
+				<button onclick="document.location = 'items.html'">MOD ITEMS</button>
 				<br><br>
 				<button onclick="document.location = 'promos.html'">PROMOS</button>
 				<br><br>
@@ -201,29 +384,25 @@
 		</div>
 	<!--holds remove employee form-->
 		<div class = "items">
-			<h2>REMOVE EMPLOYEE</h2>
+			<h2>EMPLOYEES</h2>
 			<hr color="black">
 			<span style="text-align:left !important;position:relative;left:10px;">
-			<form id ="rem">
-					<label>Select which employee(s) you would like to remove:</label>
-					<br><br>
-					<input type ="submit" value ="REM EMP"/>
-			</form>
+			<span style="text-align:left !important;position:relative;left:10px;">
+				<table id = 'rem'>
+					<tr>
+						<th>FIRST NAME</th>
+						<th>LAST NAME</th>
+						<th>PASSWORD</th>
+						<th>WAGE</th>
+						<th>PHONE</th>
+						<th>POSITION</th>
+						<th></th>
+						<th></th>
+					</tr>
+				</table>
+			</span>
 			</span>
 		</div>
 	</div>
-	<script>
-		<!--Function should add in all current employees from the database into a checkbox, but is not working currently-->
-		function createForm(){
-			var x = document.createElement("INPUT");
-			x.setAttribute("type","checkbox");
-			x.setAttributes("id","emp")
-			document.getElementById("rem").appendChild(x);
-			var y = document.createElement("LABEL");
-			y.setAttributes("for","emp");
-			y.innerHTML = "ID:40";
-			document.getElementById("rem").appendChild(y);
-		}
-	</script>
 </body>
 </html>

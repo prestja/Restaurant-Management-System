@@ -21,7 +21,7 @@
 /*Button group for creating the buttons at top of page*/
 	/*Same button group from the main page*/
 	.button-group button {
-		background-color: #D3D3D3; /*Makes Gray background*/
+		background: #D3D3D3; /*Makes Gray background*/
 		border:  0px #D3D3D3;  /*Border around boxes is Gray*/
 		color: black; /* White text */
 		padding: 10px 10px; /* Some padding */
@@ -51,7 +51,7 @@
 		margin: 10px 10px 10px;
 		position: relative;
 		width: 150px;
-		height: 245px;
+		height: 190px;
 		left: 20px;
 		top: 10px;
 		display: inline-block;
@@ -112,9 +112,7 @@
 	.items {
 		background-color: #A9A9A9 !important; //makes Gray background
 		padding: 10px;
-		margin: 10px 10px 10px 10px;
-		width: 60vw;
-		height: 300px;
+		margin: 10px;
 		display: inline-block;
 		text-align: center;
 		border: 5px;
@@ -124,7 +122,7 @@
 	}
 		/*Created a tool button similar to menu buttons*/
 	.tool-button-group button {
-		background-color: #D3D3D3; /*Makes Gray background*/
+		background: #D3D3D3; /*Makes Gray background*/
 		border:  0px #FFFFFF;  /*Border around boxes is black*/
 		color: black; /* White text */
 		padding: 10px 10px; /* Some padding */
@@ -152,6 +150,8 @@
 		position:relative;
 		right:10px;
 		left:5px;
+		margin-bottom:5px;
+		margin-right:10px;
 	}
 </style>
 <head>
@@ -159,6 +159,7 @@
     <script>
 	//adds item for the sales report onto the table
 	function addItem(item) {
+		if(item.items != null && item.placed != null && item.status == 5){//if the order is not empty
 		var salesTab = document.getElementById('sales');
 		
 		var rowCnt = salesTab.rows.length; //gets current amount of rows
@@ -171,18 +172,55 @@
 		
 		td = document.createElement('td'); //inserts the number of items for the order onto the table
 		td = tr.insertCell(1);
-		td.append('Num items here');
+		var placed = item.placed.$date.$numberLong; //gets the date the order was placed and formats, then adds it onto the table
+			var d = new Date(0);
+			d.setUTCSeconds(placed/1000);
+			month = d.getMonth()+1;
+			day=d.getDate();
+			year = d.getFullYear();
+			d = month + '/' + day + '/' + year;
+			td.append(d);
+		
+		td = document.createElement('td'); //inserts the number of items for the order onto the table by going through the array of items and keeping a count
+		td = tr.insertCell(2);
+		var orderItems = item.items;
+		var count = 0;
+		orderItems.forEach(order => count++);
+		td.append(count);
 		
 		td = document.createElement('td'); //inserts the method of payment for an order onto a table
-		td = tr.insertCell(2);
-		td.append('Method of payment here');
+		td = tr.insertCell(3);
+		if(item.methodOfPayment != null){
+			td.append(item.methodOfPayment);
+		}
+		else
+		{
+			td.append("Unknown");
+		}
 		
 		td = document.createElement('td'); //inserts the total for the order onto the table
-		td = tr.insertCell(3);
-		td.append('total here');
-	}
+		td = tr.insertCell(4);
+		if(item.comp != null){//if there is a comp, subtract it from the total
+			var total = item.total - item.comp
+			td.append("$" + total);
+		}
+		else{//if there was no comp, add the total of the order to the report
+			td.append("$" + item.total);
+		}
+		
+		
+		td = document.createElement('td');
+		td = tr.insertCell(5);
+		if(item.tip != null)
+		{
+			td.append("$" + item.tip);
+		}
+		else{
+			td.append("$0.00");
+		}
+	}}
 		$(document).ready(function() {
-			/*var url = "http://159.89.238.181:8080/api/items?".concat(category);
+			var url = "http://159.89.238.181:8080/api/orders";
 			$.ajax({
 				url: url,
 				type: 'get',
@@ -192,8 +230,61 @@
 						addItem(item)
 					);
 				}
-			})*/
+			});
 		}); 
+	function dailyReport(){//filters table to today
+		document.getElementById('daily').style.background = "#3e8e41";
+		document.getElementById('monthly').style.background = "#D3D3D3";
+		var table, tr, td, textValue;
+		var today = new Date();//gets today and formats it
+		table = document.getElementById("sales");//gets sales table and sets the element to the table row
+		tr = table.getElementsByTagName("tr");
+		for(var i = 0; i < tr.length; i++)//for each item in the table, if there is a td in the tr, check if the text value is equal to todays date.
+		//if it is todays date, set the display to "", otherwise hide the table row
+		{
+			td = tr[i].getElementsByTagName("td")[1];
+			if(td)
+			{
+				txtValue = td.textContent || td.innerText;
+				if (txtValue >= today)
+				{
+					tr[i].style.display = "";
+				}
+				else{
+					tr[i].style.display = "none";
+				}
+			}
+		}
+	}
+	function monthlyReport(){//filters table by month (last month to this month)
+		document.getElementById('monthly').style.background = '#3e8e41';
+		document.getElementById('daily').style.background = "#D3D3D3";
+		var today = new Date();//gets todays date and the start date and formats it
+		var startDate = new Date();
+		var dd = String(today.getDate()).padStart(2,'0');
+		var mm = String(today.getMonth()+1).padStart(2,'0');
+		var yyyy = today.getFullYear();
+		mm = String(startDate.getMonth()).padStart(2,'0');
+		startDate = mm + '/' + dd + '/' + yyyy;
+		table = document.getElementById("sales");//gets sales table elements
+		tr = table.getElementsByTagName("tr");
+		for(var i = 0; i < tr.length; i++)//for each element in the table, check if the date is between startDate and today and sets the display to "" if it is, if not, set the display to none
+		{
+			td = tr[i].getElementsByTagName("td")[1];
+			if(td)
+			{
+				txtValue = new Date();
+				txtValue = td.textContent || td.innerText;
+				if (txtValue <= today || txtValue >= startDate)
+				{
+					tr[i].style.display = "";
+				}
+				else{
+					tr[i].style.display = "none";
+				}
+			}
+		}
+	}
     </script>
 </head>
 <body style="background-color:Black;">
@@ -209,8 +300,6 @@
 	<!--Creates left menu for buttons for the different manager pages-->
 	<div class = "left-menu">
 		<div class="menu-button-group">
-			<button onclick="document.location = 'tables.html'">TABLES</button>
-			<br><br>
 			<button onclick="document.location = '86_68.html'">86/68</button>
 			<br><br>
 			<button onclick="document.location = 'tools.html'">TOOLS</button>
@@ -237,14 +326,22 @@
 	<!--holds sales report-->
 		<div class = "items">
 			<h2>SALES REPORT</h2>
+			<hr color = "black">
+			<div class = 'menu-button-group'><!--holds filters for the table-->
+				<button onclick="dailyReport()" id="daily" style="width:40%!important;display:inline-block!important">DAILY</button>
+				<button onclick="monthlyReport()" id="monthly" style="width:40%!important;display:inline-block!important">MONTHLY</button>
+			</div>
+			<br>
 			<hr color="black">
 			<span style="text-align:left !important;position:relative;left:10px;">
 				<table style="width:90%" id="sales">
 					<tr>
 						<th>ORDER ID</th>
+						<th>DATE</th>
 						<th># ITEMS</th>
 						<th>METHOD OF PAYMENT</th>
 						<th>TOTAL</th>
+						<th>TIPS</th>
 					</tr>
 				</table>
 			</span>

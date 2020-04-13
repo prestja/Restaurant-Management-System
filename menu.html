@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 
 <html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 	* {
 		box-sizing: border-box;
@@ -51,7 +53,7 @@
 		margin: 1% 1% 1%;
 		position: relative;
 		width: 20vw;
-		height: 60vh;
+		height: 80vh;
 		left: .5%;
 		display: inline-block;
 	}
@@ -107,13 +109,171 @@
 		position: absolute;
 	}
 	
-</style>
-<head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	
+	/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  position: relative;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  border: 1px solid #888;
+  width: 80%;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  -webkit-animation-name: animatetop;
+  -webkit-animation-duration: 0.4s;
+  animation-name: animatetop;
+  animation-duration: 0.4s
+}
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+  from {top:-300px; opacity:0} 
+  to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+  from {top:-300px; opacity:0}
+  to {top:0; opacity:1}
+}
+
+/* The Close Button */
+.close {
+  color: white;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-header {
+  padding: 2px 16px;
+  background-color: #5cb85c;
+  color: white;
+}
+
+.modal-body {padding: 2px 16px;}
+
+.modal-footer {
+  padding: 2px 16px;
+  background-color: #5cb85c;
+  color: white;
+}
+	
+</style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+	var modal;
+	var span;
+	function setup() {
+		// Get the modal
+		modal = document.getElementById("myModal");
+		// Get the <span> element that closes the modal
+		span = document.getElementsByClassName("close")[0];		
+		// When the user clicks on <span> (x), close the modal
+		span.onclick = function() {
+			modal.style.display = "none";
+		}
+		var toggle = {
+			type: "show"
+		};
+		parent.window.postMessage(toggle, "*");
+	}
+
+	<!--selects menu type and displays menu items of that type-->
+	function menuType(mType)
+	{	
+		var t = document.getElementById("headerType");
+		var frame = document.getElementById('order_items');
+		if(mType === "drinks")
+		{
+			t.innerHTML = "BEVERAGES";
+			frame.src = "menu_category.html?category=3";
+		}
+		else if(mType === "apps")
+		{
+			t.innerHTML = "APPETIZERS";
+			frame.src = "menu_category.html?category=1";
+		}
+		else if(mType === "meals")
+		{
+			t.innerHTML = "ENTREES";
+			frame.src = "menu_category.html?category=0";
+		}
+		else if(mType === "kids")
+		{
+			t.innerHTML = "KIDS MENU";
+			frame.src = "menu_category.html?category=4";
+		}
+		else if(mType === "sweets")
+		{
+			t.innerHTML = "DESSERTS";
+			frame.src = "menu_category.html?category=2";
+		}
+	}
+	
+	window.addEventListener('message', updateOrder, false);
+	function updateOrder(message) {
+		console.log("Updating order");
+		modal.style.display = "block";
+		var name = document.getElementById("itemName");
+		name.innerHTML = message.data.name;
+		var body = document.getElementsByClassName("modal-body");
+		body.innerHTML = message.data.description;
+		var submit = $("#addOrder");
+		submit.unbind('click'); // remove any previous onclick listeners for this button		
+		submit.click(function() { // when clicked, send a message to the customer_order frame				
+			sendToOrder(message);
+		});
+	}
+	
+	function sendToOrder(message){
+		console.log("adding an item");
+		var target = document.getElementById('orderFrame');
+		target.contentWindow.postMessage(message.data, '*');
+	}
+	
+	function showStuff(){
+		var coll = document.getElementsByClassName("collapsible");
+		var i;
+
+		for (i = 0; i < coll.length; i++) {
+			coll[i].addEventListener("click", function() {
+				this.classList.toggle("active");
+				var content = this.nextElementSibling;
+				if (content.style.maxHeight){
+					content.style.maxHeight = null;
+				} else {
+					content.style.maxHeight = content.scrollHeight + "px";
+				}	 
+			});
+		}
+	}
+</script>
 </head>
 
-<body style="background-color:Black;">
+<body style="background-color:Black;" onload="setup()">
 	<!--has buttons for the menu types-->
 	<div class = "left-menu">
 		<div class="menu-button-group">
@@ -126,6 +286,7 @@
 			<button onclick="menuType('kids')">KIDS MENU</button>
 			<br><br>
 			<button onclick="menuType('sweets')">DESSERTS</button>
+			<br><br>
 		</div>
 	</div>
 	<!--Stores menu items of menu type selected from the buttons, default is beverages-->
@@ -133,60 +294,35 @@
 		<h2 id = "headerType">BEVERAGES</h2>
 		<hr color = "black">
 		<body>
-			<iframe id = "order_items" src="menu_category.html?category=3" onclick="updateOrder()" style="width:95%; height: 85%" ></iframe>
+			<iframe id = "order_items" src="menu_category.html?category=3" onclick="updateOrder(); " style="width:95%; height: 85%" ></iframe>
 		</body>
+		
+		<!-- The Modal -->
+		<div id="myModal" class="modal">
+			<!-- Modal content -->
+			<div class="modal-content">
+			
+				<div class="modal-header">
+					<span class="close">&times;</span>
+					<h2 id="itemName">Item Name</h2>
+				</div>
+				<div class="modal-body">
+					<p>Item Description Goes Here</p>
+					<p>Some other text...</p>
+				</div>
+				<div class="modal-footer">
+					<button id="addOrder">Add To Order</h3>
+				</div>
+				
+			</div>
+		</div>
 	</div>
-	<script>
-		<!--selects menu type and displays menu items of that type-->
-		function menuType(mType)
-		{	
-			var t = document.getElementById("headerType");
-			var frame = document.getElementById('order_items');
-			if(mType === "drinks")
-			{
-				t.innerHTML = "BEVERAGES";
-				frame.src = "menu_category.html?category=3";
-			}
-			else if(mType === "apps")
-			{
-				t.innerHTML = "APPETIZERS";
-				frame.src = "menu_category.html?category=1";
-			}
-			else if(mType === "meals")
-			{
-				t.innerHTML = "ENTREES";
-				frame.src = "menu_category.html?category=0";
-			}
-			else if(mType === "kids")
-			{
-				t.innerHTML = "KIDS MENU";
-				frame.src = "menu_category.html?category=4";
-			}
-			else if(mType === "sweets")
-			{
-				t.innerHTML = "DESSERTS";
-				frame.src = "menu_category.html?category=2";
-			}
-		}
-		
-		window.addEventListener('message', updateOrder, false);
-		function updateOrder(message) {
-			//alert('heard something');
-			var target = document.getElementById('orderFrame');
-			target.contentWindow.postMessage(message.data, '*');
-		}
-		
-	</script>
+
 	
 <!--Stores div for receipt items-->
 	<div class = "receipt">
 		<h2 text-align="center">ORDER</h2>
-		<div style="display:inline-block; width:45%;text-align:left;height:20px">
-			<h4>DESCRIPTION</h4>
-		</div>
-		<div style="display:inline-block;width:45%;text-align:right;height:20px">
-			<h4>QTY</h4>
-		</div>
+		
 		<hr color = "black">
 		<!--form for known allergies so kitchen and waitstaff can keep track-->
 		<div style = "color:#B22222 !important;text-align:left;position:relative;left:10px">
@@ -202,12 +338,7 @@
 		</div>
 		<hr color="black">
 		
-		<iframe src="customer/customer_order.html" id="orderFrame" style="width:95%; height: 50%"></iframe>
-		
-		<!--button submits the order-->
-		<div class="menu-button-group" style="position:relative;bottom:17px !important;width:90%">
-			<button onclick="">TEST BUTTON</button>
-		</div>
+		<iframe src="customer/customer_order.html" id="orderFrame" style="width:95%; height: 60%"></iframe>
 	</div>
 
 	

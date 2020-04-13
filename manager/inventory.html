@@ -50,7 +50,7 @@
 		margin: 10px 10px 10px;
 		position: relative;
 		width: 150px;
-		height: 245px;
+		height: 190px;
 		left: 20px;
 		top: 10px;
 		display: inline-block;
@@ -110,16 +110,14 @@
 	/*Created a container to hold the inventory report*/
 	.items {
 		background-color: #A9A9A9 !important; //makes Gray background
-		padding: 10px;
-		margin: 10px 10px 10px 10px;
-		width: 80%;
-		height: 300px;
+		padding: 30px;
+		margin: 10px;
 		display: inline-block;
 		text-align: center;
 		border: 5px;
 		border-color: black;
-		position: relative;
-		left: 150px;
+		position: absolute;
+		left: 200px;
 	}
 		/*Created a tool button similar to menu buttons*/
 	.tool-button-group button {
@@ -151,6 +149,8 @@
 		position:relative;
 		right:10px;
 		left:5px;
+		margin-bottom: 5px;
+		margin-right: 35px;
 	}
 </style>
 <head>
@@ -160,23 +160,33 @@
 	function addItem(item) {
 		var compsTab = document.getElementById('comps');
 		
-		var rowCnt = salesTab.rows.length; //gets current amount of rows
-		var tr = salesTab.insertRow(rowCnt); //adds new row below the last row
-		tr = salesTab.insertRow(rowCnt);
+		var rowCnt = compsTab.rows.length; //gets current amount of rows
+		var tr = compsTab.insertRow(rowCnt); //adds new row below the last row
+		tr = compsTab.insertRow(rowCnt);
 		
 		var td = document.createElement('td'); //inserts item into the table
 		td = tr.insertCell(0);
-		td.append(item.name);
+		td.append(item.item);
 		
 		var element = document.createElement('input');
-		element.attr('type','text');
-		element.attr('value',item.amount);
+		element.setAttribute('type','number');
+		element.setAttribute('value',item.count);
+		element.setAttribute('id',item.item);
 		td = document.createElement('td'); //inserts amount name
 		td = tr.insertCell(1);
 		td.appendChild(element);
+		
+		element = document.createElement('input');
+		element.setAttribute('type', 'button');
+		element.setAttribute('value','modify');
+		element.setAttribute('class', item.item);
+		element.setAttribute('onclick', 'editTable(this.className)');
+		//td = document.createElement('td'); //creates save button for each item
+		//td = tr.insertCell(2);
+		td.appendChild(element);
 	}
-		$(document).ready(function() {
-			/*var url = "http://159.89.238.181:8080/api/items?".concat(category);
+		$(document).ready(function() {//on load, add each item from ingredients in
+			var url = "http://159.89.238.181:8080/api/ingredients";
 			$.ajax({
 				url: url,
 				type: 'get',
@@ -186,8 +196,57 @@
 						addItem(item)
 					);
 				}
-			})*/
+			})
 		}); 
+		
+	function editTable(ingredient)//edits the ingredient table if the save button is pressed
+	{
+		var amount = document.getElementById(ingredient).value;//get amount input for ingredient
+		amount = parseInt(amount);
+		var url="http://159.89.238.181:8080/api/ingredients?name=";//update the amount for the ingredient
+				url = url.concat(ingredient);
+				url = url.concat('&count=');
+				url = url.concat(amount);
+		$.ajax({
+			url: url,
+			type: 'POST',
+			success: function(status) {				
+				var j = $.parseJSON(status);
+				alert(j.message);
+			}
+		});
+		
+			var url = "http://159.89.238.181:8080/api/items";//get all items on the menu and pass them through the update item function
+			$.ajax({
+                url: url,
+                type: 'get',
+                dataType: 'JSON',
+                success: function(response) {
+                    response.forEach(item => 
+                        updateItem(item, ingredient, amount)
+                    );
+                }
+            });
+	}
+	
+	function updateItem(item, ingredient, amount){//updates the status of an item if the items ingredients inventory was set to 0
+		var ing = item.ingredients; //gets list of ingredients for the item
+		var url="http://159.89.238.181:8080/api/items?id=";
+				url = url.concat(item._id.$oid);
+				url = url.concat('&status=');
+		if(ing != undefined){
+			ing.forEach(function(element){ //for each ingredient for an item
+				if(element == ingredient && amount == 0)//if the ingredient was changed to amount = 0, update the status of the item on the menu to 0
+				{
+					url = url.concat('0');
+					$.post(url, function(status) {				
+						var j = $.parseJSON(status);
+							console.log(j.message);
+						});
+				}
+			});
+		}
+	}
     </script>
 </head>
 <body style="background-color:Black;">
@@ -203,8 +262,6 @@
 	<!--Creates left menu for buttons for the different manager pages-->
 	<div class = "left-menu">
 		<div class="menu-button-group">
-			<button onclick="document.location = 'tables.html'">TABLES</button>
-			<br><br>
 			<button onclick="document.location = '86_68.html'">86/68</button>
 			<br><br>
 			<button onclick="document.location = 'tools.html'">TOOLS</button>
@@ -232,13 +289,9 @@
 		<div class = "items">
 			<h2>INVENTORY REPORT</h2>
 			<hr color="black">
-			<!--edit button makes it to where the amount and 86'd can be edited-->
-			<span class="button-group">
-				<button onclick="editTable()'">SUBMIT INVENTORY</button>
-			</span>
-			<br><br>
+			<!--table stores all inventory items and amounts-->
 			<span style="text-align:left !important;position:relative;left:10px;">
-				<table style="width:90%">
+				<table id = 'comps'>
 					<tr>
 						<th>ITEM</th>
 						<th>AMOUNT</th>

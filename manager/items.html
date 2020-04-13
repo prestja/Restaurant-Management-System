@@ -108,19 +108,18 @@
 		display: inline-block;
 	}
 	
-	/*Created a container to hold the promotions form*/
+	/*Created a container to hold the remove employee form*/
 	.items {
 		background-color: #A9A9A9 !important; //makes Gray background
 		padding: 10px;
 		margin: 10px 10px 10px 10px;
-		width: 60vw;
-		height: 400px;
+		width: 730px;
 		display: inline-block;
 		text-align: center;
 		border: 5px;
 		border-color: black;
-		position: relative;
-		left: 150px;
+		position: absolute;
+		left: 200px;
 	}
 		/*Created a tool button similar to menu buttons*/
 	.tool-button-group button {
@@ -144,93 +143,97 @@
 	.tool-button-group button:hover {
 		background-color: #3e8e41;
 	}
+	
+		/*styles table to have collapsed borders*/
+	table, th, td {
+		border: 1px solid black;
+		border-collapse: collapse;
+		padding: 5px;
+		position:relative;
+		right:10px;
+		left:5px;
+		margin-bottom: 5px;
+		margin-right: 35px;
+	}
 </style>
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-	<script>
-	function handleSubmit(){
-		//creates object for the promotion
-		var promoType = document.getElementById("promo").value;
-		console.log(promoType);
-		if(promoType == 'other'){
-		let request = {
-			name : document.getElementById("name").value,
-			start : document.getElementById("startDate").value,
-			end : document.getElementById("endDate").value,
-			amount : parseFloat(document.getElementById("val").value)
-		}
-		console.log(JSON.stringify(request));
-		//posts the object to the backend to be added into the database
-		//$.post("http://159.89.238.181:8080/api/", JSON.stringify(request), function(data, status) {				
-		//		alert(status);
-		//});
-		//resets the data for the object
-			name : document.getElementById("name").value = "";
-			start : document.getElementById("startDate").value = "";
-			end : document.getElementById("endDate").value = "";
-			amount : document.getElementById("val").value = "";
-			alert("Promotion added successfully!");
-		}
-		else if(promoType == 'kids'){
-			var now = new Date();
-			var month = (now.getMonth()+1);
-			var day = now.getDate();
-			if(month < 10)
-				month = "0" + month;
-			if(day < 10)
-				day = "0" + day;
-			var today = now.getFullYear() + '-' + month + '-' + day;
-			day = day+1;
-			var tomorrow = now.getFullYear() + '-' + month + '-' + day;
-			let request = {
-			name : "Kids Eat Free",
-			start : today,
-			end : tomorrow,
-			category : 4
-		}
-		console.log(JSON.stringify(request));
-		//posts the object to the backend to be added into the database
-		//$.post("http://159.89.238.181:8080/api/", JSON.stringify(request), function(data, status) {				
-		//		alert(status);
-		//});
-		//resets the data for the object
-			name : document.getElementById("name").value = "";
-			start : document.getElementById("startDate").value = "";
-			end : document.getElementById("endDate").value = "";
-			amount : document.getElementById("val").value = "";
-			alert("Promotion added successfully!");
-		}
-		else if(promoType == 'drinks'){
-			var now = new Date();
-			var month = (now.getMonth()+1);
-			var day = now.getDate();
-			if(month < 10)
-				month = "0" + month;
-			if(day < 10)
-				day = "0" + day;
-			var today = now.getFullYear() + '-' + month + '-' + day;
-			day = day+1;
-			var tomorrow = now.getFullYear() + '-' + month + '-' + day;
-			let request = {
-			name : "Free Drinks",
-			start : today,
-			end : tomorrow,
-			category : 3
-		}
-		console.log(JSON.stringify(request));
-		//posts the object to the backend to be added into the database
-		//$.post("http://159.89.238.181:8080/api/", JSON.stringify(request), function(data, status) {				
-		//		alert(status);
-		//});
-		//resets the data for the object
-			name : document.getElementById("name").value = "";
-			start : document.getElementById("startDate").value = "";
-			end : document.getElementById("endDate").value = "";
-			amount : document.getElementById("val").value = "";
-			alert("Promotion added successfully!");
+    <script>
+		$(document).ready(function() {
+			var url = "http://159.89.238.181:8080/api/items";
+			$.ajax({
+				url: url,
+				type: 'get',
+				dataType: 'JSON',
+				success: function(response) {
+					response.forEach(item => 
+						createForm(item)
+					);
+				}
+			});
+		});
+		
+		function createForm(item){
+			var empTab = document.getElementById("rem");
+			var rowCnt = empTab.rows.length; //gets current amount of rows
+			var tr = empTab.insertRow(rowCnt); //adds new row below the last row
+			tr = empTab.insertRow(rowCnt);
+			var element;
+			
+			var td = document.createElement('td'); //inserts name into the table
+			td = tr.insertCell(0);
+			td.append(item.name);
+			
+			element = document.createElement('input');
+			element.setAttribute('type', 'number');
+			if(item.price != null){
+				element.setAttribute('value',item.price.toFixed(2));
+			}
+			element.setAttribute('id', item._id.$oid);
+			td = document.createElement('td'); //inserts price into the table
+			td = tr.insertCell(1);
+			td.append(element);
+			
+			element = document.createElement('input');
+			element.setAttribute('type', 'button');
+			element.setAttribute('value','MODIFY');
+			element.setAttribute('class', item._id.$oid);
+			element.setAttribute('onclick', 'modItem(this.className)');
+			td = document.createElement('td'); //creates modify button for each item
+			td = tr.insertCell(2);
+			td.appendChild(element);
+			
+			element = document.createElement('input');
+			element.setAttribute('type', 'button');
+			element.setAttribute('value','REMOVE ITEM');
+			element.setAttribute('class', item._id.$oid);
+			element.setAttribute('onclick', 'remItem(this.className)');
+			td = document.createElement('td'); //creates remove button for each item
+			td = tr.insertCell(3);
+			td.appendChild(element);
 		}
 		
-	}
+		function remItem(id)//passes ajax request to remove the employee of id
+		{
+			console.log(id);
+			var url = "http://159.89.238.181:8080/api/items/delete?id=";
+			url = url.concat(id);
+			$.post(url, function(status) {				
+						var j = $.parseJSON(status);
+							alert(j.message);
+							window.location.reload();
+			});
+		}
+		function modItem(id){//modifies employee information
+			var price = parseFloat(document.getElementById(id).value);
+			var url = "http://159.89.238.181:8080/api/items/modify?id=";//ajax request to modify employees
+			url = url.concat(id);
+			url = url.concat("&price=");
+			url = url.concat(price);
+			$.post(url, function(data, status) {	
+				alert(status);
+			});
+		}
     </script>
 </head>
 <body style="background-color:Black;">
@@ -250,7 +253,7 @@
 			<br><br>
 			<button onclick="document.location = 'tools.html'">TOOLS</button>
 			<br><br>
-			<button onclick="document.location = 'report.html'">REPORTS</button>
+			<button onclick="document.location = 'reports.html'">REPORTS</button>
 		</div>
 	</div>
 	
@@ -273,48 +276,21 @@
 				<button onclick="document.location = 'discount.html'">DISCOUNT</button>
 			</div>
 		</div>
-	<!--holds promotions form-->
+	<!--holds remove/modify items form-->
 		<div class = "items">
-			<h2>PROMOS</h2>
+			<h2>MENU</h2>
 			<hr color="black">
 			<span style="text-align:left !important;position:relative;left:10px;">
-					<label>Select which promotion you would like to run:</label>
-					<select id="promo" onclick="selectOption()">
-						<option value="kids">Kids Eat Free</option>
-						<option value="drinks">Free Drinks</option>
-						<option value="other">Other</option>
-					</select>
-					<br><br>
-					<!--If the manager selects other, form displays-->
-					<span id = "oth" style="display:none">
-						<label>Name of promotion:</label>
-						<input type="text" id="name" placeholder="Name">
-						<br><br>
-						<label>Start Date:</label>
-						<input type="date" id="startDate">
-						<br><br>
-						<label>End Date:</label>
-						<input type="date" id="endDate">
-						<br><br>
-						<label>Discount Amount:</label>
-						<input type="text" id="val" placeholder="$0.00">
-						<br><br>
-					</span>
-					<input type ="button" value ="ADD PROMOTION" onclick="handleSubmit()"/>
-			<script>
-				<!--If other is selected, display form to fill out-->
-				function selectOption(){
-					var x = document.getElementById("promo").value;
-					if(x === "other")
-					{
-						document.getElementById("oth").style.display = "block";
-					}
-					else
-					{
-						document.getElementById("oth").style.display = "none";
-					}
-				}
-			</script>
+			<span style="text-align:left !important;position:relative;left:10px;">
+				<table id = 'rem'>
+					<tr>
+						<th>NAME</th>
+						<th>PRICE</th>
+						<th></th>
+						<th></th>
+					</tr>
+				</table>
+			</span>
 			</span>
 		</div>
 	</div>

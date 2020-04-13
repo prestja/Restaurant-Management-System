@@ -18,12 +18,12 @@
         position: relative;
         /*background-color:plum;*/
         /*color:white;*/
-        border-color:transparent;
+        //border-color:transparent;
 		
 		background-color: #D3D3D3; /*Makes Gray background*/
-		border:  0px #D3D3D3;  /*Border around boxes is Gray*/
+		border:  0% #D3D3D3;  /*Border around boxes is Gray*/
 		color: black; /* White text */
-		padding: 10px 10px; /* Some padding */
+		padding: 1% 1%; /* Some padding */
 		margin-top: 5px;  /* Created space between buttons */
 		font-family: Arial Black, Times, serif; /* sets font */
 		font-size:  16px;	/* Sets size */
@@ -81,25 +81,26 @@
 		var pin = ""; // default to no pin set
 		var table = 0; // default to table 0 (1 in real-world terms)
 		
-		function goBack(wasPlayMenu) {			
-			var home = document.getElementById("ifrm");
-			if (wasPlayMenu) {
+		function goBack() {						
+			var frame = document.getElementById("ifrm");
+			var location = frame.src;
+			var n = location.lastIndexOf('/'); //finds the name of the last page
+			var result = location.substring(n+1);
+			console.log(result);
+			if (result == "play.html") { // check if the last page frame was on was "play"
 				var attempt = prompt("Please enter your pin");
 				if (pin != attempt) {
 					alert("I'm sorry, you put in the incorrect pin. If you believe this is a mistake, please press the HELP button located at the top of the display.");
 					return;
 				}
 			}
-			home.src = "landing.html";
-			showButton(false);
-		}
-
-		function goRefill() {
-			var home = document.getElementById("ifrm");
-			home.src = "refills.html";
+			if (result == "rewards.html") {
+				frame.src = "../payment.html";
+				return;
+			}
 			
-			var btn = document.getElementById("nav-back");
-			btn.style.display = "inline-block";
+			frame.src = "landing.html";
+			showButton(false);
 		}
 		
 		function showButton(state) {
@@ -118,7 +119,7 @@
 			var btn = document.getElementById("nav-back");
 		}
 		
-		function myFunction() {
+		function goHelp() {
 			var txt;
 			if (confirm("Do you need assistance from your server?")) {
 				txt = "You pressed OK!";
@@ -131,19 +132,54 @@
 		}		
 		
 		window.addEventListener('message', master_listener, false);
-	
+		
 		function master_listener(message) {
 			if(message.data.type == "back" ) {
 				showButton(message.data.state);
+			}
+			else if (message.data.type == "show") {
+				showButton(true);
+			}
+			else if (message.data.type == "hide") {
+				showButton(false);
 			}
 			else if(message.data.type == "pin") {
 				if(pin == "" && message.data.pin != "") {
 					pin = message.data.pin;
 				}
 				document.getElementById("ifrm").contentWindow.postMessage(pin, "*");
-			}			
+			}
+			else if(message.data.type == "table") {
+				document.getElementById("ifrm").contentWindow.postMessage(table, "*");	
+			}
+			else if (message.data.type == "order") {
+				var frame = document.getElementById("ifrm");
+				frame.src = "../menu.html";
+			}
+			else if (message.data.type == "play") {
+				var frame = document.getElementById("ifrm");
+				frame.src = "play.html";
+			}
+			else if (message.data.type == "pay") {
+				var frame = document.getElementById("ifrm");
+				frame.src = "../payment.html";
+			}
+			else if (message.data.type == "rewards") {
+				var frame = document.getElementById("ifrm");
+				frame.src = "rewards.html";
+			}
 		}
-			
+		
+		function goRoulette() {
+			var frame = document.getElementById("ifrm");
+			frame.src = "roulette.html";
+		}
+		
+		function goRefills() {
+			var frame = document.getElementById("ifrm");
+			frame.src = "refills.html";
+		}
+		
 	</script>
 	
 </head>
@@ -151,15 +187,14 @@
 <body>
     <!--Navigation buttons-->
     <div class = "navigation">
-        <button id = "nav-back" onclick ="goBack(true);" >Back</button>
-		<button id = "nav-help" onclick = "myFunction()">Help</button>
-        <button id = "nav-refills" onclick ="goRefill()">Refills</button>
+        <button id = "nav-back" onclick ="goBack();" >Back</button>
+		<button id = "nav-help" onclick = "goHelp()">Help</button>
+        <button id = "nav-refills" onclick="goRefills()">Refills</button>
     </div>
 
     <!---Content -->
     <div class = "content">
-        <iframe src = "landing.html" name="ifrm" id="ifrm" style = "height: 100%; width: 100%" >
-		</iframe>
+        <iframe src = "landing.html" name="ifrm" id="ifrm" style = "height: 100%; width: 100%"></iframe>
     </div>
 
 </body>

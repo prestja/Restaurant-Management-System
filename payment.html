@@ -195,6 +195,9 @@
 </style>
 
 <head>
+	<link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet'>
+    <!--changed to https://... below to remove error-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
 	function setup() {
 		var toggle = {
@@ -209,6 +212,31 @@
 		}
 		parent.window.postMessage(message, "*");
 	}
+
+	function updateReceipt(item){
+		console.log("Updating receipt");
+		console.log(JSON.stringify(item));
+		var target = document.getElementById("receipt_screen");
+		target.contentWindow.postMessage(item, '*');
+	}
+	
+	$(document).ready(function() {
+		var queryStr = window.location.search;
+		var category = queryStr.substr(1)
+		var url = "http://159.89.238.181:8080/api/orders?".concat(category);
+		$.ajax({
+			url: url,
+			type: 'get',
+			dataType: 'JSON',
+			success: function(response) {
+				response.forEach(item => 
+					updateReceipt(item)
+				);
+			}
+		});
+	});
+	
+	
 </script>
 </head>
 
@@ -256,7 +284,7 @@
 		<h2>RECEIPT</h2>
 		
 		<!--Insert an iframe for the receipt-->
-		<iframe src="customer/customer_receipt.html" style="width:95%; height:80%" ></iframe>
+		<iframe id="receipt_screen" src="customer/customer_receipt.html" style="width:95%; height:80%" ></iframe>
 	</div>
 </div>
 </body>

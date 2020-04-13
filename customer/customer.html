@@ -181,11 +181,21 @@
 			frame.src = "refills.html";
 		}
 		
+		//Function to get the table number from url
+		function getTableNumber(){
+			//Get the url path 
+			var url = window.location.pathname;
+			//Get the substring at the end of url
+			var table = "Table # ";
+			table += url.substring(url.lastIndexOf('/') + 2);
+			//alert(table);
+		}
+	
 	</script>
 	
 </head>
     
-<body>
+<body onload="getTableNumber();">
     <!--Navigation buttons-->
     <div class = "navigation">
         <button id = "nav-back" onclick ="goBack();" >Back</button>

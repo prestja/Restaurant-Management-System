@@ -25,22 +25,45 @@
 		background-color: none;
 		text-align: right;
 	}
+	
+	.content {
+		width: 100%;
+		height: 90%;
+	}	
 
 </style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+	window.addEventListener('message', addReceipt, false);
+	function addReceipt(message){
+		var clone = $("#item").clone(true);
+		clone.css('display','block'); 
+		clone.children("#item.td").html(message.data.name);
+		clone.children("#item.td").html(message.data._id.$oid);
+		clone.data("item", message.data); // assign the data of this item to the button for future use
+		clone.appendTo('#receipt');	
+	}
+
+</script>
 </head>
 <body style="background-color:white">
-
+  <div class = "content">
 	<!--Creating a table to store purchase information-->
+  </div>
 	<table id="receipt">
 		<tr>
 			<th>Item</th>
 			<th>Qty</th>
 			<th>Price</th>
 		</tr>
-		<tr>
-			<th>Nachos</th>
-			<th>1</th>
-			<th>$7.99</th>
+		<tr id="item">
+			<td></td>
+		</tr>
+		<tr id="qty">
+			<td></td>
+		</tr>
+		<tr id="price">
+			<td></td>
 		</tr>
 	</table>
 
@@ -66,28 +89,7 @@
 			<th>TOTAL DUE  $</th>
 		</tr>
 	</table>
-	<!--Header for customer receipt
-	<pre>Item                           Qty                         Price</pre>
-	<pre>================================================================</pre>
-	-->
-	
-	<!--Order data needs to go here to fill the body-->
-	<!--
-	<pre>Item name.         Number of item.           Item price</pre>
-	
-	<pre>================================================================</pre>
-	-->	
-		
-	<!--Bottom of the receipt needs these elements-->
-	<!--
-	<div class="receiptTotals">
-		<pre> SUBTOTAL   $ </pre>
-		<pre>      TAX   $ </pre>
-		<pre> GRATUITY   $ </pre>
-		<pre>TOTAL DUE   $ </pre>
-	</div>
-	-->
-	
+
 </body>
 </html>
 

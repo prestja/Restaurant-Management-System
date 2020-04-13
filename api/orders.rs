@@ -205,7 +205,7 @@ pub fn post(conn: LogsDbConn, order: Json<Order>) -> String {
 		"table": inner.table,
 		"id": inner.id,
 		"items": inner.items,
-		"status": inner.status,
+		"status": 0,
 		"total": 43.19,
 		"tip": 5.00 
 	};	
@@ -216,23 +216,24 @@ pub fn post(conn: LogsDbConn, order: Json<Order>) -> String {
 		}
 	};
 	let coll = conn.collection("orders");
-	if let Ok(result) = coll.find_one(existing, None) {
+	if let Ok(result) = coll.find_one(Some(existing.clone()), None) {
 		if let Some (order) = result {
 			let response = json!({ // generate a response for the user
 				"code": 404,
 				"message": "You cannot place an order at this time as you have an outstanding unpaid order."
 			});
-			_coll.find_one_and_update(doc.clone(), _update, None).unwrap();
 			return serde_json::to_string(&response).unwrap();
 		}
 	}
-	
-	coll.insert_one(doc, None).unwrap();
+	coll.insert_one(doc.clone(), None).unwrap(); // insert the order
 	let response = json!({ // generate a response for the user
 		"code": 200,
 		"message": "Inserted order into collection orders"
 	});
-	_coll.find_one_and_update(doc.clone(), _update, None).unwrap();
+
+	// update the order with the current date time
+	let update = doc!{"$currentDate": { "placed": true}};
+	coll.find_one_and_update(doc.clone(), update.clone(), None).unwrap();
 	return serde_json::to_string(&response).unwrap();
 }
 

@@ -96,8 +96,8 @@
 		position: absolute;
 	}
 	
-	/*Created a receipt container to hold menu items*/
-	.receipt {
+	/*Created a order container to hold menu items*/
+	.order {
 		background-color: #A9A9A9 !important; //makes Gray background
 		padding: 1%;
 		margin: 1%;
@@ -195,11 +195,10 @@
 		span.onclick = function() {
 			modal.style.display = "none";
 		}
-	}
-	
-	//Return function for new back button
-	function returnMain(){
-		document.location = "customer/landing.html";
+		var toggle = {
+			type: "show"
+		};
+		parent.window.postMessage(toggle, "*");
 	}
 
 	<!--selects menu type and displays menu items of that type-->
@@ -236,20 +235,19 @@
 	
 	window.addEventListener('message', updateOrder, false);
 	function updateOrder(message) {
-		if(message.data == 'block'){
-			modal.style.display = "block";
-		}
-		else if(message.data != 'block'){
-			var name = document.getElementById("itemName");
-			name.innerHTML = message.data.name;
-			var body = document.getElementsByClassName("modal-body");
-			body.innerHTML = message.data.description;
-			var submit = $("#addOrder");
-			
-			submit.click(function() {				
-				sendToOrder(message);
-			});
-		}
+		console.log("Updating order");
+		modal.style.display = "block";
+		var name = document.getElementById("itemName");
+		name.innerHTML = message.data.name;
+		var body = document.getElementsByClassName("modal-body");
+		body.innerHTML = message.data.description;
+		var submit = $("#addOrder");
+		submit.unbind('click'); // remove any previous onclick listeners for this button		
+		submit.click(function() { // when clicked, send a message to the customer_order frame				
+			sendToOrder(message);
+			modal = document.getElementById("myModal");
+			modal.style.display = 'none';
+		});
 	}
 	
 	function sendToOrder(message){
@@ -291,7 +289,6 @@
 			<br><br>
 			<button onclick="menuType('sweets')">DESSERTS</button>
 			<br><br>
-			<button onclick="returnMain()">BACK</button>
 		</div>
 	</div>
 	<!--Stores menu items of menu type selected from the buttons, default is beverages-->
@@ -324,24 +321,13 @@
 	</div>
 
 	
-<!--Stores div for receipt items-->
-	<div class = "receipt">
+<!--Stores div for order items-->
+	<div class = "order">
 		<h2 text-align="center">ORDER</h2>
 		
 		<hr color = "black">
 		<!--form for known allergies so kitchen and waitstaff can keep track-->
-		<div style = "color:#B22222 !important;text-align:left;position:relative;left:10px">
-			<form action="">
-				<label>Known Allergies:</label>
-				<br>
-				<input type="text" id="known-allergies" name="known-allergies" placeholder="Enter Allergies Here..."/>
-				<input type="submit" value="SUBMIT">
-			</form>
-			<br>
 		
-			<!--<span style="color:black !important">*VEGETARIAN ITEM</span>-->
-		</div>
-		<hr color="black">
 		
 		<iframe src="customer/customer_order.html" id="orderFrame" style="width:95%; height: 60%"></iframe>
 	</div>

@@ -90,14 +90,11 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<script src="../jquery-3.4.1.min.js"></script>
-	<script>
-		
+	<script>		
 		window.addEventListener('message', get_table, false);
 		var table = 0;
 
-
-		function addRefill(message)
-		{
+		function addRefill(message) {
 			var clone = $("#refillTemplate").clone(true);
 			clone.css('display', 'block');
 			clone.children(".refillName").html(message);
@@ -105,7 +102,6 @@
 			
 			clone.appendTo('.content');
 		}
-	
 	
 		function placeRefill(message)
 		{
@@ -130,28 +126,28 @@
 			};
 			$.post("http://159.89.238.181:8080/api/notifications/", JSON.stringify(notifications));
 		}
-		function get_table(message)
-		{
+		function get_table(message) {
 			table = parseInt(message.data); 
 		}
-		function on_load()
-		{
-			parent.window.postMessage("table", "*");
+		
+		function setup() {
+			var toggle = {
+				type: "show"
+			};
+			parent.window.postMessage(toggle, "*"); // toggle back button
+			parent.window.postMessage("table", "*"); // sample table number from master frame
 		}
-		function removeRefill()
-		{
+		
+		function removeRefill() {
 			//This uses the buttons class as a 'delete' item to narrow the functionality to just it
-			$('.delete').click(function()
-			{
+			$('.delete').click(function() {
 				//This forces the target to be the buttons grandparent, aka the container holding the entire refill item
 				 $(this).parent().parent().remove('#refillTemplate');
 
 			});
 		}
 
-
-		function removeRefills()
-		{
+		function removeRefills() {
 			//Current idea for improvement -- Figure out how to filter a != "", as only the invisible template contains
 			//an empty string (note this uses :contains selector)
 
@@ -164,19 +160,15 @@
 			$('.delete').parent().parent().filter(":contains('lemonade')").remove();
 			$('.delete').parent().parent().filter(":contains('dr pepper')").remove();
 			$('.delete').parent().parent().filter(":contains('root beer')").remove();
-
 		}
 
-		function handleStuff()
-		{
-		parent.window.postMessage("inline-block", '*');
+		function handleStuff() {
+			parent.window.postMessage("inline-block", '*');
 		}
 	</script>
 
 </head>
-<body style="background-color:Black;" onload = "on_load()">
-
-
+<body style="background-color:Black;" onload = "setup()">
 	<div id="myDIV" class="header" style="height: 15%;">
 		<h2 style="margin:5px">Refills</h2>
 		<h3 style="margin:5px">Please Select Your Drinks to be refilled</h3>
@@ -191,39 +183,22 @@
 		<button id="sweettea" style="background: url('../img/beverages/Drink_SweetTea.jpg') no-repeat; background-size: auto 100%; " ; onclick="addRefill('sweet tea')"></button>
 		<button id="lemonade" style="background: url('../img/beverages/Drink_Lemonade.jpg') no-repeat; background-size: auto 100%; " ; onclick="addRefill('lemonade')"></button>
 	</div>
-
-
-
 	<div class="content">
 		<!--- Refill template--->
 	</div>
 	<div class="refillTemplate" id="refillTemplate">
-
 		<div style="display:inline-block">
 			<button class="delete"value="Remove Element" onmousedown="removeRefill();">Remove this item</button>
-
 		</div>
 		<div class="refillName" style="display:inline-block">
 			refill name goes here
 		</div>
-
-
-<div class= "bottom-group">
-   <button type="button" onclick="alert('Your refill has been ordered!')">SUBMIT</button>
- </div>
-    
-
+		<div class= "bottom-group">
+		   <button type="button" onclick="alert('Your refill has been ordered!')">SUBMIT</button>
+		</div>
 	</div>
-
-
 	<div class="bottom-group">
 		<button type="button" onclick="alert('Your refill has been ordered!'); placeRefill(); removeRefills() ">SUBMIT</button>
 	</div>
-
-
-
 </body>
-
-
-
 </html>

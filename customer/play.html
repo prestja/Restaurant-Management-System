@@ -1,83 +1,68 @@
 <!DOCTYPE html>
 <html>
+<head>
 <style>
-* {
+
+	* {
 		box-sizing: border-box;
 	}
-
-	body {
+	
+	.grid-container {
+		display: grid;
+		grid-gap: 50px 10px;
+		grid-template-columns: auto auto;
 		background-color: black;
-		margin: 0;
-		padding: 0;
-		height: 100%
-	}
-	
-	/*Created a header container to hold buttons at the top*/
-	.header {
+		width: 70%;
 		padding: 10px;
-		<!-- background-color: blue; -->
-		margin: 0px 0px 0px;
+		height: 500px;
+		margin-left: 15%;
+		margin-top: 5%;
 	}
 	
-	/*Button group for creating the buttons at top of page*/
-	/*Same button group from the main page*/
-	.button-group button {
-		background-color: #D3D3D3; /*Makes Gray background*/
-		border:  0px #D3D3D3;  /*Border around boxes is Gray*/
-		color: black; /* White text */
-		padding: 10px 10px; /* Some padding */
-		margin: 0;  /* Created space between buttons */
-		font-family: Arial Black, Times, serif; /* sets font */
-		font-size:  16px;	/* Sets size */
-		font-weight:  normal;	/*Sets normal or bold */
-		text-align: center;	/* Aligns to center of button */
-		cursor: pointer; /* Pointer/hand icon */
-		width: 15%; /* Set a width if needed */
-		display: inline-block;
+	.grid-item {
+		background-color: black;
+		border: 1px solid rgba(0, 0, 0, 0.8);
+		padding: 10px;
+		height: 90%;
+		width: 70%;
+		font-size: 30px;
+		text-align: center;
 	}
 
-	.button-group button:not(:last-child) {
-		border-right: none; /* Prevent double borders */
+	.title {
+		width: 100%;
+		height: 14%;
+		background-color:#ffffffA0;
+		color: green;
+		font-family: "Lato", Arial, sans-serif;
+		text-align: center;
+		font-size: 14px;
+		font-weight: 900;
+		position: relative;
+		opacity: 0.5;
+		top: 30%;
 	}
 
-	/* Add a background color on hover */
-	.button-group button:hover {
-		background-color: #3e8e41;
-	}
-
-.container{
-	margin: 20px auto;
-	width:300px;
-	height:300px;
-	background-color:#fff;
-	display:grid;
-	grid-template-columns: 100px 100px;
-	grid-row: auto auto;
-	grid-column-gap: 10px;
-	grid-row-gap: 10px;
-  .box{
-    background-color:white;
-    padding: 10px;
-    border-radius:10px;
-    color:#fff;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:100px;
-    font-family: Arial Black, Times, serif;
-	
-  }
-
-}
 
 </style>
+</head>
+<body style="background-color: black">
 
-<body style="background-color:Black;">
-<div class="container" style= "color:white; background: url('../img/games/birdo.png') no-repeat; background-size: 100%;">Birdo</div>
-<div class="container" style= "color:white; background: url('../img/games/diduno.png') no-repeat; background-size: 100%;">Diduno</div>
-<div class="container" style= "color:white; background: url('../img/games/bedazzled.png') no-repeat; background-size: 100%;">Bedazzled</div>
-<div class="container" style= "color:white; background: url('../img/games/tictac.png') no-repeat; background-size: 100%;">TicTac</div>
+<div class="grid-container" style="">
+	<div class="grid-item" style= "color:white; background: url('../img/games/birdo.png') no-repeat; background-size: 110%;">
+		<div class="title" onclick="">Birdo</div>
+	</div>
+	<div class="grid-item" style= "color:white; background: url('../img/games/diduno.png') no-repeat; background-size: 120%;">
+		<div class="title" onclick="">Diduno</div>
+	</div>
+	<div class="grid-item" style= "color:white; background: url('../img/games/bedazzled.png') no-repeat; background-size: 110%;">
+		<div class="title" onclick="">Bedazzled</div>
+	</div> 
+  <div class="grid-item" style= "color:white; background: url('../img/games/tictac.png') no-repeat; background-size: 120%;">
+		<div class="title" onclick="">Tic-Tac</div>
+	</div> 
+</div>
+
+
 </body>
-
-
 </html>

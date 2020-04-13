@@ -47,23 +47,30 @@ h2 {
 	}
 	
 	function placeOrder() {
-		//console.log("Placing order...");
-		var items = document.getElementsByClassName("content")[0].getElementsByClassName("itemTemplate");
-		var itemArray = [];
-		Array.prototype.forEach.call(items, function(i) {
-			//console.log(i);
-			var data = $(i).data("item");
-			itemArray.push(data._id);
-		});
+		var response = confirm("Are you sure you want to submit your order. Once Submitted, your order cannot be changed.");
+		if(response == true){
+			var items = document.getElementsByClassName("content")[0].getElementsByClassName("itemTemplate");
+			var itemArray = [];
+			Array.prototype.forEach.call(items, function(i) {
+				var data = $(i).data("item");
+				itemArray.push(data._id);
+			});
 		
-		var order = {
-			table: 5,
-			items: itemArray,
-			status: 0
-		};
-		console.log(JSON.stringify(order));
-		$.post("http://159.89.238.181:8080/api/orders/", JSON.stringify(order));
+			var order = {
+				table: 5,
+				items: itemArray,
+				status: 0
+			};
+			console.log(JSON.stringify(order));
+			$.post("http://159.89.238.181:8080/api/orders/", JSON.stringify(order));
+		}
 	}
+	
+	$(document).ready(function(){
+		$("button").click(function(){
+			$(".itemTemplate").remove();
+		});
+	});
 
 </script>
 
@@ -88,7 +95,7 @@ h2 {
 			List any allergies or substitutions you would like <textarea rows = "1"> </textarea>
 		</div>
 		<div style = "align: right">
-			<button>Remove this item</button>
+			<button id="rmv">Remove this item</button>
 		</div>
 	</div>
 	

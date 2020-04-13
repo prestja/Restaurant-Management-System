@@ -157,7 +157,8 @@
 			name : document.getElementById("name").value,
 			start : document.getElementById("startDate").value,
 			end : document.getElementById("endDate").value,
-			amount : parseFloat(document.getElementById("val").value)
+			amount : parseFloat(document.getElementById("val").value),
+			category : -1
 		}
 		console.log(JSON.stringify(request));
 		//posts the object to the backend to be added into the database
@@ -186,7 +187,8 @@
 			name : "Kids Eat Free",
 			start : today,
 			end : tomorrow,
-			category : 4
+			category : 4,
+			amount : -1
 		}
 		console.log(JSON.stringify(request));
 		//posts the object to the backend to be added into the database
@@ -215,7 +217,8 @@
 			name : "Free Drinks",
 			start : today,
 			end : tomorrow,
-			category : 3
+			category : 3,
+			amount : -1
 		}
 		console.log(JSON.stringify(request));
 		//posts the object to the backend to be added into the database

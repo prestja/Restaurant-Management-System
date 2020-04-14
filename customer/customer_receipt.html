@@ -52,6 +52,11 @@
 		display: inline-block;
 	}
 
+	/* Add a background color on click */
+	.button-group button:focus {
+		background-color: green;
+	}
+	
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
@@ -131,8 +136,7 @@
 	
 	<br>
 	<form id="CouponCode">
-		<label for="coupon">Add Coupon Code:</label><br>
-		<input type="text" id="coupon" name="coupon"><br>
+		Add Couon Code: <input type="text" id="coupon" name="coupon"><br><br>
 		<input type="button" value="Submit" onclick="submitCoupon()">
 	</form>
 	

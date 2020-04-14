@@ -269,7 +269,7 @@
 		}
 		});
 		
-		var best = -1, bestId, bestName;
+		var best = -1, bestId;
 		
 		for(var key in menuOrder){
 			if(menuOrder[key] >= best)
@@ -279,18 +279,18 @@
 			}
 		}
 		
-		var url = "http://159.89.238.181:8080/api/items";
-			$.get(url, function(response) {				
-				response.forEach(item => {
-					if(item._id.$oid == bestId)
-					{
-						bestName = item.name;
-					}
-				});
+		var url = "http://159.89.238.181:8080/api/orders?id=";
+		url = url.concat(bestId);
+		$.get(url, function(response) {				
+				printBestItem(response.name);
 			});
-			console.log(bestName);
 	}
-		
+	
+	function printBestItem(name){
+		var element = document.getElementById("best");
+		element.append(name);
+	}
+	
 	function dailyReport(){//filters table to today
 		document.getElementById('daily').style.background = "#3e8e41";
 		document.getElementById('monthly').style.background = "#D3D3D3";
@@ -410,8 +410,7 @@
 				<button onclick="monthlyReport()" id="monthly" style="width:40%!important;display:inline-block!important">MONTHLY</button>
 			</div>
 			<br>
-				<p>OVERALL BEST SELLING ITEM: <p>
-				<p id="best"></p>
+				<p id = "best">OVERALL BEST SELLING ITEM: <p>
 			<hr color="black">
 			<span style="text-align:left !important;position:relative;left:10px;">
 				<table style="width:90%" id="sales">

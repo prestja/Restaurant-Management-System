@@ -114,7 +114,7 @@
 		padding: 10px;
 		margin: 10px 10px 10px 10px;
 		width: 60vw;
-		height: 520px;
+		height: 680px;
 		display: inline-block;
 		text-align: center;
 		border: 5px;
@@ -187,7 +187,8 @@
 				vegan: document.getElementById("vegan").checked,
 				vegetarian: document.getElementById("vegetarian").checked,			
 				imgPath: imagePath,
-				price: parseFloat(document.getElementById("price").value)
+				price: parseFloat(document.getElementById("price").value),
+				description: document.getElementById("description")
 			}
 			//puts the object in JSON format and posts it to the backend to be added to the database
 			console.log(JSON.stringify(request));
@@ -281,6 +282,9 @@
 					<br><br>
 					<label id = "ing">INGREDIENTS:</label><br>
 					<textarea id = "ingredients" rows = "5" cols = "40" placeholder="Enter ingredients here, each ingredient separated by a comma with no spaces. Example: Burger,cheese,lettuce"></textarea>
+					<br><br>
+					<label id = "ing">DESCRIPTION:</label><br>
+					<textarea id = "description" rows = "5" cols = "40" placeholder="Enter description here..."></textarea>
 					<br><br>
 				</span>
 				<label for="img">SELECT IMAGE:</label>

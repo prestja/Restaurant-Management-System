@@ -107,6 +107,11 @@
 		document.getElementById("FinTot").innerHtml = finalTotal;
 	}
 	
+	function submitCoupon(){
+		document.getElementById("CouponCode").reset();
+		
+	}
+	
 </script>
 </head>
 <body style="background-color:white">
@@ -123,7 +128,14 @@
 			<td id="price">some price</td>
 		</tr>
 	</table>
-
+	
+	<br>
+	<form id="CouponCode">
+		<label for="coupon">Add Coupon Code:</label><br>
+		<input type="text" id="coupon" name="coupon"><br>
+		<input type="button" value="Submit" onclick="submitCoupon()">
+	</form>
+	
 	<table id="total">
 		<tr>
 			<th id="SubTot">Subtotal: </th><br>

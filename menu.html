@@ -241,6 +241,19 @@
 		name.innerHTML = message.data.name;
 		var body = document.getElementsByClassName("modal-body");
 		body.innerHTML = message.data.description;
+		
+		var ingre = document.getElementById("ingre");
+		ingre.innerHTML = message.data.ingredients; 
+		
+		message.data.ingredients.forEach(ingredient => {
+		
+		ingre.innerHTML += ingredient + ", "
+		
+		});
+		
+		var img = document.getElementById("img").src = message.data.imgPath; 
+		
+		
 		var submit = $("#addOrder");
 		submit.unbind('click'); // remove any previous onclick listeners for this button		
 		submit.click(function() { // when clicked, send a message to the customer_order frame				
@@ -294,8 +307,9 @@
 					<h2 id="itemName">Item Name</h2>
 				</div>
 				<div class="modal-body">
+					<img src = "id = 'img'">
 					<p>Item Description Goes Here</p>
-					<p>Some other text...</p>
+					<p>Contains: <span id = "ingre"></span></p>
 				</div>
 				<div class="modal-footer">
 					<button id="addOrder">Add To Order</h3>

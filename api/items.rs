@@ -69,6 +69,40 @@ pub fn get_category (_conn: LogsDbConn, category: u32) -> String {
 	return _str;
 }
 
+#[get("/?<id>")]
+pub fn get_id(_conn: LogsDbConn, id: String) -> String {
+        let mut _str = String::from("[\n\t");
+        let cast = bson::oid::ObjectId::with_string(id.as_str());
+        if let Ok(oid) = cast {
+                let _doc = doc!{"_id":
+                let _coll = _conn.collection("items");
+                let _cursor = _coll.find(Some(_doc.clone()), None).unwrap();
+                for result in _cursor {
+                        if let Ok(item) = result {
+                                let _bson = mongodb::to_bson(&item).unwrap();
+                                let _json = serde_json::ser::to_string(&_bson).unwrap();
+                                _str.push_str(&_json);
+                        }
+                        _str.push_str(",\n\t");
+                }
+                if _str.len() <= 3 {
+                        return String::from("No entries found");
+                }
+                _str.pop();
+                _str.pop();
+                _str.pop();
+                _str.push_str("\n]");
+                return _str;
+        }
+        else {
+                let response = json!({
+                        "code": 404,
+                        "message": "Invalid or malformed object id."
+                });
+                return serde_json::to_string(&response).unwrap();
+        }
+}
+
 #[post("/", data = "<item>")]
 pub fn post (_conn: LogsDbConn, item: Json<Item>) -> String {
 	let inner = item.into_inner(); // deserializes the Json-formatted item

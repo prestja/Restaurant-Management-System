@@ -233,6 +233,7 @@
 			td.append("$0.00");
 		}
 	}}
+	
 		$(document).ready(function() {
 			var url = "http://159.89.238.181:8080/api/orders";
 			$.ajax({
@@ -243,9 +244,21 @@
 					response.forEach(item => 
 						addItem(item)
 					);
+					getBestSellingItem(response);
 				}
 			});
 		}); 
+		
+	function getBestSellingItem(orderList)
+	{
+		
+		orderList = JSON.parse(orderList);
+		console.log(orderList);
+		/*orderList.forEach(item => {
+		if(item.items != null)
+		console.log(item.items.$oid)});*/
+	}
+		
 	function dailyReport(){//filters table to today
 		document.getElementById('daily').style.background = "#3e8e41";
 		document.getElementById('monthly').style.background = "#D3D3D3";
@@ -365,6 +378,8 @@
 				<button onclick="monthlyReport()" id="monthly" style="width:40%!important;display:inline-block!important">MONTHLY</button>
 			</div>
 			<br>
+				<p>BEST SELLING ITEM: <p>
+				<p id="best"></p>
 			<hr color="black">
 			<span style="text-align:left !important;position:relative;left:10px;">
 				<table style="width:90%" id="sales">

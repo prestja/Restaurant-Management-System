@@ -21,7 +21,7 @@ pub struct Item {
 	#[serde(default)] status: u32 // status defaults to 1 upon insertion
 }
 
-#[get("/")]
+#[get("/", rank = 2)]
 pub fn get_all (_conn: LogsDbConn) -> String {	
 	let mut _str = String::from("[\n\t");
 	let _doc = doc!{};
@@ -45,7 +45,7 @@ pub fn get_all (_conn: LogsDbConn) -> String {
 	return _str;
 }
 
-#[get("/?<category>")]
+#[get("/?<category>", rank = 0)]
 pub fn get_category (_conn: LogsDbConn, category: u32) -> String {	
 	let mut _str = String::from("[\n\t");
 	let _doc = doc!{"category": category};
@@ -69,7 +69,7 @@ pub fn get_category (_conn: LogsDbConn, category: u32) -> String {
 	return _str;
 }
 
-#[get("/?<id>", rank = 4)]
+#[get("/?<id>", rank = 1)]
 pub fn get_id(_conn: LogsDbConn, id: String) -> String {
         let mut _str = String::from("[\n\t");
         let cast = bson::oid::ObjectId::with_string(id.as_str());

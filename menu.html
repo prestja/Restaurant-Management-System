@@ -256,6 +256,17 @@
 		var allergen = document.getElementById("allergy");
 		allergen.innerHTML = message.data.allergen;
 		
+		var desc = document.getElementById("desc");
+		
+		desc.innerHTML = message.data.description;
+		
+		var price = document.getElementById("price");
+		
+		price.innerHTML = message.data.price; 
+		
+		
+		
+		
 		var submit = $("#addOrder");
 		submit.unbind('click'); // remove any previous onclick listeners for this button		
 		submit.click(function() { // when clicked, send a message to the customer_order frame				
@@ -310,7 +321,8 @@
 				</div>
 				<div class="modal-body">
 					<img src = "id = 'img'">
-					<p>Item Description Goes Here</p>
+					<p>Price: <span id= "price"></span></p>
+					<p>Description: <span d="desc"></span></p>
 					<p>Contains: <span id = "ingre"></span></p>
 					<p>Allergens Include: <span id = "allergy"></span></p>
 				</div>

@@ -70,37 +70,42 @@ pub fn get_category (_conn: LogsDbConn, category: u32) -> String {
 }
 
 #[get("/?<id>", rank = 1)]
-pub fn get_id(_conn: LogsDbConn, id: String) -> String {
-        let mut _str = String::from("[\n\t");
-        let cast = bson::oid::ObjectId::with_string(id.as_str());
-        if let Ok(oid) = cast {
-                let _doc = doc!{"_id": oid};
-                let _coll = _conn.collection("items");
-                let _cursor = _coll.find(Some(_doc.clone()), None).unwrap();
-                for result in _cursor {
-                        if let Ok(item) = result {
-                                let _bson = mongodb::to_bson(&item).unwrap();
-                                let _json = serde_json::ser::to_string(&_bson).unwrap();
-                                _str.push_str(&_json);
-                        }
-                        _str.push_str(",\n\t");
-                }
-                if _str.len() <= 3 {
-                        return String::from("No entries found");
-                }
-                _str.pop();
-                _str.pop();
-                _str.pop();
-                _str.push_str("\n]");
-                return _str;
-        }
-        else {
-                let response = json!({
-                        "code": 404,
-                        "message": "Invalid or malformed object id."
-                });
-                return serde_json::to_string(&response).unwrap();
-        }
+pub fn get_id(conn: LogsDbConn, id: String) -> String {
+	let coll = conn.collection("items");
+	let cast = bson::oid::ObjectId::with_string(id.as_str());
+	if let Ok (oid) = cast {
+		let doc = doc! {
+			"_id": oid
+		};
+		if let Ok (result) = coll.find_one(Some(doc), None) {
+			if let Some (item) = result {
+				let _bson = mongodb::to_bson(&item).unwrap();
+				let _json = serde_json::ser::to_string(&_bson).unwrap();
+				return _json;
+			}
+			else {
+				let response = json!({
+					"code": 404,
+					"message": "Could not find the specified item."
+				});
+				return serde_json::to_string(&response).unwrap();
+			}
+		}
+		else {
+			let response = json!({
+				"code": 404,
+				"message": "Database error."
+			});
+			return serde_json::to_string(&response).unwrap();			
+		}
+	}
+	else {
+		let response = json!({
+			"code": 404,
+			"message": "Invalid or malformed object id."
+		});
+		return serde_json::to_string(&response).unwrap();
+	}        
 }
 
 #[post("/delete?<id>")]

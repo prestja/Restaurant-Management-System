@@ -62,6 +62,10 @@
 <script>
 	window.addEventListener('message', addReceipt, false);
 	function addReceipt(message){
+		if(message.data == '20'){
+			var num = parseInt("message.data");
+			printTip(message.data);
+		}
 		var clone = $("#row").clone(true);
 		clone.css('display','block'); 
 		
@@ -86,9 +90,9 @@
 	
 	//Function to calculate the total of items in the receipt.
 	$(function (){
-		var subTotal = 0.00;
-		var salesTx  = 0.08;
-		var finalTotal = 0.00;
+		var subTotal = "0.00";
+		var salesTx  = "0.08";
+		var finalTotal = "0.00";
 		$("#price").each(function(){
 			subTotal = subTotal + parseFloat($(this).html());
 		});
@@ -101,15 +105,19 @@
 	});
 	
 	function printSubTotal(subTotal){
-		document.getElementById("SubTot").innerHtml = subTotal;
+		document.getElementById("SubTot").innerHtml += subTotal;
 	}
 	
 	function printSalesTax(salesTx){
-		document.getElementById("SlsTax").innerHtml = salesTx;
+		document.getElementById("SlsTax").innerHtml += salesTx;
+	}
+	
+	function printTip(tipAmnt){
+		document.getElementById("Tip") += tipAmnt;
 	}
 	
 	function printFinalTotal(finalTotal){
-		document.getElementById("FinTot").innerHtml = finalTotal;
+		document.getElementById("FinTot").innerHtml += finalTotal;
 	}
 	
 	function submitCoupon(){

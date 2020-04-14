@@ -91,7 +91,8 @@ pub fn clock_out(conn: LogsDbConn, timeinfo: Json<TimeInfo>) -> String {
 	//create the document to insert
 	let doc = doc! {
 		"id": inner.id,
-		"password": inner.password
+		"password": inner.password,
+		"clocked_out": false
 	};
 
 	//open coupons collection
@@ -99,16 +100,25 @@ pub fn clock_out(conn: LogsDbConn, timeinfo: Json<TimeInfo>) -> String {
 	let update = doc!{"$currentDate": { "clocked_out": true}};
 	//insert the new document
 	if let Ok(result) = coll.find_one_and_update(doc.clone(), update.clone(), None) { 
-		let response = json!({
-			"code": 200,
-			"message": "Successfully clocked out."
-		});
-		return serde_json::to_string(&response).unwrap();
+		if let Some(item) = result {
+			let response = json!({
+				"code": 200,
+				"message": "Successfully clocked out."
+			});
+			return serde_json::to_string(&response).unwrap();
+		} else {
+			let response = json!({
+				"code": 404,
+				"message": "Error clocking out! Make sure you have previously clocked in."
+			});
+			return serde_json::to_string(&response).unwrap();
+		}
+		
 	}
 	else {
 		let response = json!({
 			"code": 404,
-			"message": "Error clocking out! Make sure you have previously clocked in."
+			"message": "Unknown error while clocking out!."
 		});
 		return serde_json::to_string(&response).unwrap();
 	}

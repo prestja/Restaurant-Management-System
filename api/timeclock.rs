@@ -36,39 +36,57 @@ pub fn get_all(_conn:LogsDbConn) -> String {
 	return str;
 }
 #[post("/clockin", data = "<timeinfo>")]
-pub fn clock_in(_conn: LogsDbConn, timeinfo: Json<TimeInfo>) -> String {
+pub fn clock_in(conn: LogsDbConn, timeinfo: Json<TimeInfo>) -> String {
 	let inner = timeinfo.into_inner();
-
+	let coll = conn.collection("timeclock");	
 	//create the document to insert
-	let doc = doc! {
+	let previous = doc! {
+		"id": inner.id.clone(), // id must be cloned in order to prevent move errors
+		"clocked_out": false
+	};
+	// check to see if this employee has previously clocked in without clocking out
+	if let Ok (result) = coll.find_one(Some(previous), None) {
+		if let Some(item) = result {
+			let response = json!({
+				"code": 404,
+				"message": "Could not clock in. Please clock out first"
+			});
+			return serde_json::to_string(&response).unwrap();
+		}
+	}
+	let insert = doc! {
 		"id": inner.id,
-		"password": inner.password
+		"password": inner.password,
+		"clocked_out": false
 	};
 
-	//open coupons collection
-	let _coll = _conn.collection("timeclock");
-	let _update = doc!{"$currentDate": { "clocked_in": true}, "$set": { "clocked_out": "None"}};
-	//insert the new document
-	let mut _upsert = mongodb::coll::options::FindOneAndUpdateOptions::new();
-	_upsert.upsert = Some(true);
-	if let Ok(result) = _coll.find_one_and_update(doc.clone(), _update.clone(), Some(_upsert.clone())) {
+	let update = doc! {		
+		"$currentDate": { // $currentDate only works with upsert (update)
+			"clocked_in": true
+		},		
+	};
+
+	let mut options = mongodb::coll::options::FindOneAndUpdateOptions::new();
+	options.upsert = Some(true);
+	// upsert the new document
+	if let Ok(result) = coll.find_one_and_update(insert, update, Some(options)) {
 		let response = json!({
 			"code": 200,
-			"message": "Successfully updated clock in time."
+			"message": "Successfully clocked in"
 		});
 		return serde_json::to_string(&response).unwrap();
 	}
 	else {
 		let response = json!({
 			"code": 404,
-			"message": "Error accessing database."
+			"message": "Error clocking in!"
 		});
 		return serde_json::to_string(&response).unwrap();
 	}
 }
 
 #[post("/clockout", data = "<timeinfo>")]
-pub fn clock_out(_conn: LogsDbConn, timeinfo: Json<TimeInfo>) -> String {
+pub fn clock_out(conn: LogsDbConn, timeinfo: Json<TimeInfo>) -> String {
 	let inner = timeinfo.into_inner();
 	//create the document to insert
 	let doc = doc! {
@@ -77,22 +95,20 @@ pub fn clock_out(_conn: LogsDbConn, timeinfo: Json<TimeInfo>) -> String {
 	};
 
 	//open coupons collection
-	let _coll = _conn.collection("timeclock");
-	let _update = doc!{"$currentDate": { "clocked_out": true}};
+	let coll = conn.collection("timeclock");
+	let update = doc!{"$currentDate": { "clocked_out": true}};
 	//insert the new document
-	let mut _upsert = mongodb::coll::options::FindOneAndUpdateOptions::new();
-	_upsert.upsert = Some(true);
-	if let Ok(result) = _coll.find_one_and_update(doc.clone(), _update.clone(), Some(_upsert.clone())) { 
+	if let Ok(result) = coll.find_one_and_update(doc.clone(), update.clone(), None) { 
 		let response = json!({
 			"code": 200,
-			"message": "Successfully updated clock out time."
+			"message": "Successfully clocked out."
 		});
 		return serde_json::to_string(&response).unwrap();
 	}
 	else {
 		let response = json!({
 			"code": 404,
-			"message": "Error accessing database."
+			"message": "Error clocking out! Make sure you have previously clocked in."
 		});
 		return serde_json::to_string(&response).unwrap();
 	}

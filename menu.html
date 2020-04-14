@@ -253,6 +253,8 @@
 		
 		var img = document.getElementById("img").src = message.data.imgPath; 
 		
+		var allergen = document.getElementById("allergy");
+		allergen.innerHTML = message.data.allergen;
 		
 		var submit = $("#addOrder");
 		submit.unbind('click'); // remove any previous onclick listeners for this button		
@@ -310,6 +312,7 @@
 					<img src = "id = 'img'">
 					<p>Item Description Goes Here</p>
 					<p>Contains: <span id = "ingre"></span></p>
+					<p>Allergens Include: <span id = "allergy"></span></p>
 				</div>
 				<div class="modal-footer">
 					<button id="addOrder">Add To Order</h3>

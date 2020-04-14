@@ -241,8 +241,12 @@
 		target.contentWindow.postMessage(item, '*');
 	}
 	
-	function payButton(){
-	
+	function sendTip(){
+		//var x = document.getElementById("myRange");
+		var x = "20";
+		var z = x.valueOf();
+		var target = document.getElementById("receipt_screen");
+		console.log(target.contentWindow.postMessage(z, '*'));
 	}
 	
 	$(document).ready(function() {
@@ -293,7 +297,7 @@
 			</script>
 	
 			<div class="add-tip">
-				<button id="addTip" style="">Add Tip</button>
+				<button id="addTip" style="" onclick="sendTip()">Add Tip</button>
 			</div>
 		</div>
 		

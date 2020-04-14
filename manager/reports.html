@@ -279,16 +279,17 @@
 			}
 		}
 		
-		var url = "http://159.89.238.181:8080/api/orders?id=";
+		var url = "http://159.89.238.181:8080/api/items/?id=";
 		url = url.concat(bestId);
 		$.get(url, function(response) {				
-				printBestItem(response.name);
+				var parse = JSON.parse(response);
+				printBestItem(parse.name);
 			});
 	}
 	
 	function printBestItem(name){
 		var element = document.getElementById("best");
-		element.append(name);
+		element.append(name.toUpperCase());
 	}
 	
 	function dailyReport(){//filters table to today

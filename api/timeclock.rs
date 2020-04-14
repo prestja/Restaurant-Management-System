@@ -122,5 +122,4 @@ pub fn clock_out(conn: LogsDbConn, timeinfo: Json<TimeInfo>) -> String {
 		});
 		return serde_json::to_string(&response).unwrap();
 	}
-
 }

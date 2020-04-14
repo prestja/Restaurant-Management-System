@@ -13,7 +13,7 @@ pub struct Item {
 	category: u32,
 	price: f32,
 	nutrition: String,
-	imgPath: String,
+	#[serde(default)] imgPath: String,
 	#[serde(default)] ingredients: serde_json::Value,
 	#[serde(default)] allergen: String,	
 	#[serde(default)] vegan: bool,
@@ -103,22 +103,31 @@ pub fn post (_conn: LogsDbConn, item: Json<Item>) -> String {
 	}
 }
 
-#[post("/modify?<id>&<price>")]
-pub fn post_modify_price (conn: LogsDbConn, id: String, price: f32) -> String {
+#[post("/modify?<id>", data = "<replacement>")]
+pub fn modify (conn: LogsDbConn, id: String, replacement: Json<Item>) -> String {
 	let cast = bson::oid::ObjectId::with_string(id.as_str());
 	let coll = conn.collection("items");
+	let inner = replacement.into_inner();
 	if let Ok(oid) = cast {
 		let filter = doc! {"_id": oid};		
 		let update = doc! {
 			"$set": {
-				"price": price
-			}
+				"name": inner.name,
+				"category": inner.category,
+				"price": inner.price,
+				"nutrition": inner.nutrition,
+				"ingredients": inner.ingredients,
+				"allergen": inner.allergen,
+				"vegan": inner.vegan,
+				"vegeration": inner.vegetarian,
+				"status": inner.status,
+			}			
 		};
 		if let Ok (result) = coll.find_one_and_update(filter.clone(), update.clone(), None) {
 			if let Some(item) = result {
 				let response = json!({
 					"code": 200,
-					"message": "Successfully updated price for item"
+					"message": "Successfully updated item."
 				});
 				return serde_json::to_string(&response).unwrap();
 			}
@@ -133,7 +142,7 @@ pub fn post_modify_price (conn: LogsDbConn, id: String, price: f32) -> String {
 		else {
 			let response = json!({
 				"code": 404,
-				"message": "Error accessing database."
+				"message": "Error accessing to database or malformed update document."
 			});
 			return serde_json::to_string(&response).unwrap();
 		}

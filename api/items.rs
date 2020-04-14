@@ -69,12 +69,12 @@ pub fn get_category (_conn: LogsDbConn, category: u32) -> String {
 	return _str;
 }
 
-#[get("/?<id>")]
+#[get("/?<id>", rank = 4)]
 pub fn get_id(_conn: LogsDbConn, id: String) -> String {
         let mut _str = String::from("[\n\t");
         let cast = bson::oid::ObjectId::with_string(id.as_str());
         if let Ok(oid) = cast {
-                let _doc = doc!{"_id":
+                let _doc = doc!{"_id": oid};
                 let _coll = _conn.collection("items");
                 let _cursor = _coll.find(Some(_doc.clone()), None).unwrap();
                 for result in _cursor {
@@ -101,6 +101,38 @@ pub fn get_id(_conn: LogsDbConn, id: String) -> String {
                 });
                 return serde_json::to_string(&response).unwrap();
         }
+}
+
+#[post("/delete?<id>")]
+pub fn delete(conn: LogsDbConn, id: String) -> String {
+	let cast = bson::oid::ObjectId::with_string(id.as_str());
+	let coll = conn.collection("items");
+	if let Ok(oid) = cast {
+		let filter = doc! {
+			"_id": oid
+		};
+		if let Ok (result) = coll.delete_one(filter, None) {
+			let response = json!({
+				"code": 200,
+				"message": "Succesfully removed item."
+			});
+			return serde_json::to_string(&response).unwrap();
+		}
+		else {
+			let response = json!({
+				"code": 404,
+				"message": "Error writing to database."
+			});
+			return serde_json::to_string(&response).unwrap();
+		}	
+	}
+	else {
+		let response = json!({
+			"code": 404,
+			"message": "Invalid or malformed object id."
+		});
+		return serde_json::to_string(&response).unwrap();
+	}
 }
 
 #[post("/", data = "<item>")]

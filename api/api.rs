@@ -72,6 +72,7 @@ fn main()
 	.mount("/api/items/", routes![items::post])
 	.mount("/api/items/", routes![items::post_status])
 	.mount("/api/items/", routes![items::modify])
+	.mount("/api/items/", routes![items::delete])
 	// notification functions
 	.mount("/api/notifications", routes![notifications::get_all])
 	.mount("/api/notifications", routes![notifications::post])

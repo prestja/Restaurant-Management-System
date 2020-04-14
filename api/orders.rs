@@ -237,38 +237,6 @@ pub fn post(conn: LogsDbConn, order: Json<Order>) -> String {
 	return serde_json::to_string(&response).unwrap();
 }
 
-#[post("/delete?<id>")]
-pub fn delete(conn: LogsDbConn, id: String) -> String {
-	let cast = bson::oid::ObjectId::with_string(id.as_str());
-	let coll = conn.collection("orders");
-	if let Ok(oid) = cast {
-		let filter = doc! {
-			"_id": oid
-		};
-		if let Ok (result) = coll.delete_one(filter, None) {
-			let response = json!({
-				"code": 200,
-				"message": "Succesfully removed item."
-			});
-			return serde_json::to_string(&response).unwrap();
-		}
-		else {
-			let response = json!({
-				"code": 404,
-				"message": "Error writing to database."
-			});
-			return serde_json::to_string(&response).unwrap();
-		}	
-	}
-	else {
-		let response = json!({
-			"code": 404,
-			"message": "Invalid or malformed object id."
-		});
-		return serde_json::to_string(&response).unwrap();
-	}
-}
-
 #[post("/comp?<table>&<amount>&<employee>")]
 pub fn comp (_conn: LogsDbConn, table: u32, amount: f32, employee: String) -> String {
 	// this document is for the query (what to find)

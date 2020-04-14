@@ -68,6 +68,7 @@ fn main()
 	// item functions
 	.mount("/api/items/", routes![items::get_all])
 	.mount("/api/items/", routes![items::get_category])
+	.mount("/api/items/", routes![items::get_id])
 	.mount("/api/items/", routes![items::post])
 	.mount("/api/items/", routes![items::post_status])
 	.mount("/api/items/", routes![items::modify])

@@ -34,6 +34,23 @@
 	#row {
 		display: none;
 	}
+	
+	/*Button group for creating the buttons at top of page*/
+	/*Same button group from the main page*/
+	.button-group button {
+		background-color: #D3D3D3; /*Makes Gray background*/
+		border:  1% #D3D3D3;  /*Border around boxes is Gray*/
+		color: black; /* White text */
+		padding: 10px 10px; /* Some padding */
+		margin: 0;  /* Created space between buttons */
+		font-family: Arial Black, Times, serif; /* sets font */
+		font-size:  16px;	/* Sets size */
+		font-weight:  normal;	/*Sets normal or bold */
+		text-align: center;	/* Aligns to center of button */
+		cursor: pointer; /* Pointer/hand icon */
+		width: 35%; /* Set a width if needed */
+		display: inline-block;
+	}
 
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -61,6 +78,35 @@
 		}); 
 		clone.appendTo('#receipt');	
 	}
+	
+	//Function to calculate the total of items in the receipt.
+	$(function (){
+		var subTotal = 0.00;
+		var salesTx  = 0.08;
+		var finalTotal = 0.00;
+		$("#price").each(function(){
+			subTotal = subTotal + parseFloat($(this).html());
+		});
+		//$("#SubTot").html("Subtotal= " subTotal.toString());
+		printSubTotal(subTotal);
+		salesTx *= subTotal;
+		printSalesTax(salesTx);
+		finalTotal = subTotal + (subTotal * salesTx);
+		printFinalTotal(finalTotal);
+	});
+	
+	function printSubTotal(subTotal){
+		document.getElementById("SubTot").innerHtml = subTotal;
+	}
+	
+	function printSalesTax(salesTx){
+		document.getElementById("SlsTax").innerHtml = salesTx;
+	}
+	
+	function printFinalTotal(finalTotal){
+		document.getElementById("FinTot").innerHtml = finalTotal;
+	}
+	
 </script>
 </head>
 <body style="background-color:white">
@@ -80,27 +126,24 @@
 
 	<table id="total">
 		<tr>
-			<th></th>
-			<th></th>
-			<th>SUBTOTAL  $</th>
+			<th id="SubTot">Subtotal: </th><br>
 		</tr>
 		<tr>
-			<th></th>
-			<th></th>
-			<th>TAX  $</th>
+			<th id="SlsTax">Tax: </th><br>
 		</tr>
 		<tr>
-			<th></th>
-			<th></th>
-			<th>GRATUITY  $</th>
+			<th id="tip">Gratuity: </th><br>
 		</tr>
 		<tr>
-			<th></th>
-			<th></th>
-			<th>TOTAL DUE  $</th>
+			<th id="FinTot">Total: </th><br>
 		</tr>
 	</table>
-
+	
+	<br>
+	<div class="button-group">
+			<button>Submit Payment</button>
+	</div>
+	
 </body>
 </html>
 

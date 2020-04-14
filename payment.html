@@ -77,7 +77,7 @@
 	/*Add buttons to the left container*/
 	.button-group2 button {
 		background-color: black; /*Makes Gray background*/
-		border:  0px #D3D3D3;  /*Border around boxes is Gray*/
+		border:  1% #D3D3D3;  /*Border around boxes is Gray*/
 		color: white; /* White text */
 		padding: 20px 50px; /* Some padding */
 		margin: 25px;  /* Created space between buttons */
@@ -102,10 +102,10 @@
 	
 	.rewards-button button {
 		background-color: black; /*Makes Gray background*/
-		border:  0px #D3D3D3;  /*Border around boxes is Gray*/
+		border:  1% #D3D3D3;  /*Border around boxes is Gray*/
 		color: white; /* White text */
 		padding: 20px 10px; /* Some padding */
-		margin-left: 2%;  /* Created space between buttons */
+		margin-left: 13%;  /* Created space between buttons */
 		font-family: Arial Black, Times, serif; /* sets font */
 		font-size:  12px;	/* Sets size */
 		font-weight:  normal;	/*Sets normal or bold */
@@ -218,6 +218,10 @@
 		console.log(JSON.stringify(item));
 		var target = document.getElementById("receipt_screen");
 		target.contentWindow.postMessage(item, '*');
+	}
+	
+	function payButton(){
+	
 	}
 	
 	$(document).ready(function() {

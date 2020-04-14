@@ -283,14 +283,13 @@
 		url = url.concat(bestId);
 		$.get(url, function(response) {				
 				var parse = JSON.parse(response);
-				console.log(parse);
 				printBestItem(parse.name);
 			});
 	}
 	
 	function printBestItem(name){
 		var element = document.getElementById("best");
-		element.append(name);
+		element.append(name.toUpperCase());
 	}
 	
 	function dailyReport(){//filters table to today

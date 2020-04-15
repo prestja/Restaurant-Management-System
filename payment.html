@@ -235,8 +235,8 @@
 	}
 
 	function updateReceipt(order){
-		console.log("Updating receipt");
-		console.log(order);
+		//console.log("Updating receipt");
+		//console.log(order);
 		var target = document.getElementById("receipt_screen");
 		order.items.forEach(items =>
 			target.contentWindow.postMessage(items, '*')
@@ -260,10 +260,8 @@
 			type: 'get',
 			dataType: 'JSON',
 			success: function(response) {
-				console.log(response);
-				response.forEach(order => 
-					updateReceipt(order)
-				);
+				console.log(response[0]);
+				updateReceipt(response[0]); // just the first order we get			
 			}
 		});
 	});

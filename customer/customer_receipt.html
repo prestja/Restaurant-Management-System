@@ -63,26 +63,24 @@
 	
 	window.addEventListener('message', addReceipt, false);
 	function addReceipt(message){
-		var clone = $("#row").clone(true);
-		clone.css('display','block'); 
-		
+		console.log('adding receipt item');
+		var clone = $("#item_template").clone(true);
+		clone.css('display','block'); 		
 		
 		//Add an ajax request to items using _id.$oid
 		var queryStr = window.location.search;
 		var category = queryStr.substr(1)
 		var url = 'http://159.89.238.181:8080/api/items?id=' + message.data.$oid;//.concat();
-		console.log(url);
-		$.get(url, message.data._id, function(response){
-			
+		//console.log(url);
+		$.get(url, message.data._id, function(response){			
 			clone.children("#item").html(JSON.parse(response).name);
 			clone.children("#price").html(JSON.parse(response).price);
-			clone.children("SubTot").load(function () {
-				var item = $(this).price;
-			})
+			clone.data('item', JSON.parse(response));
 		})
 		
-		clone.appendTo('#receipt');	
-		
+		clone.appendTo('.receipt');
+		//var elements = document.getElementById('receipt').getElementsByClassName('receiptRow');
+		//console.log(elements.length);
 		/*
 		$(function (){
 		var subTotal = "0.00";
@@ -130,12 +128,12 @@
   <div class = "content">
 	<!--Creating a table to store purchase information-->
   </div>
-	<table id="receipt">
+	<table class="receipt">
 		<tr id="header">
 			<td>Item</td>
 			<td>Price</td>
 		</tr>
-		<tr id="row">
+		<tr id="item_template">
 			<td id="item">some text</td>
 			<th><th>
 			<td id="price">some price</td>
@@ -144,7 +142,7 @@
 	
 	<br>
 	<form id="CouponCode">
-		Add Couon Code: <input type="text" id="coupon" name="coupon"><br><br>
+		Add Coupon Code: <input type="text" id="coupon" name="coupon"><br><br>
 		<input type="button" value="Submit" onclick="submitCoupon()">
 	</form>
 	
@@ -165,7 +163,7 @@
 	
 	<br>
 	<div class="button-group">
-			<button>Submit Payment</button>
+		<button>Submit Payment</button>
 	</div>
 	
 </body>

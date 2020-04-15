@@ -118,7 +118,7 @@ pub fn post(_conn: LogsDbConn, employee: Json<Employee>) -> String {
 	_coll.insert_one(doc, None).unwrap();
 	let response = json!({
 		"code": 200,
-		"message": "Inserted order into collection orders"
+		"message": "Successfully inserted employee."
 	});
 	return serde_json::to_string(&response).unwrap();
 }

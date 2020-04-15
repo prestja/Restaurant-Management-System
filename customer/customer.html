@@ -81,6 +81,7 @@
 </style>
 
 <head>
+	<script src= '../jquery-3.4.1.min.js'></script>
 	<script>
 		var pin = ""; // default to no pin set
 		var table = 0; // default to table 0 (1 in real-world terms)
@@ -124,15 +125,17 @@
 		}
 		
 		function goHelp() {
-			var txt;
 			if (confirm("Do you need assistance from your server?")) {
-				txt = "You pressed OK!";
+				var url = 'http://159.89.238.181:8080/api/notifications';
+				var body = {
+					table: table,
+					variant: 0
+				};
 				alert("Your server is on their way!");
+				$.post(url, JSON.stringify(body));
 			} else {
-				txt = "You pressed Cancel!";
 				alert("Your request has been cancelled");
 			}
-			document.getElementById("demo").innerHTML = txt;
 		}		
 		
 		window.addEventListener('message', master_listener, false);

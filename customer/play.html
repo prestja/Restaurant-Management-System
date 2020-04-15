@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-<head>
 <style>
 
 	* {
@@ -45,24 +44,40 @@
 
 
 </style>
+<head>
+	<script>
+		function play(game) {
+			switch (game) {
+				case "birdo":
+					document.location = 'http://www.prestja.com/birdo/build';
+				break;
+				case "diduno":
+					document.location = 'http://www.prestja.com/diduno/build';
+				break;
+				case "bedazzled":
+					document.location = 'http://www.prestja.com/bedazzled/build';
+				break;
+				case "tictac":
+					document.location = 'http://www.prestja.com/tictac/build';
+				break;
+			}
+		}
+	</script>
 </head>
-<body style="background-color: black">
-
-<div class="grid-container" style="">
-	<div class="grid-item" style= "color:white; background: url('../img/games/birdo.png') no-repeat; background-size: 110%;">
-		<div class="title" onclick="">Birdo</div>
-	</div>
-	<div class="grid-item" style= "color:white; background: url('../img/games/diduno.png') no-repeat; background-size: 120%;">
-		<div class="title" onclick="">Diduno</div>
-	</div>
-	<div class="grid-item" style= "color:white; background: url('../img/games/bedazzled.png') no-repeat; background-size: 110%;">
-		<div class="title" onclick="">Bedazzled</div>
-	</div> 
-  <div class="grid-item" style= "color:white; background: url('../img/games/tictac.png') no-repeat; background-size: 120%;">
-		<div class="title" onclick="">Tic-Tac</div>
-	</div> 
-</div>
-
-
-</body>
+	<body style="background-color: black">
+		<div class="grid-container" style="">
+			<div class="grid-item" onclick="play('birdo')" style= "color:white; background: url('../img/games/birdo.png') no-repeat; background-size: 110%;">
+				<div class="title">Birdo</div>
+			</div>
+			<div class="grid-item" onclick="play('diduno')" style= "color:white; background: url('../img/games/diduno.png') no-repeat; background-size: 120%;">
+				<div class="title">Diduno</div>
+			</div>
+			<div class="grid-item" onclick="play('bedazzled')" style= "color:white; background: url('../img/games/bedazzled.png') no-repeat; background-size: 110%;">
+				<div class="title">Bedazzled</div>
+			</div> 
+		  <div class="grid-item" onclick="play('tictac')" style= "color:white; background: url('../img/games/tictac.png') no-repeat; background-size: 120%;">
+				<div class="title" >Tic-Tac</div>
+			</div> 
+		</div>
+	</body>
 </html>

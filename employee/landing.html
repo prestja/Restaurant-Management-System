@@ -136,6 +136,7 @@
 		var clone = $("#notification_template").clone(true);
 		clone.css('display', 'inline-block');
 		clone.appendTo('.notification-info');
+		clone.find(".notebutton.p").html(notification.details);
 		clone.find("button").click(removeNotification);
 		clone.find("button").data('key', notification);
 		var str ="Table ";
@@ -156,6 +157,25 @@
 				str = str.concat(", ");
 			}
 		}
+		break;
+		case 2:
+		//Skipping this 
+		break;
+		case 3:
+		//Printed receipt
+		str = str.concat(" printed receipt:")
+		break;
+		case 4:
+		//Winner winner chicken dinner
+		str = str.concat(" reward:");
+		break;
+		case 5:
+		//Needs manager
+		console.log("variant = 5");
+		console.log(notification.details);
+		str = str.concat(" manager:");
+		console.log(str);
+		document.getElementsByClassName(".notebutton").innerHTML = str;
 		break;
 		}
 		clone.children("p").html(str);

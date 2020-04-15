@@ -233,9 +233,8 @@
 		}
 	}
 	
-	window.addEventListener('message', updateOrder, false);
-	function updateOrder(message) {
-		console.log("Updating order");
+	window.addEventListener('message', updateModal, false);
+	function updateModal(message) {
 		modal.style.display = "block";
 		var name = document.getElementById("itemName");
 		name.innerHTML = message.data.name;
@@ -243,29 +242,32 @@
 		body.innerHTML = message.data.description;
 		
 		var ingre = document.getElementById("ingre");
-		ingre.innerHTML = message.data.ingredients; 
+		//ingre.innerHTML = message.data.ingredients; 
 		
-		message.data.ingredients.forEach(ingredient => {
+		if (message.data.ingredients != undefined) {
+				message.data.ingredients.forEach(ingredient => {		
+				ingre.innerHTML += ingredient + ", "
+			});
+		}		
 		
-		ingre.innerHTML += ingredient + ", "
+		if (message.data.imgPath != undefined) {
+			var photo = document.getElementById("photo");
+			photo.src = message.data.imgPath;
+		}
+		if (message.data.allergen != undefined) {
+			var allergen = document.getElementById("allergy");
+			allergen.innerHTML = message.data.allergen;
+		}		
 		
-		});
+		if (message.data.description != undefined) {
+			var desc = document.getElementById("desc");		
+			desc.innerHTML = message.data.description;
+		}
 		
-		var img = document.getElementById("img").src = message.data.imgPath; 
-		
-		var allergen = document.getElementById("allergy");
-		allergen.innerHTML = message.data.allergen;
-		
-		var desc = document.getElementById("desc");
-		
-		desc.innerHTML = message.data.description;
-		
-		var price = document.getElementById("price");
-		
-		price.innerHTML = message.data.price; 
-		
-		
-		
+		if (message.data.price != undefined) {
+			var price = document.getElementById("price");		
+			price.innerHTML = message.data.price.toFixed(2);
+		}		
 		
 		var submit = $("#addOrder");
 		submit.unbind('click'); // remove any previous onclick listeners for this button		
@@ -307,7 +309,7 @@
 		<h2 id = "headerType">BEVERAGES</h2>
 		<hr color = "black">
 		<body>
-			<iframe id = "order_items" src="menu_category.html?category=3" onclick="updateOrder(); " style="width:95%; height: 85%" ></iframe>
+			<iframe id = "order_items" src="menu_category.html?category=3" onclick="updateModal(); " style="width:95%; height: 85%" ></iframe>
 		</body>
 		
 		<!-- The Modal -->
@@ -320,7 +322,7 @@
 					<h2 id="itemName">Item Name</h2>
 				</div>
 				<div class="modal-body">
-					<img src = "id = 'img'">
+					<img id = 'photo' src = "img/burger.jpg">
 					<p>Price: <span id= "price"></span></p>
 					<p>Description: <span d="desc"></span></p>
 					<p>Contains: <span id = "ingre"></span></p>

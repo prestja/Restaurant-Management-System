@@ -60,11 +60,14 @@
 			clone.find("#complete").data("order", order); 
             clone.find("#callW").data("order", order);
 			clone.find("#callM").data("order", order);
-			
+			// append the extraenous information
+			addSubs(order.substitutions).appendTo(clone.find(".items"));
+			addAllergies(order.allergies).appendTo(clone.find(".items"));			
 			// append the items
 			order.items.forEach(item => 
 				addItem(item).appendTo(clone.find(".items"))				
             );
+			
 			// append and finishing up
 			clone.appendTo('.orders');
 			clone.find(".table_num").html("Table: " + order.table);
@@ -88,12 +91,18 @@
 			return clone;
         }
 		
-		function addSubs() {
-			
+		function addSubs(subs) {
+			var clone = $("#item_template").clone(true);
+			clone.html(subs);
+			clone.css('display', 'inline-block');
+			return clone;
 		}
 		
-		function addAllergies() {
-			
+		function addAllergies(allergies) {
+			var clone = $("#item_template").clone(true);
+			clone.html(allergies);
+			clone.css('display', 'inline-block');
+			return clone;
 		}
 		
 		function callWaiter() {			

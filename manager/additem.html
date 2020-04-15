@@ -151,13 +151,16 @@
 		//function happens when the submit button is clicked
 		function handleSubmit() {
 			//request creates an object to be stored for the item
-			var category = document.getElementById("category").value;
-			var ing = document.getElementById("ingredients").value;
+			var category = document.getElementById("category").value;//gets item category
+			var ing = document.getElementById("ingredients").value;//gets ingredients for an item and splits it into an array
 			ing = ing.split(',');
+			
+			//gets the image path
 			var image = document.getElementById("img").value;
 			image = image.slice(12);
 			var imagePath = "img/" + category.toLowerCase() + "/" + image;
-			console.log(imagePath);
+			
+			//sets the category to a numeric identifier
 			if(category == "BEVERAGES")
 			{
 				category = 3;
@@ -178,6 +181,8 @@
 			{
 				category = 4;
 			}
+			
+			//creates object to be used for JSON in the backend with all details about an item
 			let request = {
 				name: document.getElementById("name").value,
 				category: parseInt(category),
@@ -188,7 +193,7 @@
 				vegetarian: document.getElementById("vegetarian").checked,			
 				imgPath: imagePath,
 				price: parseFloat(document.getElementById("price").value),
-				description: document.getElementById("description")
+				description: document.getElementById("description").value
 			}
 			//puts the object in JSON format and posts it to the backend to be added to the database
 			console.log(JSON.stringify(request));
@@ -197,7 +202,7 @@
 				window.location.reload();
 			});
 		}		
-		function filterForm(){
+		function filterForm(){//if beverages, hide all unnecessary items
 			var category = document.getElementById("category").value;
 			var ingredients = document.getElementById("hide");
 			if(category == "BEVERAGES"){
@@ -248,14 +253,16 @@
 				<button onclick="document.location = 'discount.html'">DISCOUNT</button>
 			</div>
 		</div>
-	<!--holds add employee form-->
+	<!--holds add item form-->
 		<div class = "items">
 			<h2>ADD ITEM</h2>
 			<hr color="black">
 			<div style="text-align:left;position:relative;left:10px">
+				<!--holds name-->
 				<label>NAME:</label>
 				<input type="text" id="name" name="name" placeholder="Burgers" maxlength=20 size=12/>
 				<br><br>
+				<!--holds dropdown for category-->
 				<label>CATEGORY:</label>
 				<select id = "category" onchange="filterForm()">
 					<option name="bev">BEVERAGES</option>
@@ -265,12 +272,15 @@
 					<option name="des">DESSERTS</option>
 				</select>
 				<br><br>
+				<!--holds number form for price-->
 				<label>PRICE:</label>
 				<input type="number" id="price" name="price" placeholder="0.00" maxlength=5/>
 				<br><br>
+				<!--holds nutrition info-->
 				<label>NUTRITION:</label>
 				<input type="text" id="nutrition" name="nutrition" placeholder="50 calories" maxlength=20 size=20/>
 				<br><br>
+				<!--optional information that hides if beverages are selected-->
 				<span id="hide">
 					<label>ALLERGENS:</label>
 					<input type="text" id="allergen" name="nutrition" placeholder="Nut Allergy" maxlength=40 size=20/>
@@ -290,6 +300,7 @@
 				<label for="img">SELECT IMAGE:</label>
 				<input type="file" id="img" accept="image/*">
 				<br><br>
+				<!--submits form to add an item-->
 				<button onclick = "handleSubmit()">ADD ITEM</button>
 			</div>
 		</div>

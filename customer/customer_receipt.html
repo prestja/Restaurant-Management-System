@@ -60,6 +60,7 @@
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
+	
 	window.addEventListener('message', addReceipt, false);
 	function addReceipt(message){
 		var clone = $("#row").clone(true);
@@ -72,15 +73,18 @@
 		var url = 'http://159.89.238.181:8080/api/items?id=' + message.data.$oid;//.concat();
 		console.log(url);
 		$.get(url, message.data._id, function(response){
+			
 			clone.children("#item").html(JSON.parse(response).name);
 			clone.children("#price").html(JSON.parse(response).price);
+			clone.children("SubTot").load(function () {
+				var item = $(this).price;
+			})
 		})
 		
 		clone.appendTo('#receipt');	
-	}
-	
-	//Function to calculate the total of items in the receipt.
-	$(function (){
+		
+		/*
+		$(function (){
 		var subTotal = "0.00";
 		var salesTx  = "0.08";
 		var finalTotal = "0.00";
@@ -93,22 +97,26 @@
 		printSalesTax(salesTx);
 		finalTotal = subTotal + (subTotal * salesTx);
 		printFinalTotal(finalTotal);
-	});
+		});*/
+	}
+	
+	//Function to calculate the total of items in the receipt.
+	
 	
 	function printSubTotal(subTotal){
-		document.getElementById("SubTot").innerHtml += subTotal;
+		document.getElementById("SubTot").innerHtml = subTotal;
 	}
 	
 	function printSalesTax(salesTx){
-		document.getElementById("SlsTax").innerHtml += salesTx;
+		document.getElementById("SlsTax").innerHtml = salesTx;
 	}
 	
 	function printTip(tipAmnt){
-		document.getElementById("Tip") += tipAmnt;
+		document.getElementById("Tip") = tipAmnt;
 	}
 	
 	function printFinalTotal(finalTotal){
-		document.getElementById("FinTot").innerHtml += finalTotal;
+		document.getElementById("FinTot").innerHtml = finalTotal;
 	}
 	
 	function submitCoupon(){
@@ -124,11 +132,12 @@
   </div>
 	<table id="receipt">
 		<tr id="header">
-			<td >Item</td>
-			<td >Price</td>
+			<td>Item</td>
+			<td>Price</td>
 		</tr>
 		<tr id="row">
 			<td id="item">some text</td>
+			<th><th>
 			<td id="price">some price</td>
 		</tr>
 	</table>

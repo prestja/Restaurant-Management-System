@@ -58,9 +58,9 @@
 	/*Created a menu button similar to header buttons*/
 	.menu-button-group button {
 		background-color: #FFFFFF; /*Makes Background white*/
-		border:  0px #D3D3D3;  /*Border around boxes is Gray*/
+		border:  3% #D3D3D3;  /*Border around boxes is Gray*/
 		color: black; /* White text */
-		padding: 1%; /* Some padding */
+		padding: 0%; /* Some padding */
 		margin: 0;  /* Created space between buttons */
 		font-family: Arial Black, Times, serif; /* sets font */
 		font-size:  25px;	/* Sets font size */
@@ -90,10 +90,10 @@
 		background-color: #FFFFFF !important; //makes Container White
 		padding: 1%;
 		margin: 1%;
-		width: 40vw;
+		width: 42vw;
 		height: 75vh;
 		right: 2%;
-		display: inline-block;
+		//display: inline-block;
 		text-align: center;
 		position: absolute;
 		overflow: scroll;
@@ -108,16 +108,24 @@
 	#notification_template {
 		background-color: gray;
 		width:100%;
-		height: 10%;
+		height: 20%;
 		margin-bottom: 10px;
 		display:none;	
 	}
 	
-	.notebutton{
-		background-color: blue;
-		width:50%;
-		height: 10%;
+	.notebutton button{
+		background-color: #FFFFFF;
+		border: 3% #D3D3D3;
+		width:20%;
+		height: 20%;
 		position: relative;
+		bottom:25px;
+		float: right;
+		border: 1%;
+		padding: 30px 30px;
+		
+		top: 50%;
+		
 	}
 	
 </style>
@@ -184,11 +192,11 @@
 	<div class = "notification-info" id="notification-num">
 		<h2 id = "headerType">NOTIFICATIONS</h2>
 		<hr color = "black">
-		<h4>Table 1 needs coke refill | 15:30pm</h4>
+		<!--<h4>Table 1 needs coke refill | 15:30pm</h4>-->
 		<div id = "notification_template" >
 			<div class = "notebutton">
 			<p style = "width: 80%">sometext</p>
-			<button style = "width: 3%; height: 20%"></button>
+			<button >Remove</button>
 			</div>
 		</div>
 	</div>

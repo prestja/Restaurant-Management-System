@@ -75,6 +75,7 @@ fn main()
 	// notification functions
 	.mount("/api/notifications", routes![notifications::get_all])
 	.mount("/api/notifications", routes![notifications::post])
+	.mount("/api/notifications", routes![notifications::delete])
 	// customer functions
 	.mount("/api/customers", routes![customers::update_rewards])
 	// coupons functions

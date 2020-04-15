@@ -23,7 +23,9 @@ pub struct Order {
 
 	// default values, not required for deserialization
 	#[serde(default)] id: u32,
-	#[serde(default)] status: u32  // ordered = 0, NeedStaff = 1, NeedManager = 2, Ready = 3, Served = 4, Closed = 5	
+	#[serde(default)] status: u32,  // ordered = 0, NeedStaff = 1, NeedManager = 2, Ready = 3, Served = 4, Closed = 5
+	#[serde(default)] substitutions: String,
+	#[serde(default)] allergies: String	
 }
 
 #[get("/", rank = 4)]
@@ -207,7 +209,9 @@ pub fn post(conn: LogsDbConn, order: Json<Order>) -> String {
 		"items": inner.items,
 		"status": 0,
 		"total": 43.19,
-		"tip": 5.00 
+		"tip": 5.00,
+		"substitutions": inner.substitutions,
+		"allergies": inner.allergies
 	};	
 	let existing = doc! {
 		"table": inner.table,

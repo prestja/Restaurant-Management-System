@@ -256,7 +256,13 @@
 		}
 		if (message.data.allergen != undefined) {
 			var allergen = document.getElementById("allergy");
-			allergen.innerHTML = message.data.allergen;
+			console.log("Item contains allergen information");
+			allergen.style.display = "block";
+			allergen.innerHTML = 'Allergens include: ' + message.data.allergen;
+		} else {
+			var allergen = document.getElementById("allergy");
+			console.log("Item does not contains allergen information");
+			allergen.style.display = "none";
 		}		
 		
 		if (message.data.description != undefined) {
@@ -266,7 +272,7 @@
 		
 		if (message.data.price != undefined) {
 			var price = document.getElementById("price");		
-			price.innerHTML = message.data.price.toFixed(2);
+			price.innerHTML = "$" + message.data.price.toFixed(2);
 		}		
 		
 		var submit = $("#addOrder");
@@ -326,7 +332,7 @@
 					<p>Price: <span id= "price"></span></p>
 					<p>Description: <span id="desc"></span></p>
 					<p>Contains: <span id = "ingre"></span></p>
-					<p>Allergens Include: <span id = "allergy"></span></p>
+					<p id = "allergy">Allergens Include: </p>
 				</div>
 				<div class="modal-footer">
 					<button id="addOrder">Add To Order</h3>

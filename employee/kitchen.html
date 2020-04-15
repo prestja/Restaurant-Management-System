@@ -56,7 +56,7 @@
 			clone.find("#callM").data("order", order);
 			// append the extraenous information
 			addSubs(order.substitutions).appendTo(clone.find(".items"));
-			addAllergies(order.allergies).appendTo(clone.find(".items"));			
+			addSpacer().appendTo(clone.find(".items"));			
 			// append the items
 			order.items.forEach(item => 
 				addItem(item).appendTo(clone.find(".items"))				
@@ -85,16 +85,16 @@
 			return clone;
         }
 		
-		function addSubs(subs) {
+		function addSpacer() {
 			var clone = $("#item_template").clone(true);
-			clone.html(subs);
+			clone.html('<b><p>Ordered items</p></b>');
 			clone.css('display', 'block');
 			return clone;
 		}
 		
-		function addAllergies(allergies) {
+		function addSubs(allergies) {
 			var clone = $("#item_template").clone(true);
-			clone.html(allergies);
+			clone.html('<b>Substitutions</b><p>' + allergies + '</p>');
 			clone.css('display', 'block');
 			return clone;
 		}

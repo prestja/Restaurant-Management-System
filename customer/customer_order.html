@@ -59,12 +59,12 @@
 				var data = $(i).data("item");
 				itemArray.push(data._id);
 			});
-		
+			console.log(document.getElementById("subs"));
 			var order = {
 				table: 7,
 				items: itemArray,
 				status: 0,
-				substitutions: 
+				substitutions: document.getElementById('subs').value
 			};
 			console.log(JSON.stringify(order));
 			$.post("http://159.89.238.181:8080/api/orders/", JSON.stringify(order), function(response){
@@ -86,8 +86,8 @@
 
 </head>
 <body style="background-color: white">
-	<div id = "subs" style = "align: right;">
-			List any allergies or substitutions you would like <textarea style = "width: 100%" rows = "4"></textarea>
+	<div style = "align: right;">
+		List any allergies or substitutions you would like <textarea id = 'subs' style = "width: 100%" rows = "4"></textarea>
 	</div>	
 	<h5><pre>Item			   Price             Remove</pre>
 	<pre>------------------------------------------------------</pre>

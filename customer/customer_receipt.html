@@ -75,18 +75,7 @@
 			clone.children("#item").html(JSON.parse(response).name);
 			clone.children("#price").html(JSON.parse(response).price);
 		})
-		/*
-		$.ajax({
-			url: url,
-			type: 'get',
-			dataType: 'JSON',
-			success: function(response) {
-				response.name;
-				response.price;
-				clone.children("#item").html(response.name);
-				clone.children("#price").html(response.price);
-			}
-		}); */
+		
 		clone.appendTo('#receipt');	
 	}
 	

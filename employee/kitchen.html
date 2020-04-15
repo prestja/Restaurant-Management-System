@@ -46,6 +46,7 @@
     {
         font-family: "Lato", Arial, sans-serif;
 		color: black;
+		display: none;
     }
 </style>
 <head>
@@ -54,15 +55,20 @@
     <script>
         function addTicket(order) {
             var clone = $("#ticket_template").clone(true);
-            clone.css('display', 'inline-block');                        
-			clone.find("#complete").data("order", order); // places all information about this order in the element itself
+            clone.css('display', 'inline-block');
+			// places all information about this order in the element itself			
+			clone.find("#complete").data("order", order); 
             clone.find("#callW").data("order", order);
 			clone.find("#callM").data("order", order);
-			  order.items.forEach(item => 
-				addItem(item).appendTo(clone.find("#items"))
-				
-            );			
-			clone.find(".items").innerHTML += "test"; 
+			// append the extraenous information
+			addSubs(order.substitutions).appendTo(clone.find(".items"));
+			addAllergies(order.allergies).appendTo(clone.find(".items"));			
+			// append the items
+			order.items.forEach(item => 
+				addItem(item).appendTo(clone.find(".items"))				
+            );
+			
+			// append and finishing up
 			clone.appendTo('.orders');
 			clone.find(".table_num").html("Table: " + order.table);
 			clone.find("#complete").click(markComplete);
@@ -71,25 +77,33 @@
 			if (order.placed != undefined) { 
 				var date = new Date(order.placed.$date.$numberLong);
 				clone.find(".ordered_at").html("Ordered at: " + date.getHours() + ":" + date.getMinutes());
-			}			
-			if (order.items === undefined) {
-                return clone; // pre-emptively return if no items exist
-            }
-
-			
+			}
             return clone;
         }
 
         function addItem(item) {
             var clone = $("#item_template").clone(true);
-            clone.css('display', 'inline-block'); 
-			console.log(item);	
-			if(clone!=null)
-			{
-				console.log(clone);
-				return clone;
-			}
+            var url = 'http://159.89.238.181:8080/api/items?id=' + item.$oid;			
+			$.get(url, item._id, function (response) { // sample the item's name from the backend
+				clone.html(JSON.parse(response).name); // and assign it to the element
+			});
+			clone.css('display', 'inline-block');			
+			return clone;
         }
+		
+		function addSubs(subs) {
+			var clone = $("#item_template").clone(true);
+			clone.html(subs);
+			clone.css('display', 'inline-block');
+			return clone;
+		}
+		
+		function addAllergies(allergies) {
+			var clone = $("#item_template").clone(true);
+			clone.html(allergies);
+			clone.css('display', 'inline-block');
+			return clone;
+		}
 		
 		function callWaiter() {			
 			var url = 'http://159.89.238.181:8080/api/notifications';
@@ -131,12 +145,12 @@
                     );
                 }
             })
-			//setTimeout("location.reload(true);",5000);
+			setTimeout("location.reload(true);",5000);
 		}); 
 
     </script>
     <div class = "ticket" id = "ticket_template">        
-        <div class = "information" style = "height: 20%; background-color: navy; color:white">
+        <div class = "information" style = "height: 15%; background-color: navy; color:white">
             <div class = "topRow"> 
                 <button id="callW">Call waitstaff</button>
                 <button id="callM">Call manager</button>
@@ -153,9 +167,7 @@
         </div>
     </div>
 
-    <div class = "item" id = "item_template">       
-        <p> THIS IS AN ITEM</p>
-    </div>
+    <p class = "item" id = "item_template"></p>
 </head>
 
 <body>

@@ -179,9 +179,23 @@
 			td = tr.insertCell(2);
 			var cIn = item.clocked_in.$date.$numberLong; //gets the date the order was placed and formats, then adds it onto the table
 			var d = new Date(0);
-			d.setUTCSeconds(cIn/1000);
-			month = d.getMonth()+1;
-			day=d.getDate();
+			d.setUTCSeconds(cin/1000);
+			if(d.getMonth()+1 < 10)//keeps mm/dd/yyyy format by adding 0's if the month or day is smaller than 10
+			{
+				month = d.getMonth()+1;
+				month = "0" + month;
+			}
+			else{
+				month = d.getMonth()+1;
+			}
+			if(d.getDate() < 10)
+			{
+				day= "0" + d.getDate();
+			}
+			else
+			{
+				day = d.getDate();
+			}
 			year = d.getFullYear();
 			d = month + '/' + day + '/' + year;
 			td.append(d);
@@ -219,7 +233,7 @@
 			}
 		}
 	}
-		$(document).ready(function() {
+		$(document).ready(function() {//gets all timeclock instances
 			var url = "http://159.89.238.181:8080/api/timeclock";
 			$.ajax({
 				url: url,
@@ -238,10 +252,26 @@
 		document.getElementById('monthly').style.background = "#D3D3D3";
 		var table, tr, td, textValue;
 		var today = new Date();//gets today
-		var d = String(today.getDate()).padStart(1,'0');
-		var mm = String(today.getMonth()+1).padStart(2,'0');
-		var yyyy = today.getFullYear();
-		today = mm + '/' + d + '/' + yyyy;
+		var month, day, year;
+		if(today.getMonth()+1 < 10)
+		{
+			month = today.getMonth()+1;
+			month = "0" + month;
+		}
+		else{
+			month = today.getMonth()+1;
+		}
+			if(today.getDate() < 10)
+			{
+				day= "0" + today.getDate();
+			}
+			else
+			{
+				day = today.getDate();
+			}
+			year = today.getFullYear();
+			today = month + '/' + day + '/' + year;
+			
 		table = document.getElementById("labor");//gets sales table and sets the element to the table row
 		tr = table.getElementsByTagName("tr");
 		for(var i = 0; i < tr.length; i++)//for each item in the table, if there is a td in the tr, check if the text value is equal to todays date.
@@ -250,10 +280,8 @@
 			td = tr[i].getElementsByTagName("td")[2];
 			if(td)
 			{
-				txtValue = new Date();
-				
 				txtValue = td.textContent || td.innerText;
-				if (txtValue === today)
+				if (txtValue == today)
 				{
 					tr[i].style.display = "";
 				}
@@ -281,7 +309,6 @@
 			td = tr[i].getElementsByTagName("td")[1];
 			if(td)
 			{
-				txtValue = new Date();
 				txtValue = td.textContent || td.innerText;
 				if (txtValue <= today || txtValue >= startDate)
 				{

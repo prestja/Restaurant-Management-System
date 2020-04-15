@@ -159,7 +159,7 @@
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
-		$(document).ready(function() {
+		$(document).ready(function() {//gets all menu items to create the form
 			var url = "http://159.89.238.181:8080/api/items";
 			$.ajax({
 				url: url,
@@ -200,12 +200,12 @@
 			td = tr.insertCell(1);
 			td.append(element);
 			
-			element = document.createElement('select');
+			element = document.createElement('select');//creates a dropdown for category
 			element.setAttribute('class',item._id.$oid);
 			var cat = document.createElement('option');
 			cat.setAttribute('value',0);
 			cat.text = "ENTREES";
-			if(item.category == 0)
+			if(item.category == 0)//if item category is 0, select entrees as the default value
 			{
 				cat.setAttribute('selected','selected');
 			}
@@ -213,7 +213,7 @@
 			cat = document.createElement('option');
 			cat.setAttribute('value',1);
 			cat.text = "APPETIZERS";
-			if(item.category == 1)
+			if(item.category == 1)//if category is 1, set appetizers as the default option
 			{
 				cat.setAttribute('selected','selected');
 			}
@@ -221,7 +221,7 @@
 			cat = document.createElement('option');
 			cat.setAttribute('value',2);
 			cat.text = "DESSERTS";
-			if(item.category == 2)
+			if(item.category == 2)//if category is 2, set desserts as the default option
 			{
 				cat.setAttribute('selected','selected');
 			}
@@ -229,7 +229,7 @@
 			cat = document.createElement('option');
 			cat.setAttribute('value',4);
 			cat.text = "KIDS";
-			if(item.category == 4)
+			if(item.category == 4)//if category is 4, set kids menu as the default option
 			{
 				cat.setAttribute('selected','selected');
 			}
@@ -237,7 +237,7 @@
 			cat = document.createElement('option');
 			cat.setAttribute('value',3);
 			cat.text = "BEVERAGES";
-			if(item.category == 3)
+			if(item.category == 3)//if category is 3, set beverages as the default option
 			{
 				cat.setAttribute('selected','selected');
 			}
@@ -256,13 +256,13 @@
 			td = tr.insertCell(3);
 			td.append(element);
 			
-			if(item.category != 3){
+			if(item.category != 3){//if beverages isn't the category
 				element = document.createElement('input');
 				element.setAttribute('type','text');
 				element.setAttribute('class',item._id.$oid);
 				element.setAttribute('size',30);
 				element.setAttribute('maxLength',256);
-				if(item.ingredients != null)
+				if(item.ingredients != null)//add in ingredients
 				{
 					element.setAttribute('value',item.ingredients);
 				}
@@ -280,13 +280,13 @@
 				td.append('N/A');
 			}
 			
-			if(item.category != 3){
+			if(item.category != 3){//if beverages is not the category
 				element = document.createElement('input');
 				element.setAttribute('class', item._id.$oid);
 				element.setAttribute('type','text');
 				element.setAttribute('size',10);
 				element.setAttribute('maxLength',256);
-				if(item.allergen != null)
+				if(item.allergen != null)//add in allergens
 				{
 					element.setAttribute('value',item.allergen);
 				}
@@ -304,11 +304,11 @@
 				td.append('N/A');
 			}
 			
-			if(item.category != 3){
+			if(item.category != 3){//if item is not a beverage
 				element = document.createElement('input');
 				element.setAttribute('class', item._id.$oid);
 				element.setAttribute('type','checkbox');
-				if(item.vegan == true)
+				if(item.vegan == true)//check the box for vegan if the item is vegan
 				{
 					element.setAttribute('checked','checked');
 				}
@@ -322,11 +322,11 @@
 				td.append('N/A');
 			}
 			
-			if(item.category != 3){
+			if(item.category != 3){//if the item is not a beverage
 				element = document.createElement('input');
 				element.setAttribute('class', item._id.$oid);
 				element.setAttribute('type','checkbox');
-				if(item.vegan == true)
+				if(item.vegetarian == true)//if vegetarian, set the box to checked
 				{
 					element.setAttribute('checked','checked');
 				}
@@ -340,7 +340,7 @@
 				td.append('N/A');
 			}
 			
-			if(item.category != 3){
+			if(item.category != 3){//if category is not a beverage
 				element = document.createElement('input');
 				element.setAttribute('type','text');
 				element.setAttribute('class',item._id.$oid);
@@ -401,7 +401,7 @@
 			{
 				if(item.value != 'MODIFY' && item.value != 'REMOVE ITEM')//gets rid of the save/remove buttons from the collection
 				{
-					if(count == 0)//sets all employee values
+					if(count == 0)//sets all employee values based on their position in the form
 					{
 						name = item.value;
 						count ++;
@@ -444,8 +444,8 @@
 					}
 				}
 			}
-			if(category != 3){
-				let request = {//collection of employee values
+			if(category != 3){//if not a beverage
+				let request = {//collection of items values
 					name: name,
 					price: parseFloat(price),
 					category: parseInt(category),
@@ -456,21 +456,21 @@
 					vegetarian: vegetarian
 				}
 				console.log(JSON.stringify(request));
-				var url = "http://159.89.238.181:8080/api/items/modify?id=";//ajax request to modify employees
+				var url = "http://159.89.238.181:8080/api/items/modify?id=";//ajax request to modify items
 				url = url.concat(id);
 				$.post(url, JSON.stringify(request), function(data, status) {	
 					alert(status);
 				});
 			}
-			else{
-				let request = {//collection of employee values
+			else{//if a beverage, omit all extra items from the request
+				let request = {//collection of item values
 					name: name,
 					price: parseFloat(price),
 					category: parseInt(category),
 					nutrition: nutrition,
 				}
 				console.log(JSON.stringify(request));
-				var url = "http://159.89.238.181:8080/api/items/modify?id=";//ajax request to modify employees
+				var url = "http://159.89.238.181:8080/api/items/modify?id=";//ajax request to modify items
 				url = url.concat(id);
 				$.post(url, JSON.stringify(request), function(data, status) {	
 					alert(status);

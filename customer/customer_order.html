@@ -1,38 +1,42 @@
 <!DOCTYPE html>
 
 <html>
-<style>
+	<style>
 
-h2 {
-	text-align: center;
-}
+	body {
+		font-family: Arial
+	}
 
-.button {
-	background-color: #DC143C;
-	border: none;
-	color: white;
-	padding: 8px;
-	text-align: center;
-	text-decoration: none;
-	display: block;
-	font-size: 16px;
-	cursor: pointer;
-}
+	h2 {
+		text-align: center;
+	}
 
-.itemTemplate {
-	display: none;
-	width: 100%;
-	background-color: aqua;
-	color:black
-}
+	.button {
+		background-color: #DC143C;
+		border: none;
+		color: white;
+		padding: 8px;
+		text-align: center;
+		text-decoration: none;
+		display: block;
+		font-size: 16px;
+		cursor: pointer;
+	}
 
-.content {
-	width: 100%;
-	height: 90%;
-}
+	.itemTemplate {
+		display: none;
+		width: 100%;
+		background-color: aqua;
+		color:black
+	}
 
-.rmvButton {border-radius: 50%;}
-</style>
+	.content {
+		width: 100%;
+		height: 90%;
+	}
+
+	.rmvButton {border-radius: 50%;}
+	</style>
 <head>
 <script src="../jquery-3.4.1.min.js"></script>
 
@@ -57,9 +61,10 @@ h2 {
 			});
 		
 			var order = {
-				table: 11,
+				table: 7,
 				items: itemArray,
-				status: 0
+				status: 0,
+				substitutions: 
 			};
 			console.log(JSON.stringify(order));
 			$.post("http://159.89.238.181:8080/api/orders/", JSON.stringify(order), function(response){
@@ -67,7 +72,6 @@ h2 {
 				if(status.code != 200) {
 					alert(status.message);
 				}
-				
 			});
 		}
 	}
@@ -82,24 +86,22 @@ h2 {
 
 </head>
 <body style="background-color: white">
+	<div id = "subs" style = "align: right;">
+			List any allergies or substitutions you would like <textarea style = "width: 100%" rows = "4"></textarea>
+	</div>	
 	<h5><pre>Item			   Price             Remove</pre>
 	<pre>------------------------------------------------------</pre>
 	</h5>
 	<div class = "content">
-			<!--- Item template--->
+		
 		
 	</div>	
-	<div>
-		<button onclick="placeOrder()">Place order</button>
-	</div>
+	<button onclick="placeOrder()">Place order</button>
 	
 	<div class = "itemTemplate" id = "itemTemplate">
 		<div class = "itemName" style = "align: left">
 			Item name goes here
-		</div>
-		<div style = "align: right">
-			List any allergies or substitutions you would like <textarea rows = "1"> </textarea>
-		</div>
+		</div>		
 		<div style = "align: right">
 			<button id="rmv" onclick="removeItem()">Remove this item</button>
 		</div>

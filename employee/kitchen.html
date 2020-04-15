@@ -1,23 +1,26 @@
 <html style = "width: 100%; height: 100%">
 
 <style>    
-    body 
-	{
+    body {
 		margin: 0;
+		font-familY: Arial
 	}
 	
-	.orders 
-    {
+	::-webkit-scrollbar {
+		width: 0px;
+		background: transparent; /* make scrollbar transparent */
+	}
+	
+	.orders {
         width: 100%; 
-        height: 90%; 
+        height: 100%; 
         background-color: white;
         overflow-x:auto;
         overflow-y: hidden;
         white-space: nowrap;
     }
 
-    .ticket 
-    {
+    .ticket {
         width: 25%;
         height: 100%;
         background-color: lightgrey;        
@@ -26,31 +29,22 @@
         display: none;
     }    
 
-    .ticket button
-    {
+    .ticket button {
         background-color: white;
-        width: 33%;
-        font-family: "Lato", Arial, sans-serif;
+        width: 32%;
+        font-family: Arial, sans-serif;
         color: black;
-        border-radius:1vw;
+        border-radius: 3px;
     }
 
-    .controls 
-    {
-        width: 100%; 
-        height: 10%; 
-        background-color: lightgrey;
-    }
-
-    .item 
-    {
-        font-family: "Lato", Arial, sans-serif;
+    .item {
+        font-family: Arial, sans-serif;
 		color: black;
 		display: none;
+		padding-left:.5vw;
     }
 </style>
 <head>
-	<link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet'>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
         function addTicket(order) {
@@ -87,21 +81,21 @@
 			$.get(url, item._id, function (response) { // sample the item's name from the backend
 				clone.html(JSON.parse(response).name); // and assign it to the element
 			});
-			clone.css('display', 'inline-block');			
+			clone.css('display', 'block');			
 			return clone;
         }
 		
 		function addSubs(subs) {
 			var clone = $("#item_template").clone(true);
 			clone.html(subs);
-			clone.css('display', 'inline-block');
+			clone.css('display', 'block');
 			return clone;
 		}
 		
 		function addAllergies(allergies) {
 			var clone = $("#item_template").clone(true);
 			clone.html(allergies);
-			clone.css('display', 'inline-block');
+			clone.css('display', 'block');
 			return clone;
 		}
 		
@@ -145,35 +139,30 @@
                     );
                 }
             })
-			setTimeout("location.reload(true);",5000);
+			//setTimeout("location.reload(true);",10000);
 		}); 
 
     </script>
     <div class = "ticket" id = "ticket_template">        
-        <div class = "information" style = "height: 15%; background-color: navy; color:white">
+        <div class = "information" style = "height: 15%; background-color: #3EB375; color:white;">
             <div class = "topRow"> 
                 <button id="callW">Call waitstaff</button>
                 <button id="callM">Call manager</button>
                 <button id="complete">Complete</button>
             </div>
-            <div class = "bottomRow">
+            <div class = "bottomRow" style= "padding-left:0.5vw">
                 <p class = "table_num">Table: </p>
                 <p class = "ordered_at">Time: </p>
             </div>			
         </div>
         
-        <div class = "items" style = "height: 90%; background-color:lightgrey; overflow-x: hidden; overflow-y: scroll;">
-		
-        </div>
+        <div class = "items" style = "height: 90%; background-color:lightgrey; overflow-x: hidden; overflow-y: scroll;"></div>
     </div>
 
     <p class = "item" id = "item_template"></p>
 </head>
 
 <body>
-    <div class = "orders">        
-    </div>
-    <div class = "controls">
-    </div>
+    <div class = "orders"></div>
 </body>
 </html>

@@ -4,6 +4,7 @@
         width: 100%;
         height: 100%;
         margin: 0;
+		font-family: Arial;
     }
 
     .navigation {
@@ -16,14 +17,11 @@
         /*width: 10%;*/
         vertical-align: middle;
         position: relative;
-        /*background-color:plum;*/
-        /*color:white;*/
+        background-color:#FF7F7F;
+        color:white;
         //border-color:transparent;
-		
-		background-color: #D3D3D3; /*Makes Gray background*/
-		border:  0% #D3D3D3;  /*Border around boxes is Gray*/
-		color: black; /* White text */
-		padding: 1% 1%; /* Some padding */
+		border-radius: 0.5vw;
+		height: 75%;
 		margin-top: 5px;  /* Created space between buttons */
 		font-family: Arial Black, Times, serif; /* sets font */
 		font-size:  16px;	/* Sets size */
@@ -33,6 +31,12 @@
 		width: 15%; /* Set a width if needed */
 		display: inline-block;
     }
+	
+	.navigation h1 {
+		color: white;
+		display: inline-block;
+		padding-left: 10vw;
+	}
 
     #nav-back {
         /*border-radius: 50px 40px 40px 50px;*/
@@ -202,6 +206,7 @@
         <button id = "nav-back" onclick ="goBack();" >Back</button>
 		<button id = "nav-help" onclick = "goHelp()">Help</button>
         <button id = "nav-refills" onclick="goRefills()">Refills</button>
+		<h1>Welcome to Not Chilis'</h1>
     </div>
 
     <!---Content -->

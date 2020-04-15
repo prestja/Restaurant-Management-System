@@ -187,20 +187,22 @@
 		}
 		
 		//Function to get the table number from url
-		function getTableNumber(){
-			//Get the url path 
-			var url = window.location.pathname;
-			//Get the substring at the end of url
-			var table = "Table # ";
-			table += url.substring(url.lastIndexOf('/') + 2);
-			//alert(table);
-		}
-	
+		function getTableNumber() {
+			var url = window.location.search;
+			//console.log(url);
+			var n = url.lastIndexOf('=');
+			if (n < 0) {
+				table = 3;
+				return;
+			}
+			table = parseInt(url.substring(n + 1, url.length));			
+			console.log("Customer page loaded with table " + table);
+		}	
 	</script>
 	
 </head>
     
-<body onload="getTableNumber();">
+<body onload="getTableNumber()">
     <!--Navigation buttons-->
     <div class = "navigation">
         <button id = "nav-back" onclick ="goBack();" >Back</button>

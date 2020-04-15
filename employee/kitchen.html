@@ -44,7 +44,8 @@
 
     .item 
     {
-        display: none;
+        font-family: "Lato", Arial, sans-serif;
+		color: black;
     }
 </style>
 <head>
@@ -57,6 +58,11 @@
 			clone.find("#complete").data("order", order); // places all information about this order in the element itself
             clone.find("#callW").data("order", order);
 			clone.find("#callM").data("order", order);
+			  order.items.forEach(item => 
+				addItem(item).appendTo(clone.find("#items"))
+				
+            );			
+			clone.find(".items").innerHTML += "test"; 
 			clone.appendTo('.orders');
 			clone.find(".table_num").html("Table: " + order.table);
 			clone.find("#complete").click(markComplete);
@@ -69,16 +75,20 @@
 			if (order.items === undefined) {
                 return clone; // pre-emptively return if no items exist
             }
-            order.items.forEach(item => 
-                addItem(order)
-            );			
+
+			
             return clone;
         }
 
-        function addItem(ticket) {
+        function addItem(item) {
             var clone = $("#item_template").clone(true);
-            clone.css('display', 'inline-block');            
-            return clone;
+            clone.css('display', 'inline-block'); 
+			console.log(item);	
+			if(clone!=null)
+			{
+				console.log(clone);
+				return clone;
+			}
         }
 		
 		function callWaiter() {			
@@ -109,7 +119,7 @@
 				console.log(response);
 			}); // tell backend to mark order as complete		
 		}
-
+		
         $(document).ready(function() {
             $.ajax({
                 url: 'http://159.89.238.181:8080/api/orders/?status=0',
@@ -121,7 +131,7 @@
                     );
                 }
             })
-			setTimeout("location.reload(true);",5000);
+			//setTimeout("location.reload(true);",5000);
 		}); 
 
     </script>
@@ -139,10 +149,7 @@
         </div>
         
         <div class = "items" style = "height: 90%; background-color:lightgrey; overflow-x: hidden; overflow-y: scroll;">
-			<p id="item_name"> Item Name </p>
-			<p id="item_subs"> --Subs </p>
-			<p id="known_allergies"> --Allergies </p>
-			<br>
+		
         </div>
     </div>
 

@@ -159,7 +159,7 @@
     <script>
 	//adds item for the sales report onto the table
 	function addItem(item) {
-		if(item.items != null && item.placed != null && item.status == 5){//if the order is not empty
+		if(item.items != null && item.placed != null && item.payments != null){//if the order is not empty
 		var salesTab = document.getElementById('sales');
 		
 		var rowCnt = salesTab.rows.length; //gets current amount of rows
@@ -204,24 +204,59 @@
 		
 		td = document.createElement('td'); //inserts the method of payment for an order onto a table
 		td = tr.insertCell(3);
-		if(item.methodOfPayment != null){
-			td.append(item.methodOfPayment);
+		if(item.payments != null){
+			for(items in item.payments){
+			if(item.payments[items].method == 0)
+			{
+				td.append("CARD");
+				var hr = document.createElement('hr');
+				hr.setAttribute('color','black');
+				td.append(hr);
+			}
+			else
+			{
+				td.append("CASH");
+				var hr = document.createElement('hr');
+				hr.setAttribute('color','black');
+				td.append(hr);
+			}
+		}
 		}
 		else
 		{
 			td.append("Unknown");
 		}
+		td.append("REMAINING");//this line stores the remaining balance for the table
+				var hr = document.createElement('hr');
+				hr.setAttribute('color','black');
+				td.append(hr);
 		
 		td = document.createElement('td'); //inserts the total for the order onto the table
 		td = tr.insertCell(4);
+		var total = item.total;//stores the remaining balance and prints out after subtracting each payment from it.
 		if(item.comp != null){//if there is a comp, subtract it from the total
-			var total = item.total - item.comp
-			td.append("$" + total);
+			for(items in item.payments){
+				var paid = item.payments[items].amount - item.comp/item.payments.length;
+				total = total - paid;
+				td.append("$" + paid.toFixed(2));
+				var hr = document.createElement('hr');
+				hr.setAttribute('color','black');
+				td.append(hr);
+			}
 		}
 		else{//if there was no comp, add the total of the order to the report
-			td.append("$" + item.total);
+			for(items in item.payments){
+				td.append("$" + item.payments[items].amount.toFixed(2));
+				var hr = document.createElement('hr');
+				hr.setAttribute('color','black');
+				td.append(hr);
+				total = total - item.payments[items].amount;
+			}
 		}
-		
+		td.append("$" + total.toFixed(2));
+		var hr = document.createElement('hr');
+				hr.setAttribute('color','black');
+				td.append(hr);
 		
 		td = document.createElement('td');//adds the tip given to the form
 		td = tr.insertCell(5);
@@ -253,7 +288,7 @@
 	{
 		var menuOrder = [];
 		orderList.forEach(order => {
-		if(order.items != null && order.status == 5)//if the order has been placed with items in it
+		if(order.items != null && order.payments != null)//if the order has been placed with items in it
 		{
 			order.items.forEach(item =>
 				{
@@ -421,8 +456,8 @@
 						<th>DATE</th>
 						<th># ITEMS</th>
 						<th>METHOD OF PAYMENT</th>
-						<th>TOTAL</th>
-						<th>TIPS</th>
+						<th>AMOUNT</th>
+						<th>TIP</th>
 					</tr>
 				</table>
 			</span>

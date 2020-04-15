@@ -76,9 +76,7 @@
 			
 			clone.children("#item").html(JSON.parse(response).name);
 			clone.children("#price").html(JSON.parse(response).price);
-			clone.children("SubTot").load(function () {
-				var item = $(this).price;
-			})
+			
 		})
 		
 		clone.appendTo('#receipt');	

@@ -4,6 +4,7 @@
         width: 100%;
         height: 100%;
         margin: 0;
+		font-family: Arial;
     }
 
     .navigation {
@@ -16,14 +17,11 @@
         /*width: 10%;*/
         vertical-align: middle;
         position: relative;
-        /*background-color:plum;*/
-        /*color:white;*/
+        background-color:#FF7F7F;
+        color:white;
         //border-color:transparent;
-		
-		background-color: #D3D3D3; /*Makes Gray background*/
-		border:  0% #D3D3D3;  /*Border around boxes is Gray*/
-		color: black; /* White text */
-		padding: 1% 1%; /* Some padding */
+		border-radius: 0.5vw;
+		height: 75%;
 		margin-top: 5px;  /* Created space between buttons */
 		font-family: Arial Black, Times, serif; /* sets font */
 		font-size:  16px;	/* Sets size */
@@ -33,6 +31,12 @@
 		width: 15%; /* Set a width if needed */
 		display: inline-block;
     }
+	
+	.navigation h1 {
+		color: white;
+		display: inline-block;
+		padding-left: 10vw;
+	}
 
     #nav-back {
         /*border-radius: 50px 40px 40px 50px;*/
@@ -77,6 +81,7 @@
 </style>
 
 <head>
+	<script src= '../jquery-3.4.1.min.js'></script>
 	<script>
 		var pin = ""; // default to no pin set
 		var table = 0; // default to table 0 (1 in real-world terms)
@@ -120,15 +125,17 @@
 		}
 		
 		function goHelp() {
-			var txt;
 			if (confirm("Do you need assistance from your server?")) {
-				txt = "You pressed OK!";
+				var url = 'http://159.89.238.181:8080/api/notifications';
+				var body = {
+					table: table,
+					variant: 0
+				};
 				alert("Your server is on their way!");
+				$.post(url, JSON.stringify(body));
 			} else {
-				txt = "You pressed Cancel!";
 				alert("Your request has been cancelled");
 			}
-				document.getElementById("demo").innerHTML = txt;
 		}		
 		
 		window.addEventListener('message', master_listener, false);
@@ -148,6 +155,7 @@
 					pin = message.data.pin;
 				}
 				document.getElementById("ifrm").contentWindow.postMessage(pin, "*");
+				//showButton(true);
 			}
 			else if(message.data.type == "table") {
 				document.getElementById("ifrm").contentWindow.postMessage(table, "*");	
@@ -157,6 +165,7 @@
 				frame.src = "../menu.html";
 			}
 			else if (message.data.type == "play") {
+				showButton(true);
 				var frame = document.getElementById("ifrm");
 				frame.src = "play.html";
 			}
@@ -180,16 +189,28 @@
 			frame.src = "refills.html";
 		}
 		
+		// Assigns table to the table provided at the end of the query string, otherwise defaults to three
+		function getTableNumber() {
+			var url = window.location.search;
+			var n = url.lastIndexOf('=');
+			if (n < 0) {
+				table = 3;
+				return;
+			}
+			table = parseInt(url.substring(n + 1, url.length));			
+			console.log("Customer page loaded with table " + table);
+		}	
 	</script>
 	
 </head>
     
-<body>
+<body onload="getTableNumber()">
     <!--Navigation buttons-->
     <div class = "navigation">
         <button id = "nav-back" onclick ="goBack();" >Back</button>
 		<button id = "nav-help" onclick = "goHelp()">Help</button>
         <button id = "nav-refills" onclick="goRefills()">Refills</button>
+		<h1>Welcome to Not Chilis'</h1>
     </div>
 
     <!---Content -->

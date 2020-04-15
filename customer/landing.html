@@ -133,6 +133,9 @@
 	function receivePIN(message) {		
 		if(message.data == "") {
 			var pin2 = prompt("Please enter a pin", "1234");
+			if(pin2 === null){
+				return;
+			}
 			var pin3 = {
 				type: "pin", pin: pin2
 			};
@@ -151,7 +154,6 @@
 			type: "pin", pin: ""
 		};
 		parent.window.postMessage(thingy,"*");
-
 	}
 </script>
 </body>

@@ -77,10 +77,10 @@
 	/*Add buttons to the left container*/
 	.button-group2 button {
 		background-color: black; /*Makes Gray background*/
-		border:  0px #D3D3D3;  /*Border around boxes is Gray*/
+		border:  1% #D3D3D3;  /*Border around boxes is Gray*/
 		color: white; /* White text */
 		padding: 20px 50px; /* Some padding */
-		margin: 25px;  /* Created space between buttons */
+		margin: 17px;  /* Created space between buttons */
 		margin-left: 15%;
 		font-family: Arial Black, Times, serif; /* sets font */
 		font-size:  20px;	/* Sets size */
@@ -100,12 +100,37 @@
 		background-color: green;
 	}
 	
-	.rewards-button button {
+	.add-tip button{
 		background-color: black; /*Makes Gray background*/
-		border:  0px #D3D3D3;  /*Border around boxes is Gray*/
+		border:  1% #D3D3D3;  /*Border around boxes is Gray*/
 		color: white; /* White text */
 		padding: 20px 10px; /* Some padding */
-		margin-left: 2%;  /* Created space between buttons */
+		margin-left: 13%;  /* Created space between buttons */
+		font-family: Arial Black, Times, serif; /* sets font */
+		font-size:  12px;	/* Sets size */
+		font-weight:  normal;	/*Sets normal or bold */
+		text-align: center;	/* Aligns to center of button */
+		cursor: pointer; /* Pointer/hand icon */
+		width: 18%; /* Set a width if needed */
+		display: inline-block;
+		margin-top: 0%;
+		margin-left: 75%;
+		bottom: 20%;
+		position: absolute;
+	}
+	
+	
+	/* Add a background color on click */
+	.add-tip button:focus {
+		background-color: green;
+	}
+	
+	.rewards-button button {
+		background-color: black; /*Makes Gray background*/
+		border:  1% #D3D3D3;  /*Border around boxes is Gray*/
+		color: white; /* White text */
+		padding: 20px 10px; /* Some padding */
+		margin-left: 13%;  /* Created space between buttons */
 		font-family: Arial Black, Times, serif; /* sets font */
 		font-size:  12px;	/* Sets size */
 		font-weight:  normal;	/*Sets normal or bold */
@@ -115,11 +140,7 @@
 		display: inline-block;
 	}
 
-	.rewards-button button:not(:last-child) {
-		border-right: none; /* Prevent double borders */
-	}
-
-	/* Add a background color on hover */
+	/* Add a background color on click */
 	.rewards-button button:focus {
 		background-color: green;
 	}
@@ -152,7 +173,7 @@
 		background-color: none;
 		margin: 0 auto;
 		right: 0%;
-		text-indent: 10%;
+		text-indent: 5%;
 	}
 
 	.slider {
@@ -195,6 +216,9 @@
 </style>
 
 <head>
+	<link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet'>
+    <!--changed to https://... below to remove error-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
 	function setup() {
 		var toggle = {
@@ -209,6 +233,40 @@
 		}
 		parent.window.postMessage(message, "*");
 	}
+
+	function updateReceipt(order){
+		//console.log("Updating receipt");
+		//console.log(order);
+		var target = document.getElementById("receipt_screen");
+		order.items.forEach(items =>
+			target.contentWindow.postMessage(items, '*')
+		);
+	}
+	
+	function sendTip(){
+		//var x = document.getElementById("myRange");
+		var x = "20";
+		var z = x.valueOf();
+		var target = document.getElementById("receipt_screen");
+		console.log(target.contentWindow.postMessage(z, '*'));
+	}
+	
+	$(document).ready(function() {
+		var queryStr = window.location.search;
+		var category = queryStr.substr(1)
+		var url = "http://159.89.238.181:8080/api/orders?".concat(category);
+		$.ajax({
+			url: url,
+			type: 'get',
+			dataType: 'JSON',
+			success: function(response) {
+				console.log(response[0]);
+				updateReceipt(response[0]); // just the first order we get			
+			}
+		});
+	});
+	
+	
 </script>
 </head>
 
@@ -239,14 +297,17 @@
 				}
 			</script>
 	
+			<div class="add-tip">
+				<button id="addTip" style="" onclick="sendTip()">Add Tip</button>
+			</div>
 		</div>
 		
 		<!--Rewards Option-->
 		<h2>REWARDS</h2>
 		<div class="addRewards">
 			<div class="rewards-button">
-				<button>SIGN UP</button>
-				<button onclick="goRewards()">CURRENT MEMBER</button>
+				<button onclick="goRewards()">SIGN UP</button>
+				<button onclick="">CURRENT MEMBER</button>
 			</div>
 		</div>
 		
@@ -256,7 +317,7 @@
 		<h2>RECEIPT</h2>
 		
 		<!--Insert an iframe for the receipt-->
-		<iframe src="customer/customer_receipt.html" style="width:95%; height:80%" ></iframe>
+		<iframe id="receipt_screen" src="customer/customer_receipt.html" style="width:95%; height:80%" ></iframe>
 	</div>
 </div>
 </body>

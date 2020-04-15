@@ -159,7 +159,7 @@
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
-		$(document).ready(function() {
+		$(document).ready(function() {//gets all staff and adds the staff member to the form
 			var url = "http://159.89.238.181:8080/api/staff";
 			$.ajax({
 				url: url,
@@ -277,6 +277,7 @@
 						});
 			
 		}
+		
 		function modEmp(id){//modifies employee information
 			var row = document.getElementsByClassName(id);
 			var count = 0, firstName, lastName, password, wage, phone, position;
@@ -284,7 +285,7 @@
 			{
 				if(item.value != 'SAVE' && item.value != 'REMOVE')//gets rid of the save/remove buttons from the collection
 				{
-					if(count == 0)//sets all employee values
+					if(count == 0)//sets all employee values based on where they are in the form
 					{
 						firstName = item.value;
 						count ++;
@@ -382,7 +383,7 @@
 				<button onclick="document.location = 'discount.html'">DISCOUNT</button>
 			</div>
 		</div>
-	<!--holds remove employee form-->
+	<!--holds remove and modify employee form-->
 		<div class = "items">
 			<h2>EMPLOYEES</h2>
 			<hr color="black">

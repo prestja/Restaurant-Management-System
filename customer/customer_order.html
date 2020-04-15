@@ -45,6 +45,9 @@
 	var localTableAssigned = false;
 	window.addEventListener('message', addItem, false);
 	function addItem(message){
+		if (typeof(message.data) == 'number') {
+			return;
+		}
 		var clone = $("#itemTemplate").clone(true);
 		clone.css('display','block'); 
 		clone.children(".itemName").html(message.data.name);
@@ -110,20 +113,18 @@
 	<div style = "align: right;">
 		List any allergies or substitutions you would like <textarea id = 'subs' style = "width: 100%" rows = "4"></textarea>
 	</div>	
-	<h5><pre>Item			   Price             Remove</pre>
+	<h5><pre>Item			   Price             </pre>
 	<pre>------------------------------------------------------</pre>
 	</h5>
 	<div class = "content">
-		
-		
 	</div>	
 	<button onclick="placeOrder()">Place order</button>
 	
-	<div class = "itemTemplate" id = "itemTemplate" style= "display: none">
+	<div class = "itemTemplate" id = "itemTemplate" ;">
 		<div class = "itemName" style = "align: left">
 			Item name goes here
 		</div>		
-		<div style = "align: right">
+		<div>
 			<button id="rmv" onclick="removeItem()">Remove this item</button>
 		</div>
 	</div>

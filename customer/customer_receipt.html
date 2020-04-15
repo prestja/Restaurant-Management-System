@@ -79,7 +79,7 @@
 		$.get(url, message.data._id, function(response) { // this response occurs asynchronously			
 			sum = 0.0;
 			clone.children("#item").html(JSON.parse(response).name);
-			clone.children("#price").html(JSON.parse(response).price);
+			clone.children("#price").html(JSON.parse(response).price.toFixed(2));
 			var tmp = JSON.parse(response);
 			var copy = $.extend( true, {}, tmp ); // response goes out of scope and must be deep copied
 			clone.data('item', copy);
@@ -89,7 +89,9 @@
 				}
 				//console.log($(item).data('item'));
 			});
-			console.log(sum);
+			$('#SubTot').html('Subtotal: $' + sum.toFixed(2));
+			//console.log(sum);
+			
 		})		
 	}
 	

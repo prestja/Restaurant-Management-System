@@ -70,10 +70,31 @@
 		background-color: green;
 	}
 	
+	.add-tip button {
+		background-color: #D3D3D3; /*Makes Gray background*/
+		border:  1% #D3D3D3;  /*Border around boxes is Gray*/
+		color: black; /* White text */
+		padding: 10px 10px; /* Some padding */
+		margin: 0;  /* Created space between buttons */
+		font-family: Arial Black, Times, serif; /* sets font */
+		font-size:  16px;	/* Sets size */
+		font-weight:  normal;	/*Sets normal or bold */
+		text-align: center;	/* Aligns to center of button */
+		cursor: pointer; /* Pointer/hand icon */
+		width: 35%; /* Set a width if needed */
+	}
+
+	/* Add a background color on click */
+	.add-tip button:focus {
+		background-color: green;
+	}
+	
+	
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
 	var sum = 0.0;	
+	var tip = 0.00;
 	
 	window.addEventListener('message', addReceipt, false);
 	function addReceipt(message){
@@ -93,33 +114,25 @@
 					sum += $(item).data('item').price;
 				}
 			});
-			$('#SubTot').html('Subtotal: $' + sum.toFixed(2));			
+			$('#SubTot').html('Subtotal: $' + sum.toFixed(2));
+			//Adding sales tax to payment information
+			var tax = 0.08;
+			tax *= sum;
+			$('#SlsTax').html('Tax: $' + tax.toFixed(2));
+			//Need to get tip information
+			
+			$('#Tip').html('Gratuity: $' + tip.toFixed(2));
+			//Final total 
+			var total = 0.00;
+			total += sum + tax;
+			$('#FinTot').html('Total: $' + total.toFixed(2));
 		})		
 	}
 	
-	//Function to calculate the total of items in the receipt.
-	
-	
-	function printSubTotal(subTotal){
-		document.getElementById("SubTot").innerHtml = subTotal;
-	}
-	
-	function printSalesTax(salesTx){
-		document.getElementById("SlsTax").innerHtml = salesTx;
-	}
-	
-	function printTip(tipAmnt){
-		document.getElementById("Tip") = tipAmnt;
-	}
-	
-	function printFinalTotal(finalTotal){
-		document.getElementById("FinTot").innerHtml = finalTotal;
-	}
-	
-	function submitCoupon(){
-		document.getElementById("CouponCode").reset();
+	function addTip(){
 		
 	}
+	
 	
 </script>
 </head>
@@ -143,7 +156,11 @@
 			<th id="SlsTax">Tax: </th>
 		</tr>
 		<tr>
-			<th id="tip">Gratuity: </th>
+			<th id="tip">Gratuity: 
+				<div class="tip-button">
+					<button id="tipButton">Add Tip</button>
+				</div>
+			</th>
 		</tr>
 		<tr>
 			<th id="FinTot">Total: </th>

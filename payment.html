@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 	* {
 		box-sizing: border-box;
@@ -209,13 +211,67 @@
 		cursor: pointer;
 	}
 	
-	.addRewards {
-		
+	/* Add styles to the form container */
+	.split-pay-container {
+		max-width: 500px;
+		padding: 10px;
+		background-color: white;
 	}
+	
+	/* Rewards member popup*/
+	.rewards-login {
+		display: none;
+		position: fixed;
+		bottom: 35%;
+		right: 35%;
+		border: 3px solid #f1f1f1;
+		z-index: 9;
+	}
+
+	/* Add styles to the form container */
+	.form-container {
+		max-width: 300px;
+		padding: 10px;
+		background-color: green;
+	}
+
+	.form-container input[type=text], .form-container input[type=password] {
+		width: 100%;
+		padding: 15px;
+		margin: 5px 0 22px 0;
+		border: none;
+		background: #f1f1f1;
+	}
+
+	.form-container input[type=text]:focus, .form-container input[type=password]:focus {
+		background-color: #ddd;
+		outline: none;
+	}
+
+	/* Set a style for the submit/login button */
+	.form-container .button {
+		background-color: gray;
+		color: white;
+		padding: 16px 20px;
+		border: none;
+		cursor: pointer;
+		width: 100%;
+		margin-bottom:10px;
+		opacity: 0.8;
+	}
+
+
+	.form-container .cancel {
+		background-color: gray;
+	}
+
+	.form-container .button:hover, .open-button:hover {
+		opacity: 1;
+	}
+
 	
 </style>
 
-<head>
 	<link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet'>
     <!--changed to https://... below to remove error-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -245,10 +301,11 @@
 	
 	function sendTip(){
 		//var x = document.getElementById("myRange");
-		var x = "20";
-		var z = x.valueOf();
+		//var x = 20;
+		var tip = 20;
 		var target = document.getElementById("receipt_screen");
-		console.log(target.contentWindow.postMessage(z, '*'));
+		console.log("Sending tip");
+		//console.log(target.contentWindow.postMessage(tip, '*'));
 	}
 	
 	$(document).ready(function() {
@@ -266,6 +323,17 @@
 		});
 	});
 	
+	function openFormSplit() {
+		document.getElementById("split").style.display = "block";
+	}
+	
+	function openFormRewards() {
+		document.getElementById("myForm").style.display = "block";
+	}
+
+	function closeFormRewards() {
+		document.getElementById("myForm").style.display = "none";
+	}
 	
 </script>
 </head>
@@ -274,11 +342,11 @@
 <div class="row">
 	<div class="column-left">
 		<h2>PAYMENT METHOD</h2>
-		
+
 		<div class="button-group2">
 			<button onclick="">CARD</button>
 			<button onclick="">CASH</button>
-			<button onclick="">SPLIT</button>
+			<button id="split" onclick="openFormSplit()">SPLIT</button>
 		</div>
 		
 		<h2> TIP AMOUNT </h2>			
@@ -307,8 +375,20 @@
 		<div class="addRewards">
 			<div class="rewards-button">
 				<button onclick="goRewards()">SIGN UP</button>
-				<button onclick="">CURRENT MEMBER</button>
+				<button onclick="openFormRewards()">CURRENT MEMBER</button>
 			</div>
+		</div>
+		
+		<div class="rewards-login" id="myForm">
+			<form class="form-container">
+				<h1>Memeber Login</h1>
+
+				<label for="email"><b>Phone Number</b></label>
+				<input type="text" placeholder="Enter Phone Number" name="phoneNumber" required>
+
+				<button type="submit" class="button">Login</button>
+				<button type="button" class="button cancel" onclick="closeFormRewards()">Close</button>
+			</form>
 		</div>
 		
 	</div>

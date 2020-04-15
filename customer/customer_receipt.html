@@ -62,10 +62,6 @@
 <script>
 	window.addEventListener('message', addReceipt, false);
 	function addReceipt(message){
-		if(message.data == '20'){
-			var num = parseInt("message.data");
-			printTip(message.data);
-		}
 		var clone = $("#row").clone(true);
 		clone.css('display','block'); 
 		
@@ -73,7 +69,13 @@
 		//Add an ajax request to items using _id.$oid
 		var queryStr = window.location.search;
 		var category = queryStr.substr(1)
-		var url = "http://159.89.238.181:8080/api/items?id=".concat();
+		var url = 'http://159.89.238.181:8080/api/items?id=' + message.data.$oid;//.concat();
+		console.log(url);
+		$.get(url, message.data._id, function(response){
+			clone.children("#item").html(JSON.parse(response).name);
+			clone.children("#price").html(JSON.parse(response).price);
+		})
+		/*
 		$.ajax({
 			url: url,
 			type: 'get',
@@ -84,7 +86,7 @@
 				clone.children("#item").html(response.name);
 				clone.children("#price").html(response.price);
 			}
-		}); 
+		}); */
 		clone.appendTo('#receipt');	
 	}
 	

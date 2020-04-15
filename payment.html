@@ -234,11 +234,13 @@
 		parent.window.postMessage(message, "*");
 	}
 
-	function updateReceipt(item){
+	function updateReceipt(order){
 		console.log("Updating receipt");
-		console.log(JSON.stringify(item));
+		console.log(order);
 		var target = document.getElementById("receipt_screen");
-		target.contentWindow.postMessage(item, '*');
+		order.items.forEach(items =>
+			target.contentWindow.postMessage(items, '*')
+		);
 	}
 	
 	function sendTip(){
@@ -258,8 +260,9 @@
 			type: 'get',
 			dataType: 'JSON',
 			success: function(response) {
-				response.forEach(item => 
-					updateReceipt(item)
+				console.log(response);
+				response.forEach(order => 
+					updateReceipt(order)
 				);
 			}
 		});

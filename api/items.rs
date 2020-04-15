@@ -13,6 +13,7 @@ pub struct Item {
 	category: u32,
 	price: f32,
 	nutrition: String,
+	description: Option<String>,
 	#[serde(default)] imgPath: String,
 	#[serde(default)] ingredients: serde_json::Value,
 	#[serde(default)] allergen: String,	
@@ -143,6 +144,11 @@ pub fn delete(conn: LogsDbConn, id: String) -> String {
 #[post("/", data = "<item>")]
 pub fn post (_conn: LogsDbConn, item: Json<Item>) -> String {
 	let inner = item.into_inner(); // deserializes the Json-formatted item
+	let mut description = String::from("");
+	match inner.description{
+		Some(x) => description = x,
+		None => description.push_str("None"),
+	}
 	let doc = doc! {
 		"name": inner.name,
 		"category": inner.category,
@@ -153,7 +159,8 @@ pub fn post (_conn: LogsDbConn, item: Json<Item>) -> String {
 		"vegan": inner.vegan,
 		"vegetarian": inner.vegetarian,
 		"status": 1,
-		"imgPath": inner.imgPath
+		"imgPath": inner.imgPath,
+		"description": description
 	};
 	
 	let _coll = _conn.collection("items");
@@ -179,6 +186,11 @@ pub fn modify (conn: LogsDbConn, id: String, replacement: Json<Item>) -> String 
 	let cast = bson::oid::ObjectId::with_string(id.as_str());
 	let coll = conn.collection("items");
 	let inner = replacement.into_inner();
+	let mut description = String::from("");
+        match inner.description{
+                Some(x) => description = x,
+                None => description.push_str("None"),
+        }
 	if let Ok(oid) = cast {
 		let filter = doc! {"_id": oid};		
 		let update = doc! {
@@ -192,6 +204,7 @@ pub fn modify (conn: LogsDbConn, id: String, replacement: Json<Item>) -> String 
 				"vegan": inner.vegan,
 				"vegeration": inner.vegetarian,
 				"status": inner.status,
+				"description": description
 			}			
 		};
 		if let Ok (result) = coll.find_one_and_update(filter.clone(), update.clone(), None) {

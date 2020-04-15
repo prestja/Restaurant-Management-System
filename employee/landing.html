@@ -136,6 +136,8 @@
 		var clone = $("#notification_template").clone(true);
 		clone.css('display', 'inline-block');
 		clone.appendTo('.notification-info');
+		clone.find("button").click(removeNotification);
+		clone.find("button").data('key', notification);
 		var str ="Table ";
 		str = str.concat(notification.table);
 		str = str.concat(" needs ");
@@ -160,6 +162,22 @@
 		return clone;
 	}
 	
+	function removeNotification() {
+		var key = $(this).data('key');
+		console.log(key);
+		var url = 'http://159.89.238.181:8080/api/notifications/delete?id='; //5e94d8403930633d12cd6fd9';
+		url = url.concat(key._id.$oid);
+		$.post(url, function(notification){
+			//alert(JSON.parse(notification)._id);
+			window.setTimeout(delayedTimer, 16);
+		});
+		
+		var timer;
+		function delayedTimer() {
+			location.reload();
+		}
+	}
+	
 	$(document).ready(function() {
 			$.ajax({
                 url: 'http://159.89.238.181:8080/api/notifications',
@@ -171,7 +189,8 @@
                     );
                 }
             })
-        });
+    });
+	
     </script>
 </head>
 <body style="background-color:Black;">
@@ -190,13 +209,13 @@
 
 	<!--Creates section to show details about specific notifications-->
 	<div class = "notification-info" id="notification-num">
-		<h2 id = "headerType">NOTIFICATIONS</h2>
+		<h2 id = "headerType" >NOTIFICATIONS</h2>
 		<hr color = "black">
 		<!--<h4>Table 1 needs coke refill | 15:30pm</h4>-->
 		<div id = "notification_template" >
 			<div class = "notebutton">
 			<p style = "width: 80%">sometext</p>
-			<button >Remove</button>
+			<button>Remove</button>
 			</div>
 		</div>
 	</div>

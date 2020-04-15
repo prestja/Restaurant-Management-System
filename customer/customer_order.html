@@ -41,6 +41,8 @@
 <script src="../jquery-3.4.1.min.js"></script>
 
 <script>	
+	var localTable = 0;
+	var localTableAssigned = false;
 	window.addEventListener('message', addItem, false);
 	function addItem(message){
 		var clone = $("#itemTemplate").clone(true);
@@ -51,17 +53,19 @@
 	}
 	
 	function placeOrder() {
-		var response = confirm("Are you sure you want to submit your order. Once Submitted, your order cannot be changed.");
+		var response = confirm("Are you sure you want to submit your order?");
 		if(response == true) {
 			var items = document.getElementsByClassName("content")[0].getElementsByClassName("itemTemplate");
 			var itemArray = [];
+			var _local = localTable;
 			Array.prototype.forEach.call(items, function(i) {
 				var data = $(i).data("item");
 				itemArray.push(data._id);
 			});
 			console.log(document.getElementById("subs"));
+			
 			var order = {
-				table: 7,
+				table: _local,
 				items: itemArray,
 				status: 0,
 				substitutions: document.getElementById('subs').value
@@ -76,6 +80,23 @@
 		}
 	}
 	
+	window.addEventListener('message', master_listener, false);
+	
+	function master_listener(message) {
+		if (localTableAssigned) // prevent issue where parent can send multiple objects that
+			return;
+		console.log(message.data);
+		localTable = message.data; // receive table number from parent
+		console.log('received table number from grandparent');
+		console.log(localTable);
+		localTableAssigned = true;
+	}
+	
+	function setup() {
+		console.log("customer_order loaded");
+		parent.parent.window.postMessage({type: "table"} , '*');
+	}
+	
 	//New remove function only targets the specific item
 	function removeItem(){
 		document.querySelector(".itemTemplate").remove();
@@ -85,7 +106,7 @@
 </script>
 
 </head>
-<body style="background-color: white">
+<body style="background-color: white" onload="setup()">
 	<div style = "align: right;">
 		List any allergies or substitutions you would like <textarea id = 'subs' style = "width: 100%" rows = "4"></textarea>
 	</div>	
@@ -98,7 +119,7 @@
 	</div>	
 	<button onclick="placeOrder()">Place order</button>
 	
-	<div class = "itemTemplate" id = "itemTemplate">
+	<div class = "itemTemplate" id = "itemTemplate" style= "display: none">
 		<div class = "itemName" style = "align: left">
 			Item name goes here
 		</div>		

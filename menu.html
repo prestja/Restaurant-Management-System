@@ -207,32 +207,26 @@
 	}
 
 	<!--selects menu type and displays menu items of that type-->
-	function menuType(mType)
-	{	
+	function menuType(mType) {	
 		var t = document.getElementById("headerType");
 		var frame = document.getElementById('order_items');
-		if(mType === "drinks")
-		{
+		if(mType === "drinks") {
 			t.innerHTML = "BEVERAGES";
 			frame.src = "menu_category.html?category=3";
 		}
-		else if(mType === "apps")
-		{
+		else if(mType === "apps") {
 			t.innerHTML = "APPETIZERS";
 			frame.src = "menu_category.html?category=1";
 		}
-		else if(mType === "meals")
-		{
+		else if(mType === "meals") {
 			t.innerHTML = "ENTREES";
 			frame.src = "menu_category.html?category=0";
 		}
-		else if(mType === "kids")
-		{
+		else if(mType === "kids") {
 			t.innerHTML = "KIDS MENU";
 			frame.src = "menu_category.html?category=4";
 		}
-		else if(mType === "sweets")
-		{
+		else if(mType === "sweets") {
 			t.innerHTML = "DESSERTS";
 			frame.src = "menu_category.html?category=2";
 		}
@@ -240,6 +234,10 @@
 	
 	window.addEventListener('message', updateModal, false);
 	function updateModal(message) {
+		if (typeof (message.data) == "number") { // skip instances where child of this frame wants something from grandparent (our frame)
+			orderFrame.contentWindow.postMessage(message.data, '*'); // relay table number to child
+			return;
+		}
 		modal.style.display = "block";
 		var name = document.getElementById("itemName");
 		name.innerHTML = message.data.name;

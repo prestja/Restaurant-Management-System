@@ -73,7 +73,7 @@
 	window.addEventListener('message', addReceipt, false);
 	function addReceipt(message){
 		var clone = $("#item_template").clone(true);
-		clone.css('display','block');
+		clone.css('display','table-row');
 		var url = 'http://159.89.238.181:8080/api/items?id=' + message.data.$oid;//.concat();
 		clone.appendTo('.receipt');
 		$.get(url, message.data._id, function(response) { // this response occurs asynchronously			
@@ -87,11 +87,8 @@
 				if ($(item).data('item') != undefined) {
 					sum += $(item).data('item').price;
 				}
-				//console.log($(item).data('item'));
 			});
-			$('#SubTot').html('Subtotal: $' + sum.toFixed(2));
-			//console.log(sum);
-			
+			$('#SubTot').html('Subtotal: $' + sum.toFixed(2));			
 		})		
 	}
 	
@@ -122,9 +119,6 @@
 </script>
 </head>
 <body style="background-color:white">
-  <div class = "content">
-	<!--Creating a table to store purchase information-->
-  </div>
 	<table class="receipt">
 		<tr id="header">
 			<td>Item</td>
@@ -158,11 +152,10 @@
 		<button>Submit Payment</button>
 	</div>
 		<table>
-		<tr id="item_template" class = 'receiptRow'>
-			<td id="item">some text</td>
-			<th><th>
-			<td id="price">some price</td>
-		</tr>
+			<tr id="item_template" class = 'receiptRow'>
+				<td align="left" id="item"></td>		
+				<td align="right" id="price"></td>
+			</tr>
 		</table>
 </body>
 </html>

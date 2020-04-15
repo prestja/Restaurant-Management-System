@@ -132,7 +132,10 @@
 	// function called whenever landing receives a pin from its parent
 	function receivePIN(message) {		
 		if(message.data == "") {
-			var pin2 = prompt("Please enter a pin", "1234");
+			var pin2 = prompt("Please Mike enter a pin", "1234");
+			if(pin2 === null){
+				return;
+			}
 			var pin3 = {
 				type: "pin", pin: pin2
 			};

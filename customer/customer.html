@@ -148,7 +148,7 @@
 					pin = message.data.pin;
 				}
 				document.getElementById("ifrm").contentWindow.postMessage(pin, "*");
-				showButton(true);
+				//showButton(true);
 			}
 			else if(message.data.type == "table") {
 				document.getElementById("ifrm").contentWindow.postMessage(table, "*");	
@@ -158,6 +158,7 @@
 				frame.src = "../menu.html";
 			}
 			else if (message.data.type == "play") {
+				showButton(true);
 				var frame = document.getElementById("ifrm");
 				frame.src = "play.html";
 			}

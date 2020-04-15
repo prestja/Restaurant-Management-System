@@ -26,13 +26,18 @@
 	.itemTemplate {
 		display: none;
 		width: 100%;
-		background-color: aqua;
-		color:black
+		color:black;
+		background-color:white;
 	}
-
+	
+	.itemTemplate button {
+		width: 100%;
+	}
 	.content {
 		width: 100%;
 		height: 90%;
+		background-color:#3EB375;
+		color:white;
 	}
 
 	.rmvButton {border-radius: 50%;}
@@ -49,8 +54,9 @@
 			return;
 		}
 		var clone = $("#itemTemplate").clone(true);
-		clone.css('display','block'); 
+		clone.css('display','table-row'); 
 		clone.children(".itemName").html(message.data.name);
+		clone.children('.price').html("$" + message.data.price.toFixed(2));
 		clone.data("item", message.data); // assign the data of this item to the button for future use
 		clone.appendTo('.content');	
 	}
@@ -113,21 +119,31 @@
 	<div style = "align: right;">
 		List any allergies or substitutions you would like <textarea id = 'subs' style = "width: 100%" rows = "4"></textarea>
 	</div>	
-	<h5><pre>Item			   Price             </pre>
+	<h5><pre>Item			   Price                Remove</pre>
 	<pre>------------------------------------------------------</pre>
 	</h5>
-	<div class = "content">
-	</div>	
-	<button onclick="placeOrder()">Place order</button>
+	<table class="content">
+		<tr id="header">
+			<td>Item</td>
+			<td>Price</td>
+		</tr>
+		
+	</table>
 	
-	<div class = "itemTemplate" id = "itemTemplate" ;">
-		<div class = "itemName" style = "align: left">
-			Item name goes here
-		</div>		
-		<div>
-			<button id="rmv" onclick="removeItem()">Remove this item</button>
-		</div>
-	</div>
+	<table>
+		<tr class = "itemTemplate" id = "itemTemplate">		
+			<td class = 'itemName' align = 'left'>
+				Item name goes here
+			</td>
+			<td class = 'price' align = 'center'>
+				$$$
+			</td>
+			<td align = 'right'>
+				<button id="rmv" onclick="removeItem()">Remove this item</button>
+			</td>
+		</tr>
+	</table>
+	<button onclick="placeOrder()">Place order</button>
 	
 </body>
 </html>

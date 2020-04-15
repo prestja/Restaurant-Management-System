@@ -143,42 +143,38 @@
 		str = str.concat(notification.table);
 		str = str.concat(" needs ");
 		
-		switch(notification.variant){
-		case 0:
-		str = str.concat(" help");
-		break;
-		case 1:
-		str = str.concat(" refills:");
-		console.log(notification.details);
-		for(var k in notification.details) {
-			console.log(k);
-			str = str.concat(notification.details[k]);
-			if(k < (notification.details.length -1)){
-				str = str.concat(", ");
+		switch(notification.variant) {
+			case 0:
+			str = str.concat(" help");
+			break;
+			case 1:
+			str = str.concat(" refills:");
+			console.log(notification.details);
+			for(var k in notification.details) {
+				console.log(k);
+				str = str.concat(notification.details[k]);
+				if (k < (notification.details.length -1)) {
+					str = str.concat(", ");
+				}
 			}
+			break;
+			case 2:
+				str = str.concat(" waitstaff");
+			break;
+			case 3:
+				//Printed receipt
+				str = str.concat(" a printed receipt");
+			break;
+			case 4:
+				//Winner winner chicken dinner
+				str = str.concat(" a reward");
+			break;
+			case 5:
+				str = str.concat(" manager");
+			break;
 		}
-		break;
-		case 2:
-		//Skipping this 
-		break;
-		case 3:
-		//Printed receipt
-		str = str.concat(" printed receipt:")
-		break;
-		case 4:
-		//Winner winner chicken dinner
-		str = str.concat(" reward:");
-		break;
-		case 5:
-		//Needs manager
-		console.log("variant = 5");
-		console.log(notification.details);
-		str = str.concat(" manager:");
 		console.log(str);
-		document.getElementsByClassName(".notebutton").innerHTML = str;
-		break;
-		}
-		clone.children("p").html(str);
+		clone.find('p').html(str);
 		return clone;
 	}
 	

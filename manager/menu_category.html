@@ -61,7 +61,7 @@
             var queryStr = window.location.search; // will give you ?sndReq=234
 			
 			var category = queryStr.substr(1);
-			var url = "http://159.89.238.181:8080/api/items?".concat(category);
+			var url = "http://159.89.238.181:8080/api/items?".concat(category);//gets list of items with the category
 			$.ajax({
                 url: url,
                 type: 'get',
@@ -80,7 +80,7 @@
 				var url="http://159.89.238.181:8080/api/items?id=";
 				url = url.concat(id);
 				url = url.concat('&status=');
-				if(background.style.background == "red")
+				if(background.style.background == "red")//if 86'd, change it to green and 68 the item
 				{
 					document.getElementById(id).style.background = "green";
 					url = url.concat('1');
@@ -89,7 +89,7 @@
 						alert(j.message);
 					});
 				}
-				else
+				else//if 68, change to 86'd
 				{
 					document.getElementById(id).style.background = "red";
 					url = url.concat('0');

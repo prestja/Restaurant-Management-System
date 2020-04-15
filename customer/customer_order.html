@@ -48,7 +48,7 @@ h2 {
 	
 	function placeOrder() {
 		var response = confirm("Are you sure you want to submit your order. Once Submitted, your order cannot be changed.");
-		if(response == true){
+		if(response == true) {
 			var items = document.getElementsByClassName("content")[0].getElementsByClassName("itemTemplate");
 			var itemArray = [];
 			Array.prototype.forEach.call(items, function(i) {
@@ -57,15 +57,14 @@ h2 {
 			});
 		
 			var order = {
-				table: 5,
+				table: 11,
 				items: itemArray,
 				status: 0
 			};
 			console.log(JSON.stringify(order));
 			$.post("http://159.89.238.181:8080/api/orders/", JSON.stringify(order), function(response){
 				var status = JSON.parse(response);
-				if(status.code != 200)
-				{
+				if(status.code != 200) {
 					alert(status.message);
 				}
 				

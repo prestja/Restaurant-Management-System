@@ -3,6 +3,10 @@
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
+	body {
+		font-family: Arial;
+	}
+	
 	/*Create a table to store elements in receipt*/
 	table {
 		border-collapse: collapse;
@@ -29,6 +33,10 @@
 	.content {
 		width: 100%;
 		height: 90%;
+	}
+	
+	.receiptRow {
+		display: none;
 	}
 
 	#row {
@@ -60,42 +68,29 @@
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
+	var sum = 0.0;	
 	
 	window.addEventListener('message', addReceipt, false);
 	function addReceipt(message){
-		console.log('adding receipt item');
 		var clone = $("#item_template").clone(true);
-		clone.css('display','block'); 		
-		
-		//Add an ajax request to items using _id.$oid
-		var queryStr = window.location.search;
-		var category = queryStr.substr(1)
+		clone.css('display','block');
 		var url = 'http://159.89.238.181:8080/api/items?id=' + message.data.$oid;//.concat();
-		//console.log(url);
-		$.get(url, message.data._id, function(response){			
+		clone.appendTo('.receipt');
+		$.get(url, message.data._id, function(response) { // this response occurs asynchronously			
+			sum = 0.0;
 			clone.children("#item").html(JSON.parse(response).name);
 			clone.children("#price").html(JSON.parse(response).price);
-			clone.data('item', JSON.parse(response));
-		})
-		
-		clone.appendTo('.receipt');
-		//var elements = document.getElementById('receipt').getElementsByClassName('receiptRow');
-		//console.log(elements.length);
-		/*
-		$(function (){
-		var subTotal = "0.00";
-		var salesTx  = "0.08";
-		var finalTotal = "0.00";
-		$("#price").each(function(){
-			subTotal = subTotal + parseFloat($(this).html());
-		});
-		//$("#SubTot").html("Subtotal= " subTotal.toString());
-		printSubTotal(subTotal);
-		salesTx *= subTotal;
-		printSalesTax(salesTx);
-		finalTotal = subTotal + (subTotal * salesTx);
-		printFinalTotal(finalTotal);
-		});*/
+			var tmp = JSON.parse(response);
+			var copy = $.extend( true, {}, tmp ); // response goes out of scope and must be deep copied
+			clone.data('item', copy);
+			$('.receipt').find('.receiptRow').each(function (index, item) { // for each item already added into container
+				if ($(item).data('item') != undefined) {
+					sum += $(item).data('item').price;
+				}
+				//console.log($(item).data('item'));
+			});
+			console.log(sum);
+		})		
 	}
 	
 	//Function to calculate the total of items in the receipt.
@@ -133,11 +128,6 @@
 			<td>Item</td>
 			<td>Price</td>
 		</tr>
-		<tr id="item_template">
-			<td id="item">some text</td>
-			<th><th>
-			<td id="price">some price</td>
-		</tr>
 	</table>
 	
 	<br>
@@ -165,7 +155,13 @@
 	<div class="button-group">
 		<button>Submit Payment</button>
 	</div>
-	
+		<table>
+		<tr id="item_template" class = 'receiptRow'>
+			<td id="item">some text</td>
+			<th><th>
+			<td id="price">some price</td>
+		</tr>
+		</table>
 </body>
 </html>
 

@@ -186,10 +186,9 @@
 			frame.src = "refills.html";
 		}
 		
-		//Function to get the table number from url
+		// Assigns table to the table provided at the end of the query string, otherwise defaults to three
 		function getTableNumber() {
 			var url = window.location.search;
-			//console.log(url);
 			var n = url.lastIndexOf('=');
 			if (n < 0) {
 				table = 3;

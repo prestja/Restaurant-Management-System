@@ -80,15 +80,21 @@
 
         function addItem(item) {
             var clone = $("#item_template").clone(true);
-			console.log(item);
-            var url = 'http://159.89.238.181:8080/api/items?id=' + item.$oid;
-			console.log(url);
+            var url = 'http://159.89.238.181:8080/api/items?id=' + item.$oid;			
 			$.get(url, item._id, function (response) { // sample the item's name from the backend
 				clone.html(JSON.parse(response).name); // and assign it to the element
 			});
 			clone.css('display', 'inline-block');			
 			return clone;
         }
+		
+		function addSubs() {
+			
+		}
+		
+		function addAllergies() {
+			
+		}
 		
 		function callWaiter() {			
 			var url = 'http://159.89.238.181:8080/api/notifications';

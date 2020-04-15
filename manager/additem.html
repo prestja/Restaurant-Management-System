@@ -193,7 +193,7 @@
 				vegetarian: document.getElementById("vegetarian").checked,			
 				imgPath: imagePath,
 				price: parseFloat(document.getElementById("price").value),
-				description: document.getElementById("description")
+				description: document.getElementById("description").value
 			}
 			//puts the object in JSON format and posts it to the backend to be added to the database
 			console.log(JSON.stringify(request));

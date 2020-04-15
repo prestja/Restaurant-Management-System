@@ -354,7 +354,7 @@
 				{
 					element.setAttribute('value','');
 				}
-				var td = document.createElement('td'); //inserts ingredients into the table
+				var td = document.createElement('td'); //inserts description into the table
 				td = tr.insertCell(8);
 				td.append(element);
 			}
@@ -442,6 +442,11 @@
 						vegetarian = item.checked;
 						count++;
 					}
+					else if(count == 8)
+					{
+						description = item.value;
+						count++;
+					}
 				}
 			}
 			if(category != 3){//if not a beverage
@@ -453,7 +458,8 @@
 					ingredients: ingredients,
 					allergen: allergens,
 					vegan: vegan,
-					vegetarian: vegetarian
+					vegetarian: vegetarian,
+					description: description
 				}
 				console.log(JSON.stringify(request));
 				var url = "http://159.89.238.181:8080/api/items/modify?id=";//ajax request to modify items

@@ -23,7 +23,9 @@ pub struct Order {
 
 	// default values, not required for deserialization
 	#[serde(default)] id: u32,
-	#[serde(default)] status: u32  // ordered = 0, NeedStaff = 1, NeedManager = 2, Ready = 3, Served = 4, Closed = 5	
+	#[serde(default)] status: u32,  // ordered = 0, NeedStaff = 1, NeedManager = 2, Ready = 3, Served = 4, Closed = 5
+	#[serde(default)] substitutions: String,
+	#[serde(default)] allergies: String	
 }
 
 #[get("/", rank = 4)]
@@ -71,6 +73,34 @@ pub fn get_status(_conn: LogsDbConn, status: u32) -> String {
 	str.pop();
 	str.push_str("\n]");
 	return str;
+}
+
+#[post("/status?<table>&<status>")]
+pub fn post_status(conn: LogsDbConn, table: u32, status: u32) -> String {
+	let doc = doc! {
+		"table": table,
+		"status": {
+			"$lt": 5 // where the status of the order is < 5 (not yet paid)
+		}
+	}; // find the most recent order for the table
+	let update = doc! {
+		"$set": {
+			"status": status
+		}
+	}; // apply the user-specified status	
+	let coll = conn.collection("orders");
+	if let Ok (result) = coll.find_one_and_update(doc, update, None) {
+		let response = json!({
+			"code": 200,
+			"message": "Successfully updated status for order."
+		});		
+		return serde_json::to_string(&response).unwrap();
+	}
+	let response = json!({
+		"code": 404,
+		"message": "Could not find an order to update."
+	});		
+	return serde_json::to_string(&response).unwrap();
 }
 
 #[get("/?<id>", rank = 1)]
@@ -171,26 +201,43 @@ pub fn get_comps(_conn: LogsDbConn) -> String
 }
 
 #[post("/", data = "<order>")]
-pub fn post(_conn: LogsDbConn, order: Json<Order>) -> String {
+pub fn post(conn: LogsDbConn, order: Json<Order>) -> String {
 	let inner = order.into_inner(); // converts fron Json<Order> to just Order
-	let doc = doc! // create a new document based upon deserialized object
-	{
+	let doc = doc! {
 		"table": inner.table,
 		"id": inner.id,
 		"items": inner.items,
-		"status": inner.status,
+		"status": 0,
 		"total": 43.19,
-		"tip": 5.00 
+		"tip": 5.00,
+		"substitutions": inner.substitutions,
+		"allergies": inner.allergies
+	};	
+	let existing = doc! {
+		"table": inner.table,
+		"status": {
+			"$lt": 5 // where the status of the order is < 5 (not yet paid)
+		}
 	};
-	
-	let _coll = _conn.collection("orders");
-	let _update = doc!{"$currentDate": { "placed": true}};
-	_coll.insert_one(doc.clone(), None).unwrap();
+	let coll = conn.collection("orders");
+	if let Ok(result) = coll.find_one(Some(existing.clone()), None) {
+		if let Some (order) = result {
+			let response = json!({ // generate a response for the user
+				"code": 404,
+				"message": "You cannot place an order at this time as you have an outstanding unpaid order."
+			});
+			return serde_json::to_string(&response).unwrap();
+		}
+	}
+	coll.insert_one(doc.clone(), None).unwrap(); // insert the order
 	let response = json!({ // generate a response for the user
 		"code": 200,
 		"message": "Inserted order into collection orders"
 	});
-	_coll.find_one_and_update(doc.clone(), _update, None).unwrap();
+
+	// update the order with the current date time
+	let update = doc!{"$currentDate": { "placed": true}};
+	coll.find_one_and_update(doc.clone(), update.clone(), None).unwrap();
 	return serde_json::to_string(&response).unwrap();
 }
 

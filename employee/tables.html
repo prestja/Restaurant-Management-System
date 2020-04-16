@@ -126,6 +126,8 @@
 			t.value = num;
 			
 			parent.window.postMessage(update, '*');
+			
+			var url = 'http://159.89.238.181:8080/api/orders/'
 		}
 		
 		//when comp button is pressed
@@ -201,17 +203,14 @@
 		<hr color = "black">
 		<div class="button-group">
 			<button onclick="document.location = '../menu.html'"  style="width:90% !important">ORDER/MODIFY</button>
-			<br>
+			<br><br>
 			<button onclick="document.location = '../payment.html'"  style="width:90% !important">PAYMENTS</button>
 		</div>
 		<p style="text-align:left;position:relative;left:10px;">ITEMS ORDERED:</p>
-		<table>
+		<table id = "order">
 			<tr>
 				<th>
 					DESCRIPTION
-				</th>
-				<th>
-					QTY
 				</th>
 				<th>
 					PRICE

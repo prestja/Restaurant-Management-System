@@ -261,16 +261,18 @@
 </head>
     
 <body onload="getTableNumber()">
+	<!--On load body calls function getTableNumber()-->
     <!--Navigation buttons-->
     <div class = "navigation">
-        <button id = "nav-back" onclick ="goBack();" >Back</button>
-		<button id = "nav-help" onclick = "goHelp()">Help</button>
-        <button id = "nav-refills" onclick="goRefills()">Refills</button>
-		<h1>Welcome to Not Chilis'</h1>
+        <button id = "nav-back" onclick ="goBack();" >Back</button> <!--back button-->
+		<button id = "nav-help" onclick = "goHelp()">Help</button>	<!--help button-->
+        <button id = "nav-refills" onclick="goRefills()">Refills</button> <!--refill button-->
+		<h1>Welcome to Not Chilis'</h1> <!--Company Logo-->
     </div>
 
     <!---Content -->
     <div class = "content">
+		<!--Iframe is used to display various pages to the user-->
         <iframe src = "landing.html" name="ifrm" id="ifrm" style = "height: 100%; width: 100%"></iframe>
     </div>
 

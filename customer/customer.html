@@ -1,5 +1,6 @@
 <html>
 <style>    
+	/*Css for the html and body sections*/
     html, body {
         width: 100%;
         height: 100%;
@@ -7,19 +8,18 @@
 		font-family: Arial;
     }
 
+	/*Css for the navigation class*/
     .navigation {
         height: 10%;
         background-color: black;
     }
 
+	/*Css for buttons within the navigation class located at top of screen*/
     .navigation button {
-        /*height: 50%;*/
-        /*width: 10%;*/
         vertical-align: middle;
         position: relative;
         background-color:#FF7F7F;
         color:white;
-        //border-color:transparent;
 		border-radius: 0.5vw;
 		height: 75%;
 		margin-top: 5px;  /* Created space between buttons */
@@ -32,37 +32,41 @@
 		display: inline-block;
     }
 	
+	/*H1 company name css*/
 	.navigation h1 {
 		color: white;
 		display: inline-block;
 		padding-left: 10vw;
 	}
 
+	/*Css for the back button via ID*/
     #nav-back {
-        /*border-radius: 50px 40px 40px 50px;*/
 		display: none;
     }
     
+	/*Css for the help button via ID*/
     #nav-help {
-        /*border-radius: 40px 40px 40px 40px;*/
-		
+       
     }
     
+	/*Css for the refill button via ID*/
     #nav-refills {
-        /*border-radius: 40px 50px 50px 40px;*/
-    }
-
-    .content {
-        height: 90%;
         
     }
+
+	/*Css for the class containing the iframe*/
+    .content {
+        height: 90%;
+    }
 	
+	/*Css for the alert from clicking help*/
 	.help_alert {
 		padding: 20px;
 		background-color: white;
 		color: black;
 	}
 	
+	/*Css for the close button*/
 	.closebtn{
 		margin-left: 15px;
 		color: black;
@@ -74,6 +78,7 @@
 		transition: 0.3s;
 	}
 	
+	/*Css for hovering over the close button class*/
 	.closebtn:hover {
 		color: green;
 	}
@@ -86,25 +91,43 @@
 		var pin = ""; // default to no pin set
 		var table = 0; // default to table 0 (1 in real-world terms)
 		
+		//This function controls what happens when back button is clicked
 		function goBack() {						
+			//Get the iframe id and assign to 'frame' variable
 			var frame = document.getElementById("ifrm");
+			
+			//frame.src assigned to 'loaction' variable
 			var location = frame.src;
-			var n = location.lastIndexOf('/'); //finds the name of the last page
+			
+			//Variable 'n' is assigned the name of the last page
+			var n = location.lastIndexOf('/');
+			
+			//Variable 'result' is the last page + 1
 			var result = location.substring(n+1);
-			console.log(result);
-			if (result == "play.html") { // check if the last page frame was on was "play"
+			console.log(result);  //Run console log check of 'result'
+			
+			//If statement checks if the last page of frame was on "play"
+			if (result == "play.html") { 
+				//Prompt user to enter their pin
 				var attempt = prompt("Please enter your pin");
+				
+				//If wrong pin is entered then...
 				if (pin != attempt) {
 					alert("I'm sorry, you put in the incorrect pin. If you believe this is a mistake, please press the HELP button located at the top of the display.");
 					return;
 				}
 			}
+			
+			//if the lastpage was here then fo to new 'frame.src'
 			if (result == "rewards.html") {
 				frame.src = "../payment.html";
 				return;
 			}
 			
+			//frame is taken back to original 'laning' page
 			frame.src = "landing.html";
+			
+			//back button is set to false and becomes hidden
 			showButton(false);
 		}
 		

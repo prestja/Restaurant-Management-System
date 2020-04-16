@@ -1,0 +1,223 @@
+<html>
+<style>    
+    html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+		font-family: Arial;
+    }
+
+    .navigation {
+        height: 10%;
+        background-color: black;
+    }
+
+    .navigation button {
+        /*height: 50%;*/
+        /*width: 10%;*/
+        vertical-align: middle;
+        position: relative;
+        background-color:#FF7F7F;
+        color:white;
+        //border-color:transparent;
+		border-radius: 0.5vw;
+		height: 75%;
+		margin-top: 5px;  /* Created space between buttons */
+		font-family: Arial Black, Times, serif; /* sets font */
+		font-size:  16px;	/* Sets size */
+		font-weight:  normal;	/*Sets normal or bold */
+		text-align: center;	/* Aligns to center of button */
+		cursor: pointer; /* Pointer/hand icon */
+		width: 15%; /* Set a width if needed */
+		display: inline-block;
+    }
+	
+	.navigation h1 {
+		color: white;
+		display: inline-block;
+		padding-left: 10vw;
+	}
+
+    #nav-back {
+        /*border-radius: 50px 40px 40px 50px;*/
+		display: none;
+    }
+    
+    #nav-help {
+        /*border-radius: 40px 40px 40px 40px;*/
+		
+    }
+    
+    #nav-refills {
+        /*border-radius: 40px 50px 50px 40px;*/
+    }
+
+    .content {
+        height: 90%;
+        
+    }
+	
+	.help_alert {
+		padding: 20px;
+		background-color: white;
+		color: black;
+	}
+	
+	.closebtn{
+		margin-left: 15px;
+		color: black;
+		font-weight: bold;
+		float: right;
+		font-size: 22px;
+		line-height: 20px;
+		cursor: pointer;
+		transition: 0.3s;
+	}
+	
+	.closebtn:hover {
+		color: green;
+	}
+
+</style>
+
+<head>
+	<script src= '../jquery-3.4.1.min.js'></script>
+	<script>
+		var pin = ""; // default to no pin set
+		var table = 0; // default to table 0 (1 in real-world terms)
+		
+		function goBack() {						
+			var frame = document.getElementById("ifrm");
+			var location = frame.src;
+			var n = location.lastIndexOf('/'); //finds the name of the last page
+			var result = location.substring(n+1);
+			console.log(result);
+			if (result == "play.html") { // check if the last page frame was on was "play"
+				var attempt = prompt("Please enter your pin");
+				if (pin != attempt) {
+					alert("I'm sorry, you put in the incorrect pin. If you believe this is a mistake, please press the HELP button located at the top of the display.");
+					return;
+				}
+			}
+			if (result == "rewards.html") {
+				frame.src = "../payment.html";
+				return;
+			}
+			
+			frame.src = "landing.html";
+			showButton(false);
+		}
+		
+		function showButton(state) {
+			var btn = document.getElementById("nav-back");
+			switch (state) {
+				case true:
+				btn.style.display = "inline-block";
+				break;
+				case false:
+				btn.style.display = "none";
+				break;
+			}
+		}
+		
+		function showBtnLocal(){
+			var btn = document.getElementById("nav-back");
+		}
+		
+		function goHelp() {
+			if (confirm("Do you need assistance from your server?")) {
+				var url = 'http://159.89.238.181:8080/api/notifications';
+				var body = {
+					table: table,
+					variant: 0
+				};
+				alert("Your server is on their way!");
+				$.post(url, JSON.stringify(body));
+			} else {
+				alert("Your request has been cancelled");
+			}
+		}		
+		
+		window.addEventListener('message', master_listener, false);
+		
+		function master_listener(message) {
+			if(message.data.type == "back" ) {
+				showButton(message.data.state);
+			}
+			else if (message.data.type == "show") {
+				showButton(true);
+			}
+			else if (message.data.type == "hide") {
+				showButton(false);
+			}
+			else if(message.data.type == "pin") {
+				if(pin == "" && message.data.pin != "") {
+					pin = message.data.pin;
+				}
+				document.getElementById("ifrm").contentWindow.postMessage(pin, "*");
+				//showButton(true);
+			}
+			else if(message.data.type == "table") {
+				document.getElementById("ifrm").contentWindow.postMessage(table, "*");	
+			}
+			else if (message.data.type == "order") {
+				var frame = document.getElementById("ifrm");
+				frame.src = "../menu.html";
+			}
+			else if (message.data.type == "play") {
+				showButton(true);
+				var frame = document.getElementById("ifrm");
+				frame.src = "play.html";
+			}
+			else if (message.data.type == "pay") {
+				var frame = document.getElementById("ifrm");
+				frame.src = "../payment.html";
+			}
+			else if (message.data.type == "rewards") {
+				var frame = document.getElementById("ifrm");
+				frame.src = "rewards.html";
+			}
+		}
+		
+		function goRoulette() {
+			var frame = document.getElementById("ifrm");
+			frame.src = "roulette.html";
+		}
+		
+		function goRefills() {
+			var frame = document.getElementById("ifrm");
+			frame.src = "refills.html";
+		}
+		
+		// Assigns table to the table provided at the end of the query string, otherwise defaults to three
+		function getTableNumber() {
+			var url = window.location.search;
+			var n = url.lastIndexOf('=');
+			if (n < 0) {
+				table = 3;
+				return;
+			}
+			table = parseInt(url.substring(n + 1, url.length));			
+			console.log("Customer page loaded with table " + table);
+		}	
+	</script>
+	
+</head>
+    
+<body onload="getTableNumber()">
+    <!--Navigation buttons-->
+    <div class = "navigation">
+        <button id = "nav-back" onclick ="goBack();" >Back</button>
+		<button id = "nav-help" onclick = "goHelp()">Help</button>
+        <button id = "nav-refills" onclick="goRefills()">Refills</button>
+		<h1>Welcome to Not Chilis'</h1>
+    </div>
+
+    <!---Content -->
+    <div class = "content">
+        <iframe src = "landing.html" name="ifrm" id="ifrm" style = "height: 100%; width: 100%"></iframe>
+    </div>
+
+</body>
+
+</html>

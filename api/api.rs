@@ -44,6 +44,7 @@ fn main()
 	// order functions	
 	.mount("/api/orders", routes![orders::get])
 	.mount("/api/orders", routes![orders::get_id])
+	.mount("/api/orders", routes![orders::get_table])
 	.mount("/api/orders", routes![orders::get_status])
 	.mount("/api/orders", routes![orders::post_status])
 	.mount("/api/orders", routes![orders::get_comps])
@@ -60,7 +61,6 @@ fn main()
 	// staff functions
 	.mount("/api/staff", routes![staff::get_all])
 	.mount("/api/staff", routes![staff::get])
-	.mount("/api/staff", routes![staff::get_names])
 	.mount("/api/staff", routes![staff::get_login])
 	.mount("/api/staff", routes![staff::post])
 	.mount("/api/staff", routes![staff::delete])
@@ -76,6 +76,7 @@ fn main()
 	// notification functions
 	.mount("/api/notifications", routes![notifications::get_all])
 	.mount("/api/notifications", routes![notifications::post])
+	.mount("/api/notifications", routes![notifications::delete])
 	// customer functions
 	.mount("/api/customers", routes![customers::get_all])
 	.mount("/api/customers", routes![customers::get])

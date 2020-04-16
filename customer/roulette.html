@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+
+<html>
+<style>
+	* {
+		box-sizing: border-box;
+	}
+	body {
+		background-color: black;
+		margin: 0;
+	}
+
+	/*Created a header container to hold buttons at the top*/
+	.header {
+		padding: 1%;
+		<!-- background-color: blue; -->
+		margin: 0%;
+	}
+
+/*Button group for creating the buttons at top of page*/
+	/*Same button group from the main page*/
+	.button-group button {
+		background-color: #FFFFFF; /*Makes Button White*/
+		border:  0% #D3D3D3;  /*Border around boxes is Gray*/
+		color: black; /* White text */
+		padding: 0.75%; /* Some padding */
+		margin: 0;  /* Created space between buttons */
+		font-family: Arial Black, Times, serif; /* sets font */
+		font-size:  16px;	/* Sets size */
+		font-weight:  normal;	/*Sets normal or bold */
+		text-align: center;	/* Aligns to center of button */
+		cursor: pointer; /* Pointer/hand icon */
+		width: 15vw; /* Set a width if needed */
+		display: inline-block;
+	}
+
+	.button-group button:not(:last-child) {
+		border-right: none; /* Prevent double borders */
+	}
+
+	/* Add a background color on hover */
+	.button-group button:hover {
+		background-color: #3e8e41;
+	}
+
+	/*Created a left container to hold buttons for the manager navigation*/
+	.left-menu {
+		background-color: #c70c0c !important; //makes Gray background
+		padding: 1%;
+		margin: 1% 1% 1%;
+		position: absolute;
+		width: 95vw;
+		height: 80vh;
+		left: 2%;
+		display: inline-block;
+	}
+
+	/*Created a menu button similar to header buttons*/
+	.menu-button-group button {
+		background-color: #FFFFFF; /*Makes Background white*/
+		border:  0px #D3D3D3;  /*Border around boxes is Gray*/
+		color: black; /* White text */
+		padding: 1%; /* Some padding */
+		margin: 1%;  /* Created space between buttons */
+		font-family: Arial Black, Times, serif; /* sets font */
+		font-size:  40px;	/* Sets font size */
+		font-weight:  normal;	/*Sets normal or bold */
+		text-align: center;	/* Aligns to center of button */
+		cursor: pointer; /* Pointer/hand icon */
+		width: 15vw; /* Set a width if needed */
+		height: 40vh;
+		display: inline-block;
+		position: relative;
+		left: 1%;
+		top: 1%;
+		bottom: 1%;
+	}
+
+	/* Add a background color on hover */
+	.menu-button-group button:focus {
+		background-color: #3e8e41;
+	}
+
+	/* Add a background color on hover */
+	.table-button-group button:hover {
+		background-color: #D3D3D3;
+	}
+
+	@media screen and (max-width: 600px) {
+		.column {
+			width: 100vh;
+		}
+	}
+
+</style>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script type="text/javascript">
+	var table;
+	
+	function numbercheck(cardnum){
+		Math.floor((Math.random() * 5) + 1);
+		if(cardnum ==(Math.floor((Math.random() * 5) + 1))){
+			postnote();
+			alert("you win!");
+			window.location.href="landing.html";
+			//setTimeout(function() {window.location.href="landing.html"}, 3000);
+		}
+		else{
+			alert("Sorry better luck next time");
+			window.location.href="landing.html";
+			//setTimeout(function() {window.location.href="landing.html"}, 3000);
+		}
+		}
+		function postnote() {		
+		var winner = {
+			table: table,
+			variant: 4
+		};
+		//request with URL,data,success callback
+		$.post("http://159.89.238.181:8080/api/notifications",JSON.stringify(winner));
+		}
+		
+		window.addEventListener('message', table_listener, false);
+		
+		function table_listener(message){
+			table = message.data;
+		}
+		
+		function gettablenum() {
+			var tablemessage = {
+				type: 'table'
+			};
+			parent.window.postMessage(tablemessage, "*");
+		}
+	</script>
+</head>
+<body onload = "gettablenum()" style="background-color:Black;">
+	<!--Creates left menu for buttons for the different employee pages-->
+	<div class = "left-menu">
+		<div class="menu-button-group">
+			<br><br><br><br><br><br><br><br><br><br>
+			<button id = "1" onclick = "numbercheck(1)">1</button>
+			<button id = "2" onclick = "numbercheck(2)">2</button>
+			<button id = "3" onclick = "numbercheck(3)">3</button>
+			<button id = "4" onclick = "numbercheck(4)">4</button>
+			<button id = "5" onclick = "numbercheck(5)">5</button>
+			
+		</div>
+	</div>
+
+</body>
+</html>

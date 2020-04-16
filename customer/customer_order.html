@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+
+<html>
+	<style>
+
+	body {
+		font-family: Arial
+	}
+
+	h2 {
+		text-align: center;
+	}
+
+	.button {
+		background-color: #DC143C;
+		border: none;
+		color: white;
+		padding: 8px;
+		text-align: center;
+		text-decoration: none;
+		display: block;
+		font-size: 16px;
+		cursor: pointer;
+	}
+
+	.itemTemplate {
+		display: none;
+		width: 100%;
+		color:black;
+		background-color:white;
+	}
+	
+	.itemTemplate button {
+		width: 100%;
+	}
+	.content {
+		width: 100%;
+		height: 90%;
+		background-color:#3EB375;
+		color:white;
+	}
+
+	.rmvButton {border-radius: 50%;}
+	</style>
+<head>
+<script src="../jquery-3.4.1.min.js"></script>
+
+<script>	
+	var localTable = 0;
+	var localTableAssigned = false;
+	window.addEventListener('message', addItem, false);
+	function addItem(message){
+		if (typeof(message.data) == 'number') {
+			return;
+		}
+		var clone = $("#itemTemplate").clone(true);
+		clone.css('display','table-row'); 
+		clone.children(".itemName").html(message.data.name);
+		clone.children('.price').html("$" + message.data.price.toFixed(2));
+		clone.data("item", message.data); // assign the data of this item to the button for future use
+		clone.appendTo('.content');	
+	}
+	
+	function placeOrder() {
+		var response = confirm("Are you sure you want to submit your order?");
+		if(response == true) {
+			var items = document.getElementsByClassName("content")[0].getElementsByClassName("itemTemplate");
+			var itemArray = [];
+			var _local = localTable;
+			Array.prototype.forEach.call(items, function(i) {
+				var data = $(i).data("item");
+				itemArray.push(data._id);
+			});
+			console.log(document.getElementById("subs"));
+			
+			var order = {
+				table: _local,
+				items: itemArray,
+				status: 0,
+				substitutions: document.getElementById('subs').value
+			};
+			console.log(JSON.stringify(order));
+			$.post("http://159.89.238.181:8080/api/orders/", JSON.stringify(order), function(response){
+				var status = JSON.parse(response);
+				if(status.code != 200) {
+					alert(status.message);
+				}
+			});
+		}
+	}
+	
+	window.addEventListener('message', master_listener, false);
+	
+	function master_listener(message) {
+		if (localTableAssigned) // prevent issue where parent can send multiple objects that
+			return;
+		console.log(message.data);
+		localTable = message.data; // receive table number from parent
+		console.log('received table number from grandparent');
+		console.log(localTable);
+		localTableAssigned = true;
+	}
+	
+	function setup() {
+		console.log("customer_order loaded");
+		parent.parent.window.postMessage({type: "table"} , '*');
+	}
+	
+	//New remove function only targets the specific item
+	function removeItem(){
+		document.querySelector(".itemTemplate").remove();
+	}
+	
+
+</script>
+
+</head>
+<body style="background-color: white" onload="setup()">
+	<div style = "align: right;">
+		List any allergies or substitutions you would like <textarea id = 'subs' style = "width: 100%" rows = "4"></textarea>
+	</div>	
+	<h5><pre>Item			   Price                Remove</pre>
+	<pre>------------------------------------------------------</pre>
+	</h5>
+	<table class="content">
+		<tr id="header">
+			<td>Item</td>
+			<td>Price</td>
+		</tr>
+		
+	</table>
+	
+	<table>
+		<tr class = "itemTemplate" id = "itemTemplate">		
+			<td class = 'itemName' align = 'left'>
+				Item name goes here
+			</td>
+			<td class = 'price' align = 'center'>
+				$$$
+			</td>
+			<td align = 'right'>
+				<button id="rmv" onclick="removeItem()">Remove this item</button>
+			</td>
+		</tr>
+	</table>
+	<button onclick="placeOrder()">Place order</button>
+	
+</body>
+</html>

@@ -87,3 +87,44 @@ pub fn post(_conn: LogsDbConn, notification: Json<Notification>) -> String {
 		return serde_json::to_string(&response).unwrap();
 	}
 }
+
+#[post("/delete?<id>")]
+pub fn delete (conn: LogsDbConn, id: String) -> String {
+	let coll = conn.collection("notifications");
+	let cast = bson::oid::ObjectId::with_string(id.as_str());
+	if let Ok (oid) = cast {
+		let doc = doc! {
+			"_id": oid
+		};
+		if let Ok (result) = coll.delete_one(doc, None) {
+			if result.deleted_count >= 1 {
+				let response = json!({
+					"code": 200,
+					"message": "Successfully deleted notification."
+				});
+				return serde_json::to_string(&response).unwrap();
+			}
+			else {
+				let response = json!({
+					"code": 404,
+					"message": "Could not find the specified notification."
+				});
+				return serde_json::to_string(&response).unwrap();
+			}
+		}
+		else {
+			let response = json!({
+				"code": 404,
+				"message": "Database error."
+			});
+			return serde_json::to_string(&response).unwrap();			
+		}
+	}
+	else {
+		let response = json!({
+			"code": 404,
+			"message": "Invalid or malformed object id."
+		});
+		return serde_json::to_string(&response).unwrap();
+	}
+}

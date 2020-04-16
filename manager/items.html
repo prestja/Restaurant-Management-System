@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+
+<html>
+<style>
+	* {
+		box-sizing: border-box;
+	}
+
+	body {
+		background-color: black;
+		margin: 0;
+	}
+	
+	/*Created a header container to hold buttons at the top*/
+	.header {
+		padding: 10px;
+		<!-- background-color: blue; -->
+		margin: 0px 0px 0px;
+	}
+	
+/*Button group for creating the buttons at top of page*/
+	/*Same button group from the main page*/
+	.button-group button {
+		background-color: #D3D3D3; /*Makes Gray background*/
+		border:  0px #D3D3D3;  /*Border around boxes is Gray*/
+		color: black; /* White text */
+		padding: 10px 10px; /* Some padding */
+		margin: 0;  /* Created space between buttons */
+		font-family: Arial Black, Times, serif; /* sets font */
+		font-size:  16px;	/* Sets size */
+		font-weight:  normal;	/*Sets normal or bold */
+		text-align: center;	/* Aligns to center of button */
+		cursor: pointer; /* Pointer/hand icon */
+		width: 15%; /* Set a width if needed */
+		display: inline-block;
+	}
+
+	.button-group button:not(:last-child) {
+		border-right: none; /* Prevent double borders */
+	}
+
+	/* Add a background color on hover */
+	.button-group button:hover {
+		background-color: #3e8e41;
+	}
+	
+	/*Created a left container to hold buttons for the manager navigation*/
+	.left-menu {
+		background-color: #A9A9A9 !important; //makes Gray background
+		padding: 10px;
+		margin: 10px 10px 10px;
+		position: relative;
+		width: 150px;
+		height: 190px;
+		left: 20px;
+		top: 10px;
+		display: inline-block;
+		border: 5px #FFFFFF;
+	}
+	
+	/*Created a menu button similar to header buttons*/
+	.menu-button-group button {
+		background-color: #D3D3D3; /*Makes Gray background*/
+		border:  0px #FFFFFF;  /*Border around boxes is black*/
+		color: black; /* White text */
+		padding: 10px 10px; /* Some padding */
+		margin: 0;  /* Created space between buttons */
+		font-family: Arial Black, Times, serif; /* sets font */
+		font-size:  16px;	/* Sets size */
+		font-weight:  normal;	/*Sets normal or bold */
+		text-align: center;	/* Aligns to center of button */
+		cursor: pointer; /* Pointer/hand icon */
+		width: 86%; /* Set a width if needed */
+		display: inline-block;
+		position: relative;
+		left:10px;
+		top: 10px;
+		bottom: 10px;
+	}
+	
+	/* Add a background color on hover */
+	.menu-button-group button:hover {
+		background-color: #3e8e41;
+	}
+	
+	/*Created a menu container to hold menu items*/
+	.main-section {
+		background-color: Black; //makes black background
+		padding: 10px;
+		margin: 10px 10px 10px 10px;
+		width: 80vw;
+		height: 100vh;
+		left: 190px;
+		display: inline-block;
+		text-align: center;
+		position: absolute;
+	}
+	
+	/*Created a left container to hold buttons for the manager navigation*/
+	.menu-type {
+		background-color: #A9A9A9 !important; //makes Gray background
+		padding: 10px;
+		margin: 10px 10px 10px;
+		position: absolute;
+		width: 160px;
+		height: 450px;
+		left: 20px;
+		display: inline-block;
+	}
+	
+	/*Created a container to hold the remove employee form*/
+	.items {
+		background-color: #A9A9A9 !important; //makes Gray background
+		padding: 10px;
+		margin: 10px 10px 10px 10px;
+		width: 1650px;
+		display: inline-block;
+		text-align: center;
+		border: 5px;
+		border-color: black;
+		position: absolute;
+		left: 200px;
+	}
+		/*Created a tool button similar to menu buttons*/
+	.tool-button-group button {
+		background-color: #D3D3D3; /*Makes Gray background*/
+		border:  0px #FFFFFF;  /*Border around boxes is black*/
+		color: black; /* White text */
+		padding: 10px 10px; /* Some padding */
+		margin: 0;  /* Created space between buttons */
+		font-family: Arial Black, Times, serif; /* sets font */
+		font-size:  16px;	/* Sets size */
+		font-weight:  normal;	/*Sets normal or bold */
+		text-align: center;	/* Aligns to center of button */
+		cursor: pointer; /* Pointer/hand icon */
+		width: 86%; /* Set a width if needed */
+		display: inline-block;
+		position: relative;
+		top: 10px;
+		bottom: 10px;
+	}
+	/* Add a background color on hover */
+	.tool-button-group button:hover {
+		background-color: #3e8e41;
+	}
+	
+		/*styles table to have collapsed borders*/
+	table, th, td {
+		border: 1px solid black;
+		border-collapse: collapse;
+		padding: 5px;
+		position:relative;
+		right:10px;
+		left:5px;
+		margin-bottom: 5px;
+		margin-right: 35px;
+	}
+</style>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+		$(document).ready(function() {//gets all menu items to create the form
+			var url = "http://159.89.238.181:8080/api/items";
+			$.ajax({
+				url: url,
+				type: 'get',
+				dataType: 'JSON',
+				success: function(response) {
+					response.forEach(item => 
+						createForm(item)
+					);
+				}
+			});
+		});
+		
+		function createForm(item){
+			var empTab = document.getElementById("rem");
+			var rowCnt = empTab.rows.length; //gets current amount of rows
+			var tr = empTab.insertRow(rowCnt); //adds new row below the last row
+			tr = empTab.insertRow(rowCnt);
+			var element;
+			
+			element = document.createElement('input');
+			element.setAttribute('class', item._id.$oid);
+			element.setAttribute('type','text');
+			element.setAttribute('size',30);
+			element.setAttribute('maxLength',256);
+			element.setAttribute('value',item.name);
+			var td = document.createElement('td'); //inserts name into the table
+			td = tr.insertCell(0);
+			td.append(element);
+			
+			element = document.createElement('input');
+			element.setAttribute('type', 'number');
+			if(item.price != null){
+				element.setAttribute('value',item.price.toFixed(2));
+			}
+			element.setAttribute('class', item._id.$oid);
+			td = document.createElement('td'); //inserts price into the table
+			td = tr.insertCell(1);
+			td.append(element);
+			
+			element = document.createElement('select');//creates a dropdown for category
+			element.setAttribute('class',item._id.$oid);
+			var cat = document.createElement('option');
+			cat.setAttribute('value',0);
+			cat.text = "ENTREES";
+			if(item.category == 0)//if item category is 0, select entrees as the default value
+			{
+				cat.setAttribute('selected','selected');
+			}
+			element.appendChild(cat);
+			cat = document.createElement('option');
+			cat.setAttribute('value',1);
+			cat.text = "APPETIZERS";
+			if(item.category == 1)//if category is 1, set appetizers as the default option
+			{
+				cat.setAttribute('selected','selected');
+			}
+			element.appendChild(cat);
+			cat = document.createElement('option');
+			cat.setAttribute('value',2);
+			cat.text = "DESSERTS";
+			if(item.category == 2)//if category is 2, set desserts as the default option
+			{
+				cat.setAttribute('selected','selected');
+			}
+			element.appendChild(cat);
+			cat = document.createElement('option');
+			cat.setAttribute('value',4);
+			cat.text = "KIDS";
+			if(item.category == 4)//if category is 4, set kids menu as the default option
+			{
+				cat.setAttribute('selected','selected');
+			}
+			element.appendChild(cat);
+			cat = document.createElement('option');
+			cat.setAttribute('value',3);
+			cat.text = "BEVERAGES";
+			if(item.category == 3)//if category is 3, set beverages as the default option
+			{
+				cat.setAttribute('selected','selected');
+			}
+			element.appendChild(cat);
+			var td = document.createElement('td'); //inserts category dropdown into the table
+			td = tr.insertCell(2);
+			td.append(element);
+			
+			element = document.createElement('input');
+			element.setAttribute('type','text');
+			element.setAttribute('size',10);
+			element.setAttribute('maxLength',256);
+			element.setAttribute('value',item.nutrition);
+			element.setAttribute('class', item._id.$oid);
+			var td = document.createElement('td'); //inserts nutrition into the table
+			td = tr.insertCell(3);
+			td.append(element);
+			
+			if(item.category != 3){//if beverages isn't the category
+				element = document.createElement('input');
+				element.setAttribute('type','text');
+				element.setAttribute('class',item._id.$oid);
+				element.setAttribute('size',30);
+				element.setAttribute('maxLength',256);
+				if(item.ingredients != null)//add in ingredients
+				{
+					element.setAttribute('value',item.ingredients);
+				}
+				else
+				{
+					element.setAttribute('value','');
+				}
+				var td = document.createElement('td'); //inserts ingredients into the table
+				td = tr.insertCell(4);
+				td.append(element);
+			}
+			else{
+				var td = document.createElement('td'); //inserts N/A if the item was a drink into the table
+				td = tr.insertCell(4);
+				td.append('N/A');
+			}
+			
+			if(item.category != 3){//if beverages is not the category
+				element = document.createElement('input');
+				element.setAttribute('class', item._id.$oid);
+				element.setAttribute('type','text');
+				element.setAttribute('size',10);
+				element.setAttribute('maxLength',256);
+				if(item.allergen != null)//add in allergens
+				{
+					element.setAttribute('value',item.allergen);
+				}
+				else
+				{
+					element.setAttribute('value','');
+				}
+				var td = document.createElement('td'); //inserts allergens into the table
+				td = tr.insertCell(5);
+				td.append(element);
+			}
+			else{
+				var td = document.createElement('td'); //inserts N/A if the item was a drink into the table
+				td = tr.insertCell(5);
+				td.append('N/A');
+			}
+			
+			if(item.category != 3){//if item is not a beverage
+				element = document.createElement('input');
+				element.setAttribute('class', item._id.$oid);
+				element.setAttribute('type','checkbox');
+				if(item.vegan == true)//check the box for vegan if the item is vegan
+				{
+					element.setAttribute('checked','checked');
+				}
+				var td = document.createElement('td'); //inserts checkbox for vegan into the table
+				td = tr.insertCell(6);
+				td.append(element);
+			}
+			else{
+				var td = document.createElement('td'); //inserts N/A if the item was a drink into the table
+				td = tr.insertCell(6);
+				td.append('N/A');
+			}
+			
+			if(item.category != 3){//if the item is not a beverage
+				element = document.createElement('input');
+				element.setAttribute('class', item._id.$oid);
+				element.setAttribute('type','checkbox');
+				if(item.vegetarian == true)//if vegetarian, set the box to checked
+				{
+					element.setAttribute('checked','checked');
+				}
+				var td = document.createElement('td'); //inserts checkbox for vegetarian into the table
+				td = tr.insertCell(7);
+				td.append(element);
+			}
+			else{
+				var td = document.createElement('td'); //inserts N/A if the item was a drink into the table
+				td = tr.insertCell(7);
+				td.append('N/A');
+			}
+			
+			if(item.category != 3){//if category is not a beverage
+				element = document.createElement('input');
+				element.setAttribute('type','text');
+				element.setAttribute('class',item._id.$oid);
+				element.setAttribute('size',30);
+				element.setAttribute('maxLength',256);
+				if(item.description != null)
+				{
+					element.setAttribute('value',item.description);
+				}
+				else
+				{
+					element.setAttribute('value','');
+				}
+				var td = document.createElement('td'); //inserts description into the table
+				td = tr.insertCell(8);
+				td.append(element);
+			}
+			else{
+				var td = document.createElement('td'); //inserts N/A if the item was a drink into the table
+				td = tr.insertCell(8);
+				td.append('N/A');
+			}
+			
+			element = document.createElement('input');
+			element.setAttribute('type', 'button');
+			element.setAttribute('value','MODIFY');
+			element.setAttribute('class', item._id.$oid);
+			element.setAttribute('onclick', 'modItem(this.className)');
+			td = document.createElement('td'); //creates modify button for each item
+			td = tr.insertCell(9);
+			td.appendChild(element);
+			
+			element = document.createElement('input');
+			element.setAttribute('type', 'button');
+			element.setAttribute('value','REMOVE ITEM');
+			element.setAttribute('class', item._id.$oid);
+			element.setAttribute('onclick', 'remItem(this.className)');
+			td = document.createElement('td'); //creates remove button for each item
+			td = tr.insertCell(10);
+			td.appendChild(element);
+		}
+		
+		function remItem(id)//passes ajax request to remove the employee of id
+		{
+			console.log(id);
+			var url = "http://159.89.238.181:8080/api/items/delete?id=";
+			url = url.concat(id);
+			$.post(url, function(status) {				
+						var j = $.parseJSON(status);
+							alert(j.message);
+							window.location.reload();
+			});
+		}
+		function modItem(id){//modifies employee information
+			var row = document.getElementsByClassName(id);
+			var count = 0, name, price, category, nutrition, ingredients, allergens, vegan, vegetarian;
+			for(item of row)//goes through each item in the collection of employees
+			{
+				if(item.value != 'MODIFY' && item.value != 'REMOVE ITEM')//gets rid of the save/remove buttons from the collection
+				{
+					if(count == 0)//sets all employee values based on their position in the form
+					{
+						name = item.value;
+						count ++;
+					}
+					else if(count == 1)
+					{
+						price = item.value;
+						count++;
+					}
+					else if(count == 2)
+					{
+						category = item.value;
+						count++;
+					}
+					else if(count == 3)
+					{
+						nutrition = item.value;
+						count++;
+					}
+					else if(count == 4)
+					{
+						ingredients = item.value;
+						ingredients = ingredients.split(',');
+						count++;
+					}
+					else if(count == 5)
+					{
+						allergens = item.value;
+						count++;
+					}
+					else if(count == 6)
+					{
+						vegan = item.checked;
+						count++;
+					}
+					else if(count == 7)
+					{
+						vegetarian = item.checked;
+						count++;
+					}
+					else if(count == 8)
+					{
+						description = item.value;
+						count++;
+					}
+				}
+			}
+			if(category != 3){//if not a beverage
+				let request = {//collection of items values
+					name: name,
+					price: parseFloat(price),
+					category: parseInt(category),
+					nutrition: nutrition,
+					ingredients: ingredients,
+					allergen: allergens,
+					vegan: vegan,
+					vegetarian: vegetarian,
+					description: description
+				}
+				console.log(JSON.stringify(request));
+				var url = "http://159.89.238.181:8080/api/items/modify?id=";//ajax request to modify items
+				url = url.concat(id);
+				$.post(url, JSON.stringify(request), function(data, status) {	
+					alert(status);
+				});
+			}
+			else{//if a beverage, omit all extra items from the request
+				let request = {//collection of item values
+					name: name,
+					price: parseFloat(price),
+					category: parseInt(category),
+					nutrition: nutrition,
+				}
+				console.log(JSON.stringify(request));
+				var url = "http://159.89.238.181:8080/api/items/modify?id=";//ajax request to modify items
+				url = url.concat(id);
+				$.post(url, JSON.stringify(request), function(data, status) {	
+					alert(status);
+				});
+			}
+		}
+    </script>
+</head>
+<body style="background-color:Black;">
+	<!--creates buttons in header to go back-->
+	<div class="header">
+
+		<div class="button-group">
+			<button onclick="document.location = '../employee/landing.html'">&#60&#60 BACK</button>
+		</div>
+	
+	</div>
+	
+	<!--Creates left menu for buttons for the different manager pages-->
+	<div class = "left-menu">
+		<div class="menu-button-group">
+			<button onclick="document.location = '86_68.html'">86/68</button>
+			<br><br>
+			<button onclick="document.location = 'tools.html'">TOOLS</button>
+			<br><br>
+			<button onclick="document.location = 'reports.html'">REPORTS</button>
+		</div>
+	</div>
+	
+	<!--Creates page to show tools-->
+	<div class = "main-section">
+		<div class = "menu-type">
+			<h2>TOOLS</h2>
+			<hr color = "black">
+			<div class="tool-button-group">
+				<button onclick="document.location = 'tools.html'">ADD EMP</button>
+				<br><br>
+				<button onclick="document.location = 'employees.html'">EMPLOYEES</button>
+				<br><br>
+				<button onclick="document.location = 'additem.html'">ADD ITEM</button>
+				<br><br>
+				<button onclick="document.location = 'items.html'">MOD ITEMS</button>
+				<br><br>
+				<button onclick="document.location = 'promos.html'">PROMOS</button>
+				<br><br>
+				<button onclick="document.location = 'discount.html'">DISCOUNT</button>
+			</div>
+		</div>
+	<!--holds remove/modify items form-->
+		<div class = "items">
+			<h2>MENU</h2>
+			<hr color="black">
+			<span style="text-align:left !important;position:relative;left:10px;">
+			<span style="text-align:left !important;position:relative;left:10px;">
+				<table id = 'rem'>
+					<tr>
+						<th>NAME</th>
+						<th>PRICE</th>
+						<th>CATEGORY</th>
+						<th>NUTRITION</th>
+						<th>INGREDIENTS</th>
+						<th>ALLERGENS</th>
+						<th>VEGAN</th>
+						<th>VEGETARIAN</th>
+						<th>DESCRIPTION</th>
+						<th></th>
+						<th></th>
+					</tr>
+				</table>
+			</span>
+			</span>
+		</div>
+	</div>
+</body>
+</html>

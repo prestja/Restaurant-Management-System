@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+
+<html>
+<style>
+	* {
+		box-sizing: border-box;
+	}
+
+	body {
+		background-color: black;
+		margin: 0;
+	}
+	
+	/*Created a header container to hold buttons at the top*/
+	.header {
+		padding: 10px;
+		<!-- background-color: blue; -->
+		margin: 0px 0px 0px;
+	}
+	
+/*Button group for creating the buttons at top of page*/
+	/*Same button group from the main page*/
+	.button-group button {
+		background-color: #D3D3D3; /*Makes Gray background*/
+		border:  0px #D3D3D3;  /*Border around boxes is Gray*/
+		color: black; /* White text */
+		padding: 10px 10px; /* Some padding */
+		margin: 0;  /* Created space between buttons */
+		font-family: Arial Black, Times, serif; /* sets font */
+		font-size:  16px;	/* Sets size */
+		font-weight:  normal;	/*Sets normal or bold */
+		text-align: center;	/* Aligns to center of button */
+		cursor: pointer; /* Pointer/hand icon */
+		width: 15%; /* Set a width if needed */
+		display: inline-block;
+	}
+
+	.button-group button:not(:last-child) {
+		border-right: none; /* Prevent double borders */
+	}
+
+	/* Add a background color on hover */
+	.button-group button:hover {
+		background-color: #3e8e41;
+	}
+	
+	/*Created a left container to hold buttons for the manager navigation*/
+	.left-menu {
+		background-color: #A9A9A9 !important; //makes Gray background
+		padding: 10px;
+		margin: 10px 10px 10px;
+		position: relative;
+		width: 150px;
+		height: 190px;
+		left: 20px;
+		top: 10px;
+		display: inline-block;
+		border: 5px #FFFFFF;
+	}
+	
+	/*Created a menu button similar to header buttons*/
+	.menu-button-group button {
+		background-color: #D3D3D3; /*Makes Gray background*/
+		border:  0px #FFFFFF;  /*Border around boxes is black*/
+		color: black; /* White text */
+		padding: 10px 10px; /* Some padding */
+		margin: 0;  /* Created space between buttons */
+		font-family: Arial Black, Times, serif; /* sets font */
+		font-size:  16px;	/* Sets size */
+		font-weight:  normal;	/*Sets normal or bold */
+		text-align: center;	/* Aligns to center of button */
+		cursor: pointer; /* Pointer/hand icon */
+		width: 86%; /* Set a width if needed */
+		display: inline-block;
+		position: relative;
+		left:10px;
+		top: 10px;
+		bottom: 10px;
+	}
+	
+	/* Add a background color on hover */
+	.menu-button-group button:hover {
+		background-color: #3e8e41;
+	}
+	
+	/*Created a menu container to hold menu items*/
+	.main-section {
+		background-color: Black; //makes black background
+		padding: 10px;
+		margin: 10px 10px 10px 10px;
+		width: 80vw;
+		height: 100vh;
+		left: 190px;
+		display: inline-block;
+		text-align: center;
+		position: absolute;
+	}
+	
+	/*Created a left container to hold buttons for the manager navigation*/
+	.menu-type {
+		background-color: #A9A9A9 !important; //makes Gray background
+		padding: 10px;
+		margin: 10px 10px 10px;
+		position: absolute;
+		width: 160px;
+		height: 330px;
+		left: 20px;
+		display: inline-block;
+	}
+	
+	/*Created a container to hold the labor report*/
+	.items {
+		background-color: #A9A9A9 !important; //makes Gray background
+		padding: 10px;
+		margin: 10px;
+		width: 500px;
+		display: inline-block;
+		text-align: center;
+		border: 5px;
+		border-color: black;
+		position: relative;
+		left: 150px;
+	}
+		/*Created a tool button similar to menu buttons*/
+	.tool-button-group button {
+		background-color: #D3D3D3; /*Makes Gray background*/
+		border:  0px #FFFFFF;  /*Border around boxes is black*/
+		color: black; /* White text */
+		padding: 10px 10px; /* Some padding */
+		margin: 0;  /* Created space between buttons */
+		font-family: Arial Black, Times, serif; /* sets font */
+		font-size:  16px;	/* Sets size */
+		font-weight:  normal;	/*Sets normal or bold */
+		text-align: center;	/* Aligns to center of button */
+		cursor: pointer; /* Pointer/hand icon */
+		width: 86%; /* Set a width if needed */
+		display: inline-block;
+		position: relative;
+		top: 10px;
+		bottom: 10px;
+	}
+	/* Add a background color on hover */
+	.tool-button-group button:hover {
+		background-color: #3e8e41;
+	}
+	table, th, td {
+		border: 1px solid black;
+		border-collapse: collapse;
+		padding: 5px;
+		position:relative;
+		right:10px;
+		left:5px;
+		margin-bottom:20px;
+	}
+</style>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+	//adds row to the labor table
+	function addItem(item) {
+		if(item.clocked_in.$date.$numberLong != null){
+			var labTab = document.getElementById('labor');
+		
+			//adds row to labor table by getting the length and inserts
+			var rowCnt = labTab.rows.length;
+			var tr = labTab.insertRow(rowCnt);
+			tr = labTab.insertRow(rowCnt);
+		
+			var td = document.createElement('td');//inserts employee id
+			td = tr.insertCell(0);
+			td.append(item.id);
+		
+			td = document.createElement('td'); //inserts start time
+			td = tr.insertCell(1);
+			var cIn = item.clocked_in.$date.$numberLong; //gets the date the order was placed and formats, then adds it onto the table
+			var d = new Date(0);
+			d.setUTCSeconds(cIn/1000);
+			if(d.getMonth()+1 < 10)//keeps mm/dd/yyyy format by adding 0's if the month or day is smaller than 10
+			{
+				month = d.getMonth()+1;
+				month = "0" + month;
+			}
+			else{
+				month = d.getMonth()+1;
+			}
+			if(d.getDate() < 10)
+			{
+				day= "0" + d.getDate();
+			}
+			else
+			{
+				day = d.getDate();
+			}
+			year = d.getFullYear();
+			d = month + '/' + day + '/' + year;
+			td.append(d);
+		
+			td = document.createElement('td'); //inserts start time
+			td = tr.insertCell(2);
+			var t = new Date(0);
+			t.setUTCSeconds(cIn/1000);
+			td.append(t.toLocaleTimeString('en-US'));
+		
+			if(item.clocked_out != false){
+			td = document.createElement('td'); //inserts end time
+			td = tr.insertCell(3);
+			var cOut = item.clocked_out.$date.$numberLong;
+			var t = new Date(0);
+			t.setUTCSeconds(cOut/1000);
+			td.append(t.toLocaleTimeString('en-US'));
+		
+			td = document.createElement('td'); //inserts total hours worked
+			td = tr.insertCell(4);
+			var totalHours = cOut - cIn;
+			totalHours = totalHours/1000.0//convert to seconds
+			totalHours = totalHours/60.0;//convert to minutes
+			totalHours = totalHours/60.0;//convert to hours
+			td.append(parseFloat(totalHours.toFixed(2)));
+			}
+			else{
+				td = document.createElement('td');
+				td = tr.insertCell(3);
+				td.append("N/A");
+				td = document.createElement('td');
+				td = tr.insertCell(4);
+				td.append("N/A");
+				
+			}
+		}
+	}
+		$(document).ready(function() {//gets all timeclock instances
+			var url = "http://159.89.238.181:8080/api/timeclock";
+			$.ajax({
+				url: url,
+				type: 'get',
+				dataType: 'JSON',
+				success: function(response) {
+					response.forEach(item => 
+						addItem(item)
+					);
+				}
+			})
+		}); 
+		
+	function dailyReport(){//filters table to today
+		document.getElementById('daily').style.background = "#3e8e41";
+		document.getElementById('monthly').style.background = "#D3D3D3";
+		var table, tr, td, textValue;
+		var today = new Date();//gets today
+		var month, day, year;
+		if(today.getMonth()+1 < 10)
+		{
+			month = today.getMonth()+1;
+			month = "0" + month;
+		}
+		else{
+			month = today.getMonth()+1;
+		}
+			if(today.getDate() < 10)
+			{
+				day= "0" + today.getDate();
+			}
+			else
+			{
+				day = today.getDate();
+			}
+			year = today.getFullYear();
+			today = month + '/' + day + '/' + year;
+			
+		table = document.getElementById("labor");//gets sales table and sets the element to the table row
+		tr = table.getElementsByTagName("tr");
+		for(var i = 0; i < tr.length; i++)//for each item in the table, if there is a td in the tr, check if the text value is equal to todays date.
+		//if it is todays date, set the display to "", otherwise hide the table row
+		{
+			td = tr[i].getElementsByTagName("td")[1];
+			if(td)
+			{
+				txtValue = td.textContent || td.innerText;
+				if (txtValue == today)
+				{
+					tr[i].style.display = "";
+				}
+				else{
+					tr[i].style.display = "none";
+				}
+			}
+		}
+	}
+	function monthlyReport(){//filters table by month (last month to this month)
+		document.getElementById('monthly').style.background = '#3e8e41';
+		document.getElementById('daily').style.background = "#D3D3D3";
+		var today = new Date();//gets todays date and the start date and formats it
+		var startDate = new Date();
+		var dd = String(today.getDate()).padStart(2,'0');
+		var mm = String(today.getMonth()+1).padStart(2,'0');
+		var yyyy = today.getFullYear();
+		mm = String(startDate.getMonth()).padStart(2,'0');
+		startDate = mm + '/' + dd + '/' + yyyy;
+		
+		table = document.getElementById("labor");//gets sales table elements
+		tr = table.getElementsByTagName("tr");
+		for(var i = 0; i < tr.length; i++)//for each element in the table, check if the date is between startDate and today and sets the display to "" if it is, if not, set the display to none
+		{
+			td = tr[i].getElementsByTagName("td")[1];
+			if(td)
+			{
+				txtValue = td.textContent || td.innerText;
+				if (txtValue <= today || txtValue >= startDate)
+				{
+					tr[i].style.display = "";
+				}
+				else{
+					tr[i].style.display = "none";
+				}
+			}
+		}
+	}
+    </script>
+</head>
+<body style="background-color:Black;">
+	<!--creates buttons in header to go back-->
+	<div class="header">
+
+		<div class="button-group">
+			<button onclick="document.location = '../employee/landing.html'">&#60&#60 BACK</button>
+		</div>
+	
+	</div>
+	
+	<!--Creates left menu for buttons for the different manager pages-->
+	<div class = "left-menu">
+		<div class="menu-button-group">
+			<button onclick="document.location = '86_68.html'">86/68</button>
+			<br><br>
+			<button onclick="document.location = 'tools.html'">TOOLS</button>
+			<br><br>
+			<button onclick="document.location = 'reports.html'">REPORTS</button>
+		</div>
+	</div>
+	
+	<!--Creates page to show reports-->
+	<div class = "main-section">
+		<div class = "menu-type">
+			<h2>REPORTS</h2>
+			<hr color = "black">
+			<div class="tool-button-group">
+				<button onclick="document.location = 'reports.html'">SALES</button>
+				<br><br>
+				<button onclick="document.location = 'inventory.html'">INV</button>
+				<br><br>
+				<button onclick="document.location = 'labor.html'">LABOR</button>
+				<br><br>
+				<button onclick="document.location = 'comps_report.html'">COMPS</button>
+			</div>
+		</div>
+	<!--holds labor report-->
+		<div class = "items">
+			<h2>LABOR REPORT</h2>
+			<hr color ="black">
+			<div class = 'menu-button-group'><!--holds filters for the table-->
+				<button onclick="dailyReport()" id="daily" style="width:40%!important;display:inline-block!important">DAILY</button>
+				<button onclick="monthlyReport()" id="monthly" style="width:40%!important;display:inline-block!important">MONTHLY</button>
+			</div>
+			<br>
+			<hr color="black">
+			<span style="text-align:left !important;position:relative;left:10px;">
+				<table style="width:90%" id="labor">
+					<tr>
+						<th>ID</th>
+						<th>DATE</th>
+						<th>START TIME</th>
+						<th>END TIME</th>
+						<th>TOTAL HOURS</th>
+					</tr>
+				</table>
+			</span>
+		</div>
+	</div>
+</body>
+</html>

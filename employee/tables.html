@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+
+<html>
+<style>
+	* {
+		box-sizing: border-box;
+	}
+
+	body {
+		background-color: black;
+		margin: 0;
+	}
+	
+	/*Created a header container to hold buttons at the top*/
+	.header {
+		padding: 1%;
+		<!-- background-color: blue; -->
+		margin: 0%;
+	}
+	
+/*Button group for creating the buttons at top of page*/
+	/*Same button group from the main page*/
+	.button-group button {
+		background-color: #D3D3D3; /*Makes Gray background*/
+		border:  0px #D3D3D3;  /*Border around boxes is Gray*/
+		color: black; /* White text */
+		padding: 1% 1%; /* Some padding */
+		margin: 0;  /* Created space between buttons */
+		font-family: Arial Black, Times, serif; /* sets font */
+		font-size:  16px;	/* Sets size */
+		font-weight:  normal;	/*Sets normal or bold */
+		text-align: center;	/* Aligns to center of button */
+		cursor: pointer; /* Pointer/hand icon */
+		width: 15vw; /* Set a width if needed */
+		display: inline-block;
+	}
+
+	.button-group button:not(:last-child) {
+		border-right: none; /* Prevent double borders */
+	}
+
+	/* Add a background color on hover */
+	.button-group button:hover {
+		background-color: #3e8e41;
+	}
+	
+	/* Add a background color on hover */
+	.menu-button-group button:hover {
+		background-color: #3e8e41;
+	}
+	
+	/*Created a table container to hold tables*/
+	.tables {
+		background-color: #A9A9A9 !important; //makes Gray background
+		padding: 1%;
+		margin: 1%;
+		width: 55vw;
+		height: 80vh;
+		left: .5%;
+		display: inline-block;
+		text-align: center;
+		position: absolute;
+	}
+		
+	/*Created a table button similar to header buttons*/
+	.table-button-group button {
+		background-color: #3e8e41; /*Makes green background*/
+		border:  0px #D3D3D3;  /*Border around boxes is Gray*/
+		color: black; /* White text */
+		padding: 3% 3%; /* Some padding */
+		margin: 2%;  /* Created space between buttons */
+		font-family: Arial Black, Times, serif; /* sets font */
+		font-size:  16px;	/* Sets size */
+		font-weight:  normal;	/*Sets normal or bold */
+		text-align: center;	/* Aligns to center of button */
+		cursor: pointer; /* Pointer/hand icon */
+		width: 15%; /* Set a width if needed */
+		display: inline-block;
+		position: relative;
+		left: 1%;
+		top: 1%;
+		bottom: 1%;
+	}
+	
+	/* Add a background color on hover */
+	.table-button-group button:hover {
+		background-color: #D3D3D3;
+	}
+	
+	/*Created a table info container to hold information about tables*/
+	.table-info {
+		background-color: #A9A9A9 !important; //makes Gray background
+		padding: 1%;
+		margin: 1%;
+		width: 33vw;
+		height: 80vh;
+		right: 1%;
+		display: inline-block;
+		text-align: center;
+		position: absolute;
+	}
+	
+	table {
+		border: 1px solid black;
+		border-collapse: collapse;
+		padding: 5px;
+		width:90%;
+		position:relative;
+		left:10px;
+	}
+</style>
+<head>
+	<script src="../jquery-3.4.1.min.js"></script>
+    <script>
+
+		<!--takes in table number and displays information about that table-->
+		function table(num)
+		{	
+			var t = document.getElementById("headerType");
+			var update = {
+				variant: 'setTable',
+				value: num
+			};
+			
+			t.innerHTML = "TABLE " + num;
+			t.value = num;
+			
+			parent.window.postMessage(update, '*');
+		}
+		
+		//when comp button is pressed
+		
+		function handleComp()
+		{
+			//checks the table number
+			var t = document.getElementById("headerType");
+			var tableNum = parseInt(t.value);
+			//gets the amount input, and the name input
+			var amount = document.getElementById("amt").value;
+			var name = document.getElementById("emp").value;
+			//if the amount is valid, send an ajax request with the table number and amount, then print the result
+			if(amount !== "" && name != "")
+			{
+				var url = 'http://159.89.238.181:8080/api/orders/comp?table=';
+				url = url.concat(tableNum);
+				url = url.concat('&amount=');
+				url = url.concat(amount);
+				url = url.concat('&employee=');
+				url = url.concat(name);
+				$.post(url, function(status) {				
+				var j = $.parseJSON(status);
+				alert(j.message);
+			});
+			}
+			else{
+				alert("Employee name and amount cannot be empty");
+			}
+			
+			document.getElementById("amt").value = "";
+			document.getElementById("emp").value = "";
+		}
+    </script>
+</head>
+<body style="background-color:Black;" onload="table(1)">
+	
+	<!--Creates page to show the tables-->
+	<div class = "tables">
+		<h2>TABLES</h2>
+		<hr color = "black">
+		<!--holds the buttons for the tables-->
+		<div class="table-button-group">
+			<button onclick="table(1)" id="table1">1</button>
+			<button onclick="table(2)" id="table2">2</button>
+			<button onclick="table(3)" id="table3">3</button>
+			<button onclick="table(4)" id="table4">4</button>
+			<button onclick="table(5)" id="table5">5</button>
+			<br><br>
+			<button onclick="table(6)" id="table6">6</button>
+			<button onclick="table(7)" id="table7">7</button>
+			<button onclick="table(8)" id="table8">8</button>
+			<button onclick="table(9)" id="table9">9</button>
+			<button onclick="table(10)" id="table10">10</button>
+			<br><br>
+			<button onclick="table(11)" id="table11">11</button>
+			<button onclick="table(12)" id="table12">12</button>
+			<button onclick="table(13)" id="table13">13</button>
+			<button onclick="table(14)" id="table14">14</button>
+			<button onclick="table(15)" id="table15">15</button>
+			<br><br>
+			<button onclick="table(16)" id="table16">16</button>
+			<button onclick="table(17)" id="table17">17</button>
+			<button onclick="table(18)" id="table18">18</button>
+			<button onclick="table(19)" id="table19">19</button>
+			<button onclick="table(20)" id="table20">20</button>
+		</div>
+	</div>
+	
+	<!--Creates section to show details about specific tables-->
+	<div class = "table-info" id="table-num">
+		<h2 id = "headerType" value=1>TABLE 1</h2>
+		<hr color = "black">
+		<div class="button-group">
+			<button onclick="document.location = '../menu.html'"  style="width:90% !important">ORDER/MODIFY</button>
+			<br>
+			<button onclick="document.location = '../payment.html'"  style="width:90% !important">PAYMENTS</button>
+		</div>
+		<p style="text-align:left;position:relative;left:10px;">ITEMS ORDERED:</p>
+		<table>
+			<tr>
+				<th>
+					DESCRIPTION
+				</th>
+				<th>
+					QTY
+				</th>
+				<th>
+					PRICE
+				</th>
+			</tr>
+		</table>
+		<hr color="black">
+		<div class="button-group">
+			<label>AMOUNT: </label>
+			<input type="number" id="amt" placeholder="0.00" max=100><br><br>
+			<label>EMPLOYEE NAME:</label>
+			<input type="text" id="emp" placeholder="John Doe" size=10 maxlength=30><br><br>
+			<button id="comp" onclick="handleComp()">COMP</button>
+		</div>
+	</div>
+</body>
+</html>

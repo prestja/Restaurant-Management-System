@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+	body {
+		font-family: Arial;
+	}
+	
+	::-webkit-scrollbar { 
+		width: 0px;
+		background: transparent; /* make scrollbar transparent */
+	}
+	
+	/*Create a table to store elements in receipt*/
+	table {
+		border-collapse: collapse;
+		border-spacing: 0;
+		width: 100%;
+		border: 1px solid #ddd;
+	}
+	
+	th, td {
+		text-align: left;
+		padding: 16px;
+	}
+	
+	tr:nth-child(even) {
+		background-color: #f2f2f2;
+	}
+
+
+	.receiptTotals {
+		background-color: none;
+		text-align: right;
+	}
+	
+	.content {
+		width: 100%;
+		height: 90%;
+	}
+	
+	.receiptRow {
+		display: none;
+	}
+
+	#row {
+		display: none;
+	}
+	
+	/*Button group for creating the buttons at top of page*/
+	/*Same button group from the main page*/
+	.button-group button {
+		background-color: #D3D3D3; /*Makes Gray background*/
+		border:  1% #D3D3D3;  /*Border around boxes is Gray*/
+		color: black; /* White text */
+		padding: 10px 10px; /* Some padding */
+		margin: 0;  /* Created space between buttons */
+		font-family: Arial Black, Times, serif; /* sets font */
+		font-size:  16px;	/* Sets size */
+		font-weight:  normal;	/*Sets normal or bold */
+		text-align: center;	/* Aligns to center of button */
+		cursor: pointer; /* Pointer/hand icon */
+		width: 35%; /* Set a width if needed */
+		display: inline-block;
+	}
+
+	/* Add a background color on click */
+	.button-group button:focus {
+		background-color: green;
+	}
+	
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+	var sum = 0.0;	
+	
+	window.addEventListener('message', addReceipt, false);
+	function addReceipt(message){
+		var clone = $("#item_template").clone(true);
+		clone.css('display','table-row');
+		var url = 'http://159.89.238.181:8080/api/items?id=' + message.data.$oid;//.concat();
+		clone.appendTo('.receipt');
+		$.get(url, message.data._id, function(response) { // this response occurs asynchronously			
+			sum = 0.0;
+			clone.children("#item").html(JSON.parse(response).name);
+			clone.children("#price").html(JSON.parse(response).price.toFixed(2));
+			var tmp = JSON.parse(response);
+			var copy = $.extend( true, {}, tmp ); // response goes out of scope and must be deep copied
+			clone.data('item', copy);
+			$('.receipt').find('.receiptRow').each(function (index, item) { // for each item already added into container
+				if ($(item).data('item') != undefined) {
+					sum += $(item).data('item').price;
+				}
+			});
+			$('#SubTot').html('Subtotal: $' + sum.toFixed(2));			
+		})		
+	}
+	
+	//Function to calculate the total of items in the receipt.
+	
+	
+	function printSubTotal(subTotal){
+		document.getElementById("SubTot").innerHtml = subTotal;
+	}
+	
+	function printSalesTax(salesTx){
+		document.getElementById("SlsTax").innerHtml = salesTx;
+	}
+	
+	function printTip(tipAmnt){
+		document.getElementById("Tip") = tipAmnt;
+	}
+	
+	function printFinalTotal(finalTotal){
+		document.getElementById("FinTot").innerHtml = finalTotal;
+	}
+	
+	function submitCoupon(){
+		document.getElementById("CouponCode").reset();
+		
+	}
+	
+</script>
+</head>
+<body style="background-color:white">
+	<table class="receipt">
+		<tr id="header">
+			<td>Item</td>
+			<td>Price</td>
+		</tr>
+	</table>
+	
+	<form id="CouponCode">
+		Apply Coupon Code: <input type="text" id="coupon" name="coupon">
+		<input type="button" value="Submit" onclick="submitCoupon()">
+	</form>
+	<table id="total">
+		<tr>
+			<th id="SubTot">Subtotal: </th>
+		</tr>
+		<tr>
+			<th id="SlsTax">Tax: </th>
+		</tr>
+		<tr>
+			<th id="tip">Gratuity: </th>
+		</tr>
+		<tr>
+			<th id="FinTot">Total: </th>
+		</tr>
+	</table>
+	
+	<br>
+	<div class="button-group">
+		<button>Submit Payment</button>
+	</div>
+		<table>
+			<tr id="item_template" class = 'receiptRow'>
+				<td align="left" id="item"></td>		
+				<td align="right" id="price"></td>
+			</tr>
+		</table>
+</body>
+</html>
+

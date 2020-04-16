@@ -1,0 +1,46 @@
+<html>
+<style>
+	*{
+		margin: 0;
+		padding: 0;
+		text-decoration: none;
+		color: inherit;
+	}
+	
+	body {
+		background-color: white;
+	}
+	
+	.column {
+		background-color: #A9A9A9 !important; //makes Gray background
+		padding: 0%;
+		margin: 1%;
+		width: 40%;
+		height: 40%;
+		display: inline-block;
+		text-align: center;
+		position: absolute;
+	}
+
+	@media screen and (max-width: 600px){
+		.column {
+			width: 100%;
+		}
+	}
+	
+</style>
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
+	<script>
+		window.addEventListener('message', itemName, false);
+		function updateScreen(message) {
+			document.body.innerHTML += message.data + "<br/>";
+		}
+	</script>
+</head>
+<body onclick="updateScreen()">
+
+
+	
+</body>
+</html>

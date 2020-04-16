@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+
+<html>
+<style>
+	* {
+		box-sizing: border-box;
+	}
+
+	body {
+		background-color: black;
+		margin: 0;
+	}
+	
+	/*Created a header container to hold buttons at the top*/
+	.header {
+		padding: 10px;
+		<!-- background-color: blue; -->
+		margin: 0px 0px 0px;
+	}
+	
+/*Button group for creating the buttons at top of page*/
+	/*Same button group from the main page*/
+	.button-group button {
+		background-color: #D3D3D3; /*Makes Gray background*/
+		border:  0px #D3D3D3;  /*Border around boxes is Gray*/
+		color: black; /* White text */
+		padding: 10px 10px; /* Some padding */
+		margin: 0;  /* Created space between buttons */
+		font-family: Arial Black, Times, serif; /* sets font */
+		font-size:  16px;	/* Sets size */
+		font-weight:  normal;	/*Sets normal or bold */
+		text-align: center;	/* Aligns to center of button */
+		cursor: pointer; /* Pointer/hand icon */
+		width: 15vw; /* Set a width if needed */
+		display: inline-block;
+	}
+
+	.button-group button:not(:last-child) {
+		border-right: none; /* Prevent double borders */
+	}
+
+	/* Add a background color on hover */
+	.button-group button:hover {
+		background-color: #3e8e41;
+	}
+	
+	/*Created a left container to hold buttons for the manager navigation*/
+	.left-menu {
+		background-color: #A9A9A9 !important; //makes Gray background
+		padding: 10px;
+		margin: 10px 10px 10px;
+		position: relative;
+		width: 150px;
+		height: 190px;
+		left: 20px;
+		display: inline-block;
+		border: 5px #FFFFFF;
+	}
+	
+	/*Created a menu button similar to header buttons*/
+	.menu-button-group button {
+		background-color: #D3D3D3; /*Makes Gray background*/
+		border:  0px #FFFFFF;  /*Border around boxes is black*/
+		color: black; /* White text */
+		padding: 10px 10px; /* Some padding */
+		margin: 0;  /* Created space between buttons */
+		font-family: Arial Black, Times, serif; /* sets font */
+		font-size:  16px;	/* Sets size */
+		font-weight:  normal;	/*Sets normal or bold */
+		text-align: center;	/* Aligns to center of button */
+		cursor: pointer; /* Pointer/hand icon */
+		width: 86%; /* Set a width if needed */
+		display: inline-block;
+		position: relative;
+		left: 10px;
+		top: 10px;
+		bottom: 10px;
+	}
+	
+	/* Add a background color on hover */
+	.menu-button-group button:hover {
+		background-color: #3e8e41;
+	}
+	
+	/*Created a menu container to hold menu items*/
+	.main-section {
+		background-color: #A9A9A9 !important; //makes Gray background
+		padding: 10px;
+		margin: 10px 10px 10px 10px;
+		width: 70vw;
+		height: 90vh;
+		left: 190px;
+		display: inline-block;
+		text-align: center;
+		position: absolute;
+	}
+		
+	/*Created a menu item button similar to header buttons*/
+	.items-button-group button {
+		background: green; /*Makes green background*/
+		border:  0px #D3D3D3;  /*Border around boxes is Gray*/
+		color: black; /* White text */
+		padding: 10px 10px; /* Some padding */
+		margin-bottom: 10px;  /* Created space between buttons */
+		font-family: Arial Black, Times, serif; /* sets font */
+		font-size:  16px;	/* Sets size */
+		font-weight:  normal;	/*Sets normal or bold */
+		text-align: center;	/* Aligns to center of button */
+		cursor: pointer; /* Pointer/hand icon */
+		display: inline-block;
+		position: relative;
+		left: 10px;
+		top: 10px;
+		bottom: 10px;
+	}
+	
+	/*Created a left container to hold buttons for the manager navigation*/
+	.menu-type {
+		background-color: #A9A9A9 !important; //makes Gray background
+		padding: 10px;
+		margin: 10px 10px 10px;
+		position: absolute;
+		width: 150px;
+		height: 245px;
+		left: 20px;
+		top: 90px;
+		display: inline-block;
+	}
+	
+	/*Created a container to hold menu items*/
+	.items {
+		background-color: #A9A9A9 !important; //makes Gray background
+		padding: 10px;
+		margin: 10px 10px 10px 10px;
+		width: 50%;
+		height: 80%;
+		display: inline-block;
+		text-align: center;
+		border: 5px;
+		border-color: black;
+		position: relative;
+		left: 100px;
+	}
+	
+</style>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+		<!--changes the type of items displayed on the menu-->
+			function menuType(mType)
+			{	
+				var t = document.getElementById("headerType");
+				var frame = document.getElementById('order_items');
+				if(mType === "drinks")
+				{
+					t.innerHTML = "BEVERAGES";
+					frame.src = "menu_category.html?category=3";
+				}
+				else if(mType === "apps")
+				{
+					t.innerHTML = "APPETIZERS";
+					frame.src = "menu_category.html?category=1";
+				}
+				else if(mType === "meals")
+				{
+					t.innerHTML = "ENTREES";
+					frame.src = "menu_category.html?category=0";
+				}
+				else if(mType === "kids")
+				{
+					t.innerHTML = "KIDS MENU";
+					frame.src = "menu_category.html?category=4";
+				}
+				else if(mType === "sweets")
+				{
+					t.innerHTML = "DESSERTS";
+					frame.src = "menu_category.html?category=2";
+				}
+			}
+    </script>
+</head>
+<body style="background-color:Black;">
+	<!--creates buttons in header to go back-->
+	<div class="header">
+
+		<div class="button-group">
+			<button onclick="document.location = '../employee/landing.html'">&#60&#60 BACK</button>
+		</div>
+	
+	</div>
+	
+	<!--Creates left menu for buttons for the different manager pages-->
+	<div class = "left-menu">
+		<div class="menu-button-group">
+			<button onclick="document.location = '86_68.html'">86/68</button>
+			<br><br>
+			<button onclick="document.location = 'tools.html'">TOOLS</button>
+			<br><br>
+			<button onclick="document.location = 'reports.html'">REPORTS</button>
+		</div>
+	</div>
+	
+	<!--Creates page to show 86/68-->
+	<div class = "main-section">
+		<h2>86/68</h2>
+		<hr color = "black">
+		<div class = "menu-type">
+			<div class="menu-button-group">
+				<button onclick="menuType('drinks')">BEVERAGES</button>
+				<br><br>
+				<button onclick="menuType('apps')">APPETIZERS</button>
+				<br><br>
+				<button onclick="menuType('meals')">ENTREES</button>
+				<br><br>
+				<button onclick="menuType('kids')">KIDS</button>
+				<br><br>
+				<button onclick="menuType('sweets')">DESSERTS</button>
+			</div>
+		</div>
+	<!--holds menu items of the type selected in menu-type-->
+		<!--Stores menu items of menu type selected from the buttons, default is beverages-->
+	<div class = "items" id = "menuType">
+		<h2 id = "headerType">BEVERAGES</h2>
+		<hr color = "black">
+		<body>
+			<iframe id = "order_items" src="menu_category.html?category=3" style="width:95%; height: 85%" ></iframe>
+		</body>
+	</div>
+	</div>
+</body>
+</html>

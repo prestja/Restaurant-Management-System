@@ -23,7 +23,9 @@ pub struct Order {
 
 	// default values, not required for deserialization
 	#[serde(default)] id: u32,
-	#[serde(default)] status: u32  // ordered = 0, NeedStaff = 1, NeedManager = 2, Ready = 3, Served = 4, Closed = 5	
+	#[serde(default)] status: u32,  // ordered = 0, NeedStaff = 1, NeedManager = 2, Ready = 3, Served = 4, Closed = 5
+	#[serde(default)] substitutions: String,
+	#[serde(default)] allergies: String	
 }
 
 #[get("/", rank = 4)]
@@ -171,9 +173,43 @@ pub fn get_table_orders(_conn: LogsDbConn, tableid: u32) -> String {
 	return doc_list;
 }
 
+
+#[get("/table?<table>")] 
+pub fn get_table(conn: LogsDbConn, table: u32) -> String {
+	println!("{}", table);
+	let coll = conn.collection("orders");
+	let filter = doc! {
+		"table": table
+	};
+	let mut options = mongodb::coll::options::FindOptions::new();
+	options.sort = Some(doc! {
+		"_id": -1
+	});
+	if let Ok (result) = coll.find_one(Some(filter.clone()), Some(options)) {
+		if let Some(item) = result {
+			let bson = mongodb::to_bson(&item).unwrap();
+            let json = serde_json::ser::to_string(&bson).unwrap();
+            return json;
+		}
+		else {
+			let response = json!({
+                "code": 404,
+                "message": "Supplied table has no orders open or otherwise."
+        	});
+        	return serde_json::to_string(&response).unwrap();
+		}
+	}
+	else {
+		let response = json!({
+            "code": 404,
+            "message": "Error accessing database."
+        });
+        return serde_json::to_string(&response).unwrap();
+	}
+}	
+
 #[get("/comp")]
-pub fn get_comps(_conn: LogsDbConn) -> String
-{
+pub fn get_comps(_conn: LogsDbConn) -> String {
 	let mut _str = String::from("[\n\t");
 	let _doc = doc!{"comp": {"$gte": 0}};
 	let mut _filter = mongodb::coll::options::FindOptions::new();
@@ -207,7 +243,9 @@ pub fn post(conn: LogsDbConn, order: Json<Order>) -> String {
 		"items": inner.items,
 		"status": 0,
 		"total": 43.19,
-		"tip": 5.00 
+		"tip": 5.00,
+		"substitutions": inner.substitutions,
+		"allergies": inner.allergies
 	};	
 	let existing = doc! {
 		"table": inner.table,

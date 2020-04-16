@@ -1,0 +1,170 @@
+<html style = "width: 100%; height: 100%">
+
+<style>    
+    body {
+		margin: 0;
+		font-familY: Arial
+	}
+	
+	::-webkit-scrollbar {
+		width: 0px;
+		background: transparent; /* make scrollbar transparent */
+	}
+	
+	.orders {
+        width: 100%; 
+        height: 100%; 
+        background-color: white;
+        overflow-x:auto;
+        overflow-y: hidden;
+        white-space: nowrap;
+    }
+
+    .ticket {
+        width: 25%;
+        height: 100%;
+        background-color: lightgrey;        
+        margin-right: 1vw;
+        border-radius: 1vw;
+        display: none;
+    }    
+
+    .ticket button {
+        background-color: white;
+        width: 32%;
+        font-family: Arial, sans-serif;
+        color: black;
+        border-radius: 3px;
+    }
+
+    .item {
+        font-family: Arial, sans-serif;
+		color: black;
+		display: none;
+		padding-left:.5vw;
+    }
+</style>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        function addTicket(order) {
+            var clone = $("#ticket_template").clone(true);
+            clone.css('display', 'inline-block');
+			// places all information about this order in the element itself			
+			clone.find("#complete").data("order", order); 
+            clone.find("#callW").data("order", order);
+			clone.find("#callM").data("order", order);
+			// append the extraenous information
+			addSubs(order.substitutions).appendTo(clone.find(".items"));
+			addSpacer().appendTo(clone.find(".items"));			
+			// append the items
+			order.items.forEach(item => 
+				addItem(item).appendTo(clone.find(".items"))				
+            );
+			
+			// append and finishing up
+			clone.appendTo('.orders');
+			clone.find(".table_num").html("Table: " + order.table);
+			clone.find("#complete").click(markComplete);
+			clone.find("#callW").click(callWaiter);
+			clone.find("#callM").click(callManager);
+			if (order.placed != undefined) { 
+				var date = new Date(order.placed.$date.$numberLong);
+				clone.find(".ordered_at").html("Ordered at: " + date.getHours() + ":" + date.getMinutes());
+			}
+            return clone;
+        }
+
+        function addItem(item) {
+            var clone = $("#item_template").clone(true);
+            var url = 'http://159.89.238.181:8080/api/items?id=' + item.$oid;			
+			$.get(url, item._id, function (response) { // sample the item's name from the backend
+				clone.html(JSON.parse(response).name); // and assign it to the element
+			});
+			clone.css('display', 'block');			
+			return clone;
+        }
+		
+		function addSpacer() {
+			var clone = $("#item_template").clone(true);
+			clone.html('<b><p>Ordered items</p></b>');
+			clone.css('display', 'block');
+			return clone;
+		}
+		
+		function addSubs(allergies) {
+			var clone = $("#item_template").clone(true);
+			clone.html('<b>Substitutions</b><p>' + allergies + '</p>');
+			clone.css('display', 'block');
+			return clone;
+		}
+		
+		function callWaiter() {			
+			var url = 'http://159.89.238.181:8080/api/notifications';
+			var data = {
+				table: $(this).data("order").table,
+				variant: 2
+			};
+			$.post(url, JSON.stringify(data), function(response){
+				alert(JSON.parse(response).message);
+			});
+		}
+		
+		function callManager() {
+			var url = 'http://159.89.238.181:8080/api/notifications';
+			var data = {
+				table: $(this).data("order").table,
+				variant: 5
+			};
+			$.post(url, JSON.stringify(data), function(response){
+				alert(JSON.parse(response).message);
+			});
+		}
+
+		function markComplete() {
+			var url = 'http://159.89.238.181:8080/api/orders/status?table=' + $(this).data("order").table + "&status=1";
+			$.post(url, function (response) {
+				setTimeout(function() {
+					location.reload();
+				}, 16);
+			}); // tell backend to mark order as complete		
+		}
+		
+        $(document).ready(function() {
+            $.ajax({
+                url: 'http://159.89.238.181:8080/api/orders/?status=0',
+                type: 'get',
+                dataType: 'JSON',
+                success: function(response) {
+                    response.forEach(order => 
+                        addTicket(order)
+                    );
+                }
+            })
+			setTimeout("location.reload(true);",10000);
+		}); 
+
+    </script>
+    <div class = "ticket" id = "ticket_template">        
+        <div class = "information" style = "height: 15%; background-color: #3EB375; color:white;">
+            <div class = "topRow"> 
+                <button id="callW">Call waitstaff</button>
+                <button id="callM">Call manager</button>
+                <button id="complete">Complete</button>
+            </div>
+            <div class = "bottomRow" style= "padding-left:0.5vw">
+                <p class = "table_num">Table: </p>
+                <p class = "ordered_at">Time: </p>
+            </div>			
+        </div>
+        
+        <div class = "items" style = "height: 90%; background-color:lightgrey; overflow-x: hidden; overflow-y: scroll;"></div>
+    </div>
+
+    <p class = "item" id = "item_template"></p>
+</head>
+
+<body>
+    <div class = "orders"></div>
+</body>
+</html>

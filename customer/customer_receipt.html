@@ -141,6 +141,24 @@
 		$('#FinTot').html('Total: $' + total.toFixed(2));
 	}
 	
+	function submitPayment(){
+		var response = confirm("Are you sure you want to submit your order?");
+		if(response === true){
+			var payment = {
+				total: document.getElementById('FinTot').value,
+				//tip: document.getElementById('tip2').value,
+				status: 5
+			};
+			console.log(JSON.stringify(payment));
+			$.post("http://159.89.238.181:8080/api/payment/", JSON.stringify(payment), function(response){
+				var status = JSON.parse(response);
+				//if(status.code != 200){
+					alert(status.message);
+					console.log(status.message);
+				//}
+			});
+		}
+	}
 	
 </script>
 </head>
@@ -179,7 +197,7 @@
 	
 	<br>
 	<div class="button-group">
-		<button>Submit Payment</button>
+		<button onclick="submitPayment()">Submit Payment</button>
 	</div>
 		<table>
 			<tr id="item_template" class = 'receiptRow'>

@@ -79,6 +79,14 @@
             }
         },
         {
+            "Key": "23ad5e68-10fe-41e2-8ccd-612f946b3e03",
+            "Value": {
+                "id": "a209379f-5a64-4deb-afb2-099ff5a9c27d",
+                "resourcePath": "sprites\\sprBackgroundLevel\\sprBackgroundLevel.yy",
+                "resourceType": "GMSprite"
+            }
+        },
+        {
             "Key": "241134a2-7e72-443c-bcbb-41c854a9adfa",
             "Value": {
                 "id": "be3c550a-2daa-4371-9a7c-91d647fc831f",
@@ -268,6 +276,14 @@
                 "id": "f801168b-bb34-4479-8dc2-1f399f5b2b45",
                 "resourcePath": "views\\5f7ab323-13d8-4d0e-9246-c3910924fb94.yy",
                 "resourceType": "GMFolder"
+            }
+        },
+        {
+            "Key": "641ae1ef-beed-48ab-add8-27b3dad0604b",
+            "Value": {
+                "id": "511fbd9b-5c08-48bf-8623-4f7a4e6a9017",
+                "resourcePath": "objects\\objBackground\\objBackground.yy",
+                "resourceType": "GMObject"
             }
         },
         {
@@ -639,6 +655,14 @@
             }
         },
         {
+            "Key": "e6b8b4d5-943f-4d71-9c6c-8356d7a909c6",
+            "Value": {
+                "id": "8e198f57-5ad5-406c-82a7-ae323a986949",
+                "resourcePath": "scripts\\scrDrawPie\\scrDrawPie.yy",
+                "resourceType": "GMScript"
+            }
+        },
+        {
             "Key": "e6d0f813-1ea1-415d-97ea-99616392a86a",
             "Value": {
                 "id": "f1fd667d-253b-44b2-b085-3294d1aab1e4",
@@ -700,7 +724,8 @@
         "2db0284a-0c3a-4d60-b161-7fa366ce8869",
         "b972d345-e873-445f-967f-f4ffbe13609c",
         "0ff0cada-f666-4668-9aec-08b6d67c847e",
-        "5acfa250-0617-4330-869e-f7ce75199b1d"
+        "5acfa250-0617-4330-869e-f7ce75199b1d",
+        "e6b8b4d5-943f-4d71-9c6c-8356d7a909c6"
     ],
     "tutorial": ""
 }

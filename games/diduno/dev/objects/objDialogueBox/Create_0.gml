@@ -1,6 +1,6 @@
 /// @description Initialize
 cpt_init();
-cols = 40;
+cols = 33;
 rows = 4;
 myType = ct_argument[0];
 mySpeed = ct_argument[1];

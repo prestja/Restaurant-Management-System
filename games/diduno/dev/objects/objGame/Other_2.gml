@@ -13,7 +13,7 @@
 #macro cpt_fastin 2
 #macro cpt_fastout 3
 #macro cpt_slowmid 4
-#macro font_w 12
+#macro font_w 14
 #macro font_h 22
 #macro font_sprite sprFont
 #macro op_open "{"
@@ -86,7 +86,7 @@ global.frameTimer = 0;
 
 enum GameState {
 	None = 0,
-	NewQuestion, WaitingResponse, AnsweredQuestion,
+	RequestPending, NewQuestion, WaitingResponse, AnsweredQuestion,
 	Total
 }
 
@@ -96,11 +96,14 @@ enum QuestionProperties {
 	Total
 }
 
-global.gameState = GameState.NewQuestion;
+global.gameState = GameState.RequestPending;
 questionTimer = 0;
 optionsReferences = [noone, noone, noone, noone];
-questionId = -1;
-lastQuestion = -1;
-maxQuestion = 3;
+questionText = "";
+questionOptions = array_create(4, "");
+questionCorrect = -1;
+requestPending = false;
+httpGet = undefined;
+httpToken = undefined;
 answerCountdown = -1;
 gameScore = 0;

@@ -1,12 +1,22 @@
 ///@description Manage state
+if (global.gameState == GameState.RequestPending) {
+	if (!requestPending) {
+		//Check for a valid token
+		if (httpToken != undefined) {
+			//Request a question
+			httpGet = http_get("https://opentdb.com/api.php?amount=1&category=9&difficulty=easy&encode=base64&type=multiple&token="+httpToken);
+		}
+		else {
+			//Request a new token
+			httpGet = http_get("https://opentdb.com/api_token.php?command=request");
+		}
+		requestPending = true;
+	}
+}
 if (global.gameState == GameState.NewQuestion) {
 	//Create dialogue box
 	if (!db_exists) {
-		//Choose a question from the list
-		questionId = irandom(maxQuestion);
-		if (questionId == lastQuestion) { questionId = wrap(questionId + 1, 0, maxQuestion); }
-		lastQuestion = questionId;
-		db_create(tb_static, x, get_camera_t() + (ideal_h/4), 2, true, scrQuestionGet(questionId, QuestionProperties.Text));
+		db_create(tb_static, x, get_camera_t() + (ideal_h/4), 2, true, questionText);
 	}
 	
 	//Create options
@@ -14,10 +24,10 @@ if (global.gameState == GameState.NewQuestion) {
 		//Create boxes
 		if (!instance_exists(objOption)) {
 			var _y1 = get_camera_t() + floor(5*ideal_h/8), _y2 = get_camera_t() + floor(7*ideal_h/8), _w = half_w(sprOption);
-			optionsReferences[0] = instance_create_v(get_camera_l() - _w, _y1, "InstanceActors", objOption, scrQuestionGet(questionId, QuestionProperties.Option0), 0);
-			optionsReferences[1] = instance_create_v(get_camera_l() - _w, _y2, "InstanceActors", objOption, scrQuestionGet(questionId, QuestionProperties.Option1), 1);
-			optionsReferences[2] = instance_create_v(get_camera_r() + _w, _y1, "InstanceActors", objOption, scrQuestionGet(questionId, QuestionProperties.Option2), 2);
-			optionsReferences[3] = instance_create_v(get_camera_r() + _w, _y2, "InstanceActors", objOption, scrQuestionGet(questionId, QuestionProperties.Option3), 3);
+			optionsReferences[0] = instance_create_v(get_camera_l() - _w, _y1, "InstanceActors", objOption, questionOptions[0], 0);
+			optionsReferences[1] = instance_create_v(get_camera_l() - _w, _y2, "InstanceActors", objOption, questionOptions[1], 1);
+			optionsReferences[2] = instance_create_v(get_camera_r() + _w, _y1, "InstanceActors", objOption, questionOptions[2], 2);
+			optionsReferences[3] = instance_create_v(get_camera_r() + _w, _y2, "InstanceActors", objOption, questionOptions[3], 3);
 		}
 	
 		//Wait for player respone
@@ -48,9 +58,8 @@ else if (global.gameState == GameState.WaitingResponse) {
 else if (global.gameState == GameState.AnsweredQuestion) {
 	if (answerCountdown < 0) {
 		//Change options colors
-		var _correct_option = scrQuestionGet(questionId, QuestionProperties.CorrectOption);
 		for(var i = 0; i < 4; ++i) {
-			if (i == _correct_option) {
+			if (i == questionCorrect) {
 				with(optionsReferences[i]) { event_perform(ev_other, ev_user0); }
 				if (global.optionChosen == i) { optionsReferences[i].image_index = 1; }
 				else { optionsReferences[i].image_index = 2; }
@@ -62,7 +71,7 @@ else if (global.gameState == GameState.AnsweredQuestion) {
 		}
 		
 		//Increase score
-		var _score_increase = (_correct_option == global.optionChosen)? ((questionTimer div GAME_SPEED) + 1)*10 : 0;
+		var _score_increase = (questionCorrect == global.optionChosen)? ((questionTimer div GAME_SPEED) + 1)*10 : 0;
 		gameScore += _score_increase;
 		var _x = get_camera_l() + 6, _y = get_camera_t() + floor(3*ideal_h/8);
 		instance_create_v(_x, _y, "InstanceActors", objScore, "+"+string(_score_increase));
@@ -95,7 +104,7 @@ else if (global.gameState == GameState.AnsweredQuestion) {
 			}
 		}
 		if (_finished_moving) {
-			global.gameState = GameState.NewQuestion;
+			global.gameState = GameState.RequestPending;
 			global.optionChosen = -1;
 			answerCountdown = -1;
 			instance_destroy(objOption);

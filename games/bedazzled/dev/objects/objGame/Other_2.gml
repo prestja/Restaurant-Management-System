@@ -80,8 +80,8 @@ global.game_state = GameState.Player;
 global.combo_level = -1;
 game_score = 0;
 
-global.board_y = get_camera_t() + ((ideal_h - sprite_get_width(sprBackgroundLevel)) / 2);
-global.board_x = get_camera_r() - sprite_get_width(sprBackgroundLevel) - global.board_y;
+global.board_y = get_camera_t() + ((ideal_h - sprite_get_width(sprBackgroundGrid)) / 2);
+global.board_x = get_camera_r() - sprite_get_width(sprBackgroundGrid) - global.board_y;
 
 instance_create_layer(global.board_x, global.board_y, "InstanceActors", objBoard);
 scrEmptyGameGrid();

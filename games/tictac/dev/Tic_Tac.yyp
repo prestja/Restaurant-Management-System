@@ -231,6 +231,14 @@
             }
         },
         {
+            "Key": "6fd0ee20-d9b4-49c9-b300-515e1295ee0a",
+            "Value": {
+                "id": "22075171-f555-48f4-bdb6-ad1618c34df3",
+                "resourcePath": "sprites\\sprBackgroundLevel\\sprBackgroundLevel.yy",
+                "resourceType": "GMSprite"
+            }
+        },
+        {
             "Key": "7228eb92-1966-40c0-aa6b-046ce58acfd9",
             "Value": {
                 "id": "4271d613-e786-4fa9-99e4-d287bd13287a",
@@ -419,6 +427,14 @@
             "Value": {
                 "id": "470d840c-d246-4e09-8ddf-856757b286b2",
                 "resourcePath": "objects\\objPlayer1Marker\\objPlayer1Marker.yy",
+                "resourceType": "GMObject"
+            }
+        },
+        {
+            "Key": "f2c91816-34fd-4326-93f8-a8b24f0ccad3",
+            "Value": {
+                "id": "c706fa5a-ba7d-452b-8e5e-a27aee239e9b",
+                "resourcePath": "objects\\objBackground\\objBackground.yy",
                 "resourceType": "GMObject"
             }
         },

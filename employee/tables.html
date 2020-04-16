@@ -112,12 +112,20 @@
 <head>
 	<script src="../jquery-3.4.1.min.js"></script>
     <script>
+
 		<!--takes in table number and displays information about that table-->
 		function table(num)
 		{	
 			var t = document.getElementById("headerType");
+			var update = {
+				variant: 'setTable',
+				value: num
+			};
+			
 			t.innerHTML = "TABLE " + num;
 			t.value = num;
+			
+			parent.window.postMessage(update, '*');
 		}
 		
 		//when comp button is pressed
@@ -154,15 +162,6 @@
     </script>
 </head>
 <body style="background-color:Black;" onload="table(1)">
-	<!--creates buttons in header to go back-->
-	<div class="header">
-
-		<div class="button-group">
-			<button onclick="document.location = 'landing.html'">&#60&#60 BACK</button>
-		</div>
-	
-	</div>
-	
 	
 	<!--Creates page to show the tables-->
 	<div class = "tables">
@@ -201,7 +200,9 @@
 		<h2 id = "headerType" value=1>TABLE 1</h2>
 		<hr color = "black">
 		<div class="button-group">
-			<button onclick="document.location = 'employee_order_page.html'"  style="width:90% !important">ORDER/MODIFY</button>
+			<button onclick="document.location = '../menu.html'"  style="width:90% !important">ORDER/MODIFY</button>
+			<br>
+			<button onclick="document.location = '../payment.html'"  style="width:90% !important">PAYMENTS</button>
 		</div>
 		<p style="text-align:left;position:relative;left:10px;">ITEMS ORDERED:</p>
 		<table>

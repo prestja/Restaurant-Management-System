@@ -119,7 +119,7 @@
 		border-color: black;
 		position: absolute;
 		left: 200px;
-		width:350px;
+		width:370px;
 	}
 		/*Created a tool button similar to menu buttons*/
 	.tool-button-group button {
@@ -171,12 +171,26 @@
 		td = tr.insertCell(0);
 		var placed = item.placed.$date.$numberLong; //gets the date the order was placed and formats, then adds it onto the table
 		var d = new Date(0);
-		d.setUTCSeconds(placed/1000);
-		month = d.getMonth()+1;
-		day=d.getDate();
-		year = d.getFullYear();
-		d = month + '-' + day + '-' + year;
-		td.append(d);
+			d.setUTCSeconds(placed/1000);
+			if(d.getMonth()+1 < 10)//keeps mm/dd/yyyy format by adding 0's if the month or day is smaller than 10
+			{
+				month = d.getMonth()+1;
+				month = "0" + month;
+			}
+			else{
+				month = d.getMonth()+1;
+			}
+			if(d.getDate() < 10)
+			{
+				day= "0" + d.getDate();
+			}
+			else
+			{
+				day = d.getDate();
+			}
+			year = d.getFullYear();
+			d = month + '/' + day + '/' + year;
+			td.append(d);//appends date for the comp
 		
 		td = document.createElement('td'); //inserts employee name
 		td = tr.insertCell(1);
@@ -191,7 +205,7 @@
 		td.append("$" + item.comp);
 	}
 	}
-		$(document).ready(function() {
+		$(document).ready(function() { //gets all orders
 			var url = "http://159.89.238.181:8080/api/orders/";
 			$.ajax({
 				url: url,
@@ -210,8 +224,26 @@
 		document.getElementById('monthly').style.background = "#D3D3D3";
 		var table, tr, td, textValue;
 		var today = new Date();//gets today and formats it
-		txtValue = new Date();
-		
+		var month, day, year;
+		if(today.getMonth()+1 < 10)
+		{
+			month = today.getMonth()+1;
+			month = "0" + month;
+		}
+		else{
+			month = today.getMonth()+1;
+		}
+		if(today.getDate() < 10)
+		{
+			day= "0" + today.getDate();
+		}
+		else
+		{
+			day = today.getDate();
+		}
+		year = today.getFullYear();
+		today = month + '/' + day + '/' + year;
+
 		table = document.getElementById("comps");//gets sales table and sets the element to the table row
 		tr = table.getElementsByTagName("tr");
 		for(var i = 0; i < tr.length; i++)//for each item in the table, if there is a td in the tr, check if the text value is equal to todays date.
@@ -221,7 +253,7 @@
 			if(td)
 			{
 				txtValue = td.textContent || td.innerText;
-				if (txtValue >= today)
+				if (txtValue == today)
 				{
 					tr[i].style.display = "";
 				}

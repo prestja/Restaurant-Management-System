@@ -157,21 +157,16 @@
 			name : document.getElementById("name").value,
 			start : document.getElementById("startDate").value,
 			end : document.getElementById("endDate").value,
-			amount : parseFloat(document.getElementById("val").value)
+			amount : parseFloat(document.getElementById("val").value),
+			category : -1
 		}
 		console.log(JSON.stringify(request));
 		//posts the object to the backend to be added into the database
-		//$.post("http://159.89.238.181:8080/api/", JSON.stringify(request), function(data, status) {				
-		//		alert(status);
-		//});
-		//resets the data for the object
-			name : document.getElementById("name").value = "";
-			start : document.getElementById("startDate").value = "";
-			end : document.getElementById("endDate").value = "";
-			amount : document.getElementById("val").value = "";
-			alert("Promotion added successfully!");
+		$.post("http://159.89.238.181:8080/api/promotions", JSON.stringify(request), function(data, status) {				
+				alert(status);
+		});
 		}
-		else if(promoType == 'kids'){
+		else if(promoType == 'kids'){//if kids, set default values to keep the promotion for the day
 			var now = new Date();
 			var month = (now.getMonth()+1);
 			var day = now.getDate();
@@ -186,21 +181,16 @@
 			name : "Kids Eat Free",
 			start : today,
 			end : tomorrow,
-			category : 4
-		}
-		console.log(JSON.stringify(request));
+			category : 4,
+			amount : -1
+			}
+			console.log(JSON.stringify(request));
 		//posts the object to the backend to be added into the database
-		//$.post("http://159.89.238.181:8080/api/", JSON.stringify(request), function(data, status) {				
-		//		alert(status);
-		//});
-		//resets the data for the object
-			name : document.getElementById("name").value = "";
-			start : document.getElementById("startDate").value = "";
-			end : document.getElementById("endDate").value = "";
-			amount : document.getElementById("val").value = "";
-			alert("Promotion added successfully!");
+		$.post("http://159.89.238.181:8080/api/promotions", JSON.stringify(request), function(data, status) {				
+				alert(status);
+		});
 		}
-		else if(promoType == 'drinks'){
+		else if(promoType == 'drinks'){//sets promotion to free drinks for the rest of the day
 			var now = new Date();
 			var month = (now.getMonth()+1);
 			var day = now.getDate();
@@ -215,21 +205,20 @@
 			name : "Free Drinks",
 			start : today,
 			end : tomorrow,
-			category : 3
+			category : 3,
+			amount : -1
 		}
 		console.log(JSON.stringify(request));
 		//posts the object to the backend to be added into the database
-		//$.post("http://159.89.238.181:8080/api/", JSON.stringify(request), function(data, status) {				
-		//		alert(status);
-		//});
+		$.post("http://159.89.238.181:8080/api/promotions", JSON.stringify(request), function(data, status) {				
+				alert(status);
+		});
+		}
 		//resets the data for the object
 			name : document.getElementById("name").value = "";
 			start : document.getElementById("startDate").value = "";
 			end : document.getElementById("endDate").value = "";
 			amount : document.getElementById("val").value = "";
-			alert("Promotion added successfully!");
-		}
-		
 	}
     </script>
 </head>
@@ -297,7 +286,7 @@
 						<input type="date" id="endDate">
 						<br><br>
 						<label>Discount Amount:</label>
-						<input type="text" id="val" placeholder="$0.00">
+						<input type="number" id="val" placeholder="0.00">
 						<br><br>
 					</span>
 					<input type ="button" value ="ADD PROMOTION" onclick="handleSubmit()"/>

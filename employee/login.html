@@ -71,28 +71,38 @@
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
+	
 	function login() {
-		var url ='http://159.89.238.181:8080/api/staff/login?id=';
-		url = url.concat(document.getElementById('name').value);
-		url = url.concat("&password=");
-		url = url.concat(document.getElementById('empId').value);
-		$.ajax({
-			url: url,
-			type: 'get',
-			dataType: 'JSON',
-			success: function(response) {
-				switch (response.code) {
-					case 200:
-						window.location.href="landing.html";
-					break;
-					default:
-						alert(response.message);
-					break;
-				}
-				
-			}
-		})
+		//request creates an object
+		let request = {
+			id: document.getElementById("empId").value,
+			password: document.getElementById("pass").value,
+		}
+		//puts object in JSON format and posts
+		console.log(JSON.stringify(request));
+		$.post("http://159.89.238.181:8080/api/timeclock/clockin", JSON.stringify(request), function(data){
+			alert(JSON.parse(data).message);
+		});
+		//reset form data
+		document.getElementById("empId").value = "";
+		document.getElementById("pass").value = "";
 	} 
+	
+	function logout(){
+		//request creates an object
+		let request = {
+			id: document.getElementById("empId").value,
+			password: document.getElementById("pass").value,
+		}
+		//puts object in JSON format and posts
+		console.log(JSON.stringify(request));
+		$.post("http://159.89.238.181:8080/api/timeclock/clockout", JSON.stringify(request), function(data){
+			alert(JSON.parse(data).message);
+		});
+		//reset form data
+		document.getElementById("empId").value = "";
+		document.getElementById("pass").value = "";
+	}
 	
     </script>
 </head>
@@ -102,13 +112,13 @@
 			<h2>Clock in / Clock out</h2>
 			<hr color="black">
 				<label>EMPLOYEE ID:</label>
-				<input type="text" id="name" name="empId" placeholder="abcxxxx" required />
+				<input type="text" id="empId" name="empId" placeholder="abcxxxx" required />
 				<br>
 				<label>PASSWORD:</label>
-				<input type="password" id="empId" name="pass" placeholder="123456" required />
+				<input type="password" id="pass" name="pass" placeholder="123456" required />
 				<br>
 				<button onclick="login()">Clock In</button>
-				<button>Clock out </button>
+				<button onclick="logout()">Clock Out</button>
 		</div>
 	</div>
 </body>

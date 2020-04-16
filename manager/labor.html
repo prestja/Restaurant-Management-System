@@ -112,9 +112,8 @@
 	.items {
 		background-color: #A9A9A9 !important; //makes Gray background
 		padding: 10px;
-		margin: 10px 10px 10px 10px;
-		width: 60vw;
-		height: 300px;
+		margin: 10px;
+		width: 500px;
 		display: inline-block;
 		text-align: center;
 		border: 5px;
@@ -151,6 +150,7 @@
 		position:relative;
 		right:10px;
 		left:5px;
+		margin-bottom:20px;
 	}
 </style>
 <head>
@@ -168,58 +168,67 @@
 		
 			var td = document.createElement('td');//inserts employee id
 			td = tr.insertCell(0);
-			td.append(item.empid);
-		
-			td = document.createElement('td'); //inserts employee name
-			td = tr.insertCell(1);
-			td.append(item.first_name + ' ' + item.last_name);
-		
+			td.append(item.id);
 		
 			td = document.createElement('td'); //inserts start time
-			td = tr.insertCell(2);
+			td = tr.insertCell(1);
 			var cIn = item.clocked_in.$date.$numberLong; //gets the date the order was placed and formats, then adds it onto the table
 			var d = new Date(0);
 			d.setUTCSeconds(cIn/1000);
-			month = d.getMonth()+1;
-			day=d.getDate();
+			if(d.getMonth()+1 < 10)//keeps mm/dd/yyyy format by adding 0's if the month or day is smaller than 10
+			{
+				month = d.getMonth()+1;
+				month = "0" + month;
+			}
+			else{
+				month = d.getMonth()+1;
+			}
+			if(d.getDate() < 10)
+			{
+				day= "0" + d.getDate();
+			}
+			else
+			{
+				day = d.getDate();
+			}
 			year = d.getFullYear();
 			d = month + '/' + day + '/' + year;
 			td.append(d);
 		
 			td = document.createElement('td'); //inserts start time
-			td = tr.insertCell(3);
+			td = tr.insertCell(2);
 			var t = new Date(0);
 			t.setUTCSeconds(cIn/1000);
 			td.append(t.toLocaleTimeString('en-US'));
 		
-			if(item.clocked_out != 'None'){
+			if(item.clocked_out != false){
 			td = document.createElement('td'); //inserts end time
-			td = tr.insertCell(4);
+			td = tr.insertCell(3);
 			var cOut = item.clocked_out.$date.$numberLong;
 			var t = new Date(0);
 			t.setUTCSeconds(cOut/1000);
 			td.append(t.toLocaleTimeString('en-US'));
 		
 			td = document.createElement('td'); //inserts total hours worked
-			td = tr.insertCell(5);
+			td = tr.insertCell(4);
 			var totalHours = cOut - cIn;
 			totalHours = totalHours/1000.0//convert to seconds
 			totalHours = totalHours/60.0;//convert to minutes
 			totalHours = totalHours/60.0;//convert to hours
-			td.append(parseInt(totalHours));
+			td.append(parseFloat(totalHours.toFixed(2)));
 			}
 			else{
 				td = document.createElement('td');
-				td = tr.insertCell(4);
+				td = tr.insertCell(3);
 				td.append("N/A");
 				td = document.createElement('td');
-				td = tr.insertCell(5);
+				td = tr.insertCell(4);
 				td.append("N/A");
 				
 			}
 		}
 	}
-		$(document).ready(function() {
+		$(document).ready(function() {//gets all timeclock instances
 			var url = "http://159.89.238.181:8080/api/timeclock";
 			$.ajax({
 				url: url,
@@ -238,22 +247,36 @@
 		document.getElementById('monthly').style.background = "#D3D3D3";
 		var table, tr, td, textValue;
 		var today = new Date();//gets today
-		var d = String(today.getDate()).padStart(1,'0');
-		var mm = String(today.getMonth()+1).padStart(2,'0');
-		var yyyy = today.getFullYear();
-		today = mm + '/' + d + '/' + yyyy;
+		var month, day, year;
+		if(today.getMonth()+1 < 10)
+		{
+			month = today.getMonth()+1;
+			month = "0" + month;
+		}
+		else{
+			month = today.getMonth()+1;
+		}
+			if(today.getDate() < 10)
+			{
+				day= "0" + today.getDate();
+			}
+			else
+			{
+				day = today.getDate();
+			}
+			year = today.getFullYear();
+			today = month + '/' + day + '/' + year;
+			
 		table = document.getElementById("labor");//gets sales table and sets the element to the table row
 		tr = table.getElementsByTagName("tr");
 		for(var i = 0; i < tr.length; i++)//for each item in the table, if there is a td in the tr, check if the text value is equal to todays date.
 		//if it is todays date, set the display to "", otherwise hide the table row
 		{
-			td = tr[i].getElementsByTagName("td")[2];
+			td = tr[i].getElementsByTagName("td")[1];
 			if(td)
 			{
-				txtValue = new Date();
-				
 				txtValue = td.textContent || td.innerText;
-				if (txtValue === today)
+				if (txtValue == today)
 				{
 					tr[i].style.display = "";
 				}
@@ -281,7 +304,6 @@
 			td = tr[i].getElementsByTagName("td")[1];
 			if(td)
 			{
-				txtValue = new Date();
 				txtValue = td.textContent || td.innerText;
 				if (txtValue <= today || txtValue >= startDate)
 				{
@@ -345,7 +367,6 @@
 				<table style="width:90%" id="labor">
 					<tr>
 						<th>ID</th>
-						<th>NAME</th>
 						<th>DATE</th>
 						<th>START TIME</th>
 						<th>END TIME</th>

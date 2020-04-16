@@ -44,6 +44,7 @@ fn main()
 	// order functions	
 	.mount("/api/orders", routes![orders::get])
 	.mount("/api/orders", routes![orders::get_id])
+	.mount("/api/orders", routes![orders::get_table])
 	.mount("/api/orders", routes![orders::get_status])
 	.mount("/api/orders", routes![orders::post_status])
 	.mount("/api/orders", routes![orders::get_comps])

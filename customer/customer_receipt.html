@@ -95,6 +95,8 @@
 <script>
 	var sum = 0.0;	
 	var tip = 0.00;
+	var total = 0.00;
+	var tax = 0.08;
 	
 	window.addEventListener('message', addReceipt, false);
 	function addReceipt(message){
@@ -116,21 +118,27 @@
 			});
 			$('#SubTot').html('Subtotal: $' + sum.toFixed(2));
 			//Adding sales tax to payment information
-			var tax = 0.08;
+			tax = 0.08;
 			tax *= sum;
 			$('#SlsTax').html('Tax: $' + tax.toFixed(2));
 			//Need to get tip information
 			
-			$('#Tip').html('Gratuity: $' + tip.toFixed(2));
+			//$('#Tip').html('Gratuity: $' + tip.toFixed(2));
 			//Final total 
-			var total = 0.00;
-			total += sum + tax;
+			total = 0.00;
+			total += sum + tax + tip;
 			$('#FinTot').html('Total: $' + total.toFixed(2));
 		})		
 	}
 	
 	function addTip(){
-		
+		document.getElementById("formContainer").style.display = 'none';
+		var x = document.getElementById("tip_input");
+		console.log(x.value);
+		tip = parseFloat(x.value);
+		$('#tip2').html('Gratuity: $' + tip.toFixed(2));
+		total += tip;
+		$('#FinTot').html('Total: $' + total.toFixed(2));
 	}
 	
 	
@@ -156,10 +164,12 @@
 			<th id="SlsTax">Tax: </th>
 		</tr>
 		<tr>
-			<th id="tip">Gratuity: 
-				<div class="tip-button">
-					<button id="tipButton">Add Tip</button>
-				</div>
+			<div id="formContainer">
+				Add Tip: <input type="number" id="tip_input" name="tip" step=".01">
+				<input type="button" value="Submit" onclick="addTip();">
+			</div>
+			
+			<th id="tip2">Gratuity: </th>
 			</th>
 		</tr>
 		<tr>

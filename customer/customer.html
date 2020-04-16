@@ -131,83 +131,116 @@
 			showButton(false);
 		}
 		
+		//controls back button's visibility via state which is true or false
 		function showButton(state) {
+			//Variable 'btn' set to #id for back button
 			var btn = document.getElementById("nav-back");
+			
+			//Switch statement using 'state' variable passed to funciton
 			switch (state) {
+				//case state == true display back button as inline-bock
 				case true:
-				btn.style.display = "inline-block";
-				break;
+					btn.style.display = "inline-block";
+					break;
+				//case state == false back button is hidden from view
 				case false:
-				btn.style.display = "none";
-				break;
+					btn.style.display = "none";
+					break;
 			}
 		}
 		
+		/*
 		function showBtnLocal(){
 			var btn = document.getElementById("nav-back");
 		}
+		*/
 		
+		//Funciton to be used with the 'help' button
 		function goHelp() {
+			//If user chooses yes
 			if (confirm("Do you need assistance from your server?")) {
+				//Variable 'url' assigned address to notifications data base
 				var url = 'http://159.89.238.181:8080/api/notifications';
+				
+				//Variable 'body' is table number and variant
 				var body = {
 					table: table,
 					variant: 0
 				};
-				alert("Your server is on their way!");
-				$.post(url, JSON.stringify(body));
+				alert("Your server is on their way!"); //User alerted 
+				$.post(url, JSON.stringify(body));	//post to DB
 			} else {
+				//Acknowledfe cancel selected
 				alert("Your request has been cancelled");
 			}
-		}		
+		}			
 		
+		//Add event listener from child element
 		window.addEventListener('message', master_listener, false);
 		
+		//Function to receive 'message' from add event listener
 		function master_listener(message) {
+			
 			if(message.data.type == "back" ) {
+				//if .type == string "back" pass .state to showButton()
 				showButton(message.data.state);
 			}
 			else if (message.data.type == "show") {
+				//if .type == string "show" pass to showButton() to display hidden buttons
 				showButton(true);
 			}
 			else if (message.data.type == "hide") {
+				//hides button is string == "hide"
 				showButton(false);
 			}
 			else if(message.data.type == "pin") {
+				//if .type == "pin" do the following
 				if(pin == "" && message.data.pin != "") {
+					//if pin is empty and .data.pin is not
+					//let pin = message.data.pin
 					pin = message.data.pin;
 				}
+				//post to iframe via content window post message
 				document.getElementById("ifrm").contentWindow.postMessage(pin, "*");
-				//showButton(true);
 			}
 			else if(message.data.type == "table") {
+				//If .type == strign table then post content window of iframe
 				document.getElementById("ifrm").contentWindow.postMessage(table, "*");	
 			}
 			else if (message.data.type == "order") {
+				//If .type == string "order" then change frame src to menu.html
 				var frame = document.getElementById("ifrm");
 				frame.src = "../menu.html";
 			}
 			else if (message.data.type == "play") {
+				//If .type == string "play" then show button
 				showButton(true);
+				//Iframe src changed to play.html
 				var frame = document.getElementById("ifrm");
 				frame.src = "play.html";
 			}
 			else if (message.data.type == "pay") {
+				//If .type == string "pay" change frame src to payment.html
 				var frame = document.getElementById("ifrm");
 				frame.src = "../payment.html";
 			}
 			else if (message.data.type == "rewards") {
+				//If .type == string "rewards" change frame src to rewards.html
 				var frame = document.getElementById("ifrm");
 				frame.src = "rewards.html";
 			}
 		}
 		
+		//roulette game function
 		function goRoulette() {
+			//Iframe changed to roulette.html
 			var frame = document.getElementById("ifrm");
 			frame.src = "roulette.html";
 		}
 		
+		//Function handles refills for the customer
 		function goRefills() {
+			//Iframe changed to refills.html
 			var frame = document.getElementById("ifrm");
 			frame.src = "refills.html";
 		}

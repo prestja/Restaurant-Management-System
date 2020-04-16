@@ -233,7 +233,7 @@
 		
 		td = document.createElement('td'); //inserts the total for the order onto the table
 		td = tr.insertCell(4);
-		var total = item.total;//stores the remaining balance and prints out after subtracting each payment from it.
+		var total = item.total + item.tip;//stores the remaining balance and prints out after subtracting each payment from it.
 		if(item.comp != null){//if there is a comp, subtract it from the total
 			for(items in item.payments){
 				var paid = item.payments[items].amount - item.comp/item.payments.length;
@@ -323,8 +323,10 @@
 	}
 	
 	function printBestItem(name){//prints out the best selling item's name to the reports page
-		var element = document.getElementById("best");
-		element.append(name.toUpperCase());
+		if(name != null){
+			var element = document.getElementById("best");
+			element.append(name.toUpperCase());
+		}
 	}
 	
 	function dailyReport(){//filters table to today

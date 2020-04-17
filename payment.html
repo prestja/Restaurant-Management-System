@@ -330,7 +330,9 @@
 <script>
 	//Global payment method selection 0 == card, 1 == cash
 	var payment_method;
-
+	//Global paymet amount to be sent to receipt
+	var payment_amount;
+	
 	//funciton passed its parameter from button onclick below
 	function updatePaymentMethod(){
 		//establish an iframe variable
@@ -350,6 +352,30 @@
 		});
 	}
 	
+	//send notification to servers wanting to pay with cash
+	function sendCashNotification() {
+		var response = confirm("Are you sure you wish to pay cash for this order?");
+	
+		if(response === true){
+			//Create a message to send to notifications page
+			var message = {
+				table: 3,
+				variant: 2,
+				details: "customers wish to pay with cash."
+			};
+		
+			console.log(JSON.stringify(message));
+			$.post('http://159.89.238.181:8080/api/notifications', JSON.stringify(message), function(){
+				var status = JSON.parse(response);
+				
+				if(status.code != 200){
+					alert(status.message);
+					console.log(status.message);
+				}
+			});
+		}	
+	}
+	
 	//Function to open credit card form for payment
 	function openFormCreditCard() {
 		document.getElementById("creditInfo").style.display = "block";
@@ -357,6 +383,19 @@
 	
 	//Function to close the credit card form after submitting
 	function closeFormCreditCard() {
+		//target the iframe to submit charge amount
+		var target = document.getElementById("receipt_screen");
+
+		//click function to submit the amount
+		var submit = $("#submitAmnt-button");
+		var amnt = document.getElementById("creditInfo");
+		payment_amount = parseFloat(amnt.value);
+		console.log("amnt variable");
+		console.log(payment_amount);
+		submit.click( function(){
+	
+		});
+	
 		document.getElementById("creditInfo").style.display = "none";
 	}
 
@@ -389,8 +428,6 @@
 	}
 	
 	function sendTip(){
-		//var x = document.getElementById("myRange");
-		//var x = 20;
 		var tip = 20;
 		var target = document.getElementById("receipt_screen");
 		console.log("Sending tip");
@@ -530,7 +567,7 @@
 
 		<div class="button-group2">
 			<button id="select_card" onclick="openFormCreditCard();updatePaymentMethod()">CARD</button>
-			<button id="select_cash" onclick="updatePaymentMethod()">CASH</button>
+			<button id="select_cash" onclick="sendCashNotification();updatePaymentMethod()">CASH</button>
 			<button id="split" onclick="openFormSplit()">SPLIT</button>
 		</div>
 		
@@ -542,7 +579,7 @@
 				Enter Amount: <input type="number" placeholder="0.00" step=".01" id="creditInfo" required>
 		
 				<span id = "send-amount">
-					<button type="button" class="button" onclick="closeFormCreditCard()">Submit</button>
+					<button type="button" class="button" id="submitAmnt-button" onclick="closeFormCreditCard()">Submit</button>
 				</span>
 			</form>
 		</div>

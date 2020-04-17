@@ -52,6 +52,7 @@ fn main()
 	.mount("/api/orders", routes![orders::comp])
 	.mount("/api/orders", routes![orders::get_table_orders])
 	.mount("/api/orders", routes![orders::apply_promotion])
+	.mount("/api/orders", routes![orders::add_tip])
 	// payment functions
 	.mount("/api/payment", routes![payment::post])
 	// ingredients functions

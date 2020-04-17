@@ -25,7 +25,8 @@ pub struct Order {
 	#[serde(default)] id: u32,
 	#[serde(default)] status: u32,  // ordered = 0, NeedStaff = 1, NeedManager = 2, Ready = 3, Served = 4, Closed = 5
 	#[serde(default)] substitutions: String,
-	#[serde(default)] allergies: String	
+	#[serde(default)] allergies: String,
+	#[serde(default)] total: f32
 }
 
 #[get("/", rank = 4)]
@@ -241,9 +242,9 @@ pub fn post(conn: LogsDbConn, order: Json<Order>) -> String {
 		"table": inner.table,
 		"id": inner.id,
 		"items": inner.items,
-		"status": 0,
-		"total": 43.19,
-		"tip": 5.00,
+		"status": inner.status,
+		"total": inner.total,
+		"tip": 0.00,
 		"substitutions": inner.substitutions,
 		"allergies": inner.allergies
 	};	
@@ -353,3 +354,41 @@ pub fn apply_promotion(_conn: LogsDbConn, id: String, amount: f32) -> String {
         }
 }
 
+#[post("/tip?<id>&<amount>")]
+pub fn add_tip(_conn: LogsDbConn, id: String, amount: f32) -> String {
+	let cast = bson::oid::ObjectId::with_string(id.as_str());
+        let coll = _conn.collection("orders");
+        if let Ok(oid) = cast {
+                let filter = doc! {"_id": oid};
+                let _promo = doc! { "$set": {"tip": amount} };
+                if let Ok (result) = coll.find_one_and_update(filter.clone(),_promo.clone(), None) {
+                        println!("Got a result");
+                        if let Some(item) = result {
+                                let response = json!({
+                                        "code": 200,
+                                        "message": "Successfully updated tip for order"
+                                });
+                                return serde_json::to_string(&response).unwrap();
+                        }
+                                let response = json!({
+                                "code": 404,
+                                "message": "Could not find order to add tip."
+                        });
+                        return serde_json::to_string(&response).unwrap();
+                }
+                else {
+                        let response = json!({
+                                "code": 404,
+                                "message": "Error accessing database."
+                        });
+                        return serde_json::to_string(&response).unwrap();
+                }
+        }
+        else {
+                let response = json!({
+                        "code": 404,
+                        "message": "Invalid or malformed object id."
+                });
+                return serde_json::to_string(&response).unwrap();
+        }
+}

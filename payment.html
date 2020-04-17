@@ -268,6 +268,57 @@
 	.form-container .button:hover, .open-button:hover {
 		opacity: 1;
 	}
+	
+	/****Credit Card****/
+	.credit-popup {
+		display: none;
+		position: fixed;
+		bottom: 50%;
+		right: 5%;
+		border: 3px solid #f1f1f1;
+		z-index: 9;
+	}
+	
+	/* Add styles to the form container */
+	.credit-container {
+		max-width: 100%;
+		padding: 10px;
+		background-color: green;
+	}
+
+	.credit-container input[type=text], .form-container input[type=password] {
+		width: 100%;
+		padding: 15px;
+		margin: 5px 0 22px 0;
+		border: none;
+		background: #f1f1f1;
+	}
+
+	.credit-container input[type=text]:focus, .form-container input[type=password]:focus {
+		background-color: #ddd;
+		outline: none;
+	}
+
+	/* Set a style for the submit/login button */
+	.credit-container .button {
+		background-color: gray;
+		color: white;
+		padding: 16px 20px;
+		border: none;
+		cursor: pointer;
+		width: 100%;
+		margin-bottom:10px;
+		opacity: 0.8;
+	}
+
+
+	.credit-container .cancel {
+		background-color: gray;
+	}
+
+	.credit-container .button:hover, .open-button:hover {
+		opacity: 1;
+	}
 
 	
 </style>
@@ -286,8 +337,9 @@
 		
 		var credit = $("#select_card");
 		credit.click( function() {		//when credit card button clicked assign a payment method == 0
+			
 			payment_method = 0;
-			target.contentWindow.postMessage("card", '*')
+			target.contentWindow.postMessage("card", '*');
 		});
 		
 		var cash = $("#select_cash");
@@ -295,6 +347,14 @@
 			payment_method = 1;
 			target.contentWindow.postMessage("cash", '*');
 		});
+	}
+	
+	function openFormCreditCard() {
+		document.getElementById("creditInfo").style.display = "block";
+	}
+	
+	function closeFormCreditCard() {
+		document.getElementById("creditInfo").style.display = "none";
 	}
 
 	function setup() {
@@ -466,9 +526,22 @@
 		<h2>PAYMENT METHOD</h2>
 
 		<div class="button-group2">
-			<button id="select_card" onclick="updatePaymentMethod()">CARD</button>
+			<button id="select_card" onclick="openFormCreditCard();updatePaymentMethod()">CARD</button>
 			<button id="select_cash" onclick="updatePaymentMethod()">CASH</button>
 			<button id="split" onclick="openFormSplit()">SPLIT</button>
+		</div>
+		
+		<div class="credit-popup" id="creditInfo">
+			<form class="credit-container">
+				<h2>Credit Card Information</h2>
+				
+				<label for="Enter Amount to Charge"</label>
+				Enter Amount: <input type="number" placeholder="0.00" id="creditInfo" required>
+		
+				<span id = "send-amount">
+					<button type="button" class="button" onclick="closeFormCreditCard()">Submit</button>
+				</span>
+			</form>
 		</div>
 		
 		

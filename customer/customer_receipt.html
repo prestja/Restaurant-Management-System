@@ -139,6 +139,13 @@
 		$('#tip2').html('Gratuity: $' + tip.toFixed(2));
 		total += tip;
 		$('#FinTot').html('Total: $' + total.toFixed(2));
+		/*var url = "http://159.89.238.181:8080/api/tip?id="//api call should be mostly done, just need to find a way to get the order ID
+		url = url.concat(id);
+		url = url.concat("&amount=");
+		url = url.concat(parseFloat(tip));
+		$.post(url, function(response)){
+			console.log(response);
+		}*/
 	}
 	
 	function submitPayment(){

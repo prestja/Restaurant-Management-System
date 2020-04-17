@@ -152,17 +152,21 @@
 		var response = confirm("Are you sure you want to submit your order?");
 		if(response === true){
 			var payment = {
-				total: document.getElementById('FinTot').value,
+				//total: document.getElementById('FinTot').value,
 				//tip: document.getElementById('tip2').value,
-				status: 5
+				//table: 11,
+				//status: 5
+				amount: total,
+				method: 0
 			};
 			console.log(JSON.stringify(payment));
-			$.post("http://159.89.238.181:8080/api/payment/", JSON.stringify(payment), function(response){
+			$.post('http://159.89.238.181:8080/api/payment?table=3', JSON.stringify(payment), function(response){
 				var status = JSON.parse(response);
-				//if(status.code != 200){
+				
+				if(status.code != 200){
 					alert(status.message);
 					console.log(status.message);
-				//}
+				}
 			});
 		}
 	}

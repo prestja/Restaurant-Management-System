@@ -93,10 +93,11 @@
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
-	var sum = 0.0;	
-	var tip = 0.00;
-	var total = 0.00;
-	var tax = 0.08;
+	var sum = 0.0;		//sum is used to total all of the items brought in from order
+	var tip = 0.00;		//value changed when user inputs text
+	var total = 0.00;	//used for a final total
+	var tax = 0.08;		//constant tax amount to figure proper total
+	var payment_method; //assign cresit card == 0 or cash == 1
 	
 	window.addEventListener('message', addReceipt, false);
 	function addReceipt(message){

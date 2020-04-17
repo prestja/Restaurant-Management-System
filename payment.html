@@ -276,6 +276,22 @@
     <!--changed to https://... below to remove error-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
+	//Global payment method selection 0 == card, 1 == cash
+	var payment_method;
+
+	//funciton passed its parameter from button onclick below
+	function updatePaymentMethod(){
+		var credit = $("#select_card");
+		credit.click( function() {		//when credit card button clicked assign a payment method == 0
+			payment_method = 0;
+		});
+		
+		var cash = $("#select_cash");
+		cash.click( function() {		//when cash button clicked assign a payment method == 1
+			payment_method = 1;
+		});
+	}
+
 	function setup() {
 		var toggle = {
 			type: "show"
@@ -316,14 +332,14 @@
 	$(document).ready(function() {
 		var queryStr = window.location.search;
 		var category = queryStr.substr(1)
-		var url = "http://159.89.238.181:8080/api/orders?".concat(category);
+		var url = 'http://159.89.238.181:8080/api/orders/table?table=3'.concat(category);
 		$.ajax({
 			url: url,
 			type: 'get',
 			dataType: 'JSON',
 			success: function(response) {
-				console.log(response[0]);
-				updateReceipt(response[0]); // just the first order we get			
+				console.log(response);
+				updateReceipt(response); // just the first order we get			
 			}
 		});
 	});
@@ -445,8 +461,8 @@
 		<h2>PAYMENT METHOD</h2>
 
 		<div class="button-group2">
-			<button onclick="">CARD</button>
-			<button onclick="">CASH</button>
+			<button id="select_card" onclick="updatePaymentMethod()">CARD</button>
+			<button id="select_cash" onclick="updatePaymentMethod()">CASH</button>
 			<button id="split" onclick="openFormSplit()">SPLIT</button>
 		</div>
 		

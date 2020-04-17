@@ -150,28 +150,42 @@ pub fn remove (conn: LogsDbConn, table: u32, id: String) -> String {
 		};
 		if let Ok(result) = coll.find_one_and_update(filter, update, None) {
 			if let Some(item) = result {
-				return String::from("updated?");
+				let response = json!({
+            		"code": 200,
+            		"message": "Successfully removed item from order."
+        		});
+       		 	return serde_json::to_string(&response).unwrap();
 			}
 			else {
-				return String::from("no updated iitem");
+				let response = json!({
+            		"code": 404,
+            		"message": "Failed to find item or order for the specified table."
+        		});
+        		return serde_json::to_string(&response).unwrap();
 			}			
 		}
 		else {
-			return String::from("Database error");
+			let response = json!({
+        		"code": 404,
+        		"message": "Database error."
+    		});
+    		return serde_json::to_string(&response).unwrap();
 		}
 	}
 	else {
-		return String::from("Invalid or malformed oid");
+		let response = json!({
+    		"code": 404,
+    		"message": "Invalid or malformed ObjectID."
+		});
+		return serde_json::to_string(&response).unwrap();
 	}
 }
 
 #[get("/?<tableid>", rank = 2)]
 pub fn get_table_orders(_conn: LogsDbConn, tableid: u32) -> String {
 	let mut doc_list = String::from("[\n\t");
-        let _doc = doc!{"table": tableid};
-	//let mut _filter = mongodb::coll::options::FindOptions::new();
-	//_filter.projection = serde::export::Some(doc!{"items": 1, "_id": 0});
-        let _coll = _conn.collection("orders");
+    let _doc = doc!{"table": tableid};
+    let _coll = _conn.collection("orders");
 	let _itemcoll = _conn.collection("items");
 	let _cursor = _coll.find(Some(_doc.clone()), None).unwrap(); //search for the specified table in the orders database
 	for result in _cursor {

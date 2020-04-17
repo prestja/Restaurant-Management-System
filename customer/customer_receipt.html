@@ -170,7 +170,7 @@
 				//table: 11,
 				//status: 5
 				amount: total,
-				method: 0
+				method: payment_method
 			};
 			console.log(JSON.stringify(payment));
 			$.post('http://159.89.238.181:8080/api/payment?table=3', JSON.stringify(payment), function(response){

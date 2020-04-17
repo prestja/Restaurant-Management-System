@@ -13,6 +13,11 @@
         height: 10%;
         background-color: black;
     }
+	/*Css for the welcome text*/
+	.welcome {
+		height: 10%;
+		background-color: aqua;
+	}
 
 	/*Css for buttons within the navigation class located at top of screen*/
     .navigation button {
@@ -36,6 +41,13 @@
 	.navigation h1 {
 		color: white;
 		display: inline-block;
+		padding-left: 10vw;
+	}
+	
+	/*H2 table number css*/
+	.navigation h2 {
+		color: white;
+		display: inline;
 		padding-left: 10vw;
 	}
 
@@ -246,10 +258,12 @@
 			var n = url.lastIndexOf('=');
 			if (n < 0) {
 				table = 3;
+				document.getElementById('tablenum').innerHTML = 'Table 3';
 				return;
 			}
 			table = parseInt(url.substring(n + 1, url.length));			
 			console.log("Customer page loaded with table " + table);
+			document.getElementById('tablenum').innerHTML = 'Table ' + table;
 		}	
 		
 		function goRoulette() {
@@ -263,13 +277,13 @@
 <body onload="getTableNumber()">
 	<!--On load body calls function getTableNumber()-->
     <!--Navigation buttons-->
-    <div class = "navigation">
+    <div class = "navigation" width: 40%>
         <button id = "nav-back" onclick ="goBack();" >Back</button> <!--back button-->
 		<button id = "nav-help" onclick = "goHelp()">Help</button>	<!--help button-->
         <button id = "nav-refills" onclick="goRefills()">Refills</button><!--refill button-->
 		<h1>Welcome to Not Chilis'</h1> <!--Company Logo-->
+		<h2 id = "tablenum">Table</h2>
     </div>
-
     <!---Content -->
     <div class = "content">
 		<!--Iframe is used to display various pages to the user-->

@@ -288,7 +288,11 @@
 			type: "rewards"
 		}
 		parent.window.postMessage(message, "*");
-		document.location = 'customer/rewards.html';
+		document.getElementById("signup").style.display = "block";
+	}
+	
+	function closeRewardsSignup(){
+		document.getElementById("signup").style.display = "none";
 	}
 
 	function updateReceipt(order){
@@ -380,11 +384,11 @@
 				if(month == birthday[1] && day == birthday[2])
 				{
 					var birthday = document.getElementById("birthday");
-					birthday.innerHTML = "Happy birthday! Check your email for a free dessert!";
+					birthday.innerHTML = "Happy birthday! Check your email at " +  response[0].email + " for a free dessert!";
 				}
 				if(visits == 0)
 				{
-					numVisits.innerHTML = "You have earned a free dessert! Check your email for your coupon on your next visit!";
+					numVisits.innerHTML = "You have earned a free dessert! Check your email at " + response[0].email + " for your coupon on your next visit!";
 				}
 				else
 				{
@@ -401,6 +405,34 @@
 				});
 			}
 		});
+	}
+	function submitForm() {
+			var phone = document.getElementById("phone").value;//gets form information
+			var email = document.getElementById("email").value;
+			var birthday = document.getElementById("birthday").value;
+			
+			var url = "http://159.89.238.181:8080/api/customers/?phone=";//checks to see if phone number exists in system
+			url = url.concat(parseInt(phone));
+			$.get(url, function(response){
+				if(response == "No entries found")//create request if rewards account does not exist and post to the backend.
+				{
+					let request = {
+						phone: phone,
+						email: email,
+						bday: birthday
+					}
+					var url = "http://159.89.238.181:8080/api/customers/";
+					request = JSON.stringify(request);
+					$.post(url, request, function(message){//message is returned from the backend and alerted
+						message = JSON.parse(message);
+						alert(message.message);
+					});
+				}
+				else
+				{
+					alert("Phone number already exists.");
+				}
+			});
 	}
 </script>
 </head>
@@ -422,7 +454,7 @@
 		<div class="addRewards">
 			<div class="rewards-button">
 				<button onclick="goRewards()">SIGN UP</button>
-				<button onclick="openFormRewards()">CURRENT MEMBER</button>
+				<button onclick="openFormRewards()" id ="current">CURRENT MEMBER</button>
 			</div>
 		</div>
 		
@@ -440,6 +472,27 @@
 					<button type="button" class="button" onclick="getRewards()">Login</button>
 				</span>
 				<button type="button" class="button cancel" onclick="closeFormRewards()">Close</button>
+			</form>
+		</div>
+		
+		<div class="rewards-login" id="signup">
+			<form class="form-container">
+				<h1>Member Signup</h1>
+
+				<!--holds form to add a new rewards member-->
+				<label style = "font-family: Arial Black, Times, serif" for ="phone">Phone Number:</label><br><br>
+				<input style = "margin: 0px 0px;"type="number" id="phone" name="phone" placeholder="5555555555"><br><br>
+
+				<label style = "font-family: Arial Black, Times, serif" for ="email">Email:</label><br><br>
+				<input style = "margin: 0px 0px;"type="email" id="email" name="email" placeholder="xxxx@xxxx.com"><br><br>
+
+				<label style = "font-family: Arial Black, Times, serif" for ="birthday">Birthday:</label><br><br>
+				<input style = "margin: 0px 0px;"type="date" id="birthday" name="birthday"><br><br>
+				
+				<span id = "login">
+					<button type="button" class="button" onclick="submitForm()">Signup</button>
+				</span>
+				<button type="button" class="button cancel" onclick="closeRewardsSignup()">Cancel</button>
 			</form>
 		</div>
 		

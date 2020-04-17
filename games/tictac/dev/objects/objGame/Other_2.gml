@@ -22,7 +22,7 @@ global.space_selected = noone;
 
 //Resolution setup
 ideal_w=0;
-ideal_h=480;
+ideal_h=400;
 if (os_browser == browser_not_a_browser) {
 	screen_w=display_get_width();
 	screen_h=display_get_height();

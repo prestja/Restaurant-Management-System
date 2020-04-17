@@ -120,8 +120,7 @@ pub fn get_id (_conn: LogsDbConn, id: String) -> String {
 		}
 		_str.push_str(",\n\t");
 	}
-	if _str.len() <= 3
-	{
+	if _str.len() <= 3 {
 		return String::from("No entries found");
 	}
 	_str.pop();
@@ -129,6 +128,41 @@ pub fn get_id (_conn: LogsDbConn, id: String) -> String {
 	_str.pop();
 	_str.push_str("\n]");
 	return _str;
+}
+
+// removes the specified item from the 
+#[post("/remove?<table>&<id>")]
+pub fn remove (conn: LogsDbConn, table: u32, id: String) -> String {
+	let coll = conn.collection("orders");
+	let cast = bson::oid::ObjectId::with_string(id.as_str());
+	let filter = doc! {
+		"table": table,
+		"status": {
+			"$lt": 5 // where the status of the order is < 5 (not yet paid)
+		}
+	};
+	
+	if let Ok (oid) = cast {
+		let update = doc! { // pulls value from array and removes it
+			"$pull": {
+				"items": oid
+			}
+		};
+		if let Ok(result) = coll.find_one_and_update(filter, update, None) {
+			if let Some(item) = result {
+				return String::from("updated?");
+			}
+			else {
+				return String::from("no updated iitem");
+			}			
+		}
+		else {
+			return String::from("Database error");
+		}
+	}
+	else {
+		return String::from("Invalid or malformed oid");
+	}
 }
 
 #[get("/?<tableid>", rank = 2)]
@@ -147,8 +181,7 @@ pub fn get_table_orders(_conn: LogsDbConn, tableid: u32) -> String {
 					let itemid = value.as_object_id().unwrap();
 					let itemdoc = doc!{"_id": itemid.clone()};
 					let itemcursor = _itemcoll.find(Some(itemdoc.clone()), None).unwrap(); //search through the item database for the item
-					for itemresult in itemcursor
-					{
+					for itemresult in itemcursor {
 						if let Ok(actualitem) = itemresult //if the item is valid
 						{
 							let _bson = mongodb::to_bson(&actualitem).unwrap();

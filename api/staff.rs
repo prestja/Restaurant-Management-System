@@ -47,7 +47,7 @@ pub fn get_all(_conn: LogsDbConn) -> String {
 	return str;
 }
 
-#[get("/<id>")]
+#[get("/?<id>")]
 pub fn get(_conn: LogsDbConn, id: u32) -> String {
 	let mut str = String::from("[\n\t");
 	let doc = doc!{"id": id};

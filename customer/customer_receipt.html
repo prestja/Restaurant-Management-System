@@ -97,17 +97,17 @@
 	var tip = 0.00;		//value changed when user inputs text
 	var total = 0.00;	//used for a final total
 	var tax = 0.08;		//constant tax amount to figure proper total
-	var payment_method; //assign cresit card == 0 or cash == 1
+	var payment_method = 0; //assign cresit card == 0 or cash == 1
 	
 	window.addEventListener('message', addReceipt, false);
 	function addReceipt(message){
 		console.log(message);
 		console.log(message.data);
-		if(message.data === 'card'){
+		if(message.data == 'card'){
 			payment_method = 0;
 			console.log(payment_method);
 		}
-		else if (message.data === 'cash'){
+		else if (message.data == 'cash'){
 			payment_method = 1;
 			console.log(payment_method);
 		}
@@ -170,9 +170,9 @@
 				//table: 11,
 				//status: 5
 				amount: total,
-				method: payment_method
+				method: 0
 			};
-			//console.log(JSON.stringify(payment));
+			console.log(JSON.stringify(payment));
 			$.post('http://159.89.238.181:8080/api/payment?table=3', JSON.stringify(payment), function(response){
 				var status = JSON.parse(response);
 				

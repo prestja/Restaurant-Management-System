@@ -342,13 +342,13 @@
 		credit.click( function() {		//when credit card button clicked assign a payment method == 0
 			
 			payment_method = 0;
-			target.contentWindow.postMessage("card", '*');
+			target.contentWindow.postMessage(payment_method, '*');
 		});
 		
 		var cash = $("#select_cash");
 		cash.click( function() {		//when cash button clicked assign a payment method == 1
 			payment_method = 1;
-			target.contentWindow.postMessage("cash", '*');
+			target.contentWindow.postMessage(payment_method, '*');
 		});
 	}
 	

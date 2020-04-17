@@ -256,6 +256,11 @@
 			table = parseInt(url.substring(n + 1, url.length));			
 			console.log("Customer page loaded with table " + table);
 		}	
+		
+		function goRoulette() {
+			var frame = document.getElementById("ifrm");
+			frame.src = "roulette.html";
+		}
 	</script>
 	
 </head>
@@ -266,7 +271,7 @@
     <div class = "navigation">
         <button id = "nav-back" onclick ="goBack();" >Back</button> <!--back button-->
 		<button id = "nav-help" onclick = "goHelp()">Help</button>	<!--help button-->
-        <button id = "nav-refills" onclick="goRefills()">Refills</button> <!--refill button-->
+        <button id = "nav-refills" onclick="goRefills()">Refills</button><!--refill button-->
 		<h1>Welcome to Not Chilis'</h1> <!--Company Logo-->
     </div>
 

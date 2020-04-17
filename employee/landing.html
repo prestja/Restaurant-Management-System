@@ -141,14 +141,14 @@
 		clone.find("button").data('key', notification);
 		var str ="Table ";
 		str = str.concat(notification.table);
-		str = str.concat(" needs ");
+		str = str.concat(" ");
 		
 		switch(notification.variant) {
 			case 0:
-			str = str.concat(" help");
+			str = str.concat(" needs help");
 			break;
 			case 1:
-			str = str.concat(" refills:");
+			str = str.concat(" needs refills:");
 			console.log(notification.details);
 			for(var k in notification.details) {
 				console.log(k);
@@ -159,18 +159,18 @@
 			}
 			break;
 			case 2:
-				str = str.concat(" waitstaff");
+				str = str.concat(" has an order ready for delivery");
 			break;
 			case 3:
 				//Printed receipt
-				str = str.concat(" a printed receipt");
+				str = str.concat(" needs a printed receipt");
 			break;
 			case 4:
 				//Winner winner chicken dinner
-				str = str.concat(" a reward");
+				str = str.concat(" needs a reward");
 			break;
 			case 5:
-				str = str.concat(" manager");
+				str = str.concat(" needs a manager");
 			break;
 		}
 		console.log(str);

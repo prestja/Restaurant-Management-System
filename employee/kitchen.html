@@ -124,7 +124,17 @@
 		}
 
 		function markComplete() {
+			var notif = 'http://159.89.238.181:8080/api/notifications?table=' + $(this).data('order').table;
+			var data = {
+				variant: 2,
+				table: $(this).data('order').table
+			};
 			var url = 'http://159.89.238.181:8080/api/orders/status?table=' + $(this).data("order").table + "&status=1";
+			
+			$.post(notif, JSON.stringify(data), function (response){
+				console.log('marked order complete');
+			});
+			
 			$.post(url, function (response) {
 				setTimeout(function() {
 					location.reload();

@@ -407,22 +407,24 @@
 		});
 	}
 	function submitForm() {
-			var phone = document.getElementById("phone").value;//gets form information
+			var phone = document.getElementById("phoneNumber").value;//gets form information
 			var email = document.getElementById("email").value;
-			var birthday = document.getElementById("birthday").value;
+			var birthday = document.getElementById("birth").value;
 			
 			var url = "http://159.89.238.181:8080/api/customers/?phone=";//checks to see if phone number exists in system
 			url = url.concat(parseInt(phone));
 			$.get(url, function(response){
+				console.log(response);
 				if(response == "No entries found")//create request if rewards account does not exist and post to the backend.
 				{
 					let request = {
 						phone: phone,
 						email: email,
 						bday: birthday
-					}
+					};
 					var url = "http://159.89.238.181:8080/api/customers/";
 					request = JSON.stringify(request);
+					console.log(request);
 					$.post(url, request, function(message){//message is returned from the backend and alerted
 						message = JSON.parse(message);
 						alert(message.message);
@@ -481,13 +483,13 @@
 
 				<!--holds form to add a new rewards member-->
 				<label style = "font-family: Arial Black, Times, serif" for ="phone">Phone Number:</label><br><br>
-				<input style = "margin: 0px 0px;"type="number" id="phone" name="phone" placeholder="5555555555"><br><br>
+				<input style = "margin: 0px 0px;"type="number" id="phoneNumber" name="phone" placeholder="5555555555"><br><br>
 
 				<label style = "font-family: Arial Black, Times, serif" for ="email">Email:</label><br><br>
 				<input style = "margin: 0px 0px;"type="email" id="email" name="email" placeholder="xxxx@xxxx.com"><br><br>
 
 				<label style = "font-family: Arial Black, Times, serif" for ="birthday">Birthday:</label><br><br>
-				<input style = "margin: 0px 0px;"type="date" id="birthday" name="birthday"><br><br>
+				<input style = "margin: 0px 0px;"type="date" id="birth" name="birthday"><br><br>
 				
 				<span id = "login">
 					<button type="button" class="button" onclick="submitForm()">Sign Up</button>

@@ -342,7 +342,7 @@
 	
 	function getRewards(){
 		var phone = document.getElementById("phone").value;
-		var today = new Date();
+		var today = new Date();//gets todays date to compare with customer birthday
 		var month, day, year;
 		if(today.getMonth()+1 < 10)
 		{
@@ -362,7 +362,7 @@
 			day = today.getDate();
 		}
 		
-		var noPhone = document.getElementById("noPhone");
+		var noPhone = document.getElementById("noPhone");//gets paragraph area to store data if there is no phone number in the system and the number of visits
 		var numVisits = document.getElementById("numVisits");	
 		noPhone.innerHTML="";
 		numVisits.innerHTML="";
@@ -377,27 +377,27 @@
 			else{
 				noPhone.innerHTML="";
 				response = JSON.parse(response);
-				var birthday = response[0].bday.split('-');
+				var birthday = response[0].bday.split('-');//gets birthday by year, month, and date
 				var visits = response[0].visits;
 				visits ++;
-				visits = visits%5;
-				if(month == birthday[1] && day == birthday[2])
+				visits = visits%5;//gets how many visits the person has between rewards
+				if(month == birthday[1] && day == birthday[2])//if month and day match, print out birthday message
 				{
 					var birthday = document.getElementById("birthday");
 					birthday.innerHTML = "Happy birthday! Check your email at " +  response[0].email + " for a free dessert!";
 				}
-				if(visits == 0)
+				if(visits == 0)//if they have 5 visits, print reward message
 				{
 					numVisits.innerHTML = "You have earned a free dessert! Check your email at " + response[0].email + " for your coupon on your next visit!";
 				}
-				else
+				else //if they have less than 5, print how many visits they have
 				{
 					numVisits.innerHTML = "You have " + visits + " visits. On your fifth visit, get emailed a coupon for a free dessert!";
 				}
 				$.post(url, function(response){
 					response = JSON.parse(response);
 					console.log(response);
-					if(response.code == 200)
+					if(response.code == 200)//hide rewards login button if rewards have been added
 					{
 						var login = document.getElementById("login");
 						login.style.display="none";

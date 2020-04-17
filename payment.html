@@ -268,6 +268,57 @@
 	.form-container .button:hover, .open-button:hover {
 		opacity: 1;
 	}
+	
+	/****Credit Card****/
+	.credit-popup {
+		display: none;
+		position: fixed;
+		bottom: 50%;
+		right: 5%;
+		border: 3px solid #f1f1f1;
+		z-index: 9;
+	}
+	
+	/* Add styles to the form container */
+	.credit-container {
+		max-width: 100%;
+		padding: 10px;
+		background-color: green;
+	}
+
+	.credit-container input[type=text], .form-container input[type=password] {
+		width: 100%;
+		padding: 15px;
+		margin: 5px 0 22px 0;
+		border: none;
+		background: #f1f1f1;
+	}
+
+	.credit-container input[type=text]:focus, .form-container input[type=password]:focus {
+		background-color: #ddd;
+		outline: none;
+	}
+
+	/* Set a style for the submit/login button */
+	.credit-container .button {
+		background-color: gray;
+		color: white;
+		padding: 16px 20px;
+		border: none;
+		cursor: pointer;
+		width: 100%;
+		margin-bottom:10px;
+		opacity: 0.8;
+	}
+
+
+	.credit-container .cancel {
+		background-color: gray;
+	}
+
+	.credit-container .button:hover, .open-button:hover {
+		opacity: 1;
+	}
 
 	
 </style>
@@ -275,7 +326,79 @@
 	<link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet'>
     <!--changed to https://... below to remove error-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	
 <script>
+	//Global payment method selection 0 == card, 1 == cash
+	var payment_method;
+	//Global paymet amount to be sent to receipt
+	var payment_amount;
+	
+	//funciton passed its parameter from button onclick below
+	function updatePaymentMethod(){
+		//establish an iframe variable
+		var target = document.getElementById("receipt_screen");
+		
+		var credit = $("#select_card");
+		credit.click( function() {		//when credit card button clicked assign a payment method == 0
+			
+			payment_method = "card";
+			target.contentWindow.postMessage(payment_method, '*');
+		});
+		
+		var cash = $("#select_cash");
+		cash.click( function() {		//when cash button clicked assign a payment method == 1
+			payment_method = "cash";
+			target.contentWindow.postMessage(payment_method, '*');
+		});
+	}
+	
+	//send notification to servers wanting to pay with cash
+	function sendCashNotification() {
+		var response = confirm("Are you sure you wish to pay cash for this order?");
+	
+		if(response === true){
+			//Create a message to send to notifications page
+			var message = {
+				table: 3,
+				variant: 2,
+				details: "customers wish to pay with cash."
+			};
+		
+			console.log(JSON.stringify(message));
+			$.post('http://159.89.238.181:8080/api/notifications', JSON.stringify(message), function(){
+				var status = JSON.parse(response);
+				
+				if(status.code != 200){
+					alert(status.message);
+					console.log(status.message);
+				}
+			});
+		}	
+	}
+	
+	//Function to open credit card form for payment
+	function openFormCreditCard() {
+		document.getElementById("creditInfo").style.display = "block";
+	}
+	
+	//Function to close the credit card form after submitting
+	function closeFormCreditCard() {
+		//target the iframe to submit charge amount
+		var target = document.getElementById("receipt_screen");
+
+		//click function to submit the amount
+		var submit = $("#submitAmnt-button");
+		var amnt = document.getElementById("creditInfo");
+		payment_amount = amnt.value;
+		console.log("amnt variable");
+		console.log(payment_amount);
+		submit.click( function(){
+	
+		});
+	
+		document.getElementById("creditInfo").style.display = "none";
+	}
+
 	function setup() {
 		var toggle = {
 			type: "show"
@@ -305,8 +428,6 @@
 	}
 	
 	function sendTip(){
-		//var x = document.getElementById("myRange");
-		//var x = 20;
 		var tip = 20;
 		var target = document.getElementById("receipt_screen");
 		console.log("Sending tip");
@@ -316,14 +437,14 @@
 	$(document).ready(function() {
 		var queryStr = window.location.search;
 		var category = queryStr.substr(1)
-		var url = "http://159.89.238.181:8080/api/orders?".concat(category);
+		var url = 'http://159.89.238.181:8080/api/orders/table?table=3'.concat(category);
 		$.ajax({
 			url: url,
 			type: 'get',
 			dataType: 'JSON',
 			success: function(response) {
-				console.log(response[0]);
-				updateReceipt(response[0]); // just the first order we get			
+				console.log(response);
+				updateReceipt(response); // just the first order we get			
 			}
 		});
 	});
@@ -445,9 +566,22 @@
 		<h2>PAYMENT METHOD</h2>
 
 		<div class="button-group2">
-			<button onclick="">CARD</button>
-			<button onclick="">CASH</button>
+			<button id="select_card" onclick="openFormCreditCard();updatePaymentMethod()">CARD</button>
+			<button id="select_cash" onclick="sendCashNotification();updatePaymentMethod()">CASH</button>
 			<button id="split" onclick="openFormSplit()">SPLIT</button>
+		</div>
+		
+		<div class="credit-popup" id="creditInfo">
+			<div class="credit-container">
+				<h2>Credit Card Information</h2>
+				
+				<label for="Enter Amount to Charge"</label>
+				Enter Amount: <input type="number" placeholder="0.00" step=".01" value="0.00" id="creditInfo" required>
+		
+				<span id = "send-amount">
+					<button type="button" class="button" id="submitAmnt-button" onclick="closeFormCreditCard()">Submit</button>
+				</span>
+			</div>
 		</div>
 		
 		

@@ -93,13 +93,25 @@
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
-	var sum = 0.0;	
-	var tip = 0.00;
-	var total = 0.00;
-	var tax = 0.08;
+	var sum = 0.0;		//sum is used to total all of the items brought in from order
+	var tip = 0.00;		//value changed when user inputs text
+	var total = 0.00;	//used for a final total
+	var tax = 0.08;		//constant tax amount to figure proper total
+	var payment_method = 0; //assign cresit card == 0 or cash == 1
 	
 	window.addEventListener('message', addReceipt, false);
 	function addReceipt(message){
+		console.log(message);
+		console.log(message.data);
+		if(message.data == 'card'){
+			payment_method = 0;
+			console.log(payment_method);
+		}
+		else if (message.data == 'cash'){
+			payment_method = 1;
+			console.log(payment_method);
+		}
+		else{
 		var clone = $("#item_template").clone(true);
 		clone.css('display','table-row');
 		var url = 'http://159.89.238.181:8080/api/items?id=' + message.data.$oid;//.concat();
@@ -119,7 +131,7 @@
 			$('#SubTot').html('Subtotal: $' + sum.toFixed(2));
 			//Adding sales tax to payment information
 			tax = 0.08;
-			tax *= sum;
+			tax *= sum; 
 			$('#SlsTax').html('Tax: $' + tax.toFixed(2));
 			//Need to get tip information
 			
@@ -128,7 +140,8 @@
 			total = 0.00;
 			total += sum + tax + tip;
 			$('#FinTot').html('Total: $' + total.toFixed(2));
-		})		
+		})
+		}//end else
 	}
 	
 	function addTip(){
@@ -152,17 +165,21 @@
 		var response = confirm("Are you sure you want to submit your order?");
 		if(response === true){
 			var payment = {
-				total: document.getElementById('FinTot').value,
+				//total: document.getElementById('FinTot').value,
 				//tip: document.getElementById('tip2').value,
-				status: 5
+				//table: 11,
+				//status: 5
+				amount: total,
+				method: payment_method
 			};
 			console.log(JSON.stringify(payment));
-			$.post("http://159.89.238.181:8080/api/payment/", JSON.stringify(payment), function(response){
+			$.post('http://159.89.238.181:8080/api/payment?table=3', JSON.stringify(payment), function(response){
 				var status = JSON.parse(response);
-				//if(status.code != 200){
+				
+				if(status.code != 200){
 					alert(status.message);
 					console.log(status.message);
-				//}
+				}
 			});
 		}
 	}

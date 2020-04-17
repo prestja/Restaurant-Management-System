@@ -4,7 +4,8 @@ if (global.gameState == GameState.RequestPending) {
 		//Check for a valid token
 		if (httpToken != undefined) {
 			//Request a question
-			httpGet = http_get("https://opentdb.com/api.php?amount=1&category=9&difficulty=easy&encode=base64&type=multiple&token="+httpToken);
+			var _cat = choose(9, 10, 11, 12, 14);
+			httpGet = http_get("https://opentdb.com/api.php?amount=1&category="+string(_cat)+"&difficulty=easy&encode=base64&type=multiple&token="+httpToken);
 		}
 		else {
 			//Request a new token

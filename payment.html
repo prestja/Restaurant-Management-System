@@ -281,14 +281,19 @@
 
 	//funciton passed its parameter from button onclick below
 	function updatePaymentMethod(){
+		//establish an iframe variable
+		var target = document.getElementById("receipt_screen");
+		
 		var credit = $("#select_card");
 		credit.click( function() {		//when credit card button clicked assign a payment method == 0
 			payment_method = 0;
+			target.contentWindow.postMessage("card", '*')
 		});
 		
 		var cash = $("#select_cash");
 		cash.click( function() {		//when cash button clicked assign a payment method == 1
 			payment_method = 1;
+			target.contentWindow.postMessage("cash", '*');
 		});
 	}
 

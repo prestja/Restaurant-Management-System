@@ -177,7 +177,7 @@
 									var element = document.createElement('input');
 									element.setAttribute('type', 'button');
 									element.setAttribute('value','REMOVE');
-									element.setAttribute('class', response._id.$oid);//class is order id
+									element.setAttribute('class', num);//class is order id
 									element.setAttribute('id', items[menuItem].$oid);//id is item id
 									element.setAttribute('onclick', 'remItem(this.id, this.className)');
 									td = document.createElement('td'); //creates remove button for each item
@@ -194,10 +194,18 @@
 		}
 		
 		//removes an item from an order
-		function remItem(itemId, orderId)
+		function remItem(itemId, tableId)
 		{
 			console.log(itemId);
-			console.log(orderId);
+			console.log(tableId);
+			var url = "http://159.89.238.181:8080/api/orders/remove?table=";
+			url = url.concat(tableId);
+			url = url.concat("&id=");
+			url = url.concat(itemId);
+			$.post(url, function(response){
+				alert("Item removed from order");
+				window.location.reload();
+			});
 		}
 		
 		//when comp button is pressed

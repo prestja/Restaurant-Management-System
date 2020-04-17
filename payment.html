@@ -288,6 +288,7 @@
 			type: "rewards"
 		}
 		parent.window.postMessage(message, "*");
+		document.location = 'customer/rewards.html';
 	}
 
 	function updateReceipt(order){
@@ -335,6 +336,72 @@
 		document.getElementById("myForm").style.display = "none";
 	}
 	
+	function getRewards(){
+		var phone = document.getElementById("phone").value;
+		var today = new Date();
+		var month, day, year;
+		if(today.getMonth()+1 < 10)
+		{
+			month = today.getMonth()+1;
+			month = "0" + month;
+		}
+		else
+		{
+			month = today.getMonth()+1;
+		}
+		if(today.getDate() < 10)
+		{
+			day= "0" + today.getDate();
+		}
+		else
+		{
+			day = today.getDate();
+		}
+		
+		var noPhone = document.getElementById("noPhone");
+		var numVisits = document.getElementById("numVisits");	
+		noPhone.innerHTML="";
+		numVisits.innerHTML="";
+		
+		var url = "http://159.89.238.181:8080/api/customers/?phone=";
+		url = url.concat(phone);
+		$.get(url, function(response){
+			if(response == "No entries found"){
+				noPhone.innerHTML = "No rewards account found.";
+				numVisits.innerHTML = "";
+			}
+			else{
+				noPhone.innerHTML="";
+				response = JSON.parse(response);
+				var birthday = response[0].bday.split('-');
+				var visits = response[0].visits;
+				visits ++;
+				visits = visits%5;
+				if(month == birthday[1] && day == birthday[2])
+				{
+					var birthday = document.getElementById("birthday");
+					birthday.innerHTML = "Happy birthday! Check your email for a free dessert!";
+				}
+				if(visits == 0)
+				{
+					numVisits.innerHTML = "You have earned a free dessert! Check your email for your coupon on your next visit!";
+				}
+				else
+				{
+					numVisits.innerHTML = "You have " + visits + " visits. On your fifth visit, get emailed a coupon for a free dessert!";
+				}
+				$.post(url, function(response){
+					response = JSON.parse(response);
+					console.log(response);
+					if(response.code == 200)
+					{
+						var login = document.getElementById("login");
+						login.style.display="none";
+					}
+				});
+			}
+		});
+	}
 </script>
 </head>
 
@@ -361,12 +428,17 @@
 		
 		<div class="rewards-login" id="myForm">
 			<form class="form-container">
-				<h1>Memeber Login</h1>
+				<h1>Member Login</h1>
 
 				<label for="email"><b>Phone Number</b></label>
-				<input type="text" placeholder="Enter Phone Number" name="phoneNumber" required>
+				<input type="number" placeholder="1234567890" id="phone" required>
 
-				<button type="submit" class="button">Login</button>
+				<p id = "noPhone"></p>
+				<p id = "numVisits"></p>
+				<p id = "birthday"></p>
+				<span id = "login">
+					<button type="button" class="button" onclick="getRewards()">Login</button>
+				</span>
 				<button type="button" class="button cancel" onclick="closeFormRewards()">Close</button>
 			</form>
 		</div>

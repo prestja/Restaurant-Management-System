@@ -22,7 +22,7 @@ global.space_selected = noone;
 
 //Resolution setup
 ideal_w=0;
-ideal_h=400;
+ideal_h=480;
 if (os_browser == browser_not_a_browser) {
 	screen_w=display_get_width();
 	screen_h=display_get_height();
@@ -50,6 +50,7 @@ if(ideal_h & 1) {ideal_h++;}
 //Set zoom level
 if (os_browser == browser_not_a_browser) { zoom = 1; }
 else { zoom = min(screen_w div ideal_w, screen_h div ideal_h); }
+zoom = 1;
 //Set window sizes
 surface_resize(application_surface, ideal_w*zoom, ideal_h*zoom);
 display_set_gui_size(ideal_w, ideal_h);

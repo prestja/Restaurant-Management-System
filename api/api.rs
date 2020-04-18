@@ -63,7 +63,7 @@ fn main()
 	// staff functions
 	.mount("/api/staff", routes![staff::get_all])
 	.mount("/api/staff", routes![staff::get])
-	//.mount("/api/staff", routes![staff::get_login])	-Legacy
+	.mount("/api/staff", routes![staff::get_login])
 	.mount("/api/staff", routes![staff::post])
 	.mount("/api/staff", routes![staff::delete])
 	.mount("/api/staff", routes![staff::modify])

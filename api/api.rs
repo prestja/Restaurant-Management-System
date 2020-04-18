@@ -42,7 +42,7 @@ fn main()
 	.mount("/api/tables", routes![tables::get])
 	//.mount("/api/tables", routes![tables::post])	-Legacy
 	// order functions	
-	.mount("/api/orders", routes![orders::get])
+	.mount("/api/orders", routes![orders::get_all])
 	.mount("/api/orders", routes![orders::get_id])
 	.mount("/api/orders", routes![orders::get_table])
 	.mount("/api/orders", routes![orders::get_status])

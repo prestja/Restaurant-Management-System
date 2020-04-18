@@ -5,7 +5,7 @@ use rocket_contrib::{databases::mongodb};
 use mongodb::{doc, bson};
 use serde_json;
 
-#[get("/tables")]
+#[get("/")]
 pub fn get_all(_conn: LogsDbConn) -> String 
 {
 	let mut str = String::from("[\n\t");
@@ -32,7 +32,7 @@ pub fn get_all(_conn: LogsDbConn) -> String
 	return str;
 }
 
-#[get("/tables/<id>")]
+#[get("/?<id>")]
 pub fn get(_conn: LogsDbConn, id: u32) -> String 
 {
 	let mut str = String::from("[\n\t");

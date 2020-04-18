@@ -30,7 +30,7 @@ pub struct Order {
 }
 
 #[get("/", rank = 4)]
-pub fn get(_conn: LogsDbConn) -> String {
+pub fn get_all(_conn: LogsDbConn) -> String {
 	let mut str = String::from("[\n\t");
 	let _coll = _conn.collection("orders");
 	let cursor = _coll.find(None, None).unwrap();

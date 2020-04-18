@@ -400,6 +400,36 @@
 		}	
 	}
 	
+	//pay to system via credit card
+	function sendCreditCardNotification(){
+	console.log("Called");
+		var response = confirm("Are you sure you wish to pay with a card for this order?");
+	
+		if(response === true){
+			//Create a message to send to notifications page
+			var message = {
+				table: table,
+				variant: 6,
+				details: "customers wish to pay with cash."
+			};
+			
+			//console.log(JSON.stringify(message));
+			$.post('http://159.89.238.181:8080/api/notifications', JSON.stringify(message), function(response){
+				var status = JSON.parse(response);				
+				if(status.code != 200){
+					alert(status.message);
+					//console.log(status.message);
+				} else {
+					var url = 'http://159.89.238.181:8080/api/orders/status?table=' + table + '&status=5'; // signal that this order is now complete
+					console.log(url);
+					$.post(url, function() {
+						window.history.back();
+					});
+				}
+			});
+		}	
+	}
+	
 	//Function to open credit card form for payment
 	function openFormCreditCard() {
 		document.getElementById("creditInfo").style.display = "block";
@@ -576,7 +606,7 @@
 		<h2>PAYMENT METHOD</h2>
 
 		<div class="button-group2">
-			<button id="select_card" onclick="openFormCreditCard();updatePaymentMethod()">CARD</button>
+			<button id="select_card" onclick="sendCreditCardNotification(); updatePaymentMethod()">CARD</button>
 			<button id="select_cash" onclick="sendCashNotification();updatePaymentMethod()">CASH</button>
 			<button id="split" onclick="openFormSplit()">SPLIT</button>
 		</div>

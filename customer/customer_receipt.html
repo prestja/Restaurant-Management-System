@@ -100,12 +100,19 @@
 	var payment_method = 0; //assign credit card == 0 or cash == 1
 	var promotionAmount = 0.00; //adds promotion if the promotion uses an amount instead of a category
 	var promotionExists = false;
+	var kidsEatFree = false;
+	var freeDrinks = false;
+	var kidsEatFreeM = false;
+	var freeDrinksM = false;
 	
 	window.addEventListener('message', addReceipt, false);
 	function addReceipt(message){
 		var promotion = document.getElementById("promotion");
 		//console.log(message);
 		//console.log(message.data);
+		var discount = document.getElementById("coupTotal");
+		console.log(message);
+		console.log(message.data);
 		if(message.data == 'card'){
 			payment_method = 0;
 			//console.log(payment_method);
@@ -144,16 +151,18 @@
 			{
 				clone.children("#price").html("0.00");
 				promotionExists = true;
+				freeDrinks = true;
 				promotion.innerHTML = "Promotion applied: Free Drinks!";
 			}
 			else if(weekday == 1 && hour >= 16 && hour <= 23 && JSON.parse(response).category == 4)//if it is monday between 4 and 11:59 pm, apply free kids meals promo
 			{
 				clone.children("#price").html("0.00");
 				promotionExists = true;
+				kidsEatFree = true;
 				promotion.innerHTML = "Promotion applied: Free Kids Meals!";
 			}
 			else{
-				/*url = 'http://159.89.238.181:8080/api/promotions';
+				url = 'http://159.89.238.181:8080/api/promotions';
 				$.get(url, function(list){
 					list = JSON.parse(list);
 					for(item in list)
@@ -163,21 +172,23 @@
 						
 						if((year < expireDate[0] || (year == expireDate[0] && month < expireDate[1]) || (year == expireDate[0] && month == expireDate[1] && day <= expireDate[2])) && year > startDate[0] || (year == startDate[0] && month > startDate[1]) || (year == startDate[0] && month == startDate[1] && day >= startDate[2]))//if promotion is valid
 						{
-							if(list[item].category == 3 && JSON.parse(response).category == 3 && promotionExists == false)//if no other promotion exists and the category is drinks, change the price of the drinks to 0
+							if(list[item].category == 3 && JSON.parse(response).category == 3 && kidsEatFree == false && freeDrinks == false && KidsEatFreeM == false)//if no other promotion exists and the category is drinks, change the price of the drinks to 0
 							{
 								clone.children("#price").html("0.00");
 								promotionExists = true;
 								promotion.innerHTML = "Promotion applied: Free Drinks!";
+								freeDrinksM = true;
 							}
-							else if(list[item].category == 4 && JSON.parse(response).category == 4 && promotionExists == false)//if no other promotion exists and the category is kids, change the price of the kids meals to 0
+							else if(list[item].category == 4 && JSON.parse(response).category == 4 && kidsEatFree == false && freeDrinks == false && freeDrinksM == false)//if no other promotion exists and the category is kids, change the price of the kids meals to 0
 							{
 								clone.children("#price").html("0.00");
 								promotionExists = true;
+								kidsEatFreeM = true;
 								promotion.innerHTML = "Promotion applied: Free Kids Meals!";
 							}
 						}
 					}
-				}*/
+				});
 			}
 			if(promotionExists == false)
 			{
@@ -198,7 +209,7 @@
 			$('#SlsTax').html('Tax: $' + tax.toFixed(2));
 			//Need to get tip information
 			
-			/*url = 'http://159.89.238.181:8080/api/promotions';
+			url = 'http://159.89.238.181:8080/api/promotions';
 			$.get(url, function(list){
 				list = JSON.parse(list);
 				for(item in list)
@@ -213,15 +224,17 @@
 							promotionExists = true;
 							promotion.innerHTML = "Promotion applied: " + list[item].name + " - $" + list[item].amount.toFixed(2) + " off!";
 							promotionAmount = list[item].amount;
+							total -= promotionAmount;
+							$('#FinTot').html('Total: $' + total.toFixed(2));
 						}
 					}
 				}
-			});*/
+			});
 			
 			//$('#Tip').html('Gratuity: $' + tip.toFixed(2));
 			//Final total 
 			total = 0.00;
-			total += sum + tax + tip - promotionAmount;
+			total += sum + tax + tip;
 			$('#FinTot').html('Total: $' + total.toFixed(2));
 		})
 		}//end else
@@ -307,7 +320,7 @@
 				
 				if(response[item].code.toLowerCase() == coupon)//if the code equals the coupon in the database
 				{
-					if(response[item].amount > sum)//if the amount of the coupon is greater than the subtotal, don't apply the coupon
+					if(response[item].amount > total)//if the amount of the coupon is greater than the subtotal, don't apply the coupon
 					{
 						couponResp.innerHTML = "Cannot apply coupon. Coupon amount is greater than the total.";
 						coupTotal.innerHTML = "Discount: ";

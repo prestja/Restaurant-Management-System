@@ -118,9 +118,10 @@
 		window.addEventListener('message', receivePIN, false);
 
 		// function called whenever landing receives a pin from its parent
+		// function called whenever landing receives a pin from its parent
 		function receivePIN(message) {		
 			if(message.data == "") {
-				var pin2 = prompt("Please enter a pin", "1234");
+				var pin2 = prompt("Please enter a pin to play. All games are FREE.", "1234");
 				if(pin2 === null){
 					return;
 				}
@@ -166,5 +167,6 @@
 	</div>
 
 
+	
 </body>
 </html>

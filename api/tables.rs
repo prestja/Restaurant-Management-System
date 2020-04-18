@@ -60,6 +60,7 @@ pub fn get(_conn: LogsDbConn, id: u32) -> String
 	return str;
 }
 
+/*	-Legacy
 #[post("/tables")]
 pub fn post(_conn: LogsDbConn) -> &'static str 
 {
@@ -78,3 +79,4 @@ pub fn update_table(_conn: LogsDbConn, id: u32, status: u32) -> &'static str
 	_coll.update_one(filter, update, None).unwrap();
 	return "Updated element in database";
 }
+*/

@@ -40,7 +40,7 @@ fn main()
     rocket::ignite()	
 	.mount("/api/tables", routes![tables::get_all])
 	.mount("/api/tables", routes![tables::get])
-	.mount("/api/tables", routes![tables::post])
+	//.mount("/api/tables", routes![tables::post])	-Legacy
 	// order functions	
 	.mount("/api/orders", routes![orders::get])
 	.mount("/api/orders", routes![orders::get_id])
@@ -63,7 +63,7 @@ fn main()
 	// staff functions
 	.mount("/api/staff", routes![staff::get_all])
 	.mount("/api/staff", routes![staff::get])
-	.mount("/api/staff", routes![staff::get_login])
+	//.mount("/api/staff", routes![staff::get_login])	-Legacy
 	.mount("/api/staff", routes![staff::post])
 	.mount("/api/staff", routes![staff::delete])
 	.mount("/api/staff", routes![staff::modify])
@@ -90,7 +90,7 @@ fn main()
 	.mount("/api/coupons", routes![coupons::post])
 	// promotions functions
 	.mount("/api/promotions", routes![promotions::post])
-	//.mount("/api/promotions", routes![promotions::get_all])
+	.mount("/api/promotions", routes![promotions::get_all])
 	// time clock functions
 	.mount("/api/timeclock", routes![timeclock::clock_in])
 	.mount("/api/timeclock", routes![timeclock::clock_out])

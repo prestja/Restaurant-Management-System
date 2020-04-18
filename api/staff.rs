@@ -74,6 +74,7 @@ pub fn get(_conn: LogsDbConn, id: String) -> String {
 	return str;
 }
 
+/*	-Legacy
 #[get("/login?<id>&<password>")]
 pub fn get_login(_conn: LogsDbConn, id: String, password: String) -> String {	
 	let doc = doc!{"id": id, "password": password};
@@ -98,7 +99,7 @@ pub fn get_login(_conn: LogsDbConn, id: String, password: String) -> String {
 		"message": "Invalid employee ID or password!"
 	});
 	return serde_json::to_string(&response).unwrap();
-}
+}*/
 
 #[post("/", data = "<employee>")]
 pub fn post(_conn: LogsDbConn, employee: Json<Employee>) -> String {

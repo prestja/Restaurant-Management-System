@@ -97,7 +97,7 @@
 	var tip = 0.00;		//value changed when user inputs text
 	var total = 0.00;	//used for a final total
 	var tax = 0.08;		//constant tax amount to figure proper total
-	var payment_method = 0; //assign cresit card == 0 or cash == 1
+	var payment_method = 0; //assign credit card == 0 or cash == 1
 	
 	window.addEventListener('message', addReceipt, false);
 	function addReceipt(message){
@@ -184,6 +184,82 @@
 		}
 	}
 	
+	//submits a coupon
+	function submitCoupon()
+	{
+		var coupon = document.getElementById('coupon').value;
+		coupon = coupon.toLowerCase();
+		var exists = false;
+		var couponResp = document.getElementById('couponResp');
+		var couponForm = document.getElementById('CouponCode');
+		var coupTotal = document.getElementById('coupTotal');
+		var totalAfter = document.getElementById('FinTot');
+		var today = new Date();
+		var month, day, year;
+		if(today.getMonth()+1 < 10)
+		{
+			month = today.getMonth()+1;
+			month = "0" + month;
+		}
+		else{
+			month = today.getMonth()+1;
+		}
+		if(today.getDate() < 10)
+		{
+			day= "0" + today.getDate();
+		}
+		else
+		{
+			day = today.getDate();
+		}
+		year = today.getFullYear();
+		
+		var url = 'http://159.89.238.181:8080/api/coupons';
+		$.get(url, function(response){
+			response = JSON.parse(response);
+			for(item in response)
+			{
+				var expireDate = response[item].end.split('-');
+				var startDate = response[item].start.split('-');
+				
+				if(response[item].code.toLowerCase() == coupon)
+				{
+					if(response[item].amount > sum)
+					{
+						couponResp.innerHTML = "Cannot apply coupon. Coupon amount is greater than the total.";
+						coupTotal.innerHTML = "Discount: ";
+						exists = true;
+					}
+					else if(year > expireDate[0] || (year == expireDate[0] && month > expireDate[1]) || (year == expireDate[0] && month == expireDate[1] && day > expireDate[2]))
+					{
+						couponResp.innerHTML = "Cannot apply coupon. Coupon is expired on " + expireDate[1] + "/" + expireDate[2] + "/" + expireDate[0] + ".";
+						coupTotal.innerHTML = "Discount: ";
+						exists = true;
+					}
+					else if(year < startDate[0] || (year == startDate[0] && month < startDate[1]) || (year == startDate[0] && month == startDate[1] && day < startDate[2]))
+					{
+						couponResp.innerHTML = "Cannot apply coupon. Coupon is valid from " + startDate[1] + "/" + startDate[2] + "/" + startDate[0] + " to " + expireDate[1] + "/" + expireDate[2] + "/" + expireDate[0] + ".";
+						coupTotal.innerHTML = "Discount: ";
+						exists = true;
+					}
+					else
+					{
+						couponForm.style.display = 'none';
+						total = total - response[item].amount;
+						coupTotal.innerHTML = "Discount: $" + response[item].amount.toFixed(2); 
+						totalAfter.innerHTML = "Total: $" + total.toFixed(2);
+						exists = true;
+						couponResp.innerHTML = response[item].name + " was applied.";
+					}
+				}
+			}
+		});
+		if(exists == false)
+		{
+			couponResp.innerHTML = "Coupon code not valid.";
+			coupTotal.innerHTML = "Discount: ";
+		}
+	}
 </script>
 </head>
 <body style="background-color:white">
@@ -209,10 +285,14 @@
 			<div id="formContainer">
 				Add Tip: <input type="number" id="tip_input" name="tip" step=".01">
 				<input type="button" value="Submit" onclick="addTip();">
+				<p id = "couponResp"></p>
 			</div>
 			
 			<th id="tip2">Gratuity: </th>
 			</th>
+		</tr>
+		<tr>
+			<th id="coupTotal">Discount: </th>
 		</tr>
 		<tr>
 			<th id="FinTot">Total: </th>

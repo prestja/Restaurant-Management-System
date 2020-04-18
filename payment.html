@@ -402,7 +402,6 @@
 	
 	//pay to system via credit card
 	function sendCreditCardNotification(){
-	console.log("Called");
 		var response = confirm("Are you sure you wish to pay with a card for this order?");
 	
 		if(response === true){
@@ -410,10 +409,9 @@
 			var message = {
 				table: table,
 				variant: 6,
-				details: "customers wish to pay with cash."
+				details: "customer payed with credit card*-."
 			};
 			
-			//console.log(JSON.stringify(message));
 			$.post('http://159.89.238.181:8080/api/notifications', JSON.stringify(message), function(response){
 				var status = JSON.parse(response);				
 				if(status.code != 200){
@@ -426,6 +424,7 @@
 						window.history.back();
 					});
 				}
+				
 			});
 		}	
 	}
@@ -606,7 +605,7 @@
 		<h2>PAYMENT METHOD</h2>
 
 		<div class="button-group2">
-			<button id="select_card" onclick="sendCreditCardNotification(); updatePaymentMethod()">CARD</button>
+			<button id="select_card" onclick="openFormCreditCard(); updatePaymentMethod()">CARD</button>
 			<button id="select_cash" onclick="sendCashNotification();updatePaymentMethod()">CASH</button>
 			<button id="split" onclick="openFormSplit()">SPLIT</button>
 		</div>
@@ -616,10 +615,11 @@
 				<h2>Credit Card Information</h2>
 				
 				<label for="Enter Amount to Charge"</label>
-				Enter Amount: <input type="number" placeholder="0.00" step=".01" value="0.00" id="creditInfo" required>
+				Enter Card NUmber: <br>
+				<input type="number" placeholder="xxxxxxxxxx" step=".01" id="creditInfo" required>
 		
 				<span id = "send-amount">
-					<button type="button" class="button" id="submitAmnt-button" onclick="closeFormCreditCard()">Submit</button>
+					<button type="button" class="button" id="submitAmnt-button" onclick="sendCreditCardNotification(); closeFormCreditCard()">Submit</button>
 				</span>
 			</div>
 		</div>

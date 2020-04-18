@@ -505,7 +505,7 @@
 				if(month == birthday[1] && day == birthday[2])//if month and day match, print out birthday message
 				{
 					var birthday = document.getElementById("birthday");
-					birthday.innerHTML = "Happy birthday! Check your email at " +  response[0].email + " for a free dessert!";
+					birthday.innerHTML = "Happy birthday! Check your email at " +  response[0].email + " for $5 off!";
 				}
 				if(visits == 0)//if they have 5 visits, print reward message
 				{
@@ -513,7 +513,7 @@
 				}
 				else //if they have less than 5, print how many visits they have
 				{
-					numVisits.innerHTML = "You have " + visits + " visits. On your fifth visit, get emailed a coupon for a free dessert!";
+					numVisits.innerHTML = "You have " + visits + " visits. On your fifth visit, get emailed a coupon for $5 off!";
 				}
 				$.post(url, function(response){
 					response = JSON.parse(response);

@@ -175,12 +175,10 @@
 			if(day < 10)
 				day = "0" + day;
 			var today = now.getFullYear() + '-' + month + '-' + day;
-			day = day+1;
-			var tomorrow = now.getFullYear() + '-' + month + '-' + day;
 			let request = {
 			name : "Kids Eat Free",
 			start : today,
-			end : tomorrow,
+			end : today,
 			category : 4,
 			amount : -1
 			}
@@ -199,12 +197,10 @@
 			if(day < 10)
 				day = "0" + day;
 			var today = now.getFullYear() + '-' + month + '-' + day;
-			day = day+1;
-			var tomorrow = now.getFullYear() + '-' + month + '-' + day;
 			let request = {
 			name : "Free Drinks",
 			start : today,
-			end : tomorrow,
+			end : today,
 			category : 3,
 			amount : -1
 		}

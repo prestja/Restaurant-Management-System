@@ -336,8 +336,17 @@
 	
 	window.addEventListener('message', master_listener, false);
 	function master_listener(message) {
-		console.log('Received notifcation from parent');
 		table = message.data; // sample table number from parent document
+		
+		var url = 'http://159.89.238.181:8080/api/orders/table?table='.concat(table);
+		$.ajax({
+			url: url,
+			type: 'get',
+			dataType: 'JSON',
+			success: function(response) {			
+				updateReceipt(response); // just the first order we get			
+			}
+		});
 	}
 	
 	//funciton passed its parameter from button onclick below
@@ -371,13 +380,12 @@
 				details: "customers wish to pay with cash."
 			};
 		
-			console.log(JSON.stringify(message));
+			//console.log(JSON.stringify(message));
 			$.post('http://159.89.238.181:8080/api/notifications', JSON.stringify(message), function(response){
-				var status = JSON.parse(response);
-				
+				var status = JSON.parse(response);				
 				if(status.code != 200){
 					alert(status.message);
-					console.log(status.message);
+					//console.log(status.message);
 				} else {
 					var url = 'http://159.89.238.181:8080/api/orders/status?table=' + table + '&status=5'; // signal that this order is now complete
 					console.log(url);
@@ -443,23 +451,8 @@
 	function sendTip(){
 		var tip = 20;
 		var target = document.getElementById("receipt_screen");
-		console.log("Sending tip");
+		//console.log("Sending tip");
 	}
-	
-	$(document).ready(function() {
-		var queryStr = window.location.search;
-		var category = queryStr.substr(1)
-		var url = 'http://159.89.238.181:8080/api/orders/table?table=3'.concat(category);
-		$.ajax({
-			url: url,
-			type: 'get',
-			dataType: 'JSON',
-			success: function(response) {
-				console.log(response);
-				updateReceipt(response); // just the first order we get			
-			}
-		});
-	});
 	
 	function openFormSplit() {
 		document.getElementById("split").style.display = "block";

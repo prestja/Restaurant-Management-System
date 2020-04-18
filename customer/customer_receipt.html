@@ -104,15 +104,15 @@
 	window.addEventListener('message', addReceipt, false);
 	function addReceipt(message){
 		var promotion = document.getElementById("promotion");
-		console.log(message);
-		console.log(message.data);
+		//console.log(message);
+		//console.log(message.data);
 		if(message.data == 'card'){
 			payment_method = 0;
-			console.log(payment_method);
+			//console.log(payment_method);
 		}
 		else if (message.data == 'cash'){
 			payment_method = 1;
-			console.log(payment_method);
+			//console.log(payment_method);
 		}
 		else{
 		var clone = $("#item_template").clone(true);
@@ -126,20 +126,17 @@
 			var weekday = today.getDay();
 			var hour = today.getHours();
 			var month, day, year;
-			if(today.getMonth()+1 < 10)
-			{
+			if(today.getMonth()+1 < 10) {
 				month = today.getMonth()+1;
 				month = "0" + month;
 			}
-			else{
+			else {
 				month = today.getMonth()+1;
 			}
-			if(today.getDate() < 10)
-			{
+			if (today.getDate() < 10) {
 				day= "0" + today.getDate();
 			}
-			else
-			{
+			else {
 				day = today.getDate();
 			}
 			year = today.getFullYear();

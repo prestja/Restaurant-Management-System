@@ -192,7 +192,6 @@
 		
 		//Function to receive 'message' from add event listener
 		function master_listener(message) {
-			
 			if(message.data.type == "back" ) {
 				//if .type == string "back" pass .state to showButton()
 				showButton(message.data.state);

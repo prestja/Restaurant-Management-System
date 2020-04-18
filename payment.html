@@ -332,6 +332,13 @@
 	var payment_method;
 	//Global paymet amount to be sent to receipt
 	var payment_amount;
+	var table = 0;
+	
+	window.addEventListener('message', master_listener, false);
+	function master_listener(message) {
+		console.log('Received notifcation from parent');
+		table = message.data; // sample table number from parent document
+	}
 	
 	//funciton passed its parameter from button onclick below
 	function updatePaymentMethod(){
@@ -351,7 +358,7 @@
 			target.contentWindow.postMessage(payment_method, '*');
 		});
 	}
-	
+
 	//send notification to servers wanting to pay with cash
 	function sendCashNotification() {
 		var response = confirm("Are you sure you wish to pay cash for this order?");
@@ -359,18 +366,24 @@
 		if(response === true){
 			//Create a message to send to notifications page
 			var message = {
-				table: 3,
-				variant: 2,
+				table: table,
+				variant: 6,
 				details: "customers wish to pay with cash."
 			};
 		
 			console.log(JSON.stringify(message));
-			$.post('http://159.89.238.181:8080/api/notifications', JSON.stringify(message), function(){
+			$.post('http://159.89.238.181:8080/api/notifications', JSON.stringify(message), function(response){
 				var status = JSON.parse(response);
 				
 				if(status.code != 200){
 					alert(status.message);
 					console.log(status.message);
+				} else {
+					var url = 'http://159.89.238.181:8080/api/orders/status?table=' + table + '&status=5'; // signal that this order is now complete
+					console.log(url);
+					$.post(url, function() {
+						location.reload();
+					});
 				}
 			});
 		}	
@@ -404,6 +417,8 @@
 			type: "show"
 		};
 		parent.window.postMessage(toggle, "*");
+		var getTable = {type: "table"};
+		parent.window.postMessage(getTable, "*");
 	}
 	
 	function goRewards() {
@@ -419,8 +434,6 @@
 	}
 
 	function updateReceipt(order){
-		//console.log("Updating receipt");
-		//console.log(order);
 		var target = document.getElementById("receipt_screen");
 		order.items.forEach(items =>
 			target.contentWindow.postMessage(items, '*')
@@ -431,7 +444,6 @@
 		var tip = 20;
 		var target = document.getElementById("receipt_screen");
 		console.log("Sending tip");
-		//console.log(target.contentWindow.postMessage(tip, '*'));
 	}
 	
 	$(document).ready(function() {
@@ -465,21 +477,17 @@
 		var phone = document.getElementById("phone").value;
 		var today = new Date();//gets todays date to compare with customer birthday
 		var month, day, year;
-		if(today.getMonth()+1 < 10)
-		{
+		if(today.getMonth()+1 < 10) {
 			month = today.getMonth()+1;
 			month = "0" + month;
 		}
-		else
-		{
+		else {
 			month = today.getMonth()+1;
 		}
-		if(today.getDate() < 10)
-		{
+		if(today.getDate() < 10) {
 			day= "0" + today.getDate();
 		}
-		else
-		{
+		else {
 			day = today.getDate();
 		}
 		

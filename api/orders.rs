@@ -230,7 +230,7 @@ pub fn get_table(conn: LogsDbConn, table: u32) -> String {
 		"table": table
 	};
 	let mut options = mongodb::coll::options::FindOptions::new();
-	options.sort = Some(doc! {
+	options.sort = Some(doc! { // sorts by most recently added
 		"_id": -1
 	});
 	if let Ok (result) = coll.find_one(Some(filter.clone()), Some(options)) {

@@ -98,9 +98,12 @@
 	var total = 0.00;	//used for a final total
 	var tax = 0.08;		//constant tax amount to figure proper total
 	var payment_method = 0; //assign credit card == 0 or cash == 1
+	var promotionAmount = 0.00; //adds promotion if the promotion uses an amount instead of a category
+	var promotionExists = false;
 	
 	window.addEventListener('message', addReceipt, false);
 	function addReceipt(message){
+		var promotion = document.getElementById("promotion");
 		console.log(message);
 		console.log(message.data);
 		if(message.data == 'card'){
@@ -119,7 +122,70 @@
 		$.get(url, message.data._id, function(response) { // this response occurs asynchronously			
 			sum = 0.0;
 			clone.children("#item").html(JSON.parse(response).name);
-			clone.children("#price").html(JSON.parse(response).price.toFixed(2));
+			var today = new Date();
+			var weekday = 0//today.getDay();
+			var hour = today.getHours();
+			var month, day, year;
+			if(today.getMonth()+1 < 10)
+			{
+				month = today.getMonth()+1;
+				month = "0" + month;
+			}
+			else{
+				month = today.getMonth()+1;
+			}
+			if(today.getDate() < 10)
+			{
+				day= "0" + today.getDate();
+			}
+			else
+			{
+				day = today.getDate();
+			}
+			year = today.getFullYear();
+			if(weekday == 0 && hour >= 16 && hour <= 23 && JSON.parse(response).category == 3)
+			{
+				clone.children("#price").html("0.00");
+				promotionExists = true;
+				promotion.innerHTML = "Promotion applied: Free Drinks!";
+			}
+			else if(weekday == 1 && hour >= 16 && hour <= 23 && JSON.parse(response).category == 4)
+			{
+				clone.children("#price").html("0.00");
+				promotionExists = true;
+				promotion.innerHTML = "Promotion applied: Free Kids Meals!";
+			}
+			else{
+				/*url = 'http://159.89.238.181:8080/api/promotions';
+				$.get(url, function(list){
+					list = JSON.parse(list);
+					for(item in list)
+					{
+						var expireDate = list[item].end.split('-');//gets expiration date
+						var startDate = list[item].start.split('-');//gets start date
+						
+						if((year < expireDate[0] || (year == expireDate[0] && month < expireDate[1]) || (year == expireDate[0] && month == expireDate[1] && day <= expireDate[2])) && year > startDate[0] || (year == startDate[0] && month > startDate[1]) || (year == startDate[0] && month == startDate[1] && day >= startDate[2]))//if promotion is valid
+						{
+							if(list[item].category == 3 && JSON.parse(response).category == 3 && promotionExists == false)//if no other promotion exists and the category is drinks, change the price of the drinks to 0
+							{
+								clone.children("#price").html("0.00");
+								promotionExists = true;
+								promotion.innerHTML = "Promotion applied: Free Drinks!";
+							}
+							else if(list[item].category == 4 && JSON.parse(response).category == 4 && promotionExists == false)//if no other promotion exists and the category is kids, change the price of the kids meals to 0
+							{
+								clone.children("#price").html("0.00");
+								promotionExists = true;
+								promotion.innerHTML = "Promotion applied: Free Kids Meals!";
+							}
+						}
+					}
+				}*/
+			}
+			if(promotionExists == false)
+			{
+				clone.children("#price").html(JSON.parse(response).price.toFixed(2));
+			}
 			var tmp = JSON.parse(response);
 			var copy = $.extend( true, {}, tmp ); // response goes out of scope and must be deep copied
 			clone.data('item', copy);
@@ -135,10 +201,30 @@
 			$('#SlsTax').html('Tax: $' + tax.toFixed(2));
 			//Need to get tip information
 			
+			/*url = 'http://159.89.238.181:8080/api/promotions';
+			$.get(url, function(list){
+				list = JSON.parse(list);
+				for(item in list)
+				{
+					var expireDate = list[item].end.split('-');//gets expiration date
+					var startDate = list[item].start.split('-');//gets start date
+						
+					if((year < expireDate[0] || (year == expireDate[0] && month < expireDate[1]) || (year == expireDate[0] && month == expireDate[1] && day <= expireDate[2])) && year > startDate[0] || (year == startDate[0] && month > startDate[1]) || (year == startDate[0] && month == startDate[1] && day >= startDate[2]))//if promotion is valid
+					{
+						if(list[item].amount > 0 && promotionExists == false && list[item].amount < sum)//if a promotion is not currently being applied and the promotion amount is not greater than the subtotal
+						{
+							promotionExists = true;
+							promotion.innerHTML = "Promotion applied: " + list[item].name + " - $" + list[item].amount.toFixed(2) + " off!";
+							promotionAmount = list[item].amount;
+						}
+					}
+				}
+			});*/
+			
 			//$('#Tip').html('Gratuity: $' + tip.toFixed(2));
 			//Final total 
 			total = 0.00;
-			total += sum + tax + tip;
+			total += sum + tax + tip - promotionAmount;
 			$('#FinTot').html('Total: $' + total.toFixed(2));
 		})
 		}//end else
@@ -187,14 +273,14 @@
 	//submits a coupon
 	function submitCoupon()
 	{
-		var coupon = document.getElementById('coupon').value;
+		var coupon = document.getElementById('coupon').value;//gets the coupon code typed in
 		coupon = coupon.toLowerCase();
 		var exists = false;
-		var couponResp = document.getElementById('couponResp');
-		var couponForm = document.getElementById('CouponCode');
-		var coupTotal = document.getElementById('coupTotal');
-		var totalAfter = document.getElementById('FinTot');
-		var today = new Date();
+		var couponResp = document.getElementById('couponResp');//gets the area that stores the response from the coupon
+		var couponForm = document.getElementById('CouponCode');//gets the area where the coupon form is stored
+		var coupTotal = document.getElementById('coupTotal');//gets where the coupon total will be stored
+		var totalAfter = document.getElementById('FinTot');//gets where the final total is stored
+		var today = new Date();//creates new date with day, month, and year
 		var month, day, year;
 		if(today.getMonth()+1 < 10)
 		{
@@ -215,34 +301,34 @@
 		year = today.getFullYear();
 		
 		var url = 'http://159.89.238.181:8080/api/coupons';
-		$.get(url, function(response){
+		$.get(url, function(response){//gets list of all coupons
 			response = JSON.parse(response);
-			for(item in response)
+			for(item in response)//for each coupon
 			{
-				var expireDate = response[item].end.split('-');
-				var startDate = response[item].start.split('-');
+				var expireDate = response[item].end.split('-');//gets expiration date
+				var startDate = response[item].start.split('-');//gets start date
 				
-				if(response[item].code.toLowerCase() == coupon)
+				if(response[item].code.toLowerCase() == coupon)//if the code equals the coupon in the database
 				{
-					if(response[item].amount > sum)
+					if(response[item].amount > sum)//if the amount of the coupon is greater than the subtotal, don't apply the coupon
 					{
 						couponResp.innerHTML = "Cannot apply coupon. Coupon amount is greater than the total.";
 						coupTotal.innerHTML = "Discount: ";
 						exists = true;
 					}
-					else if(year > expireDate[0] || (year == expireDate[0] && month > expireDate[1]) || (year == expireDate[0] && month == expireDate[1] && day > expireDate[2]))
+					else if(year > expireDate[0] || (year == expireDate[0] && month > expireDate[1]) || (year == expireDate[0] && month == expireDate[1] && day > expireDate[2]))//if the coupon is expired, dont apply the coupon
 					{
 						couponResp.innerHTML = "Cannot apply coupon. Coupon is expired on " + expireDate[1] + "/" + expireDate[2] + "/" + expireDate[0] + ".";
 						coupTotal.innerHTML = "Discount: ";
 						exists = true;
 					}
-					else if(year < startDate[0] || (year == startDate[0] && month < startDate[1]) || (year == startDate[0] && month == startDate[1] && day < startDate[2]))
+					else if(year < startDate[0] || (year == startDate[0] && month < startDate[1]) || (year == startDate[0] && month == startDate[1] && day < startDate[2]))//if the coupon is not valid yet, don't apply the coupon
 					{
 						couponResp.innerHTML = "Cannot apply coupon. Coupon is valid from " + startDate[1] + "/" + startDate[2] + "/" + startDate[0] + " to " + expireDate[1] + "/" + expireDate[2] + "/" + expireDate[0] + ".";
 						coupTotal.innerHTML = "Discount: ";
 						exists = true;
 					}
-					else
+					else//if the coupon is valid, apply the coupon amount to the total
 					{
 						couponForm.style.display = 'none';
 						total = total - response[item].amount;
@@ -250,15 +336,16 @@
 						totalAfter.innerHTML = "Total: $" + total.toFixed(2);
 						exists = true;
 						couponResp.innerHTML = response[item].name + " was applied.";
+						break;
 					}
 				}
 			}
+			if(exists == false)//if the coupon does not exist, print the coupon is not valid
+			{
+				couponResp.innerHTML = "Coupon code not valid.";
+				coupTotal.innerHTML = "Discount: ";
+			}
 		});
-		if(exists == false)
-		{
-			couponResp.innerHTML = "Coupon code not valid.";
-			coupTotal.innerHTML = "Discount: ";
-		}
 	}
 </script>
 </head>
@@ -270,11 +357,12 @@
 		</tr>
 	</table>
 	
-	<form id="CouponCode">
+	<form id="CouponCode"><!--holds form for coupons-->
 		Apply Coupon Code: <input type="text" id="coupon" name="coupon">
 		<input type="button" value="Submit" onclick="submitCoupon()">
 	</form>
-	<table id="total">
+	<p id = "couponResp"></p>
+	<table id="total"><!--table holds all checkout information-->
 		<tr>
 			<th id="SubTot">Subtotal: </th>
 		</tr>
@@ -285,7 +373,6 @@
 			<div id="formContainer">
 				Add Tip: <input type="number" id="tip_input" name="tip" step=".01">
 				<input type="button" value="Submit" onclick="addTip();">
-				<p id = "couponResp"></p>
 			</div>
 			
 			<th id="tip2">Gratuity: </th>
@@ -298,7 +385,8 @@
 			<th id="FinTot">Total: </th>
 		</tr>
 	</table>
-	
+	<!--stores promotion information if there is one going on-->
+	<p id = "promotion"></p>
 	<br>
 	<div class="button-group">
 		<button onclick="submitPayment()">Submit Payment</button>

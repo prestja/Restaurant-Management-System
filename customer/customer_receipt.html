@@ -104,9 +104,10 @@
 	var freeDrinks = false;
 	var kidsEatFreeM = false;
 	var freeDrinksM = false;
-	
+	var count = 0;
 	window.addEventListener('message', addReceipt, false);
 	function addReceipt(message){
+		count++;
 		var promotion = document.getElementById("promotion");
 		//console.log(message);
 		//console.log(message.data);
@@ -152,14 +153,46 @@
 				clone.children("#price").html("0.00");
 				promotionExists = true;
 				freeDrinks = true;
+				promotionAmount += JSON.parse(response).price;
 				promotion.innerHTML = "Promotion applied: Free Drinks!";
+				sum = 0;
+				$('.receipt').find('.receiptRow').each(function (index, item) { // for each item already added into container
+					if ($(item).data('item') != undefined) {
+						sum += $(item).data('item').price;
+					}
+				});
+				sum -= promotionAmount;
+				$('#SubTot').html('Subtotal: $' + sum.toFixed(2));
+				//Adding sales tax to payment information
+				tax = 0.08;
+				tax *= sum; 
+				$('#SlsTax').html('Tax: $' + tax.toFixed(2));
+				total = 0.00;
+				total += sum + tax + tip;
+				$('#FinTot').html('Total: $' + total.toFixed(2));
 			}
 			else if(weekday == 1 && hour >= 16 && hour <= 23 && JSON.parse(response).category == 4)//if it is monday between 4 and 11:59 pm, apply free kids meals promo
 			{
 				clone.children("#price").html("0.00");
 				promotionExists = true;
 				kidsEatFree = true;
+				promotionAmount += JSON.parse(response).price;
 				promotion.innerHTML = "Promotion applied: Free Kids Meals!";
+				sum = 0;
+				$('.receipt').find('.receiptRow').each(function (index, item) { // for each item already added into container
+					if ($(item).data('item') != undefined) {
+						sum += $(item).data('item').price;
+					}
+				});
+				sum -= promotionAmount;
+				$('#SubTot').html('Subtotal: $' + sum.toFixed(2));
+				//Adding sales tax to payment information
+				tax = 0.08;
+				tax *= sum; 
+				$('#SlsTax').html('Tax: $' + tax.toFixed(2));
+				total = 0.00;
+				total += sum + tax + tip;
+				$('#FinTot').html('Total: $' + total.toFixed(2));
 			}
 			else{
 				url = 'http://159.89.238.181:8080/api/promotions';
@@ -170,38 +203,72 @@
 						var expireDate = list[item].end.split('-');//gets expiration date
 						var startDate = list[item].start.split('-');//gets start date
 						
-						if((year < expireDate[0] || (year == expireDate[0] && month < expireDate[1]) || (year == expireDate[0] && month == expireDate[1] && day <= expireDate[2])) && year > startDate[0] || (year == startDate[0] && month > startDate[1]) || (year == startDate[0] && month == startDate[1] && day >= startDate[2]))//if promotion is valid
+						if((year <= expireDate[0] || (year == expireDate[0] && month <= expireDate[1]) || (year == expireDate[0] && month == expireDate[1] && day <= expireDate[2])) && year > startDate[0] || (year == startDate[0] && month >= startDate[1]) || (year == startDate[0] && month == startDate[1] && day >= startDate[2]))//if promotion is valid
 						{
-							if(list[item].category == 3 && JSON.parse(response).category == 3 && kidsEatFree == false && freeDrinks == false && KidsEatFreeM == false)//if no other promotion exists and the category is drinks, change the price of the drinks to 0
+							if(list[item].category == 3 && JSON.parse(response).category == 3 && promotionExists == false)//if no other promotion exists and the category is drinks, change the price of the drinks to 0
 							{
 								clone.children("#price").html("0.00");
 								promotionExists = true;
 								promotion.innerHTML = "Promotion applied: Free Drinks!";
 								freeDrinksM = true;
+								promotionAmount += JSON.parse(response).price;
+								sum = 0;
+								$('.receipt').find('.receiptRow').each(function (index, item) { // for each item already added into container
+									if ($(item).data('item') != undefined) {
+										sum += $(item).data('item').price;
+									}
+								});
+								sum -= promotionAmount;
+								$('#SubTot').html('Subtotal: $' + sum.toFixed(2));
+								//Adding sales tax to payment information
+								tax = 0.08;
+								tax *= sum; 
+								$('#SlsTax').html('Tax: $' + tax.toFixed(2));
+								total = 0.00;
+								total += sum + tax + tip;
+								$('#FinTot').html('Total: $' + total.toFixed(2));
 							}
-							else if(list[item].category == 4 && JSON.parse(response).category == 4 && kidsEatFree == false && freeDrinks == false && freeDrinksM == false)//if no other promotion exists and the category is kids, change the price of the kids meals to 0
+							else if(list[item].category == 4 && JSON.parse(response).category == 4 && promotionExists == false)//if no other promotion exists and the category is kids, change the price of the kids meals to 0
 							{
 								clone.children("#price").html("0.00");
 								promotionExists = true;
 								kidsEatFreeM = true;
 								promotion.innerHTML = "Promotion applied: Free Kids Meals!";
+								promotionAmount += JSON.parse(response).price;
+								sum = 0;
+								$('.receipt').find('.receiptRow').each(function (index, item) { // for each item already added into container
+									if ($(item).data('item') != undefined) {
+										sum += $(item).data('item').price;
+									}
+								});
+								sum -= promotionAmount;
+								$('#SubTot').html('Subtotal: $' + sum.toFixed(2));
+								//Adding sales tax to payment information
+								tax = 0.08;
+								tax *= sum; 
+								$('#SlsTax').html('Tax: $' + tax.toFixed(2));
+								total = 0.00;
+								total += sum + tax + tip;
+								$('#FinTot').html('Total: $' + total.toFixed(2));
 							}
 						}
 					}
 				});
 			}
-			if(promotionExists == false)
+			if(promotionExists == false || count > 1)
 			{
 				clone.children("#price").html(JSON.parse(response).price.toFixed(2));
 			}
 			var tmp = JSON.parse(response);
 			var copy = $.extend( true, {}, tmp ); // response goes out of scope and must be deep copied
 			clone.data('item', copy);
+			sum = 0;
 			$('.receipt').find('.receiptRow').each(function (index, item) { // for each item already added into container
 				if ($(item).data('item') != undefined) {
 					sum += $(item).data('item').price;
 				}
 			});
+			sum -= promotionAmount;
 			$('#SubTot').html('Subtotal: $' + sum.toFixed(2));
 			//Adding sales tax to payment information
 			tax = 0.08;
@@ -224,8 +291,21 @@
 							promotionExists = true;
 							promotion.innerHTML = "Promotion applied: " + list[item].name + " - $" + list[item].amount.toFixed(2) + " off!";
 							promotionAmount = list[item].amount;
-							total -= promotionAmount;
-							$('#FinTot').html('Total: $' + total.toFixed(2));
+							sum = 0;
+								$('.receipt').find('.receiptRow').each(function (index, item) { // for each item already added into container
+									if ($(item).data('item') != undefined) {
+										sum += $(item).data('item').price;
+									}
+								});
+								sum -= promotionAmount;
+								$('#SubTot').html('Subtotal: $' + sum.toFixed(2));
+								//Adding sales tax to payment information
+								tax = 0.08;
+								tax *= sum; 
+								$('#SlsTax').html('Tax: $' + tax.toFixed(2));
+								total = 0.00;
+								total += sum + tax + tip;
+								$('#FinTot').html('Total: $' + total.toFixed(2));
 						}
 					}
 				}

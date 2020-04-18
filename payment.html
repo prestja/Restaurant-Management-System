@@ -344,6 +344,10 @@
 			type: 'get',
 			dataType: 'JSON',
 			success: function(response) {			
+				if (response.status >= 5) {
+					window.history.back();
+					alert("I'm sorry, you have no unpaid orders at this time");
+				}
 				updateReceipt(response); // just the first order we get			
 			}
 		});
@@ -355,8 +359,7 @@
 		var target = document.getElementById("receipt_screen");
 		
 		var credit = $("#select_card");
-		credit.click( function() {		//when credit card button clicked assign a payment method == 0
-			
+		credit.click( function() {		//when credit card button clicked assign a payment method == 0			
 			payment_method = "card";
 			target.contentWindow.postMessage(payment_method, '*');
 		});
@@ -390,7 +393,7 @@
 					var url = 'http://159.89.238.181:8080/api/orders/status?table=' + table + '&status=5'; // signal that this order is now complete
 					console.log(url);
 					$.post(url, function() {
-						location.reload();
+						window.history.back();
 					});
 				}
 			});

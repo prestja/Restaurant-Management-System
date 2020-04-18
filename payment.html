@@ -348,7 +348,7 @@
 					window.history.back();
 					alert("I'm sorry, you have no unpaid orders at this time");
 				}
-				updateReceipt(response); // just the first order we get			
+				updateReceipt(response); // just the first order we get	
 			}
 		});
 	}
@@ -446,6 +446,12 @@
 
 	function updateReceipt(order){
 		var target = document.getElementById("receipt_screen");
+		if (order.items == undefined) {
+			alert("I'm sorry, you have no orders at this time");
+			window.history.back();
+			return;
+		}
+			
 		order.items.forEach(items =>
 			target.contentWindow.postMessage(items, '*')
 		);
@@ -473,14 +479,14 @@
 		var phone = document.getElementById("phone").value;
 		var today = new Date();//gets todays date to compare with customer birthday
 		var month, day, year;
-		if(today.getMonth()+1 < 10) {
+		if (today.getMonth()+1 < 10) {
 			month = today.getMonth()+1;
 			month = "0" + month;
 		}
 		else {
 			month = today.getMonth()+1;
 		}
-		if(today.getDate() < 10) {
+		if (today.getDate() < 10) {
 			day= "0" + today.getDate();
 		}
 		else {
@@ -495,7 +501,7 @@
 		var url = "http://159.89.238.181:8080/api/customers/?phone=";
 		url = url.concat(phone);
 		$.get(url, function(response){
-			if(response == "No entries found"){
+			if(response == "No entries found") {
 				noPhone.innerHTML = "No rewards account found.";
 				numVisits.innerHTML = "";
 			}
@@ -532,34 +538,34 @@
 		});
 	}
 	function submitForm() {
-			var phone = document.getElementById("phoneNumber").value;//gets form information
-			var email = document.getElementById("email").value;
-			var birthday = document.getElementById("birth").value;
-			
-			var url = "http://159.89.238.181:8080/api/customers/?phone=";//checks to see if phone number exists in system
-			url = url.concat(parseInt(phone));
-			$.get(url, function(response){
-				console.log(response);
-				if(response == "No entries found")//create request if rewards account does not exist and post to the backend.
-				{
-					let request = {
-						phone: phone,
-						email: email,
-						bday: birthday
-					};
-					var url = "http://159.89.238.181:8080/api/customers/";
-					request = JSON.stringify(request);
-					console.log(request);
-					$.post(url, request, function(message){//message is returned from the backend and alerted
-						message = JSON.parse(message);
-						alert(message.message);
-					});
-				}
-				else
-				{
-					alert("Phone number already exists.");
-				}
-			});
+		var phone = document.getElementById("phoneNumber").value;//gets form information
+		var email = document.getElementById("email").value;
+		var birthday = document.getElementById("birth").value;
+		
+		var url = "http://159.89.238.181:8080/api/customers/?phone=";//checks to see if phone number exists in system
+		url = url.concat(parseInt(phone));
+		$.get(url, function(response){
+			console.log(response);
+			if(response == "No entries found")//create request if rewards account does not exist and post to the backend.
+			{
+				let request = {
+					phone: phone,
+					email: email,
+					bday: birthday
+				};
+				var url = "http://159.89.238.181:8080/api/customers/";
+				request = JSON.stringify(request);
+				console.log(request);
+				$.post(url, request, function(message){//message is returned from the backend and alerted
+					message = JSON.parse(message);
+					alert(message.message);
+				});
+			}
+			else
+			{
+				alert("Phone number already exists.");
+			}
+		});
 	}
 </script>
 </head>

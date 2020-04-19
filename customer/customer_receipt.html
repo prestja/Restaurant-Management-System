@@ -357,25 +357,46 @@
 	}
 	
 	function submitPayment(){
-		var response = confirm("Are you sure you want to submit your order?");
+		var response = confirm("Are you sure you want to submit your payment?");
 		if(response === true){
-			var payment = {
-				//total: document.getElementById('FinTot').value,
-				//tip: document.getElementById('tip2').value,
-				//table: 11,
-				//status: 5
-				amount: total,
-				method: payment_method
-			};
-			console.log(JSON.stringify(payment));
-			$.post('http://159.89.238.181:8080/api/payment?table=3', JSON.stringify(payment), function(response){
-				var status = JSON.parse(response);
+			if(total_split > 0){
+				//Run a for loop to process multiple payments
+				var i;
+				for(i = 0; i < split_check; i++){
+					var payment = {
+						amount: total_split,
+						method: payment_method
+					};
+					console.log(JSON.stringify(payment));
+					$.post('http://159.89.238.181:8080/api/payment?table=3', JSON.stringify(payment), function(response){
+						var status = JSON.parse(response);
 				
-				if(status.code != 200){
-					alert(status.message);
-					console.log(status.message);
+						if(status.code != 200){
+							alert(status.message);
+							console.log(status.message);
+						}
+					});
 				}
-			});
+			}
+			else{
+				var payment = {
+					//total: document.getElementById('FinTot').value,
+					//tip: document.getElementById('tip2').value,
+					//table: 11,
+					//status: 5
+					amount: total,
+					method: payment_method
+				};
+				console.log(JSON.stringify(payment));
+				$.post('http://159.89.238.181:8080/api/payment?table=3', JSON.stringify(payment), function(response){
+					var status = JSON.parse(response);
+				
+					if(status.code != 200){
+						alert(status.message);
+						console.log(status.message);
+					}
+				});
+			}
 		}
 	}
 	

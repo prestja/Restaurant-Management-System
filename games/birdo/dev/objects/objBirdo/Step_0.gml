@@ -19,8 +19,8 @@ if (!dead) {
 	}
 
 	//Keep inside level bounds
-	if (y < 0) { y = 0; }
-	if (y > room_height) { event_perform(ev_other, ev_user0); }
+	if (y < get_camera_t()) { y = get_camera_t(); }
+	if (y > get_camera_b()) { event_perform(ev_other, ev_user0); }
 }
 else {
 	//Speeeeeeeeeeen

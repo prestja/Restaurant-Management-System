@@ -79,6 +79,14 @@
             }
         },
         {
+            "Key": "33878124-a257-49c2-82e2-05a7c1e853db",
+            "Value": {
+                "id": "94bc5b03-1a4b-4af1-b2c4-cf81d86bed85",
+                "resourcePath": "sprites\\sprBackgroundLevel\\sprBackgroundLevel.yy",
+                "resourceType": "GMSprite"
+            }
+        },
+        {
             "Key": "36643145-12d9-4506-96d2-936fab6ab651",
             "Value": {
                 "id": "69a2cc71-5414-4e9e-8b15-f7c0ea2fc8a4",
@@ -311,10 +319,26 @@
             }
         },
         {
+            "Key": "a7750ed9-59ea-4386-ba14-572c990a3fd1",
+            "Value": {
+                "id": "c2d98e5b-6c70-47a4-8bac-d7a834e93ebd",
+                "resourcePath": "objects\\objBackground\\objBackground.yy",
+                "resourceType": "GMObject"
+            }
+        },
+        {
             "Key": "aa61c200-bd16-4c38-9169-612b9a93a3fa",
             "Value": {
                 "id": "74e228f8-d66c-4e40-8be9-3e184b358ee7",
                 "resourcePath": "scripts\\get_camera_r\\get_camera_r.yy",
+                "resourceType": "GMScript"
+            }
+        },
+        {
+            "Key": "b1a5105e-c5b0-4a19-844d-a5dd29803e7d",
+            "Value": {
+                "id": "fa51dad3-a472-40ba-b120-ffc7c60e4d00",
+                "resourcePath": "scripts\\scrMouseInGuiRegion\\scrMouseInGuiRegion.yy",
                 "resourceType": "GMScript"
             }
         },
@@ -432,7 +456,8 @@
         "f90d3f02-4238-4d6e-ae93-05030c54336a",
         "50ce1514-aa6e-4535-a193-b24df8ef9edd",
         "2db0284a-0c3a-4d60-b161-7fa366ce8869",
-        "b972d345-e873-445f-967f-f4ffbe13609c"
+        "b972d345-e873-445f-967f-f4ffbe13609c",
+        "b1a5105e-c5b0-4a19-844d-a5dd29803e7d"
     ],
     "tutorial": ""
 }

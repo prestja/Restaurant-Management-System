@@ -242,7 +242,7 @@
             "Key": "5df3616e-df0d-49da-9526-a9bb321ab499",
             "Value": {
                 "id": "a3cad96d-e73f-42fd-b35f-13936307a254",
-                "resourcePath": "sprites\\sprBackgroundLevel\\sprBackgroundLevel.yy",
+                "resourcePath": "sprites\\sprBackgroundGrid\\sprBackgroundGrid.yy",
                 "resourceType": "GMSprite"
             }
         },
@@ -519,6 +519,14 @@
             }
         },
         {
+            "Key": "ddc7db19-3257-4206-b614-1d02030a43d5",
+            "Value": {
+                "id": "4f93d9f2-7d39-4bd0-860f-8deafbbc0cb6",
+                "resourcePath": "objects\\objBackground\\objBackground.yy",
+                "resourceType": "GMObject"
+            }
+        },
+        {
             "Key": "e3e9953e-8b66-4178-8c7e-e173e8b9381f",
             "Value": {
                 "id": "518b3433-9072-4446-9c22-09720a43ce85",
@@ -588,6 +596,14 @@
                 "id": "0d156ceb-daa8-4193-8e59-d0bf5746bd35",
                 "resourcePath": "scripts\\get_camera_t\\get_camera_t.yy",
                 "resourceType": "GMScript"
+            }
+        },
+        {
+            "Key": "f940fd8c-c6d1-4b86-b432-862f170a528a",
+            "Value": {
+                "id": "10f0d72c-e47d-4721-9f85-fa26805eb0e4",
+                "resourcePath": "sprites\\sprBackgroundLevel\\sprBackgroundLevel.yy",
+                "resourceType": "GMSprite"
             }
         },
         {

@@ -6,7 +6,8 @@
     "children": [
         "e6b7fefd-62c1-46f5-88ea-4994a739bc8c",
         "af9b2567-5a5e-4d41-90d6-143405d74718",
-        "bcb3edda-fbf4-4634-90cb-1b98605eb3f1"
+        "bcb3edda-fbf4-4634-90cb-1b98605eb3f1",
+        "ddc7db19-3257-4206-b614-1d02030a43d5"
     ],
     "filterType": "GMObject",
     "folderName": "objects",

@@ -13,7 +13,7 @@
 #macro cpt_fastin 2
 #macro cpt_fastout 3
 #macro cpt_slowmid 4
-#macro font_w 12
+#macro font_w 14
 #macro font_h 22
 #macro font_sprite sprFont
 #macro op_open "{"
@@ -61,9 +61,10 @@ if(ideal_h & 1) {ideal_h++;}
 //Set zoom level
 if (os_browser == browser_not_a_browser) { zoom = 1; }
 else { zoom = min(screen_w div ideal_w, screen_h div ideal_h); }
+zoom = 1;
 //Set window sizes
 surface_resize(application_surface, ideal_w*zoom, ideal_h*zoom);
-display_set_gui_size(ideal_w, ideal_h);
+display_set_gui_size(ideal_w*0.5, ideal_h*0.5);
 window_set_size(ideal_w*zoom, ideal_h*zoom);
 
 //Camera creation
@@ -86,7 +87,7 @@ global.frameTimer = 0;
 
 enum GameState {
 	None = 0,
-	NewQuestion, WaitingResponse, AnsweredQuestion,
+	RequestPending, NewQuestion, WaitingResponse, AnsweredQuestion,
 	Total
 }
 
@@ -96,11 +97,14 @@ enum QuestionProperties {
 	Total
 }
 
-global.gameState = GameState.NewQuestion;
+global.gameState = GameState.RequestPending;
 questionTimer = 0;
 optionsReferences = [noone, noone, noone, noone];
-questionId = -1;
-lastQuestion = -1;
-maxQuestion = 3;
+questionText = "";
+questionOptions = array_create(4, "");
+questionCorrect = -1;
+requestPending = false;
+httpGet = undefined;
+httpToken = undefined;
 answerCountdown = -1;
 gameScore = 0;

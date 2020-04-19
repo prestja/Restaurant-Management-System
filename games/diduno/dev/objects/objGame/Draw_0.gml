@@ -4,10 +4,11 @@ draw_text(get_camera_l() + 6, get_camera_t() + 6, gameScore);
 
 //Draw timer
 if (global.gameState == GameState.WaitingResponse || (global.gameState == GameState.AnsweredQuestion && db_exists)) {
-	var _x = get_camera_x() + 256 + 2*font_w, _y = get_camera_t() + (ideal_h/4);
+	var _x = get_camera_x() + 256 + 2*font_w, _y = get_camera_t() + (ideal_h/4) + font_h;
 	draw_sprite(sprTimer, 0, _x, _y);
-	var _val = (questionTimer == 0)? 0 : (questionTimer div GAME_SPEED) + 1;
-	draw_text_shadow(_x, _y, string(_val));
+	scrDrawPie(_x + font_w, _y - (font_h * 2), questionTimer, GAME_SPEED*10, c_white, font_h, 1, 90, 90, c_black);
+	var _time = (questionTimer == 0)? 0 : (questionTimer div GAME_SPEED) + 1;
+	draw_text_shadow(_x, _y, string(_time));
 }
 
 //Draw batched shadow text

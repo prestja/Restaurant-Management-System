@@ -57,9 +57,10 @@ if(ideal_h & 1) {ideal_h++;}
 //Get zoom level
 zoom = min(screen_w div ideal_w, screen_h div ideal_h);
 if (os_browser == browser_not_a_browser) { zoom = 1; }
+zoom = 1;
 //Set window sizes
 surface_resize(application_surface, ideal_w*zoom, ideal_h*zoom);
-display_set_gui_size(ideal_w, ideal_h);
+display_set_gui_size(ideal_w*0.5, ideal_h*0.5);
 window_set_size(ideal_w*zoom, ideal_h*zoom);
 
 //Camera creation
@@ -80,8 +81,8 @@ global.game_state = GameState.Player;
 global.combo_level = -1;
 game_score = 0;
 
-global.board_y = get_camera_t() + ((ideal_h - sprite_get_width(sprBackgroundLevel)) / 2);
-global.board_x = get_camera_r() - sprite_get_width(sprBackgroundLevel) - global.board_y;
+global.board_y = get_camera_t() + ((ideal_h - sprite_get_width(sprBackgroundGrid)) / 2);
+global.board_x = get_camera_r() - sprite_get_width(sprBackgroundGrid) - global.board_y;
 
 instance_create_layer(global.board_x, global.board_y, "InstanceActors", objBoard);
 scrEmptyGameGrid();

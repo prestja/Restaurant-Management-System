@@ -50,9 +50,10 @@ if(ideal_h & 1) {ideal_h++;}
 //Set zoom level
 if (os_browser == browser_not_a_browser) { zoom = 1; }
 else { zoom = min(screen_w div ideal_w, screen_h div ideal_h); }
+zoom = 1;
 //Set window sizes
 surface_resize(application_surface, ideal_w*zoom, ideal_h*zoom);
-display_set_gui_size(ideal_w, ideal_h);
+display_set_gui_size(ideal_w*0.5, ideal_h*0.5);
 window_set_size(ideal_w*zoom, ideal_h*zoom);
 
 //Camera creation
@@ -72,8 +73,8 @@ board_y = (y - (ideal_h / 2)) + ((ideal_h - sprite_get_height(sprBackgroundGrid)
 //Create spaces
 space_width = 120;
 instance_create_layer(x, y, "InstanceActors", objBoard);
-instance_create_layer((board_x - space_width) / 2, ideal_h - floor(1.5*sprite_get_height(sprSpace)), layer, objPlayer1Marker);
-instance_create_layer(board_x + sprite_get_width(sprBackgroundGrid) + ((board_x - space_width) / 2), ideal_h - floor(1.5*sprite_get_height(sprSpace)), layer, objPlayer2Marker);
+instance_create_layer((board_x - space_width) / 2, board_y + sprite_get_height(sprBackgroundGrid) - sprite_get_height(sprSpace), layer, objPlayer1Marker);
+instance_create_layer(board_x + sprite_get_width(sprBackgroundGrid) + ((board_x - space_width) / 2),  board_y + sprite_get_height(sprBackgroundGrid) - sprite_get_height(sprSpace), layer, objPlayer2Marker);
 spaces = array_create(9);
 for(var i=0; i<9; i++) {
 	var _xx = (i mod 3)*space_width;

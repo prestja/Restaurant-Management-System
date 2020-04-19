@@ -85,6 +85,10 @@
 				if(status.code != 200) {
 					alert(status.message);
 				}
+				else
+				{
+					location.reload();
+				}
 			});
 		}
 	}
@@ -119,9 +123,6 @@
 	<div style = "align: right;">
 		List any allergies or substitutions you would like <textarea id = 'subs' style = "width: 100%" rows = "4"></textarea>
 	</div>	
-	<h5><pre>Item			   Price                Remove</pre>
-	<pre>------------------------------------------------------</pre>
-	</h5>
 	<table class="content">
 		<tr id="header">
 			<td>Item</td>

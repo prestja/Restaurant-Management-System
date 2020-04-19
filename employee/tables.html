@@ -33,6 +33,7 @@
 		cursor: pointer; /* Pointer/hand icon */
 		width: 15vw; /* Set a width if needed */
 		display: inline-block;
+		margin-bottom: 20px;
 	}
 
 	.button-group button:not(:last-child) {
@@ -68,7 +69,7 @@
 		border:  0px #D3D3D3;  /*Border around boxes is Gray*/
 		color: black; /* White text */
 		padding: 3% 3%; /* Some padding */
-		margin: 2%;  /* Created space between buttons */
+		margin: 1%;  /* Created space between buttons */
 		font-family: Arial Black, Times, serif; /* sets font */
 		font-size:  16px;	/* Sets size */
 		font-weight:  normal;	/*Sets normal or bold */
@@ -77,9 +78,9 @@
 		width: 15%; /* Set a width if needed */
 		display: inline-block;
 		position: relative;
-		left: 1%;
-		top: 1%;
-		bottom: 1%;
+		left: 10px;
+		top: 10px;
+		bottom: 10px;
 	}
 	
 	/* Add a background color on hover */
@@ -92,21 +93,22 @@
 		background-color: #A9A9A9 !important; //makes Gray background
 		padding: 1%;
 		margin: 1%;
-		width: 33vw;
-		height: 80vh;
+		width: 350px;
 		right: 1%;
 		display: inline-block;
 		text-align: center;
 		position: absolute;
 	}
 	
-	table {
+	table, th, td {/*stores table information*/
 		border: 1px solid black;
 		border-collapse: collapse;
 		padding: 5px;
-		width:90%;
 		position:relative;
-		left:10px;
+		right:10px;
+		left:5px;
+		margin-bottom:5px;
+		margin-right:10px;
 	}
 </style>
 <head>
@@ -126,6 +128,84 @@
 			t.value = num;
 			
 			parent.window.postMessage(update, '*');
+			
+			var noOrder = document.getElementById("noOrder");//clears message for if there is not an order
+					noOrder.innerHTML = "";
+			
+			var tbody = document.getElementById("order");//clears body of order before putting new order in
+			tbody.innerHTML="";
+			
+			var url = 'http://159.89.238.181:8080/api/orders/table?table='
+			url = url.concat(num);
+			$.get(url, function(response){
+				response = JSON.parse(response);
+				if(response.code == 404)//404 is no order has been placed for that table
+				{
+					var noOrder = document.getElementById("noOrder");
+					noOrder.innerHTML = response.message;
+				}
+				else
+				{
+					var noOrder = document.getElementById("noOrder");
+					noOrder.innerHTML = "";
+					if(response.items != null)
+					{
+						var items = response.items;
+						var orderTable = document.getElementById("order");
+						for(menuItem in items)
+						{
+							var url = "http://159.89.238.181:8080/api/items/?id=";//gets best selling item name from the backend and prints it out through the printBestItem function
+							url = url.concat(items[menuItem].$oid);
+							$.get(url, function(message) {				
+								var parse = JSON.parse(message);
+								var orderTab = document.getElementById("order");
+								
+								var rowCnt = orderTab.rows.length; //gets current amount of rows
+								var tr = orderTab.insertRow(rowCnt); //adds new row below the last row
+								tr = orderTab.insertRow(rowCnt);
+								
+								var td = document.createElement('td'); //inserts item name into the table
+								td = tr.insertCell(0);
+								td.append(parse.name);
+								
+								td = document.createElement('td'); //inserts price into the table
+								td = tr.insertCell(1);
+								td.append("$" + parse.price.toFixed(2));
+								
+								if(response.payments == null)//if the table has not paid yet
+								{
+									var element = document.createElement('input');
+									element.setAttribute('type', 'button');
+									element.setAttribute('value','REMOVE');
+									element.setAttribute('class', num);//class is order id
+									element.setAttribute('id', items[menuItem].$oid);//id is item id
+									element.setAttribute('onclick', 'remItem(this.id, this.className)');
+									td = document.createElement('td'); //creates remove button for each item
+									td = tr.insertCell(2);
+									td.appendChild(element);
+								}
+							});
+							
+							
+						}
+					}
+				}
+			});
+		}
+		
+		//removes an item from an order
+		function remItem(itemId, tableId)
+		{
+			console.log(itemId);
+			console.log(tableId);
+			var url = "http://159.89.238.181:8080/api/orders/remove?table=";
+			url = url.concat(tableId);
+			url = url.concat("&id=");
+			url = url.concat(itemId);
+			$.post(url, function(response){
+				alert("Item removed from order");
+				window.location.reload();
+			});
 		}
 		
 		//when comp button is pressed
@@ -156,8 +236,6 @@
 				alert("Employee name and amount cannot be empty");
 			}
 			
-			document.getElementById("amt").value = "";
-			document.getElementById("emp").value = "";
 		}
     </script>
 </head>
@@ -200,8 +278,8 @@
 		<h2 id = "headerType" value=1>TABLE 1</h2>
 		<hr color = "black">
 		<div class="button-group">
-			<button onclick="document.location = '../menu.html'"  style="width:90% !important">ORDER/MODIFY</button>
-			<br>
+			<button onclick="document.location = '../menu.html'"  style="width:90% !important">ORDER</button>
+			<br><br>
 			<button onclick="document.location = '../payment.html'"  style="width:90% !important">PAYMENTS</button>
 		</div>
 		<p style="text-align:left;position:relative;left:10px;">ITEMS ORDERED:</p>
@@ -211,13 +289,13 @@
 					DESCRIPTION
 				</th>
 				<th>
-					QTY
-				</th>
-				<th>
 					PRICE
 				</th>
 			</tr>
+			<tbody id = "order">
+			</tbody>
 		</table>
+		<p id = "noOrder" style="color:red"></p>
 		<hr color="black">
 		<div class="button-group">
 			<label>AMOUNT: </label>

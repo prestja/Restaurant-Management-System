@@ -113,7 +113,7 @@
 		background-color: #A9A9A9 !important; //makes Gray background
 		padding: 10px;
 		margin: 10px 10px 10px 10px;
-		width: 900px;
+		width: 1000px;
 		display: inline-block;
 		text-align: center;
 		border: 5px;
@@ -180,6 +180,10 @@
 			tr = empTab.insertRow(rowCnt);
 			var element;
 			
+			var td = document.createElement('td'); //inserts first name into the table
+			td = tr.insertCell(0);
+			td.append(item.id);
+			
 			element = document.createElement('input');
 			element.setAttribute('type', 'text');
 			element.setAttribute('value',item.first_name);
@@ -187,7 +191,7 @@
 			element.setAttribute('maxlength', 20);
 			element.setAttribute('size',10);
 			var td = document.createElement('td'); //inserts first name into the table
-			td = tr.insertCell(0);
+			td = tr.insertCell(1);
 			td.append(element);
 			
 			element = document.createElement('input');
@@ -197,7 +201,7 @@
 			element.setAttribute('maxlength', 20);
 			element.setAttribute('size',10);
 			td = document.createElement('td'); //inserts last name into the table
-			td = tr.insertCell(1);
+			td = tr.insertCell(2);
 			td.append(element);
 			
 			element = document.createElement('input');
@@ -207,7 +211,7 @@
 			element.setAttribute('maxlength', 10);
 			element.setAttribute('size',10);
 			td = document.createElement('td'); //inserts password into the table
-			td = tr.insertCell(2);
+			td = tr.insertCell(3);
 			td.append(element);
 			
 			element = document.createElement('input');
@@ -216,7 +220,7 @@
 			element.setAttribute('class', item.id);
 			element.setAttribute('maxlength', 5);
 			td = document.createElement('td'); //inserts wage into the table
-			td = tr.insertCell(3);
+			td = tr.insertCell(4);
 			td.append(element);
 			
 			element = document.createElement('input');
@@ -226,24 +230,29 @@
 			element.setAttribute('maxlength', 20);
 			element.setAttribute('size',10);
 			td = document.createElement('td'); //inserts phone into the table
-			td = tr.insertCell(4);
+			td = tr.insertCell(5);
 			td.append(element);
 			
-			element = document.createElement('input');
-			element.setAttribute('type', 'text');
-			if(item.position == 0)
+			element = document.createElement('select');//creates a dropdown for position
+			element.setAttribute('class',item.id);
+			var cat = document.createElement('option');
+			cat.setAttribute('value',0);
+			cat.text = "Manager";
+			if(item.position == 0)//if item category is 0, select manager as the default value
 			{
-				element.setAttribute('value','Manager');
+				cat.setAttribute('selected','selected');
 			}
-			else
+			element.appendChild(cat);
+			cat = document.createElement('option');
+			cat.setAttribute('value',1);
+			cat.text = "Waiter";
+			if(item.position == 1)//if category is 1, set waiter as the default option
 			{
-				element.setAttribute('value','Waiter');
+				cat.setAttribute('selected','selected');
 			}
-			element.setAttribute('class', item.id);
-			element.setAttribute('maxlength', 20);
-			element.setAttribute('size',10);
-			td = document.createElement('td'); //inserts position into the table
-			td = tr.insertCell(5);
+			element.appendChild(cat);
+			var td = document.createElement('td'); //inserts category dropdown into the table
+			td = tr.insertCell(6);
 			td.append(element);
 			
 			element = document.createElement('input');
@@ -252,7 +261,7 @@
 			element.setAttribute('class', item.id);
 			element.setAttribute('onclick', 'modEmp(this.className)');
 			td = document.createElement('td'); //creates modify button for each item
-			td = tr.insertCell(6);
+			td = tr.insertCell(7);
 			td.appendChild(element);
 			
 			element = document.createElement('input');
@@ -261,7 +270,7 @@
 			element.setAttribute('class', item.id);
 			element.setAttribute('onclick', 'remEmp(this.className)');
 			td = document.createElement('td'); //creates remove button for each item
-			td = tr.insertCell(7);
+			td = tr.insertCell(8);
 			td.appendChild(element);
 		}
 		
@@ -313,14 +322,6 @@
 					else if(count == 5)
 					{
 						position = item.value;
-						if(position == "Manager")
-						{
-							position = 0;
-						}
-						else if(position == "Waiter")
-						{
-							position = 1;
-						}
 						count++;
 					}
 				}
@@ -343,16 +344,7 @@
 		}
     </script>
 </head>
-<body style="background-color:Black;">
-	<!--creates buttons in header to go back-->
-	<div class="header">
-
-		<div class="button-group">
-			<button onclick="document.location = '../employee/landing.html'">&#60&#60 BACK</button>
-		</div>
-	
-	</div>
-	
+<body style="background-color:Black;">	
 	<!--Creates left menu for buttons for the different manager pages-->
 	<div class = "left-menu">
 		<div class="menu-button-group">
@@ -391,6 +383,7 @@
 			<span style="text-align:left !important;position:relative;left:10px;">
 				<table id = 'rem'>
 					<tr>
+						<th>ID</th>
 						<th>FIRST NAME</th>
 						<th>LAST NAME</th>
 						<th>PASSWORD</th>

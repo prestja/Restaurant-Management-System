@@ -244,20 +244,33 @@
 		var body = document.getElementsByClassName("modal-body");
 		body.innerHTML = message.data.description;
 		
+		var nutrition = document.getElementById("nutrition");
+		nutrition.innerHTML = "Nutrition: " + message.data.nutrition;
+		
 		var ingre = document.getElementById("ingre");
-		//ingre.innerHTML = message.data.ingredients; 
+		ingre.innerHTML = "";
 		
 		if (message.data.ingredients != undefined) {
-				message.data.ingredients.forEach(ingredient => {		
-				ingre.innerHTML += ingredient + ", "
-			});
-		}		
+				ingre.innerHTML = "Contains: ";
+				for(items in message.data.ingredients)
+				{
+					if(items != message.data.ingredients.length-1)
+					{
+						ingre.innerHTML += message.data.ingredients[items] + ", ";
+					}
+					else
+					{
+						ingre.innerHTML += message.data.ingredients[items];
+					}
+				}
+		}
 		
 		if (message.data.imgPath != undefined) {
 			var photo = document.getElementById("photo");
 			photo.src = message.data.imgPath;
 		}
-		if (message.data.allergen != undefined) {
+		
+		if (message.data.allergen != null && message.data.allergen != "") {
 			var allergen = document.getElementById("allergy");
 			console.log("Item contains allergen information");
 			allergen.style.display = "block";
@@ -265,17 +278,42 @@
 		} else {
 			var allergen = document.getElementById("allergy");
 			allergen.style.display = "none";
+			allergen.innerHTML ="";
 		}		
 		
-		if (message.data.description != undefined) {
-			var desc = document.getElementById("desc");		
-			desc.innerHTML = message.data.description;
+		var desc = document.getElementById("desc");	
+		desc.innerHTML="";
+		
+		if (message.data.description != undefined && message.data.category != 3 && message.data.description != "") {
+			desc.innerHTML = "Description: " + message.data.description;
 		}
 		
 		if (message.data.price != undefined) {
 			var price = document.getElementById("price");		
 			price.innerHTML = "$" + message.data.price.toFixed(2);
 		}		
+		
+		var vegan = document.getElementById("vegan");
+		if(message.data.vegan == true)
+		{
+			vegan.innerHTML = "Vegan";
+			vegan.setAttribute("style","color:red");
+		}
+		else
+		{
+			vegan.innerHTML = "";
+		}
+		
+		var vegetarian = document.getElementById("vegetarian");
+		if(message.data.vegeration == true)
+		{
+			vegetarian.innerHTML = "Vegetarian";
+			vegetarian.setAttribute("style","color:red");
+		}
+		else
+		{
+			vegetarian.innerHTML = "";
+		}
 		
 		var submit = $("#addOrder");
 		submit.unbind('click'); // remove any previous onclick listeners for this button		
@@ -332,9 +370,12 @@
 				<div class="modal-body">
 					<img id = 'photo' src = "img/burger.jpg">
 					<p>Price: <span id= "price"></span></p>
-					<p>Description: <span id="desc"></span></p>
-					<p>Contains: <span id = "ingre"></span></p>
+					<p id = "nutrition">Nutrition:</id>
+					<p id = "desc">Description:</p>
+					<p id = "ingre">Contains: </p>
 					<p id = "allergy">Allergens Include: </p>
+					<p id = "vegan"></p>
+					<p id = "vegetarian"></p>
 				</div>
 				<div class="modal-footer">
 					<button id="addOrder">Add To Order</h3>

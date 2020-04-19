@@ -159,7 +159,7 @@
     <script>
 	//adds item for the sales report onto the table
 	function addItem(item) {
-		if(item.items != null && item.placed != null && item.payments != null){//if the order is not empty
+		if(item.items != null && item.placed != null && (item.payments != null || item.status == 5)){//if the order is not empty
 		var salesTab = document.getElementById('sales');
 		
 		var rowCnt = salesTab.rows.length; //gets current amount of rows
@@ -225,6 +225,9 @@
 		else
 		{
 			td.append("Unknown");
+			var hr = document.createElement('hr');
+				hr.setAttribute('color','black');
+				td.append(hr);
 		}
 		td.append("REMAINING");//this line stores the remaining balance for the table
 				var hr = document.createElement('hr');
@@ -233,7 +236,7 @@
 		
 		td = document.createElement('td'); //inserts the total for the order onto the table
 		td = tr.insertCell(4);
-		var total = item.total;//stores the remaining balance and prints out after subtracting each payment from it.
+		var total = item.total + item.tip;//stores the remaining balance and prints out after subtracting each payment from it.
 		if(item.comp != null){//if there is a comp, subtract it from the total
 			for(items in item.payments){
 				var paid = item.payments[items].amount - item.comp/item.payments.length;
@@ -323,8 +326,10 @@
 	}
 	
 	function printBestItem(name){//prints out the best selling item's name to the reports page
-		var element = document.getElementById("best");
-		element.append(name.toUpperCase());
+		if(name != null){
+			var element = document.getElementById("best");
+			element.append(name.toUpperCase());
+		}
 	}
 	
 	function dailyReport(){//filters table to today
@@ -403,15 +408,6 @@
     </script>
 </head>
 <body style="background-color:Black;">
-	<!--creates buttons in header to go back-->
-	<div class="header">
-
-		<div class="button-group">
-			<button onclick="document.location = '../employee/landing.html'">&#60&#60 BACK</button>
-		</div>
-	
-	</div>
-	
 	<!--Creates left menu for buttons for the different manager pages-->
 	<div class = "left-menu">
 		<div class="menu-button-group">

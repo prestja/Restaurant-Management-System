@@ -1,5 +1,6 @@
 <html>
 <style>    
+	/*Css for the html and body sections*/
     html, body {
         width: 100%;
         height: 100%;
@@ -7,19 +8,23 @@
 		font-family: Arial;
     }
 
+	/*Css for the navigation class*/
     .navigation {
         height: 10%;
         background-color: black;
     }
+	/*Css for the welcome text*/
+	.welcome {
+		height: 10%;
+		background-color: aqua;
+	}
 
+	/*Css for buttons within the navigation class located at top of screen*/
     .navigation button {
-        /*height: 50%;*/
-        /*width: 10%;*/
         vertical-align: middle;
         position: relative;
         background-color:#FF7F7F;
         color:white;
-        //border-color:transparent;
 		border-radius: 0.5vw;
 		height: 75%;
 		margin-top: 5px;  /* Created space between buttons */
@@ -32,37 +37,48 @@
 		display: inline-block;
     }
 	
+	/*H1 company name css*/
 	.navigation h1 {
 		color: white;
 		display: inline-block;
 		padding-left: 10vw;
 	}
+	
+	/*H2 table number css*/
+	.navigation h2 {
+		color: white;
+		display: inline;
+		padding-left: 10vw;
+	}
 
+	/*Css for the back button via ID*/
     #nav-back {
-        /*border-radius: 50px 40px 40px 50px;*/
 		display: none;
     }
     
+	/*Css for the help button via ID*/
     #nav-help {
-        /*border-radius: 40px 40px 40px 40px;*/
-		
+       
     }
     
+	/*Css for the refill button via ID*/
     #nav-refills {
-        /*border-radius: 40px 50px 50px 40px;*/
-    }
-
-    .content {
-        height: 90%;
         
     }
+
+	/*Css for the class containing the iframe*/
+    .content {
+        height: 90%;
+    }
 	
+	/*Css for the alert from clicking help*/
 	.help_alert {
 		padding: 20px;
 		background-color: white;
 		color: black;
 	}
 	
+	/*Css for the close button*/
 	.closebtn{
 		margin-left: 15px;
 		color: black;
@@ -74,6 +90,7 @@
 		transition: 0.3s;
 	}
 	
+	/*Css for hovering over the close button class*/
 	.closebtn:hover {
 		color: green;
 	}
@@ -86,105 +103,150 @@
 		var pin = ""; // default to no pin set
 		var table = 0; // default to table 0 (1 in real-world terms)
 		
+		//This function controls what happens when back button is clicked
 		function goBack() {						
+			//Get the iframe id and assign to 'frame' variable
 			var frame = document.getElementById("ifrm");
+			
+			//frame.src assigned to 'loaction' variable
 			var location = frame.src;
-			var n = location.lastIndexOf('/'); //finds the name of the last page
+			
+			//Variable 'n' is assigned the name of the last page
+			var n = location.lastIndexOf('/');
+			
+			//Variable 'result' is the last page + 1
 			var result = location.substring(n+1);
-			console.log(result);
-			if (result == "play.html") { // check if the last page frame was on was "play"
+			console.log(result);  //Run console log check of 'result'
+			
+			//If statement checks if the last page of frame was on "play"
+			if (result == "play.html") { 
+				//Prompt user to enter their pin
 				var attempt = prompt("Please enter your pin");
+				
+				//If wrong pin is entered then...
 				if (pin != attempt) {
 					alert("I'm sorry, you put in the incorrect pin. If you believe this is a mistake, please press the HELP button located at the top of the display.");
 					return;
 				}
 			}
+			
+			//if the lastpage was here then fo to new 'frame.src'
 			if (result == "rewards.html") {
 				frame.src = "../payment.html";
 				return;
 			}
 			
+			//frame is taken back to original 'laning' page
 			frame.src = "landing.html";
+			
+			//back button is set to false and becomes hidden
 			showButton(false);
 		}
 		
+		//controls back button's visibility via state which is true or false
 		function showButton(state) {
+			//Variable 'btn' set to #id for back button
 			var btn = document.getElementById("nav-back");
+			
+			//Switch statement using 'state' variable passed to funciton
 			switch (state) {
+				//case state == true display back button as inline-bock
 				case true:
-				btn.style.display = "inline-block";
-				break;
+					btn.style.display = "inline-block";
+					break;
+				//case state == false back button is hidden from view
 				case false:
-				btn.style.display = "none";
-				break;
+					btn.style.display = "none";
+					break;
 			}
 		}
 		
+		/*
 		function showBtnLocal(){
 			var btn = document.getElementById("nav-back");
 		}
+		*/
 		
+		//Funciton to be used with the 'help' button
 		function goHelp() {
+			//If user chooses yes
 			if (confirm("Do you need assistance from your server?")) {
+				//Variable 'url' assigned address to notifications data base
 				var url = 'http://159.89.238.181:8080/api/notifications';
+				
+				//Variable 'body' is table number and variant
 				var body = {
 					table: table,
 					variant: 0
 				};
-				alert("Your server is on their way!");
-				$.post(url, JSON.stringify(body));
+				alert("Your server is on their way!"); //User alerted 
+				$.post(url, JSON.stringify(body));	//post to DB
 			} else {
+				//Acknowledfe cancel selected
 				alert("Your request has been cancelled");
 			}
-		}		
+		}			
 		
+		//Add event listener from child element
 		window.addEventListener('message', master_listener, false);
 		
+		//Function to receive 'message' from add event listener
 		function master_listener(message) {
 			if(message.data.type == "back" ) {
+				//if .type == string "back" pass .state to showButton()
 				showButton(message.data.state);
 			}
 			else if (message.data.type == "show") {
+				//if .type == string "show" pass to showButton() to display hidden buttons
 				showButton(true);
 			}
 			else if (message.data.type == "hide") {
+				//hides button is string == "hide"
 				showButton(false);
 			}
 			else if(message.data.type == "pin") {
+				//if .type == "pin" do the following
 				if(pin == "" && message.data.pin != "") {
+					//if pin is empty and .data.pin is not
+					//let pin = message.data.pin
 					pin = message.data.pin;
 				}
+				//post to iframe via content window post message
 				document.getElementById("ifrm").contentWindow.postMessage(pin, "*");
-				//showButton(true);
 			}
 			else if(message.data.type == "table") {
+				//If .type == strign table then post content window of iframe
 				document.getElementById("ifrm").contentWindow.postMessage(table, "*");	
 			}
 			else if (message.data.type == "order") {
+				//If .type == string "order" then change frame src to menu.html
 				var frame = document.getElementById("ifrm");
 				frame.src = "../menu.html";
 			}
 			else if (message.data.type == "play") {
+				//If .type == string "play" then show button
 				showButton(true);
+				//Iframe src changed to play.html
 				var frame = document.getElementById("ifrm");
 				frame.src = "play.html";
 			}
 			else if (message.data.type == "pay") {
+				//If .type == string "pay" change frame src to payment.html
 				var frame = document.getElementById("ifrm");
 				frame.src = "../payment.html";
 			}
-			else if (message.data.type == "rewards") {
-				var frame = document.getElementById("ifrm");
-				frame.src = "rewards.html";
-			}
 		}
 		
+		//roulette game function
 		function goRoulette() {
+			//Iframe changed to roulette.html
 			var frame = document.getElementById("ifrm");
 			frame.src = "roulette.html";
 		}
 		
+		//Function handles refills for the customer
 		function goRefills() {
+			//Iframe changed to refills.html
 			var frame = document.getElementById("ifrm");
 			frame.src = "refills.html";
 		}
@@ -195,26 +257,35 @@
 			var n = url.lastIndexOf('=');
 			if (n < 0) {
 				table = 3;
+				document.getElementById('tablenum').innerHTML = 'Table 3';
 				return;
 			}
 			table = parseInt(url.substring(n + 1, url.length));			
 			console.log("Customer page loaded with table " + table);
+			document.getElementById('tablenum').innerHTML = 'Table ' + table;
 		}	
+		
+		function goRoulette() {
+			var frame = document.getElementById("ifrm");
+			frame.src = "roulette.html";
+		}
 	</script>
 	
 </head>
     
 <body onload="getTableNumber()">
+	<!--On load body calls function getTableNumber()-->
     <!--Navigation buttons-->
-    <div class = "navigation">
-        <button id = "nav-back" onclick ="goBack();" >Back</button>
-		<button id = "nav-help" onclick = "goHelp()">Help</button>
-        <button id = "nav-refills" onclick="goRefills()">Refills</button>
-		<h1>Welcome to Not Chilis'</h1>
+    <div class = "navigation" width: 40%>
+        <button id = "nav-back" onclick ="goBack();" >Back</button> <!--back button-->
+		<button id = "nav-help" onclick = "goHelp()">Help</button>	<!--help button-->
+        <button id = "nav-refills" onclick="goRefills()">Refills</button><!--refill button-->
+		<h1>Welcome to Not Chilis'</h1> <!--Company Logo-->
+		<h2 id = "tablenum">Table</h2>
     </div>
-
     <!---Content -->
     <div class = "content">
+		<!--Iframe is used to display various pages to the user-->
         <iframe src = "landing.html" name="ifrm" id="ifrm" style = "height: 100%; width: 100%"></iframe>
     </div>
 

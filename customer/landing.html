@@ -84,10 +84,69 @@
 	
 </style>
 <head>
-	<link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet'>	
+	<link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet'>
+
+	<script>
+		function onload() {
+			var message = {
+				type: 'hide'
+			};
+			parent.window.postMessage(message, '*');
+		}
+		
+		function goOrder() {
+			var message = {
+				type: "order"
+			};
+			parent.window.postMessage(message, "*");
+		}
+		function goPlay() {
+			var message = {
+				type: "play"
+			};
+			parent.window.postMessage(message, "*");
+		}
+		
+		function goPay() {
+			var message = {
+				type: "pay"
+			};
+			parent.window.postMessage(message, "*");
+		}
+		
+		window.addEventListener('message', receivePIN, false);
+
+		// function called whenever landing receives a pin from its parent
+		// function called whenever landing receives a pin from its parent
+		function receivePIN(message) {		
+			if(message.data == "") {
+				var pin2 = prompt("Please enter a pin to play. All games are FREE.", "1234");
+				if(pin2 === null){
+					return;
+				}
+				var pin3 = {
+					type: "pin", pin: pin2
+				};
+				parent.window.postMessage(pin3, "*"); // post the new pin to the parent
+			}
+			
+			var navigation = {
+				type: "play"
+			};
+			parent.window.postMessage(navigation, "*");
+		}
+		
+		// function called when attempting to change to games page
+		function pinPrompt() {		
+			var thingy = {
+				type: "pin", pin: ""
+			};
+			parent.window.postMessage(thingy,"*");
+		}
+	</script>
 </head>
 
-<body style="background-color:Black;">
+<body style="background-color:Black;" onload="onload()">
 	
 	<!-- Bottom section holds order, pay, and play buttons-->
 	<div class="row" style= "height: 90vh; display: flex; flex-wrap: wrap;">
@@ -106,55 +165,7 @@
 		</div>	
 	</div>
 
-<script>
-	function goOrder() {
-		var message = {
-			type: "order"
-		};
-		parent.window.postMessage(message, "*");
-	}
-	function goPlay() {
-		var message = {
-			type: "play"
-		};
-		parent.window.postMessage(message, "*");
-	}
-	
-	function goPay() {
-		var message = {
-			type: "pay"
-		};
-		parent.window.postMessage(message, "*");
-	}
-	
-	window.addEventListener('message', receivePIN, false);
 
-	// function called whenever landing receives a pin from its parent
-	function receivePIN(message) {		
-		if(message.data == "") {
-			var pin2 = prompt("Please enter a pin", "1234");
-			if(pin2 === null){
-				return;
-			}
-			var pin3 = {
-				type: "pin", pin: pin2
-			};
-			parent.window.postMessage(pin3, "*"); // post the new pin to the parent
-		}
-		
-		var navigation = {
-			type: "play"
-		};
-		parent.window.postMessage(navigation, "*");
-	}
 	
-	// function called when attempting to change to games page
-	function pinPrompt() {		
-		var thingy = {
-			type: "pin", pin: ""
-		};
-		parent.window.postMessage(thingy,"*");
-	}
-</script>
 </body>
 </html>

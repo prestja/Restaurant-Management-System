@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 	* {
 		box-sizing: border-box;
@@ -209,22 +211,279 @@
 		cursor: pointer;
 	}
 	
-	.addRewards {
-		
+	/* Add styles to the form container */
+	.split-pay-container {
+		max-width: 500px;
+		padding: 10px;
+		background-color: white;
 	}
+	
+	/* Rewards member popup*/
+	.rewards-login {
+		display: none;
+		position: fixed;
+		bottom: 25%;
+		right: 35%;
+		border: 3px solid #f1f1f1;
+		z-index: 9;
+	}
+
+	/* Add styles to the form container */
+	.form-container {
+		max-width: 300px;
+		padding: 10px;
+		background-color: green;
+	}
+
+	.form-container input[type=text], .form-container input[type=password] {
+		width: 100%;
+		padding: 15px;
+		margin: 5px 0 22px 0;
+		border: none;
+		background: #f1f1f1;
+	}
+
+	.form-container input[type=text]:focus, .form-container input[type=password]:focus {
+		background-color: #ddd;
+		outline: none;
+	}
+
+	/* Set a style for the submit/login button */
+	.form-container .button {
+		background-color: gray;
+		color: white;
+		padding: 16px 20px;
+		border: none;
+		cursor: pointer;
+		width: 100%;
+		margin-bottom:10px;
+		opacity: 0.8;
+	}
+
+
+	.form-container .cancel {
+		background-color: gray;
+	}
+
+	.form-container .button:hover, .open-button:hover {
+		opacity: 1;
+	}
+	
+	/****Credit Card****/
+	.credit-popup {
+		display: none;
+		position: fixed;
+		bottom: 50%;
+		right: 30%;
+		border: 3px solid #f1f1f1;
+		z-index: 9;
+	}
+	
+	/* Add styles to the form container */
+	.credit-container {
+		max-width: 100%;
+		padding: 10px;
+		background-color: green;
+	}
+
+	.credit-container input[type=text], .form-container input[type=password] {
+		width: 100%;
+		padding: 15px;
+		margin: 5px 0 22px 0;
+		border: none;
+		background: #f1f1f1;
+	}
+
+	.credit-container input[type=text]:focus, .form-container input[type=password]:focus {
+		background-color: #ddd;
+		outline: none;
+	}
+
+	/* Set a style for the submit/login button */
+	.credit-container .button {
+		background-color: gray;
+		color: white;
+		padding: 16px 20px;
+		border: none;
+		cursor: pointer;
+		width: 100%;
+		margin-bottom:10px;
+		opacity: 0.8;
+	}
+
+
+	.credit-container .cancel {
+		background-color: gray;
+	}
+
+	.credit-container .button:hover, .open-button:hover {
+		opacity: 1;
+	}
+	
+	.split-popup {
+		display: none;
+		position: fixed;
+		bottom: 50%;
+		right: 30%;
+		border: 3px solid #f1f1f1;
+		z-index: 9;
+	}
+
 	
 </style>
 
-<head>
 	<link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet'>
     <!--changed to https://... below to remove error-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	
 <script>
+	//Global payment method selection 0 == card, 1 == cash
+	var payment_method;
+	//Global paymet amount to be sent to receipt
+	var payment_amount;
+	var table = 0;
+	
+	window.addEventListener('message', master_listener, false);
+	function master_listener(message) {
+		table = message.data; // sample table number from parent document
+		
+		var url = 'http://159.89.238.181:8080/api/orders/table?table='.concat(table);
+		$.ajax({
+			url: url,
+			type: 'get',
+			dataType: 'JSON',
+			success: function(response) {			
+				if (response.status >= 5) {
+					window.history.back();
+					alert("I'm sorry, you have no unpaid orders at this time");
+				}
+				updateReceipt(response); // just the first order we get	
+			}
+		});
+	}
+	
+	//funciton passed its parameter from button onclick below
+	function updatePaymentMethod(){
+		//establish an iframe variable
+		var target = document.getElementById("receipt_screen");
+		
+		var credit = $("#select_card");
+		credit.click( function() {		//when credit card button clicked assign a payment method == 0			
+			payment_method = "card";
+			target.contentWindow.postMessage(payment_method, '*');
+		});
+		
+		var cash = $("#select_cash");
+		cash.click( function() {		//when cash button clicked assign a payment method == 1
+			payment_method = "cash";
+			target.contentWindow.postMessage(payment_method, '*');
+		});
+	}
+	
+	//Reward game function
+	function goRoulette() {
+			//var frame = document.getElementById("ifrm");
+			//frame.src = "roulette.html";
+			var playGame = window.open("customer/roulette.html", "", "width=800, height=700");
+	}
+	
+	//send notification to servers wanting to pay with cash
+	function sendCashNotification() {
+		var response = confirm("Are you sure you wish to pay cash for this order?");
+	
+		if(response === true){
+			//Create a message to send to notifications page
+			var message = {
+				table: table,
+				variant: 6,
+				details: "customers wishes to pay with cash."
+			};
+			
+			//Bring up the reward game
+			goRoulette();
+		
+			//console.log(JSON.stringify(message));
+			$.post('http://159.89.238.181:8080/api/notifications', JSON.stringify(message), function(response){
+				var status = JSON.parse(response);				
+				if(status.code != 200){
+					alert(status.message);
+					//console.log(status.message);
+				} else {
+					var url = 'http://159.89.238.181:8080/api/orders/status?table=' + table + '&status=5'; // signal that this order is now complete
+					console.log(url);
+					$.post(url, function() {
+						window.history.back();
+					});
+				}
+			});
+		}	
+	}
+	
+	//pay to system via credit card
+	function sendCreditCardNotification(){
+		var response = confirm("Are you sure you wish to pay with a card for this order?");
+	
+		if(response === true){
+			//Create a message to send to notifications page
+			var message = {
+				table: table,
+				variant: 7,
+				details: "customer payed with credit card*-."
+			};
+			
+			//Bring up the reward game
+			goRoulette();
+			
+			
+			$.post('http://159.89.238.181:8080/api/notifications', JSON.stringify(message), function(response){
+				var status = JSON.parse(response);				
+				if(status.code != 200){
+					alert(status.message);
+					//console.log(status.message);
+				} else {
+					var url = 'http://159.89.238.181:8080/api/orders/status?table=' + table + '&status=5'; // signal that this order is now complete
+					console.log(url);
+					$.post(url, function() {
+						window.history.back();
+					});
+				}
+				
+			});
+			
+			
+		}	
+	}
+	
+	//Function to open credit card form for payment
+	function openFormCreditCard() {
+		document.getElementById("creditInfo").style.display = "block";
+	}
+	
+	//Function to close the credit card form after submitting
+	function closeFormCreditCard() {
+		//target the iframe to submit charge amount
+		var target = document.getElementById("receipt_screen");
+
+		//click function to submit the amount
+		var submit = $("#submitAmnt-button");
+		var amnt = document.getElementById("creditInfo");
+		payment_amount = amnt.value;
+		console.log("amnt variable");
+		console.log(payment_amount);
+		submit.click( function(){
+	
+		});
+	
+		document.getElementById("creditInfo").style.display = "none";
+	}
+
 	function setup() {
 		var toggle = {
 			type: "show"
 		};
 		parent.window.postMessage(toggle, "*");
+		var getTable = {type: "table"};
+		parent.window.postMessage(getTable, "*");
 	}
 	
 	function goRewards() {
@@ -232,41 +491,149 @@
 			type: "rewards"
 		}
 		parent.window.postMessage(message, "*");
+		document.getElementById("signup").style.display = "block";
+	}
+	
+	function closeRewardsSignup(){
+		document.getElementById("signup").style.display = "none";
 	}
 
 	function updateReceipt(order){
-		//console.log("Updating receipt");
-		//console.log(order);
 		var target = document.getElementById("receipt_screen");
+		if (order.items == undefined) {
+			alert("I'm sorry, you have no orders at this time");
+			window.history.back();
+			return;
+		}
+			
 		order.items.forEach(items =>
 			target.contentWindow.postMessage(items, '*')
 		);
 	}
 	
 	function sendTip(){
-		//var x = document.getElementById("myRange");
-		var x = "20";
-		var z = x.valueOf();
+		var tip = 20;
 		var target = document.getElementById("receipt_screen");
-		console.log(target.contentWindow.postMessage(z, '*'));
+		//console.log("Sending tip");
 	}
 	
-	$(document).ready(function() {
-		var queryStr = window.location.search;
-		var category = queryStr.substr(1)
-		var url = "http://159.89.238.181:8080/api/orders?".concat(category);
-		$.ajax({
-			url: url,
-			type: 'get',
-			dataType: 'JSON',
-			success: function(response) {
-				console.log(response[0]);
-				updateReceipt(response[0]); // just the first order we get			
+	function openFormSplit() {
+		document.getElementById("splitInfo").style.display = "block";
+	}
+	
+	function submitSplitInfo() {
+		var input = document.getElementById("splitInput");
+		console.log("Split Number");
+		console.log(input.value);
+		var split = input.value;
+		var target = document.getElementById("receipt_screen");
+		target.contentWindow.postMessage(split, '*');
+	}
+	
+	function closeFormSplit() {
+		document.getElementById("splitInfo").style.display = "none";
+	}
+	
+	function openFormRewards() {
+		document.getElementById("myForm").style.display = "block";
+	}
+
+	function closeFormRewards() {
+		document.getElementById("myForm").style.display = "none";
+	}
+	
+	function getRewards(){
+		var phone = document.getElementById("phone").value;
+		var today = new Date();//gets todays date to compare with customer birthday
+		var month, day, year;
+		if (today.getMonth()+1 < 10) {
+			month = today.getMonth()+1;
+			month = "0" + month;
+		}
+		else {
+			month = today.getMonth()+1;
+		}
+		if (today.getDate() < 10) {
+			day= "0" + today.getDate();
+		}
+		else {
+			day = today.getDate();
+		}
+		
+		var noPhone = document.getElementById("noPhone");//gets paragraph area to store data if there is no phone number in the system and the number of visits
+		var numVisits = document.getElementById("numVisits");	
+		noPhone.innerHTML="";
+		numVisits.innerHTML="";
+		
+		var url = "http://159.89.238.181:8080/api/customers/?phone=";
+		url = url.concat(phone);
+		$.get(url, function(response){
+			if(response == "No entries found") {
+				noPhone.innerHTML = "No rewards account found.";
+				numVisits.innerHTML = "";
+			}
+			else{
+				noPhone.innerHTML="";
+				response = JSON.parse(response);
+				var birthday = response[0].bday.split('-');//gets birthday by year, month, and date
+				var visits = response[0].visits;
+				visits ++;
+				visits = visits%5;//gets how many visits the person has between rewards
+				if(month == birthday[1] && day == birthday[2])//if month and day match, print out birthday message
+				{
+					var birthday = document.getElementById("birthday");
+					birthday.innerHTML = "Happy birthday! Check your email at " +  response[0].email + " for $5 off!";
+				}
+				if(visits == 0)//if they have 5 visits, print reward message
+				{
+					numVisits.innerHTML = "You have earned a free dessert! Check your email at " + response[0].email + " for your coupon on your next visit!";
+				}
+				else //if they have less than 5, print how many visits they have
+				{
+					numVisits.innerHTML = "You have " + visits + " visits. On your fifth visit, get emailed a coupon for $5 off!";
+				}
+				$.post(url, function(response){
+					response = JSON.parse(response);
+					console.log(response);
+					if(response.code == 200)//hide rewards login button if rewards have been added
+					{
+						var login = document.getElementById("login");
+						login.style.display="none";
+					}
+				});
 			}
 		});
-	});
-	
-	
+	}
+	function submitForm() {
+		var phone = document.getElementById("phoneNumber").value;//gets form information
+		var email = document.getElementById("email").value;
+		var birthday = document.getElementById("birth").value;
+		
+		var url = "http://159.89.238.181:8080/api/customers/?phone=";//checks to see if phone number exists in system
+		url = url.concat(parseInt(phone));
+		$.get(url, function(response){
+			console.log(response);
+			if(response == "No entries found")//create request if rewards account does not exist and post to the backend.
+			{
+				let request = {
+					phone: phone,
+					email: email,
+					bday: birthday
+				};
+				var url = "http://159.89.238.181:8080/api/customers/";
+				request = JSON.stringify(request);
+				console.log(request);
+				$.post(url, request, function(message){//message is returned from the backend and alerted
+					message = JSON.parse(message);
+					alert(message.message);
+				});
+			}
+			else
+			{
+				alert("Phone number already exists.");
+			}
+		});
+	}
 </script>
 </head>
 
@@ -274,31 +641,36 @@
 <div class="row">
 	<div class="column-left">
 		<h2>PAYMENT METHOD</h2>
-		
+
 		<div class="button-group2">
-			<button onclick="">CARD</button>
-			<button onclick="">CASH</button>
-			<button onclick="">SPLIT</button>
+			<button id="select_card" onclick="openFormCreditCard(); updatePaymentMethod()">CARD</button>
+			<button id="select_cash" onclick="sendCashNotification();updatePaymentMethod()">CASH</button>
+			<button id="split" onclick="openFormSplit()">SPLIT</button>
 		</div>
 		
-		<h2> TIP AMOUNT </h2>			
-		<div class="slidecontainer">
-			<input type="range" min="0" max="30" value="15" class="slider" id="myRange">
-			<p>Tip: <span id="demo"></span>&#37;</p>
-			
-			<!--Script for slide bar needs to remain here otherwise the number for percentage doesn't display-->
-			<script>		
-				var slider = document.getElementById("myRange");
-				var output = document.getElementById("demo");
-				output.innerHTML = slider.value;
+		<div class="credit-popup" id="creditInfo">
+			<div class="credit-container">
+				<h2>Credit Card Information</h2>
+				
+				<label for="Enter Amount to Charge"</label>
+				Enter Card NUmber: <br>
+				<input type="number" placeholder="xxxxxxxxxx" step=".01" id="creditInput" required>
 		
-				slider.oninput = function() {
-					output.innerHTML = this.value;
-				}
-			</script>
-	
-			<div class="add-tip">
-				<button id="addTip" style="" onclick="sendTip()">Add Tip</button>
+				<span id = "send-amount">
+					<button type="button" class="button" id="submitAmnt-button" onclick="sendCreditCardNotification(); closeFormCreditCard()">Submit</button>
+				</span>
+			</div>
+		</div>
+		
+		<div class="split-popup" id="splitInfo">
+			<div class="credit-container">
+				<h2>Enter Number of Ways to Split Check</h2>
+			
+				<input type="number" placeholder="0" step="1" id="splitInput" required>
+			
+				<span id="span-amount">
+					<button type="button" class="button" id="submitSplit-button" onclick="submitSplitInfo(); closeFormSplit()">Submit</button>
+				</span>
 			</div>
 		</div>
 		
@@ -307,8 +679,46 @@
 		<div class="addRewards">
 			<div class="rewards-button">
 				<button onclick="goRewards()">SIGN UP</button>
-				<button onclick="">CURRENT MEMBER</button>
+				<button onclick="openFormRewards()" id ="current">CURRENT MEMBER</button>
 			</div>
+		</div>
+		
+		<div class="rewards-login" id="myForm">
+			<form class="form-container">
+				<h1>Member Login</h1>
+
+				<label for="email"><b>Phone Number</b></label>
+				<input type="number" placeholder="1234567890" id="phone" required>
+
+				<p id = "noPhone"></p>
+				<p id = "numVisits"></p>
+				<p id = "birthday"></p>
+				<span id = "login">
+					<button type="button" class="button" onclick="getRewards()">Login</button>
+				</span>
+				<button type="button" class="button cancel" onclick="closeFormRewards()">Close</button>
+			</form>
+		</div>
+		
+		<div class="rewards-login" id="signup">
+			<form class="form-container">
+				<h1>Member Sign Up</h1>
+
+				<!--holds form to add a new rewards member-->
+				<label style = "font-family: Arial Black, Times, serif" for ="phone">Phone Number:</label><br><br>
+				<input style = "margin: 0px 0px;"type="number" id="phoneNumber" name="phone" placeholder="5555555555"><br><br>
+
+				<label style = "font-family: Arial Black, Times, serif" for ="email">Email:</label><br><br>
+				<input style = "margin: 0px 0px;"type="email" id="email" name="email" placeholder="xxxx@xxxx.com"><br><br>
+
+				<label style = "font-family: Arial Black, Times, serif" for ="birthday">Birthday:</label><br><br>
+				<input style = "margin: 0px 0px;"type="date" id="birth" name="birthday"><br><br>
+				
+				<span id = "login">
+					<button type="button" class="button" onclick="submitForm()">Sign Up</button>
+				</span>
+				<button type="button" class="button cancel" onclick="closeRewardsSignup()">Cancel</button>
+			</form>
 		</div>
 		
 	</div>

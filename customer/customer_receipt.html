@@ -70,13 +70,66 @@
 		background-color: green;
 	}
 	
+	.add-tip button {
+		background-color: #D3D3D3; /*Makes Gray background*/
+		border:  1% #D3D3D3;  /*Border around boxes is Gray*/
+		color: black; /* White text */
+		padding: 10px 10px; /* Some padding */
+		margin: 0;  /* Created space between buttons */
+		font-family: Arial Black, Times, serif; /* sets font */
+		font-size:  16px;	/* Sets size */
+		font-weight:  normal;	/*Sets normal or bold */
+		text-align: center;	/* Aligns to center of button */
+		cursor: pointer; /* Pointer/hand icon */
+		width: 35%; /* Set a width if needed */
+	}
+
+	/* Add a background color on click */
+	.add-tip button:focus {
+		background-color: green;
+	}
+	
+	
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
-	var sum = 0.0;	
+	var sum = 0.0;		//sum is used to total all of the items brought in from order
+	var tip = 0.00;		//value changed when user inputs text
+	var total = 0.00;	//used for a final total
+	var tax = 0.08;		//constant tax amount to figure proper total
+	var payment_method = 0; //assign credit card == 0 or cash == 1
+	var promotionAmount = 0.00; //adds promotion if the promotion uses an amount instead of a category
+	var promotionExists = false;
+	var kidsEatFree = false;
+	var freeDrinks = false;
+	var kidsEatFreeM = false;
+	var freeDrinksM = false;
+	var count = 0;
+	var split_check = 0; //Parent window will pass number of ways to split the check
+	var total_split = 0.00; //Only show if total was split
 	
 	window.addEventListener('message', addReceipt, false);
 	function addReceipt(message){
+		count++;
+		var promotion = document.getElementById("promotion");
+		//console.log(message);
+		//console.log(message.data);
+		var discount = document.getElementById("coupTotal");
+		console.log(message);
+		console.log(message.data);
+		if(message.data == 'card'){
+			payment_method = 0;
+			//console.log(payment_method);
+		}
+		else if (message.data == 'cash'){
+			payment_method = 1;
+			//console.log(payment_method);
+		}
+		else if (message.data >= 2){
+			//console.log("Split Worked!!");
+			split_check = message.data;
+		}
+		else{
 		var clone = $("#item_template").clone(true);
 		clone.css('display','table-row');
 		var url = 'http://159.89.238.181:8080/api/items?id=' + message.data.$oid;//.concat();
@@ -84,43 +137,346 @@
 		$.get(url, message.data._id, function(response) { // this response occurs asynchronously			
 			sum = 0.0;
 			clone.children("#item").html(JSON.parse(response).name);
-			clone.children("#price").html(JSON.parse(response).price.toFixed(2));
+			var today = new Date();
+			var weekday = today.getDay();
+			var hour = today.getHours();
+			var month, day, year;
+			if(today.getMonth()+1 < 10) {
+				month = today.getMonth()+1;
+				month = "0" + month;
+			}
+			else {
+				month = today.getMonth()+1;
+			}
+			if (today.getDate() < 10) {
+				day= "0" + today.getDate();
+			}
+			else {
+				day = today.getDate();
+			}
+			year = today.getFullYear();
+			if(weekday == 0 && hour >= 16 && hour <= 23 && JSON.parse(response).category == 3)//if it is sunday between 4 and 11:59 pm, apply free drinks promo
+			{
+				clone.children("#price").html("0.00");
+				promotionExists = true;
+				freeDrinks = true;
+				promotionAmount += JSON.parse(response).price;
+				promotion.innerHTML = "Promotion applied: Free Drinks!";
+				sum = 0;
+				$('.receipt').find('.receiptRow').each(function (index, item) { // for each item already added into container
+					if ($(item).data('item') != undefined) {
+						sum += $(item).data('item').price;
+					}
+				});
+				sum -= promotionAmount;
+				$('#SubTot').html('Subtotal: $' + sum.toFixed(2));
+				//Adding sales tax to payment information
+				tax = 0.08;
+				tax *= sum; 
+				$('#SlsTax').html('Tax: $' + tax.toFixed(2));
+				total = 0.00;
+				total += sum + tax + tip;
+				$('#FinTot').html('Total: $' + total.toFixed(2));
+			}
+			else if(weekday == 1 && hour >= 16 && hour <= 23 && JSON.parse(response).category == 4)//if it is monday between 4 and 11:59 pm, apply free kids meals promo
+			{
+				clone.children("#price").html("0.00");
+				promotionExists = true;
+				kidsEatFree = true;
+				promotionAmount += JSON.parse(response).price;
+				promotion.innerHTML = "Promotion applied: Free Kids Meals!";
+				sum = 0;
+				$('.receipt').find('.receiptRow').each(function (index, item) { // for each item already added into container
+					if ($(item).data('item') != undefined) {
+						sum += $(item).data('item').price;
+					}
+				});
+				sum -= promotionAmount;
+				$('#SubTot').html('Subtotal: $' + sum.toFixed(2));
+				//Adding sales tax to payment information
+				tax = 0.08;
+				tax *= sum; 
+				$('#SlsTax').html('Tax: $' + tax.toFixed(2));
+				total = 0.00;
+				total += sum + tax + tip;
+				$('#FinTot').html('Total: $' + total.toFixed(2));
+			}
+			else{
+				url = 'http://159.89.238.181:8080/api/promotions';
+				$.get(url, function(list){
+					list = JSON.parse(list);
+					for(item in list)
+					{
+						var expireDate = list[item].end.split('-');//gets expiration date
+						var startDate = list[item].start.split('-');//gets start date
+						
+						if((year < expireDate[0] || (year == expireDate[0] && month < expireDate[1]) || (year == expireDate[0] && month == expireDate[1] && day <= expireDate[2])) && (year > startDate[0] || (year == startDate[0] && month > startDate[1]) || (year == startDate[0] && month == startDate[1] && day >= startDate[2])))//if promotion is valid
+						{
+							if(list[item].category == 3 && JSON.parse(response).category == 3 && promotionExists == false)//if no other promotion exists and the category is drinks, change the price of the drinks to 0
+							{
+								clone.children("#price").html("0.00");
+								promotionExists = true;
+								promotion.innerHTML = "Promotion applied: Free Drinks!";
+								freeDrinksM = true;
+								promotionAmount += JSON.parse(response).price;
+								sum = 0;
+								$('.receipt').find('.receiptRow').each(function (index, item) { // for each item already added into container
+									if ($(item).data('item') != undefined) {
+										sum += $(item).data('item').price;
+									}
+								});
+								sum -= promotionAmount;
+								$('#SubTot').html('Subtotal: $' + sum.toFixed(2));
+								//Adding sales tax to payment information
+								tax = 0.08;
+								tax *= sum; 
+								$('#SlsTax').html('Tax: $' + tax.toFixed(2));
+								total = 0.00;
+								total += sum + tax + tip;
+								$('#FinTot').html('Total: $' + total.toFixed(2));
+							}
+							else if(list[item].category == 4 && JSON.parse(response).category == 4 && promotionExists == false)//if no other promotion exists and the category is kids, change the price of the kids meals to 0
+							{
+								clone.children("#price").html("0.00");
+								promotionExists = true;
+								kidsEatFreeM = true;
+								promotion.innerHTML = "Promotion applied: Free Kids Meals!";
+								promotionAmount += JSON.parse(response).price;
+								sum = 0;
+								$('.receipt').find('.receiptRow').each(function (index, item) { // for each item already added into container
+									if ($(item).data('item') != undefined) {
+										sum += $(item).data('item').price;
+									}
+								});
+								sum -= promotionAmount;
+								$('#SubTot').html('Subtotal: $' + sum.toFixed(2));
+								//Adding sales tax to payment information
+								tax = 0.08;
+								tax *= sum; 
+								$('#SlsTax').html('Tax: $' + tax.toFixed(2));
+								total = 0.00;
+								total += sum + tax + tip;
+								$('#FinTot').html('Total: $' + total.toFixed(2));
+							}
+						}
+					}
+				});
+			}
+			if(promotionExists == false || count > 1)
+			{
+				clone.children("#price").html(JSON.parse(response).price.toFixed(2));
+			}
 			var tmp = JSON.parse(response);
 			var copy = $.extend( true, {}, tmp ); // response goes out of scope and must be deep copied
 			clone.data('item', copy);
+			sum = 0;
 			$('.receipt').find('.receiptRow').each(function (index, item) { // for each item already added into container
 				if ($(item).data('item') != undefined) {
 					sum += $(item).data('item').price;
 				}
 			});
-			$('#SubTot').html('Subtotal: $' + sum.toFixed(2));			
-		})		
-	}
-	
-	//Function to calculate the total of items in the receipt.
-	
-	
-	function printSubTotal(subTotal){
-		document.getElementById("SubTot").innerHtml = subTotal;
-	}
-	
-	function printSalesTax(salesTx){
-		document.getElementById("SlsTax").innerHtml = salesTx;
-	}
-	
-	function printTip(tipAmnt){
-		document.getElementById("Tip") = tipAmnt;
-	}
-	
-	function printFinalTotal(finalTotal){
-		document.getElementById("FinTot").innerHtml = finalTotal;
-	}
-	
-	function submitCoupon(){
-		document.getElementById("CouponCode").reset();
+			sum -= promotionAmount;
+			$('#SubTot').html('Subtotal: $' + sum.toFixed(2));
+			//Adding sales tax to payment information
+			tax = 0.08;
+			tax *= sum; 
+			$('#SlsTax').html('Tax: $' + tax.toFixed(2));
+			//Need to get tip information
+			
+			url = 'http://159.89.238.181:8080/api/promotions';
+			$.get(url, function(list){
+				list = JSON.parse(list);
+				for(item in list)
+				{
+					var expireDate = list[item].end.split('-');//gets expiration date
+					var startDate = list[item].start.split('-');//gets start date
+						
+					if((year < expireDate[0] || (year == expireDate[0] && month < expireDate[1]) || (year == expireDate[0] && month == expireDate[1] && day <= expireDate[2])) && (year > startDate[0] || (year == startDate[0] && month > startDate[1]) || (year == startDate[0] && month == startDate[1] && day >= startDate[2])))//if promotion is valid
+					{
+						if(list[item].amount > 0 && promotionExists == false && list[item].amount < sum)//if a promotion is not currently being applied and the promotion amount is not greater than the subtotal
+						{
+							promotionExists = true;
+							promotion.innerHTML = "Promotion applied: " + list[item].name + " - $" + list[item].amount.toFixed(2) + " off!";
+							promotionAmount = list[item].amount;
+							sum = 0;
+								$('.receipt').find('.receiptRow').each(function (index, item) { // for each item already added into container
+									if ($(item).data('item') != undefined) {
+										sum += $(item).data('item').price;
+									}
+								});
+								sum -= promotionAmount;
+								$('#SubTot').html('Subtotal: $' + sum.toFixed(2));
+								//Adding sales tax to payment information
+								tax = 0.08;
+								tax *= sum; 
+								$('#SlsTax').html('Tax: $' + tax.toFixed(2));
+								total = 0.00;
+								total += sum + tax + tip;
+								$('#FinTot').html('Total: $' + total.toFixed(2));
+						}
+					}
+				}
+			});
+			
+			//$('#Tip').html('Gratuity: $' + tip.toFixed(2));
+			//Final total 
+			total = 0.00;
+			total += sum + tax + tip;
+			$('#FinTot').html('Total: $' + total.toFixed(2));
+		})
+		}//end else
 		
+		if(split_check > 1){
+			total_split = (total + tip) / split_check;
+			document.getElementById("splitTheCheck").style.display = "inline";
+			$('#SplitTot').html('Split Total: $' + total_split.toFixed(2));
+		}
 	}
 	
+	function addTip(){
+		document.getElementById("formContainer").style.display = 'none';
+		var x = document.getElementById("tip_input");
+		console.log(x.value);
+		tip = parseFloat(x.value);
+		$('#tip2').html('Gratuity: $' + tip.toFixed(2));
+		total += tip;
+		$('#FinTot').html('Total: $' + total.toFixed(2));
+		/*var url = "http://159.89.238.181:8080/api/tip?id="//api call should be mostly done, just need to find a way to get the order ID
+		url = url.concat(id);
+		url = url.concat("&amount=");
+		url = url.concat(parseFloat(tip));
+		$.post(url, function(response)){
+			console.log(response);
+		}*/
+		
+		if(split_check > 1){
+			total_split = (total) / split_check;
+			document.getElementById("splitTheCheck").style.display = "inline";
+			$('#SplitTot').html('Split Total: $' + total_split.toFixed(2));
+		}
+	}
+	
+	function submitPayment(){
+		var response = confirm("Are you sure you want to submit your payment?");
+		if(response === true){
+			if(total_split > 0){
+				//Run a for loop to process multiple payments
+				var i;
+				for(i = 0; i < split_check; i++){
+					var payment = {
+						amount: total_split,
+						method: payment_method
+					};
+					console.log(JSON.stringify(payment));
+					$.post('http://159.89.238.181:8080/api/payment?table=3', JSON.stringify(payment), function(response){
+						var status = JSON.parse(response);
+				
+						if(status.code != 200){
+							alert(status.message);
+							console.log(status.message);
+						}
+					});
+				}
+			}
+			else{
+				var payment = {
+					//total: document.getElementById('FinTot').value,
+					//tip: document.getElementById('tip2').value,
+					//table: 11,
+					//status: 5
+					amount: total,
+					method: payment_method
+				};
+				console.log(JSON.stringify(payment));
+				$.post('http://159.89.238.181:8080/api/payment?table=3', JSON.stringify(payment), function(response){
+					var status = JSON.parse(response);
+				
+					if(status.code != 200){
+						alert(status.message);
+						console.log(status.message);
+					}
+				});
+			}
+		}
+	}
+	
+	//submits a coupon
+	function submitCoupon()
+	{
+		var coupon = document.getElementById('coupon').value;//gets the coupon code typed in
+		coupon = coupon.toLowerCase();
+		var exists = false;
+		var couponResp = document.getElementById('couponResp');//gets the area that stores the response from the coupon
+		var couponForm = document.getElementById('CouponCode');//gets the area where the coupon form is stored
+		var coupTotal = document.getElementById('coupTotal');//gets where the coupon total will be stored
+		var totalAfter = document.getElementById('FinTot');//gets where the final total is stored
+		var today = new Date();//creates new date with day, month, and year
+		var month, day, year;
+		if(today.getMonth()+1 < 10)
+		{
+			month = today.getMonth()+1;
+			month = "0" + month;
+		}
+		else{
+			month = today.getMonth()+1;
+		}
+		if(today.getDate() < 10)
+		{
+			day= "0" + today.getDate();
+		}
+		else
+		{
+			day = today.getDate();
+		}
+		year = today.getFullYear();
+		
+		var url = 'http://159.89.238.181:8080/api/coupons';
+		$.get(url, function(response){//gets list of all coupons
+			response = JSON.parse(response);
+			for(item in response)//for each coupon
+			{
+				var expireDate = response[item].end.split('-');//gets expiration date
+				var startDate = response[item].start.split('-');//gets start date
+				
+				if(response[item].code.toLowerCase() == coupon)//if the code equals the coupon in the database
+				{
+					if(response[item].amount > total)//if the amount of the coupon is greater than the subtotal, don't apply the coupon
+					{
+						couponResp.innerHTML = "Cannot apply coupon. Coupon amount is greater than the total.";
+						coupTotal.innerHTML = "Discount: ";
+						exists = true;
+					}
+					else if(year > expireDate[0] || (year == expireDate[0] && month > expireDate[1]) || (year == expireDate[0] && month == expireDate[1] && day > expireDate[2]))//if the coupon is expired, dont apply the coupon
+					{
+						couponResp.innerHTML = "Cannot apply coupon. Coupon is expired on " + expireDate[1] + "/" + expireDate[2] + "/" + expireDate[0] + ".";
+						coupTotal.innerHTML = "Discount: ";
+						exists = true;
+					}
+					else if(year < startDate[0] || (year == startDate[0] && month < startDate[1]) || (year == startDate[0] && month == startDate[1] && day < startDate[2]))//if the coupon is not valid yet, don't apply the coupon
+					{
+						couponResp.innerHTML = "Cannot apply coupon. Coupon is valid from " + startDate[1] + "/" + startDate[2] + "/" + startDate[0] + " to " + expireDate[1] + "/" + expireDate[2] + "/" + expireDate[0] + ".";
+						coupTotal.innerHTML = "Discount: ";
+						exists = true;
+					}
+					else//if the coupon is valid, apply the coupon amount to the total
+					{
+						couponForm.style.display = 'none';
+						total = total - response[item].amount;
+						coupTotal.innerHTML = "Discount: $" + response[item].amount.toFixed(2); 
+						totalAfter.innerHTML = "Total: $" + total.toFixed(2);
+						exists = true;
+						couponResp.innerHTML = response[item].name + " was applied.";
+						break;
+					}
+				}
+			}
+			if(exists == false)//if the coupon does not exist, print the coupon is not valid
+			{
+				couponResp.innerHTML = "Coupon code not valid.";
+				coupTotal.innerHTML = "Discount: ";
+			}
+		});
+	}
 </script>
 </head>
 <body style="background-color:white">
@@ -131,11 +487,12 @@
 		</tr>
 	</table>
 	
-	<form id="CouponCode">
+	<form id="CouponCode"><!--holds form for coupons-->
 		Apply Coupon Code: <input type="text" id="coupon" name="coupon">
 		<input type="button" value="Submit" onclick="submitCoupon()">
 	</form>
-	<table id="total">
+	<p id = "couponResp"></p>
+	<table id="total"><!--table holds all checkout information-->
 		<tr>
 			<th id="SubTot">Subtotal: </th>
 		</tr>
@@ -143,16 +500,29 @@
 			<th id="SlsTax">Tax: </th>
 		</tr>
 		<tr>
-			<th id="tip">Gratuity: </th>
+			<div id="formContainer">
+				Add Tip: <input type="number" id="tip_input" name="tip" step=".01">
+				<input type="button" value="Submit" onclick="addTip();">
+			</div>
+			
+			<th id="tip2">Gratuity: </th>
+			</th>
+		</tr>
+		<tr>
+			<th id="coupTotal">Discount: </th>
+		</tr>
+		<tr id="splitTheCheck">
+			<th id="SplitTot">Split Total: </th>
 		</tr>
 		<tr>
 			<th id="FinTot">Total: </th>
 		</tr>
 	</table>
-	
+	<!--stores promotion information if there is one going on-->
+	<p id = "promotion"></p>
 	<br>
 	<div class="button-group">
-		<button>Submit Payment</button>
+		<button onclick="submitPayment()">Submit Payment</button>
 	</div>
 		<table>
 			<tr id="item_template" class = 'receiptRow'>

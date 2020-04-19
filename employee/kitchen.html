@@ -76,8 +76,10 @@
         }
 
         function addItem(item) {
-            var clone = $("#item_template").clone(true);
-            var url = 'http://159.89.238.181:8080/api/items?id=' + item.$oid;			
+			var clone = $("#item_template").clone(true);
+			if (item == null) 
+				return clone;
+			var url = 'http://159.89.238.181:8080/api/items?id=' + item.$oid;			
 			$.get(url, item._id, function (response) { // sample the item's name from the backend
 				clone.html(JSON.parse(response).name); // and assign it to the element
 			});
@@ -122,7 +124,17 @@
 		}
 
 		function markComplete() {
+			var notif = 'http://159.89.238.181:8080/api/notifications?table=' + $(this).data('order').table;
+			var data = {
+				variant: 2,
+				table: $(this).data('order').table
+			};
 			var url = 'http://159.89.238.181:8080/api/orders/status?table=' + $(this).data("order").table + "&status=1";
+			
+			$.post(notif, JSON.stringify(data), function (response){
+				console.log('marked order complete');
+			});
+			
 			$.post(url, function (response) {
 				setTimeout(function() {
 					location.reload();
@@ -141,7 +153,7 @@
                     );
                 }
             })
-			setTimeout("location.reload(true);",10000);
+			//setTimeout("location.reload(true);",10000);
 		}); 
 
     </script>

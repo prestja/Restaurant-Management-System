@@ -105,6 +105,9 @@
 	var kidsEatFreeM = false;
 	var freeDrinksM = false;
 	var count = 0;
+	var split_check = 0; //Parent window will pass number of ways to split the check
+	var total_split = 0.00; //Only show if total was split
+	
 	window.addEventListener('message', addReceipt, false);
 	function addReceipt(message){
 		count++;
@@ -121,6 +124,10 @@
 		else if (message.data == 'cash'){
 			payment_method = 1;
 			//console.log(payment_method);
+		}
+		else if (message.data >= 2){
+			//console.log("Split Worked!!");
+			split_check = message.data;
 		}
 		else{
 		var clone = $("#item_template").clone(true);
@@ -318,6 +325,12 @@
 			$('#FinTot').html('Total: $' + total.toFixed(2));
 		})
 		}//end else
+		
+		if(split_check > 1){
+			total_split = (total + tip) / split_check;
+			document.getElementById("splitTheCheck").style.display = "inline";
+			$('#SplitTot').html('Split Total: $' + total_split.toFixed(2));
+		}
 	}
 	
 	function addTip(){
@@ -470,6 +483,9 @@
 		</tr>
 		<tr>
 			<th id="coupTotal">Discount: </th>
+		</tr>
+		<tr id="splitTheCheck">
+			<th id="SplitTot">Split Total: </th>
 		</tr>
 		<tr>
 			<th id="FinTot">Total: </th>

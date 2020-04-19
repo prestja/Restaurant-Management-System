@@ -274,7 +274,7 @@
 		display: none;
 		position: fixed;
 		bottom: 50%;
-		right: 5%;
+		right: 30%;
 		border: 3px solid #f1f1f1;
 		z-index: 9;
 	}
@@ -318,6 +318,15 @@
 
 	.credit-container .button:hover, .open-button:hover {
 		opacity: 1;
+	}
+	
+	.split-popup {
+		display: none;
+		position: fixed;
+		bottom: 50%;
+		right: 30%;
+		border: 3px solid #f1f1f1;
+		z-index: 9;
 	}
 
 	
@@ -380,7 +389,7 @@
 			var message = {
 				table: table,
 				variant: 6,
-				details: "customers wish to pay with cash."
+				details: "customers wishes to pay with cash."
 			};
 		
 			//console.log(JSON.stringify(message));
@@ -493,7 +502,20 @@
 	}
 	
 	function openFormSplit() {
-		document.getElementById("split").style.display = "block";
+		document.getElementById("splitInfo").style.display = "block";
+	}
+	
+	function submitSplitInfo() {
+		var input = document.getElementById("splitInput");
+		console.log("Split Number");
+		console.log(input.value);
+		var split = input.value;
+		var target = document.getElementById("receipt_screen");
+		target.contentWindow.postMessage(split, '*');
+	}
+	
+	function closeFormSplit() {
+		document.getElementById("splitInfo").style.display = "none";
 	}
 	
 	function openFormRewards() {
@@ -616,7 +638,7 @@
 				
 				<label for="Enter Amount to Charge"</label>
 				Enter Card NUmber: <br>
-				<input type="number" placeholder="xxxxxxxxxx" step=".01" id="creditInfo" required>
+				<input type="number" placeholder="xxxxxxxxxx" step=".01" id="creditInput" required>
 		
 				<span id = "send-amount">
 					<button type="button" class="button" id="submitAmnt-button" onclick="sendCreditCardNotification(); closeFormCreditCard()">Submit</button>
@@ -624,6 +646,17 @@
 			</div>
 		</div>
 		
+		<div class="split-popup" id="splitInfo">
+			<div class="credit-container">
+				<h2>Enter Number of Ways to Split Check</h2>
+			
+				<input type="number" placeholder="0" step="1" id="splitInput" required>
+			
+				<span id="span-amount">
+					<button type="button" class="button" id="submitSplit-button" onclick="submitSplitInfo(); closeFormSplit()">Submit</button>
+				</span>
+			</div>
+		</div>
 		
 		<!--Rewards Option-->
 		<h2>REWARDS</h2>

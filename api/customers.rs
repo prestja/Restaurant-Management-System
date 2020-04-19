@@ -40,10 +40,10 @@ pub fn get_all(_conn: LogsDbConn) -> String {
 	return str;
 }
 
-#[get("/?<id>")]
-pub fn get(_conn: LogsDbConn, id: u32) -> String {
+#[get("/?<phone>")]
+pub fn get(_conn: LogsDbConn, phone: String) -> String {
 	let mut str = String::from("[\n\t");
-	let doc = doc!{"id": id};
+	let doc = doc!{"phone": phone};
 	let _coll = _conn.collection("customers");
 	let cursor = _coll.find(Some(doc.clone()), None).unwrap();
 	for result in cursor 
@@ -66,29 +66,44 @@ pub fn get(_conn: LogsDbConn, id: u32) -> String {
 	return str;
 }
 
-#[post("/")]
-pub fn post(_conn: LogsDbConn) -> &'static str 
-{
-	let _coll = _conn.collection("customers");
-	_coll.insert_one(doc!{ "id": 32 }, None).unwrap();
-	return "Inserted an element into database";
-}
-
 #[post("/", data = "<customer>")]
-pub fn update_rewards(_conn: LogsDbConn, customer: Json<Customer>) -> String
+pub fn post(_conn: LogsDbConn, customer: Json<Customer>) -> String
 {
 	let inner = customer.into_inner();
-	let filter = doc!{
+	let doc = doc!{
 		"phone": inner.phone,
 		"email": inner.email,
-		"bday": inner.bday
+		"bday": inner.bday,
+		"visits": 1
 	};
-	let update = doc!{"$inc": {"quantity": 1}};
+	let _coll = _conn.collection("customers");
+	let result = _coll.insert_one(doc, None);
+        if let Ok(inserted) = result {
+                let response = json!({ // generate a response for the user
+                        "code": 200,
+                        "message": "Successfully inserted customer rewards into system."
+                });
+                return serde_json::to_string(&response).unwrap();
+        }
+        else {
+                let response = json!({ // generate a response for the user
+                        "code": 404,
+                        "message": "Error inserting customer rewards into system."
+                });
+                return serde_json::to_string(&response).unwrap();
+        }
+}
+
+#[post("/?<phone>")]
+pub fn update_rewards(_conn: LogsDbConn, phone: String) -> String
+{
+	let filter = doc!{"phone": phone};
+	let update = doc!{"$inc": {"visits": 1}};
 	let mut _upsert = mongodb::coll::options::FindOneAndUpdateOptions::new();
-	_upsert.upsert = Some(true);
-	let coll = _conn.collection("customers");
-	if let Ok(result) = coll.find_one_and_update(filter.clone(), update.clone(), Some(_upsert.clone())){
-		if let Some(item) = result {
+        _upsert.upsert = Some(true);
+        let coll = _conn.collection("customers");
+        if let Ok(result) = coll.find_one_and_update(filter.clone(), update.clone(), Some(_upsert.clone())){
+                if let Some(item) = result {
                         let response = json!({
                                 "code": 200,
                                 "message": "Successfully updated quantity for customer."
@@ -108,5 +123,4 @@ pub fn update_rewards(_conn: LogsDbConn, customer: Json<Customer>) -> String
                 });
                 return serde_json::to_string(&response).unwrap();
         }
-
 }

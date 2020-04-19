@@ -47,8 +47,8 @@ pub fn get_all(_conn: LogsDbConn) -> String {
 	return str;
 }
 
-#[get("/<id>")]
-pub fn get(_conn: LogsDbConn, id: u32) -> String {
+#[get("/?<id>")]
+pub fn get(_conn: LogsDbConn, id: String) -> String {
 	let mut str = String::from("[\n\t");
 	let doc = doc!{"id": id};
 	let _coll = _conn.collection("staff");
@@ -94,7 +94,7 @@ pub fn get_login(_conn: LogsDbConn, id: String, password: String) -> String {
 	} 
 
 	let response = json!({
-		"code": 403,
+		"code": 404,
 		"message": "Invalid employee ID or password!"
 	});
 	return serde_json::to_string(&response).unwrap();

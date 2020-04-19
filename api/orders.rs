@@ -25,11 +25,12 @@ pub struct Order {
 	#[serde(default)] id: u32,
 	#[serde(default)] status: u32,  // ordered = 0, NeedStaff = 1, NeedManager = 2, Ready = 3, Served = 4, Closed = 5
 	#[serde(default)] substitutions: String,
-	#[serde(default)] allergies: String	
+	#[serde(default)] allergies: String,
+	#[serde(default)] total: f32
 }
 
 #[get("/", rank = 4)]
-pub fn get(_conn: LogsDbConn) -> String {
+pub fn get_all(_conn: LogsDbConn) -> String {
 	let mut str = String::from("[\n\t");
 	let _coll = _conn.collection("orders");
 	let cursor = _coll.find(None, None).unwrap();
@@ -120,8 +121,7 @@ pub fn get_id (_conn: LogsDbConn, id: String) -> String {
 		}
 		_str.push_str(",\n\t");
 	}
-	if _str.len() <= 3
-	{
+	if _str.len() <= 3 {
 		return String::from("No entries found");
 	}
 	_str.pop();
@@ -131,13 +131,62 @@ pub fn get_id (_conn: LogsDbConn, id: String) -> String {
 	return _str;
 }
 
+// removes the specified item from the 
+#[post("/remove?<table>&<id>")]
+pub fn remove (conn: LogsDbConn, table: u32, id: String) -> String {
+	let coll = conn.collection("orders");
+	let cast = bson::oid::ObjectId::with_string(id.as_str());
+	let filter = doc! {
+		"table": table,
+		"status": {
+			"$lt": 5 // where the status of the order is < 5 (not yet paid)
+		}
+	};
+	
+	if let Ok (oid) = cast {
+		let update = doc! { // pulls value from array and removes it
+			"$pull": {
+				"items": oid
+			}
+		};
+		if let Ok(result) = coll.find_one_and_update(filter, update, None) {
+			if let Some(item) = result {
+				let response = json!({
+            		"code": 200,
+            		"message": "Successfully removed item from order."
+        		});
+       		 	return serde_json::to_string(&response).unwrap();
+			}
+			else {
+				let response = json!({
+            		"code": 404,
+            		"message": "Failed to find item or order for the specified table."
+        		});
+        		return serde_json::to_string(&response).unwrap();
+			}			
+		}
+		else {
+			let response = json!({
+        		"code": 404,
+        		"message": "Database error."
+    		});
+    		return serde_json::to_string(&response).unwrap();
+		}
+	}
+	else {
+		let response = json!({
+    		"code": 404,
+    		"message": "Invalid or malformed ObjectID."
+		});
+		return serde_json::to_string(&response).unwrap();
+	}
+}
+
 #[get("/?<tableid>", rank = 2)]
 pub fn get_table_orders(_conn: LogsDbConn, tableid: u32) -> String {
 	let mut doc_list = String::from("[\n\t");
-        let _doc = doc!{"table": tableid};
-	//let mut _filter = mongodb::coll::options::FindOptions::new();
-	//_filter.projection = serde::export::Some(doc!{"items": 1, "_id": 0});
-        let _coll = _conn.collection("orders");
+    let _doc = doc!{"table": tableid};
+    let _coll = _conn.collection("orders");
 	let _itemcoll = _conn.collection("items");
 	let _cursor = _coll.find(Some(_doc.clone()), None).unwrap(); //search for the specified table in the orders database
 	for result in _cursor {
@@ -147,8 +196,7 @@ pub fn get_table_orders(_conn: LogsDbConn, tableid: u32) -> String {
 					let itemid = value.as_object_id().unwrap();
 					let itemdoc = doc!{"_id": itemid.clone()};
 					let itemcursor = _itemcoll.find(Some(itemdoc.clone()), None).unwrap(); //search through the item database for the item
-					for itemresult in itemcursor
-					{
+					for itemresult in itemcursor {
 						if let Ok(actualitem) = itemresult //if the item is valid
 						{
 							let _bson = mongodb::to_bson(&actualitem).unwrap();
@@ -182,7 +230,7 @@ pub fn get_table(conn: LogsDbConn, table: u32) -> String {
 		"table": table
 	};
 	let mut options = mongodb::coll::options::FindOptions::new();
-	options.sort = Some(doc! {
+	options.sort = Some(doc! { // sorts by most recently added
 		"_id": -1
 	});
 	if let Ok (result) = coll.find_one(Some(filter.clone()), Some(options)) {
@@ -241,9 +289,9 @@ pub fn post(conn: LogsDbConn, order: Json<Order>) -> String {
 		"table": inner.table,
 		"id": inner.id,
 		"items": inner.items,
-		"status": 0,
-		"total": 43.19,
-		"tip": 5.00,
+		"status": inner.status,
+		"total": inner.total,
+		"tip": 0.00,
 		"substitutions": inner.substitutions,
 		"allergies": inner.allergies
 	};	
@@ -353,3 +401,43 @@ pub fn apply_promotion(_conn: LogsDbConn, id: String, amount: f32) -> String {
         }
 }
 
+#[post("/tip?<id>&<amount>")]
+pub fn add_tip(_conn: LogsDbConn, id: String, amount: String) -> String {
+	let amount2 : f32 = amount.parse().unwrap();
+	let cast = bson::oid::ObjectId::with_string(id.as_str());
+        let coll = _conn.collection("orders");
+        if let Ok(oid) = cast {
+            let filter = doc! {"_id": oid};
+            let _promo = doc! { "$set": {"tip": amount2} };
+            if let Ok (result) = coll.find_one_and_update(filter.clone(),_promo.clone(), None) {
+                if let Some(item) = result {
+                    let response = json!({
+                        "code": 200,
+                        "message": "Successfully updated tip for order"
+                    });
+                    return serde_json::to_string(&response).unwrap();
+                }
+                else {
+                	let response = json!({
+                		"code": 404,
+                		"message": "Could not find order to add tip."
+                	});
+                	return serde_json::to_string(&response).unwrap();
+                }                
+            }
+            else {
+                let response = json!({
+                    "code": 404,
+                    "message": "Error accessing database."
+                });
+                return serde_json::to_string(&response).unwrap();
+            }
+        }
+        else {
+            let response = json!({
+                "code": 404,
+                "message": "Invalid or malformed object id."
+            });
+            return serde_json::to_string(&response).unwrap();
+        }
+}

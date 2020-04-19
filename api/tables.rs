@@ -5,7 +5,7 @@ use rocket_contrib::{databases::mongodb};
 use mongodb::{doc, bson};
 use serde_json;
 
-#[get("/tables")]
+#[get("/")]
 pub fn get_all(_conn: LogsDbConn) -> String 
 {
 	let mut str = String::from("[\n\t");
@@ -32,7 +32,7 @@ pub fn get_all(_conn: LogsDbConn) -> String
 	return str;
 }
 
-#[get("/tables/<id>")]
+#[get("/?<id>")]
 pub fn get(_conn: LogsDbConn, id: u32) -> String 
 {
 	let mut str = String::from("[\n\t");
@@ -60,6 +60,7 @@ pub fn get(_conn: LogsDbConn, id: u32) -> String
 	return str;
 }
 
+/*	-Legacy
 #[post("/tables")]
 pub fn post(_conn: LogsDbConn) -> &'static str 
 {
@@ -78,3 +79,4 @@ pub fn update_table(_conn: LogsDbConn, id: u32, status: u32) -> &'static str
 	_coll.update_one(filter, update, None).unwrap();
 	return "Updated element in database";
 }
+*/

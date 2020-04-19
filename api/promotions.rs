@@ -16,6 +16,39 @@ pub struct Promotion {
 	category: i32
 }
 
+//Get all documents within the promotions database
+#[get("/")]
+pub fn get_all(_conn: LogsDbConn) -> String {
+	let mut str = String::from("[\n\t");
+	let _coll = _conn.collection("promotions");
+	let cursor = _coll.find(None, None).unwrap();
+	for result in cursor
+	{
+		//if result is valid, set item to serialize
+		if let Ok(item) = result 
+		{
+			let _bson = mongodb::to_bson(&item).unwrap();
+			let _json = serde_json::ser::to_string(&_bson).unwrap();
+			//add the serialized object to the return string
+			str.push_str(&_json);
+		}
+		str.push_str(",\n\t");
+	}
+	//If there are no documents in the collection, return appropriate response
+	if str.len() <= 3
+	{
+		return String::from("No entries found");
+	}
+	//Pop off the last comma, newline, and tab
+	str.pop();
+	str.pop();
+	str.pop();
+	//End the output string and return
+	str.push_str("\n]");
+	return str;
+}
+
+//Deserialize and post the new promotion to the database
 #[post("/", data = "<promo>")]
 pub fn post (conn: LogsDbConn, promo: Json<Promotion>) -> String {
 	let inner = promo.into_inner();
@@ -46,9 +79,3 @@ pub fn post (conn: LogsDbConn, promo: Json<Promotion>) -> String {
 		return serde_json::to_string(&response).unwrap();
 	}	
 }
-
-/*
-pub fn get_all(conn: LogsDbConn) {
-
-}
-*/

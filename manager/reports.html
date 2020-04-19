@@ -159,7 +159,7 @@
     <script>
 	//adds item for the sales report onto the table
 	function addItem(item) {
-		if(item.items != null && item.placed != null && item.payments != null){//if the order is not empty
+		if(item.items != null && item.placed != null && (item.payments != null || item.status == 5)){//if the order is not empty
 		var salesTab = document.getElementById('sales');
 		
 		var rowCnt = salesTab.rows.length; //gets current amount of rows
@@ -225,6 +225,9 @@
 		else
 		{
 			td.append("Unknown");
+			var hr = document.createElement('hr');
+				hr.setAttribute('color','black');
+				td.append(hr);
 		}
 		td.append("REMAINING");//this line stores the remaining balance for the table
 				var hr = document.createElement('hr');

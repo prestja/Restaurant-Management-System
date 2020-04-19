@@ -210,7 +210,7 @@
 						var expireDate = list[item].end.split('-');//gets expiration date
 						var startDate = list[item].start.split('-');//gets start date
 						
-						if((year <= expireDate[0] || (year == expireDate[0] && month <= expireDate[1]) || (year == expireDate[0] && month == expireDate[1] && day <= expireDate[2])) && year > startDate[0] || (year == startDate[0] && month >= startDate[1]) || (year == startDate[0] && month == startDate[1] && day >= startDate[2]))//if promotion is valid
+						if((year < expireDate[0] || (year == expireDate[0] && month < expireDate[1]) || (year == expireDate[0] && month == expireDate[1] && day <= expireDate[2])) && (year > startDate[0] || (year == startDate[0] && month > startDate[1]) || (year == startDate[0] && month == startDate[1] && day >= startDate[2])))//if promotion is valid
 						{
 							if(list[item].category == 3 && JSON.parse(response).category == 3 && promotionExists == false)//if no other promotion exists and the category is drinks, change the price of the drinks to 0
 							{
@@ -291,7 +291,7 @@
 					var expireDate = list[item].end.split('-');//gets expiration date
 					var startDate = list[item].start.split('-');//gets start date
 						
-					if((year < expireDate[0] || (year == expireDate[0] && month < expireDate[1]) || (year == expireDate[0] && month == expireDate[1] && day <= expireDate[2])) && year > startDate[0] || (year == startDate[0] && month > startDate[1]) || (year == startDate[0] && month == startDate[1] && day >= startDate[2]))//if promotion is valid
+					if((year < expireDate[0] || (year == expireDate[0] && month < expireDate[1]) || (year == expireDate[0] && month == expireDate[1] && day <= expireDate[2])) && (year > startDate[0] || (year == startDate[0] && month > startDate[1]) || (year == startDate[0] && month == startDate[1] && day >= startDate[2])))//if promotion is valid
 					{
 						if(list[item].amount > 0 && promotionExists == false && list[item].amount < sum)//if a promotion is not currently being applied and the promotion amount is not greater than the subtotal
 						{

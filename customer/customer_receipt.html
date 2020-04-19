@@ -348,6 +348,12 @@
 		$.post(url, function(response)){
 			console.log(response);
 		}*/
+		
+		if(split_check > 1){
+			total_split = (total) / split_check;
+			document.getElementById("splitTheCheck").style.display = "inline";
+			$('#SplitTot').html('Split Total: $' + total_split.toFixed(2));
+		}
 	}
 	
 	function submitPayment(){

@@ -379,7 +379,14 @@
 			target.contentWindow.postMessage(payment_method, '*');
 		});
 	}
-
+	
+	//Reward game function
+	function goRoulette() {
+			//var frame = document.getElementById("ifrm");
+			//frame.src = "roulette.html";
+			var playGame = window.open("customer/roulette.html", "", "width=800, height=700");
+	}
+	
 	//send notification to servers wanting to pay with cash
 	function sendCashNotification() {
 		var response = confirm("Are you sure you wish to pay cash for this order?");
@@ -391,6 +398,9 @@
 				variant: 6,
 				details: "customers wishes to pay with cash."
 			};
+			
+			//Bring up the reward game
+			goRoulette();
 		
 			//console.log(JSON.stringify(message));
 			$.post('http://159.89.238.181:8080/api/notifications', JSON.stringify(message), function(response){
@@ -417,9 +427,13 @@
 			//Create a message to send to notifications page
 			var message = {
 				table: table,
-				variant: 6,
+				variant: 7,
 				details: "customer payed with credit card*-."
 			};
+			
+			//Bring up the reward game
+			goRoulette();
+			
 			
 			$.post('http://159.89.238.181:8080/api/notifications', JSON.stringify(message), function(response){
 				var status = JSON.parse(response);				
@@ -435,6 +449,8 @@
 				}
 				
 			});
+			
+			
 		}	
 	}
 	

@@ -1,0 +1,103 @@
+<html>
+<head>
+<style>
+	/*Create a div class for the questions*/
+	.question {
+		width: 60%;
+		font-family: Arial;
+		background-color: green;
+		position: fixed;
+		left: 15%;
+		margin-top: 0%;
+		display: block;
+		color: white;
+		
+	}
+	
+	#text-box {
+		display: block;
+		height: 20%;
+		width: 60%;
+		overflow: auto;
+		word-wrap: break-word;
+		
+	}
+	
+	input {
+		padding-top: 0;
+		padding-left: 0;
+		line-height: 1em; // this probably doesn't matter
+	}
+	
+	/*Container for the submit button*/
+	.submit {
+		height: 10%;
+        background-color: black;
+	}
+	
+	.submit button {
+		vertical-align: middle;
+        position: relative;
+        background-color:#FF7F7F;
+        color:white;
+		border-radius: 0.5vw;
+		height: 75%;
+		margin-top: 5px;  /* Created space between buttons */
+		font-family: Arial Black, Times, serif; /* sets font */
+		font-size:  16px;	/* Sets size */
+		font-weight:  normal;	/*Sets normal or bold */
+		text-align: center;	/* Aligns to center of button */
+		cursor: pointer; /* Pointer/hand icon */
+		width: 15%; /* Set a width if needed */
+		display: inline-block;
+	}
+	
+</style>
+<script src= '../jquery-3.4.1.min.js'></script>
+<script>
+	function turnIn(){
+		//Do something here
+		
+		window.close();
+	}
+</script>
+</head>
+<body style="background-color: black">
+
+	<div class="question" id="q_container">
+		How would you rate your overall experience during service?<br>
+		<input type="radio" name="rating" value="excellent">Excellent<br>
+		<input type="radio" name="rating" value="above-average">Above Average<br>
+		<input type="radio" name="rating" value="average">Average<br>
+		<input type="radio" name="rating" value="below-average">Below Average<br>
+		<input type="radio" name="rating" value="worst">Worst<br>
+		<input type="text" name="input" placeholder="comment" id="text-box">
+		<br><br><br>
+		
+		How would you rate the quality of the food today?<br>
+		<input type="radio" name="rating" value="excellent">Excellent<br>
+		<input type="radio" name="rating" value="above-average">Above Average<br>
+		<input type="radio" name="rating" value="average">Average<br>
+		<input type="radio" name="rating" value="below-average">Below Average<br>
+		<input type="radio" name="rating" value="worst">Worst<br>
+		<input type="text" name="input" placeholder="comment" id="text-box">
+		<br><br><br>
+		
+		How would you rate our restaurant when mentioning to  others?<br>
+		<input type="radio" name="rating" value="excellent">Excellent<br>
+		<input type="radio" name="rating" value="above-average">Above Average<br>
+		<input type="radio" name="rating" value="average">Average<br>
+		<input type="radio" name="rating" value="below-average">Below Average<br>
+		<input type="radio" name="rating" value="worst">Worst<br>
+		<input type="text" name="input" placeholder="comment" id="text-box">
+		<br>
+		
+		<div class="submit">
+			<button id="submit-survey" onclick="turnIn();">Submit Survey</button>
+		</div>
+	</div>
+	
+
+	
+</body>
+</html>

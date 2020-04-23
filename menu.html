@@ -230,6 +230,10 @@
 			t.innerHTML = "DESSERTS";
 			frame.src = "menu_category.html?category=2";
 		}
+		else if(mType === "mealDeal"){
+			t.innerHTML = "$5 MEAL DEAL";
+			frame.src = "menu_category.html?category=5";
+		}
 	}
 	
 	window.addEventListener('message', updateModal, false);
@@ -347,6 +351,8 @@
 			<button onclick="menuType('kids')">KIDS MENU</button>
 			<br><br>
 			<button onclick="menuType('sweets')">DESSERTS</button>
+			<br><br>
+			<button onclick="menuType('mealDeal')">$5 MEAL DEAL</button>
 			<br><br>
 		</div>
 	</div>

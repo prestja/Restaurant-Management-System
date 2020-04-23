@@ -11,7 +11,7 @@
 		margin-top: 0%;
 		display: block;
 		color: white;
-		
+		padding-top:10px;
 	}
 	
 	#text-box {
@@ -56,48 +56,68 @@
 <script src= '../jquery-3.4.1.min.js'></script>
 <script>
 	function turnIn(){
-		//Do something here
-		
-		window.close();
+		let request = {
+				experience: document.getElementById("experience").value,
+				experience_comment: document.getElementById("experienceComment").value,
+				food: document.getElementById("quality").value,
+				food_comment: document.getElementById("qualityComment").value,
+				rating: document.getElementById("restaurant").value,
+				rating_comment: document.getElementById("restaurantComment").value,				
+			}
+			//puts the object in JSON format and posts it to the backend to be added to the database
+			console.log(JSON.stringify(request));
+			$.post("http://159.89.238.181:8080/api/survey", JSON.stringify(request), function(data, status) {	
+				alert(status);
+				window.close();
+			});
 	}
 </script>
 </head>
 <body style="background-color: black">
 
 	<div class="question" id="q_container">
-		How would you rate your overall experience during service?<br>
-		<input type="radio" name="rating" value="excellent">Excellent<br>
-		<input type="radio" name="rating" value="above-average">Above Average<br>
-		<input type="radio" name="rating" value="average">Average<br>
-		<input type="radio" name="rating" value="below-average">Below Average<br>
-		<input type="radio" name="rating" value="worst">Worst<br>
-		<input type="text" name="input" placeholder="comment" id="text-box">
+		<div style="padding-left:10px;padding-right:10px">
+		How would you rate your overall experience during service?<br><br>
+		<select id = "experience">
+			<option value ="Exellent">Excellent</option>
+			<option value = "Above Average">Above Average</option>
+			<option value = "Average">Average</option>
+			<option value = "Below Average">Below Average</option>
+			<option value = "Worst">Worst</option>
+		</select>
+		<br><br>
+		<textarea id = "experienceComment" rows = "5" cols = "40" placeholder="Insert Comment Here..."></textarea>
 		<br><br><br>
 		
-		How would you rate the quality of the food today?<br>
-		<input type="radio" name="rating" value="excellent">Excellent<br>
-		<input type="radio" name="rating" value="above-average">Above Average<br>
-		<input type="radio" name="rating" value="average">Average<br>
-		<input type="radio" name="rating" value="below-average">Below Average<br>
-		<input type="radio" name="rating" value="worst">Worst<br>
-		<input type="text" name="input" placeholder="comment" id="text-box">
+		How would you rate the quality of the food today?<br><br>
+		<select id = "quality">
+			<option value ="Exellent">Excellent</option>
+			<option value = "Above Average">Above Average</option>
+			<option value = "Average">Average</option>
+			<option value = "Below Average">Below Average</option>
+			<option value = "Worst">Worst</option>
+		</select>
+		<br><br>
+		<textarea id = "qualityComment" rows = "5" cols = "40" placeholder="Insert Comment Here..."></textarea>
 		<br><br><br>
 		
 		How would you rate our restaurant when mentioning to  others?<br>
-		<input type="radio" name="rating" value="excellent">Excellent<br>
-		<input type="radio" name="rating" value="above-average">Above Average<br>
-		<input type="radio" name="rating" value="average">Average<br>
-		<input type="radio" name="rating" value="below-average">Below Average<br>
-		<input type="radio" name="rating" value="worst">Worst<br>
-		<input type="text" name="input" placeholder="comment" id="text-box">
-		<br>
-		
+		<select id = "restaurant">
+			<option value ="Exellent">Excellent</option>
+			<option value = "Above Average">Above Average</option>
+			<option value = "Average">Average</option>
+			<option value = "Below Average">Below Average</option>
+			<option value = "Worst">Worst</option>
+		</select>
+		<br><br>
+		<textarea id = "restaurantComment" rows = "5" cols = "40" placeholder="Insert Comment Here..."></textarea>
+		<br><br>
+		</div>
 		<div class="submit">
+			<br>
 			<button id="submit-survey" onclick="turnIn();">Submit Survey</button>
 		</div>
 	</div>
-	
 
-	
 </body>
 </html>

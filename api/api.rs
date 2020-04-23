@@ -21,6 +21,7 @@ mod coupons;
 mod timeclock;
 mod promotions;
 mod payment;
+mod survey;
 
 #[database("mongodb_logs")]
 pub struct LogsDbConn(mongodb::db::Database);
@@ -95,6 +96,9 @@ fn main()
 	.mount("/api/timeclock", routes![timeclock::clock_in])
 	.mount("/api/timeclock", routes![timeclock::clock_out])
 	.mount("/api/timeclock", routes![timeclock::get_all])
+	// survey functions
+	.mount("/api/survey", routes![survey::get_all])
+	.mount("/api/survey", routes![survey::post])
 	// mount and launch	
 	.attach(LogsDbConn::fairing())
 	.attach(cors)

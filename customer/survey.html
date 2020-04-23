@@ -71,12 +71,17 @@
 				window.close();
 			});
 	}
+	function cancel(){
+		window.close();
+	}
 </script>
 </head>
 <body style="background-color: black">
 
 	<div class="question" id="q_container">
 		<div style="padding-left:10px;padding-right:10px">
+		Please take a moment to leave a survey...
+		
 		How would you rate your overall experience during service?<br><br>
 		<select id = "experience">
 			<option value ="Exellent">Excellent</option>
@@ -115,7 +120,8 @@
 		</div>
 		<div class="submit">
 			<br>
-			<button id="submit-survey" onclick="turnIn();">Submit Survey</button>
+			<button id="submit-survey" onclick="turnIn();" style:>Submit Survey</button>
+			<button id="cancel" onclick="cancel()">Skip <br>Survey</button>
 		</div>
 	</div>
 

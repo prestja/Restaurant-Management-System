@@ -158,7 +158,14 @@
 			//gets the image path
 			var image = document.getElementById("img").value;
 			image = image.slice(12);
-			var imagePath = "img/" + category.toLowerCase() + "/" + image;
+			if(category == "MEAL DEAL ENTREE")
+			{
+				var imagePath = "img/mealdeal/" + image;
+			}
+			else
+			{
+				var imagePath = "img/" + category.toLowerCase() + "/" + image;
+			}
 			
 			//sets the category to a numeric identifier
 			if(category == "BEVERAGES")
@@ -181,7 +188,14 @@
 			{
 				category = 4;
 			}
-			
+			else if(category == "MEAL DEAL ENTREE")
+			{
+				category = 5;
+			}
+			else if(category == "MEAL DEAL DRINK")
+			{
+				category = 6;
+			}
 			//creates object to be used for JSON in the backend with all details about an item
 			let request = {
 				name: document.getElementById("name").value,
@@ -205,11 +219,18 @@
 		function filterForm(){//if beverages, hide all unnecessary items
 			var category = document.getElementById("category").value;
 			var ingredients = document.getElementById("hide");
+			var mdFilter = document.getElementById("hidemd");
 			if(category == "BEVERAGES"){
 				ingredients.setAttribute("style","display:none");
+				mdFilter.setAttribute("style","display:inline");
+			}
+			else if(category == "MEAL DEAL DRINK")
+			{
+				mdFilter.setAttribute("style","display:none");
 			}
 			else{
 				ingredients.setAttribute("style","display:inline");
+				mdFilter.setAttribute("style","display:inline");
 			}
 		}
 	</script>
@@ -262,12 +283,15 @@
 					<option name="ent">ENTREES</option>
 					<option name="kids">KIDS</option>
 					<option name="des">DESSERTS</option>
+					<option name="md">MEAL DEAL ENTREE</option>
+					<option name="mdd">MEAL DEAL DRINK</option>
 				</select>
 				<br><br>
 				<!--holds number form for price-->
 				<label>PRICE:</label>
 				<input type="number" id="price" name="price" placeholder="0.00" maxlength=5/>
 				<br><br>
+				<span id = "hidemd">
 				<!--holds nutrition info-->
 				<label>NUTRITION:</label>
 				<input type="text" id="nutrition" name="nutrition" placeholder="50 calories" maxlength=20 size=20/>
@@ -292,6 +316,7 @@
 				<label for="img">SELECT IMAGE:</label>
 				<input type="file" id="img" accept="image/*">
 				<br><br>
+				</span>
 				<!--submits form to add an item-->
 				<button onclick = "handleSubmit()">ADD ITEM</button>
 			</div>

@@ -176,6 +176,16 @@
 					t.innerHTML = "DESSERTS";
 					frame.src = "menu_category.html?category=2";
 				}
+				else if(mType === "mdentree")
+				{
+					t.innerHTML = "MEAL DEAL ENTREE";
+					frame.src = "menu_category.html?category=5";
+				}
+				else if(mType === "mddrink")
+				{
+					t.innerHTML = "MEAL DEAL DRINK";
+					frame.src = "menu_category.html?category=6";
+				}
 			}
     </script>
 </head>
@@ -206,6 +216,10 @@
 				<button onclick="menuType('kids')">KIDS</button>
 				<br><br>
 				<button onclick="menuType('sweets')">DESSERTS</button>
+				<br><br>
+				<button onclick="menuType('mdentree')">MEAL DEAL ENTREES</button>
+				<br><br>
+				<button onclick="menuType('mddrink')">MEAL DEAL DRINKS</button>
 			</div>
 		</div>
 	<!--holds menu items of the type selected in menu-type-->

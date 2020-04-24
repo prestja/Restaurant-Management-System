@@ -113,7 +113,7 @@
 		background-color: #A9A9A9 !important; //makes Gray background
 		padding: 10px;
 		margin: 10px 10px 10px 10px;
-		width: 1650px;
+		width: 1720px;
 		display: inline-block;
 		text-align: center;
 		border: 5px;
@@ -242,6 +242,22 @@
 				cat.setAttribute('selected','selected');
 			}
 			element.appendChild(cat);
+			cat = document.createElement('option');
+			cat.setAttribute('value',5);
+			cat.text = "MEAL DEAL ENTREES";
+			if(item.category == 5)//if category is 3, set beverages as the default option
+			{
+				cat.setAttribute('selected','selected');
+			}
+			element.appendChild(cat);
+			cat = document.createElement('option');
+			cat.setAttribute('value',6);
+			cat.text = "MEAL DEAL DRINKS";
+			if(item.category == 6)//if category is 3, set beverages as the default option
+			{
+				cat.setAttribute('selected','selected');
+			}
+			element.appendChild(cat);
 			var td = document.createElement('td'); //inserts category dropdown into the table
 			td = tr.insertCell(2);
 			td.append(element);
@@ -256,7 +272,7 @@
 			td = tr.insertCell(3);
 			td.append(element);
 			
-			if(item.category != 3){//if beverages isn't the category
+			if(item.category != 3 && item.category != 6){//if beverages isn't the category
 				element = document.createElement('input');
 				element.setAttribute('type','text');
 				element.setAttribute('class',item._id.$oid);
@@ -280,7 +296,7 @@
 				td.append('N/A');
 			}
 			
-			if(item.category != 3){//if beverages is not the category
+			if(item.category != 3 && item.category != 6){//if beverages is not the category
 				element = document.createElement('input');
 				element.setAttribute('class', item._id.$oid);
 				element.setAttribute('type','text');
@@ -304,7 +320,7 @@
 				td.append('N/A');
 			}
 			
-			if(item.category != 3){//if item is not a beverage
+			if(item.category != 3 && item.category != 6){//if item is not a beverage
 				element = document.createElement('input');
 				element.setAttribute('class', item._id.$oid);
 				element.setAttribute('type','checkbox');
@@ -322,7 +338,7 @@
 				td.append('N/A');
 			}
 			
-			if(item.category != 3){//if the item is not a beverage
+			if(item.category != 3 && item.category != 6){//if the item is not a beverage
 				element = document.createElement('input');
 				element.setAttribute('class', item._id.$oid);
 				element.setAttribute('type','checkbox');
@@ -340,7 +356,7 @@
 				td.append('N/A');
 			}
 			
-			if(item.category != 3){//if category is not a beverage
+			if(item.category != 3 && item.category != 6){//if category is not a beverage
 				element = document.createElement('input');
 				element.setAttribute('type','text');
 				element.setAttribute('class',item._id.$oid);

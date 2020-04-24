@@ -245,6 +245,15 @@
 		modal.style.display = "block";
 		var name = document.getElementById("itemName");
 		name.innerHTML = message.data.name;
+		var hot = document.getElementById("hotItem");
+		if(message.data.hot)
+		{
+			hot.innerHTML = "HOT ITEM";
+		}
+		else
+		{
+			hot.innerHTML = "";
+		}
 		var body = document.getElementsByClassName("modal-body");
 		body.innerHTML = message.data.description;
 		
@@ -371,7 +380,8 @@
 			
 				<div class="modal-header">
 					<span class="close">&times;</span>
-					<h2 id="itemName">Item Name</h2>
+					<h2 id="itemName" style="display:inline">Item Name</h2>
+					<h2 id="hotItem" style="color:red;display:inline"></h2>
 				</div>
 				<div class="modal-body">
 					<img id = 'photo' src = "img/burger.jpg">

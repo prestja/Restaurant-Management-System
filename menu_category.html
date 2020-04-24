@@ -128,6 +128,8 @@ body {font-family: Arial, Helvetica, sans-serif;}
 
 <script src="jquery-3.4.1.min.js"></script>
 	<script>
+		var hotBev, hotApp, hotEnt, hotKids, hotDes, hotMD; //holds the most popular items per category
+	
 		function addItem(item) {
 			var clone = $("#item_template").clone(true);		
 			if(item.status == 1) {
@@ -135,6 +137,14 @@ body {font-family: Arial, Helvetica, sans-serif;}
 			}
 			else {	
 				clone.css('display','none');
+			}
+			if(item.name == hotBev || item.name == hotApp || item.name == hotEnt || item.name == hotKids || item.name == hotDes || item.name == hotMD)
+			{
+				item.hot = true;
+			}
+			else
+			{
+				item.hot = false;
 			}
 			clone.appendTo('.container');
 			clone.children("button").html(item.name); // assign the human-readable name for this button
@@ -164,18 +174,103 @@ body {font-family: Arial, Helvetica, sans-serif;}
 			}
 		}	
 		
+	function getBestSellingItem(orderList, itemsList)//returns best selling item
+	{
+		var menuOrder = [];//stores orders
+		var menuName = []; //stores items names
+		var menuCategory = []; //stores items categories
+		
+		//adds items to the arrays
+		itemsList.forEach(item => {
+			menuName[item._id.$oid] = item.name;
+			menuCategory[item._id.$oid] = item.category;
+		});
+		
+		orderList.forEach(order => {
+		if(order.items != null)//if the order has been placed with items in it
+		{
+			order.items.forEach(item =>
+				{
+					if(item != null)
+					{
+						if(menuOrder[item.$oid] != null)//if the item is part of the list, add one to its count
+						{
+							menuOrder[item.$oid]++;
+						}
+						else{//if the item is not part of the list, set its beginning count to 1
+							menuOrder[item.$oid] = 1;
+						}
+					}
+				}
+			);
+		}
+		});
+		var bestBev = -1;//holds the count and the id of the best selling beverage
+		var bestApp = -1; //holds the best appetizer id and count
+		var bestEnt = -1; //holds the best entree id and count
+		var bestKids = -1; //holds the best kids id and count
+		var bestDes = -1; //holds the best desserts id and count
+		var bestMD = -1; //holds the best meal deal id and count
+		
+		for(var key in menuOrder){//gets best selling item per category based on count
+			if(menuOrder[key] >= bestBev && menuCategory[key] == 3)
+			{
+				bestBev = menuOrder[key];
+				hotBev = menuName[key];
+			}
+			else if(menuOrder[key] >= bestApp && menuCategory[key] == 1)
+			{
+				bestApp = menuOrder[key];
+				hotApp = menuName[key];
+			}
+			else if(menuOrder[key] >= bestEnt && menuCategory[key] == 0)
+			{
+				bestEnt = menuOrder[key];
+				hotEnt = menuName[key];
+			}
+			else if(menuOrder[key] >= bestKids && menuCategory[key] == 4)
+			{
+				bestKids = menuOrder[key];
+				hotKids = menuName[key];
+			}
+			else if(menuOrder[key] >= bestDes && menuCategory[key] == 2)
+			{
+				bestDes = menuOrder[key];
+				hotDes = menuName[key];
+			}
+			else if(menuOrder[key] >= bestMD && menuCategory[key] == 5)
+			{
+				bestMD = menuOrder[key];
+				hotMD = menuName[key];
+			}
+		}
+	}
+		
 		$(document).ready(function() {
-			var queryStr = window.location.search;
-			var category = queryStr.substr(1)
-			var url = "http://159.89.238.181:8080/api/items?".concat(category);
+			var url = "http://159.89.238.181:8080/api/orders";
 			$.ajax({
 				url: url,
 				type: 'get',
 				dataType: 'JSON',
 				success: function(response) {
-					response.forEach(item => 
-						addItem(item)
-					);
+					var url = "http://159.89.238.181:8080/api/items";//gets items from backend
+					$.get(url, function(message) {	
+						message = JSON.parse(message);
+						getBestSellingItem(response, message);
+						var queryStr = window.location.search;
+						var category = queryStr.substr(1)
+						url = "http://159.89.238.181:8080/api/items?".concat(category);
+						$.ajax({
+							url: url,
+							type: 'get',
+							dataType: 'JSON',
+							success: function(response) {
+							response.forEach(item => 
+							addItem(item)
+							);
+							}
+						});
+					});
 				}
 			});
 		}); 
